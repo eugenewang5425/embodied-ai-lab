@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-09-02T12:01:58.558743+00:00",
+  "image_size": [
+    3840,
+    2160
+  ],
+  "camera_matrix": [
+    [
+      3125.318551988841,
+      0.0,
+      1903.5517978319076
+    ],
+    [
+      0.0,
+      3140.936387908216,
+      1234.0991546310254
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.13523188765279295,
+    -0.28258203663400694,
+    0.02366527995041298,
+    -0.0007043764740868751,
+    0.29521939840390043
+  ],
+  "rms_px": 1.2579648936266572,
+  "per_view_rms_px": [
+    1.556559681892395,
+    1.8663973808288574,
+    0.8626716732978821,
+    0.6290470361709595,
+    1.795339822769165,
+    1.5197983980178833,
+    0.45860743522644043,
+    0.6366797089576721,
+    1.2355061769485474,
+    1.5485814809799194,
+    0.4931105077266693,
+    0.7869384288787842,
+    1.6788429021835327,
+    1.4129425287246704,
+    1.0363906621932983,
+    1.2035740613937378
+  ],
+  "valid_views": 16,
+  "quality_pass": false,
+  "quality_note": "Reprojection gate only; does not validate metric depth or world pose.",
+  "source": "charuco_images",
+  "board": {
+    "squares_x": 7,
+    "squares_y": 5,
+    "square_length_m": 0.025,
+    "marker_length_m": 0.018,
+    "dictionary": "DICT_4X4_50",
+    "legacy_pattern": false
+  },
+  "accepted_images": [
+    "view_000.png",
+    "view_001.png",
+    "view_002.png",
+    "view_003.png",
+    "view_004.png",
+    "view_005.png",
+    "view_006.png",
+    "view_007.png",
+    "view_008.png",
+    "view_009.png",
+    "view_010.png",
+    "view_011.png",
+    "view_012.png",
+    "view_013.png",
+    "view_014.png",
+    "view_015.png"
+  ],
+  "rejected_images": [],
+  "capture_session": {
+    "timestamp_utc": "2026-09-02T11:48:19.376917+00:00",
+    "schema_version": 2,
+    "focus_lock_required": true,
+    "focus_policy": "F requests lock; 8 stable frames and 0.75 s required; no refocus after first save",
+    "fixed_focus_requested": 293.0,
+    "focus_controls_disabled": true,
+    "camera_index": 0,
+    "actual_image_size": [
+      3840,
+      2160
+    ],
+    "requested_image_size": [
+      3840,
+      2160
+    ],
+    "fps_reported": 30.00003000003,
+    "fourcc_reported": 1196444237,
+    "autofocus_reported": 2.0,
+    "focus_reported": 293.0,
+    "camera_settings_note": "Driver-reported values may be unsupported. Keep focus fixed.",
+    "board": {
+      "squares_x": 7,
+      "squares_y": 5,
+      "square_length_m": 0.025,
+      "marker_length_m": 0.018,
+      "dictionary": "DICT_4X4_50",
+      "legacy_pattern": false
+    }
+  },
+  "focus_lock_verified_for_accepted_frames": true,
+  "fixed_focus_driver_units": 293.0
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-09-02T13:48:54.717853+00:00",
+  "source_metadata": "D:\\项目\\具身人工智能\\monocular-depth\\outputs\\metric-live-20260902_2205\\capture_20260902_134410_396638_utc_metric_metadata.json",
+  "capture_timestamp_utc": "2026-09-02T13:44:10.396638+00:00",
+  "model": "Depth Anything V2 Small Metric Hypersim",
+  "checkpoint_sha256": "b782898d8a3e8be1f639de33837ed85e9b4b73e40f8f5e5cd99067588d722545",
+  "input_size": 392,
+  "calibration_file": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\selected\\focus293_16_20260902\\selected-camera.json",
+  "image_size": [
+    3840,
+    2160
+  ],
+  "board": {
+    "squares_x": 7,
+    "squares_y": 5,
+    "square_length_m": 0.025,
+    "marker_length_m": 0.018,
+    "dictionary": "DICT_4X4_50",
+    "legacy_pattern": false
+  },
+  "board_pose": {
+    "normal": [
+      0.06551426080804187,
+      -0.0744389598613837,
+      0.9950712149818882
+    ],
+    "plane_distance_m": 0.7352116534423124,
+    "translation_m": [
+      -0.11036264146059716,
+      0.005587631246608042,
+      0.7465374403278604
+    ],
+    "rotation_vector": [
+      0.0742104488843206,
+      0.0660195522882653,
+      -0.010668775320942302
+    ],
+    "reprojection_rms_px": 0.2726459080393415,
+    "normal_angle_to_optical_axis_deg": 5.690967535589609,
+    "pose_method": "ippe_single_solution"
+  },
+  "margin_fraction": 0.12,
+  "interior_pixels": 132091,
+  "corner_count": 24,
+  "ground_truth": {
+    "source": "charuco_board_pose",
+    "board_pitch_m": 0.025,
+    "ruler": {
+      "measured_distance_m": 0.7,
+      "projection_center_offset_m": 0.046537440327860335,
+      "ruler_only_scale": 0.5286139024310101,
+      "note": "User-stated approximate median distance; board-pose geometry is the truth used for fitting. A large inferred offset means the stated value and the placement differ, not necessarily an optical-center offset."
+    }
+  },
+  "center_depth": {
+    "projected_center_px": [
+      1454.863205068979,
+      1094.5240874527508
+    ],
+    "true_m": 0.7465374403278603,
+    "predicted_m": 1.3242179155349731
+  },
+  "interior_median": {
+    "true_m": 0.74530244196536,
+    "predicted_m": 1.272498369216919
+  },
+  "scale": 0.5853820363641558,
+  "scale_mad": 0.005712277992846904,
+  "scale_p05_p95": [
+    0.5733159606702267,
+    0.5950811374392349
+  ],
+  "residual_before_rms_m": 0.5301824245940527,
+  "residual_after_rms_m": 0.009254959585101169,
+  "residual_before_rms_relative": 0.7113194286646961,
+  "residual_after_mad_relative": 0.009756892129031566,
+  "fit": "scale_only",
+  "fit_note": "One reference distance fits only a multiplicative scale. A second, independent distance is required to fit scale+offset or to validate this scale.",
+  "validation": {
+    "independent": false,
+    "note": "The same capture is used to fit and then describe itself; it is not validation."
+  },
+  "metric_accuracy_validated": false
+}

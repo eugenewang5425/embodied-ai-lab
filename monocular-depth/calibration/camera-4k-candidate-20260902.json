@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-09-02T10:53:51.107722+00:00",
+  "image_size": [
+    3840,
+    2160
+  ],
+  "camera_matrix": [
+    [
+      2988.8125755881406,
+      0.0,
+      1903.7730132377574
+    ],
+    [
+      0.0,
+      2991.6279059764915,
+      981.7362634930273
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.106466593837832,
+    -0.4380727835661164,
+    -0.004513825008770599,
+    -0.0007232083153715624,
+    0.44212506452759837
+  ],
+  "rms_px": 1.0696372890023937,
+  "per_view_rms_px": [
+    0.4468245506286621,
+    0.8431428670883179,
+    0.26360851526260376,
+    0.21446023881435394,
+    0.1808573603630066,
+    0.2141980528831482,
+    0.50529944896698,
+    0.6527451872825623,
+    0.3787010610103607,
+    0.8806868195533752,
+    0.9683769941329956,
+    1.9839621782302856,
+    0.570506751537323,
+    0.6605600118637085,
+    2.3944551944732666,
+    1.856713056564331,
+    1.3501002788543701,
+    1.1333497762680054,
+    0.4794538915157318,
+    0.620608925819397,
+    0.6416403651237488,
+    1.0734390020370483,
+    0.9370430707931519,
+    1.3563308715820312,
+    1.3200489282608032,
+    1.4523849487304688,
+    1.4073039293289185,
+    1.0812067985534668,
+    0.5934351086616516,
+    1.1610524654388428
+  ],
+  "valid_views": 30,
+  "quality_pass": false,
+  "quality_note": "Reprojection gate only; does not validate metric depth or world pose.",
+  "source": "charuco_images",
+  "board": {
+    "squares_x": 7,
+    "squares_y": 5,
+    "square_length_m": 0.025,
+    "marker_length_m": 0.018,
+    "dictionary": "DICT_4X4_50",
+    "legacy_pattern": false
+  },
+  "accepted_images": [
+    "view_000.png",
+    "view_001.png",
+    "view_002.png",
+    "view_003.png",
+    "view_004.png",
+    "view_005.png",
+    "view_006.png",
+    "view_007.png",
+    "view_008.png",
+    "view_009.png",
+    "view_010.png",
+    "view_011.png",
+    "view_012.png",
+    "view_013.png",
+    "view_014.png",
+    "view_015.png",
+    "view_016.png",
+    "view_017.png",
+    "view_018.png",
+    "view_019.png",
+    "view_020.png",
+    "view_021.png",
+    "view_022.png",
+    "view_023.png",
+    "view_024.png",
+    "view_025.png",
+    "view_026.png",
+    "view_027.png",
+    "view_028.png",
+    "view_029.png"
+  ],
+  "rejected_images": [],
+  "capture_session": {
+    "timestamp_utc": "2026-09-02T08:17:23.701127+00:00",
+    "camera_index": 0,
+    "actual_image_size": [
+      3840,
+      2160
+    ],
+    "requested_image_size": [
+      3840,
+      2160
+    ],
+    "fps_reported": 30.00003000003,
+    "fourcc_reported": 1196444237,
+    "autofocus_reported": 1.0,
+    "focus_reported": 301.0,
+    "camera_settings_note": "Driver-reported values may be unsupported. Keep focus fixed.",
+    "board": {
+      "squares_x": 7,
+      "squares_y": 5,
+      "square_length_m": 0.025,
+      "marker_length_m": 0.018,
+      "dictionary": "DICT_4X4_50",
+      "legacy_pattern": false
+    }
+  }
+}

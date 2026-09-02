@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-09-02T12:42:21.490872+00:00",
+  "image_size": [
+    3840,
+    2160
+  ],
+  "camera_matrix": [
+    [
+      3042.397482212765,
+      0.0,
+      1914.8807139062596
+    ],
+    [
+      0.0,
+      3045.8613958047017,
+      1063.4164072685935
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.11983714644271404,
+    -0.46108936942188544,
+    0.003482968564085585,
+    -0.0005850654211894649,
+    0.5685737751885762
+  ],
+  "rms_px": 0.7245998723182088,
+  "per_view_rms_px": [
+    0.9408329129219055,
+    0.6403746604919434,
+    0.3291688859462738,
+    0.3504968583583832,
+    0.3526763617992401,
+    0.6756846904754639,
+    1.2215731143951416,
+    1.0992015600204468,
+    0.22296971082687378,
+    0.811211109161377,
+    0.4969048798084259,
+    0.5682052969932556,
+    0.5793980956077576,
+    0.7168457508087158,
+    0.964389443397522,
+    0.757279634475708
+  ],
+  "valid_views": 16,
+  "quality_pass": true,
+  "quality_note": "Reprojection gate only; does not validate metric depth or world pose.",
+  "source": "charuco_images",
+  "board": {
+    "squares_x": 7,
+    "squares_y": 5,
+    "square_length_m": 0.025,
+    "marker_length_m": 0.018,
+    "dictionary": "DICT_4X4_50",
+    "legacy_pattern": false
+  },
+  "accepted_images": [
+    "supplement_view_002.png",
+    "supplement_view_003.png",
+    "supplement_view_006.png",
+    "supplement_view_007.png",
+    "supplement_view_010.png",
+    "supplement_view_011.png",
+    "supplement_view_013.png",
+    "supplement_view_014.png",
+    "trial_view_000.png",
+    "trial_view_001.png",
+    "trial_view_002.png",
+    "trial_view_003.png",
+    "trial_view_004.png",
+    "trial_view_005.png",
+    "trial_view_006.png",
+    "trial_view_007.png"
+  ],
+  "rejected_images": [],
+  "capture_session": {
+    "camera_index": 0,
+    "actual_image_size": [
+      3840,
+      2160
+    ],
+    "requested_image_size": [
+      3840,
+      2160
+    ],
+    "fourcc_reported": 1196444237,
+    "board": {
+      "squares_x": 7,
+      "squares_y": 5,
+      "square_length_m": 0.025,
+      "marker_length_m": 0.018,
+      "dictionary": "DICT_4X4_50",
+      "legacy_pattern": false
+    },
+    "focus_lock_required": true,
+    "source_sessions": [
+      "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289",
+      "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814"
+    ],
+    "note": "Derived selection; untouched original sessions and per-photo provenance retained",
+    "selection_policy": {
+      "method": "greedy backward elimination; evaluate every eligible one-view removal",
+      "global_optimum_proven": false,
+      "min_views": 15,
+      "minimum_hull_fraction_of_initial": 0.9,
+      "initial_hull_image_fraction": 0.715386528421544,
+      "selected_hull_image_fraction": 0.7098066319139689,
+      "preserved_corner_regions": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "minimum_tilted_views": 4,
+      "minimum_xy_normal_angle_span_deg": [
+        15.0,
+        15.0
+      ],
+      "pose_note": "Geometry constraints use initial-fit pose estimates, not independent ground truth.",
+      "requested_retained_count": 16,
+      "count_choice_note": "Explicit trade-off choice; not an independent validation result"
+    }
+  },
+  "focus_lock_verified_for_accepted_frames": true,
+  "fixed_focus_driver_units": 293.0
+}

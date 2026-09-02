@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "timestamp_utc": "2026-09-02T12:38:54.687305+00:00",
+  "image_size": [
+    3840,
+    2160
+  ],
+  "camera_matrix": [
+    [
+      3042.1756433813925,
+      0.0,
+      1916.0976783278531
+    ],
+    [
+      0.0,
+      3046.0714589719078,
+      1076.5702552163493
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_coefficients": [
+    0.11329970823372577,
+    -0.4306432711292439,
+    0.005418403475428904,
+    -8.313989141409655e-05,
+    0.5344935841032503
+  ],
+  "rms_px": 0.7652280423229444,
+  "per_view_rms_px": [
+    0.22180354595184326,
+    0.808160662651062,
+    0.5027076005935669,
+    0.573638379573822,
+    0.5797947645187378,
+    0.7430780529975891,
+    0.95374995470047,
+    0.7434999942779541,
+    0.9345029592514038,
+    0.6360042095184326,
+    0.3317079544067383,
+    0.366815447807312,
+    0.36047741770744324,
+    0.7045528292655945,
+    1.2322760820388794,
+    1.0774766206741333,
+    1.2312356233596802
+  ],
+  "valid_views": 17,
+  "quality_pass": true,
+  "quality_note": "Reprojection gate only; does not validate metric depth or world pose.",
+  "source": "charuco_images",
+  "board": {
+    "squares_x": 7,
+    "squares_y": 5,
+    "square_length_m": 0.025,
+    "marker_length_m": 0.018,
+    "dictionary": "DICT_4X4_50",
+    "legacy_pattern": false
+  },
+  "accepted_images": [
+    "trial_view_000.png",
+    "trial_view_001.png",
+    "trial_view_002.png",
+    "trial_view_003.png",
+    "trial_view_004.png",
+    "trial_view_005.png",
+    "trial_view_006.png",
+    "trial_view_007.png",
+    "supplement_view_002.png",
+    "supplement_view_003.png",
+    "supplement_view_006.png",
+    "supplement_view_007.png",
+    "supplement_view_010.png",
+    "supplement_view_011.png",
+    "supplement_view_013.png",
+    "supplement_view_014.png",
+    "supplement_view_015.png"
+  ],
+  "rejected_images": [
+    {
+      "file": "trial_view_008.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_000.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_001.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_004.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_005.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_008.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_009.png",
+      "reason": "backward selection; not deleted"
+    },
+    {
+      "file": "supplement_view_012.png",
+      "reason": "backward selection; not deleted"
+    }
+  ],
+  "source_image_paths": {
+    "trial_view_000.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_000.png",
+    "trial_view_001.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_001.png",
+    "trial_view_002.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_002.png",
+    "trial_view_003.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_003.png",
+    "trial_view_004.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_004.png",
+    "trial_view_005.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_005.png",
+    "trial_view_006.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_006.png",
+    "trial_view_007.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289\\view_007.png",
+    "supplement_view_002.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_002.png",
+    "supplement_view_003.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_003.png",
+    "supplement_view_006.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_006.png",
+    "supplement_view_007.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_007.png",
+    "supplement_view_010.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_010.png",
+    "supplement_view_011.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_011.png",
+    "supplement_view_013.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_013.png",
+    "supplement_view_014.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_014.png",
+    "supplement_view_015.png": "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814\\view_015.png"
+  },
+  "source_image_sha256": {
+    "trial_view_000.png": "5d692148f2a602bab4f26d93d22445793d8c752b1a2da8f829f5a6482831133d",
+    "trial_view_001.png": "f3794981bf7e026880079f5ce3f553ca970fb7d7b90915e4246dc5f473cff5c0",
+    "trial_view_002.png": "0fb821bfb4231f3e09071564eee2590d56f3dfcd55e253fe9ac2949dffb5101d",
+    "trial_view_003.png": "e60af3c1a02cd292f151ad6f6a830999b6a9a96bbb9633de46ad9f77ec572351",
+    "trial_view_004.png": "6935060de8d5218a8b66eceaff36589110268225bac7bddbb55e138f41810cb6",
+    "trial_view_005.png": "8375991f84ea0c0c512d22502097e5fe4d6174d6733707df0f16faf3bf046cdc",
+    "trial_view_006.png": "5b5a92d5914612790b37ac0e3e51f60c5003334dafe7a60ecaadb09afcb44824",
+    "trial_view_007.png": "bcf585184da93807478b341f89c8ea296497813496fa9983b6e3cd69c2d6554c",
+    "supplement_view_002.png": "bc723528fc5c8a1341385ec70db1c0c6a4435f9f79bf46b24acb5b59936c5b49",
+    "supplement_view_003.png": "be16b2f37776a634b15bc4d96806db32a4b833d93c3357ec13f5f596196ea804",
+    "supplement_view_006.png": "6e62154cbd76f8ee745c2919087f5ac1026e8c681d0119f1fa9c2af4039395de",
+    "supplement_view_007.png": "b38095cb84cca6d20a7282852d62d0c2cc248b1be166c31316dfbb4ae1496550",
+    "supplement_view_010.png": "b1c025fe2c8d38cbf29e40b7c8bb1471bb1d8c64b8612e244c120350512811e8",
+    "supplement_view_011.png": "1b2b87da5acb301e74106c06a524740c8aa6154d7947a2758feb41aa1bff0c5e",
+    "supplement_view_013.png": "f579fc54cd6dfac47739cfe070c36ce7071f526c1c69757055dce897d549697c",
+    "supplement_view_014.png": "1fbdf6c78676adb493f4e8db814e720639ed7fee5c748975d29eea3e1ab3f168",
+    "supplement_view_015.png": "71c36edaa01a831c19d821be7bf184e5cad70f0952fc9482832df830c3c12a4e"
+  },
+  "focus_lock_verified_for_accepted_frames": true,
+  "fixed_focus_driver_units": 293.0,
+  "capture_session": {
+    "camera_index": 0,
+    "actual_image_size": [
+      3840,
+      2160
+    ],
+    "requested_image_size": [
+      3840,
+      2160
+    ],
+    "fourcc_reported": 1196444237,
+    "board": {
+      "squares_x": 7,
+      "squares_y": 5,
+      "square_length_m": 0.025,
+      "marker_length_m": 0.018,
+      "dictionary": "DICT_4X4_50",
+      "legacy_pattern": false
+    },
+    "focus_lock_required": true,
+    "source_sessions": [
+      "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\session_20260902_113833_342289",
+      "D:\\项目\\具身人工智能\\monocular-depth\\calibration\\sessions\\focus293_20260902_194814"
+    ],
+    "note": "Joint diagnostic from matching recorded modes; identical optics not proven by records alone."
+  },
+  "selection_policy": {
+    "method": "greedy backward elimination; evaluate every eligible one-view removal",
+    "global_optimum_proven": false,
+    "min_views": 15,
+    "minimum_hull_fraction_of_initial": 0.9,
+    "initial_hull_image_fraction": 0.715386528421544,
+    "selected_hull_image_fraction": 0.7142573341759085,
+    "preserved_corner_regions": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "minimum_tilted_views": 4,
+    "minimum_xy_normal_angle_span_deg": [
+      15.0,
+      15.0
+    ],
+    "pose_note": "Geometry constraints use initial-fit pose estimates, not independent ground truth."
+  },
+  "source_candidate": "D:\\项目\\具身人工智能\\monocular-depth\\outputs\\calibration-focus293-pair-20260902\\combined-candidate.json",
+  "validation_status": "Selected-data reprojection gate only; independent metric validation pending"
+}

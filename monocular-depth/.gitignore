@@ -1,0 +1,27 @@
+.venv/
+.venv-bench/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+
+# Model weights are downloaded by scripts, never committed.
+checkpoints/*.pth
+checkpoints/*.part
+bench/weights/
+
+# Live capture and benchmark outputs; JSON evidence is committed,
+# rendered PNGs and raw captures stay local.
+outputs/
+tmp/
+bench/outputs/*.png
+
+# Upstream checkouts with their own .git; recreated from pinned commits in README.
+third_party/Depth-Anything-V2/
+bench/third_party/
+
+# Calibration: keep the small result JSONs and the printable board;
+# raw capture images and debug PNGs stay local.
+calibration/sessions/
+calibration/**/images/
+calibration/distance/**/*.png
