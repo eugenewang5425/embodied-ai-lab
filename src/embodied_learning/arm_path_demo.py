@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from embodied_learning.arm_demo import ArmDemo, ArmReplay, draw_arm
+from embodied_learning.arm_dynamics import FEEDFORWARD_COLORS, FEEDFORWARD_METHODS
 from embodied_learning.arm_path import (
     IK_COMPARISON_METHODS,
     METHOD_COLORS,
@@ -31,6 +32,8 @@ class PathReplay(ArmReplay):
     q_reference: np.ndarray
     dq_reference: np.ndarray
     requested_torques: np.ndarray | None = None
+    feedforward_torques: np.ndarray | None = None
+    feedback_torques: np.ndarray | None = None
 
     @cached_property
     def terminal_check(self):
@@ -50,23 +53,25 @@ def load_replays(directory):
         "planar_2r_path": METHODS,
         "planar_2r_ik_path": IK_COMPARISON_METHODS,
         "planar_2r_timing": tuple((key, seconds) for key, seconds, _ in TIMINGS),
+        "planar_2r_feedforward": FEEDFORWARD_METHODS,
     }
     expected = families.get(report.get("experiment"))
     if expected is None or report.get("schema_version") != 1:
-        raise ValueError("Expected arm_path, lesson11 IK or lesson12 timing results")
+        raise ValueError("Expected arm path, IK, timing or feedforward results")
     if not np.allclose(report["lengths_m"], LENGTHS, atol=1e-12, rtol=0):
         raise ValueError("Saved arm geometry differs from the probe")
     if [case["key"] for case in report["cases"]] != [m for m, _ in expected]:
-        raise ValueError("Expected the three paired path methods")
+        raise ValueError("Expected the ordered paired comparison methods")
     replays = []
     with np.load(directory / "trajectories.npz", allow_pickle=False) as archive:
         for case in report["cases"]:
             timing = report["experiment"] == "planar_2r_timing"
-            if timing:
-                seconds = dict(expected)[case["key"]]
+            feedforward = report["experiment"] == "planar_2r_feedforward"
+            if timing or feedforward:
+                seconds = dict(expected)[case["key"]] if timing else 4.0
                 if case.get("movement_s") != seconds or case.get("hold_s") != 3:
                     raise ValueError("Invalid timing protocol")
-                if case.get("status") == "planning_rejected":
+                if timing and case.get("status") == "planning_rejected":
                     peak = case.get("peak_reference_speed_rad_s", float("nan"))
                     if not math.isfinite(peak) or peak <= 1 or not case.get("reason"):
                         raise ValueError("Invalid planning rejection")
@@ -104,7 +109,7 @@ def load_replays(directory):
             if not np.isclose(case["duration_s"], n * dt):
                 raise ValueError("Invalid duration")
             requested = None
-            if timing:
+            if timing or feedforward:
                 if case.get("completed") and not np.isclose(n * dt, seconds + 3):
                     raise ValueError("Invalid timing horizon")
                 requested = archive[f"{key}_requested_torques_nm"].copy()
@@ -113,10 +118,25 @@ def load_replays(directory):
                 if not np.allclose(torques, np.clip(requested, -0.25, 0.25), rtol=0, atol=1e-12):
                     raise ValueError("Applied torque does not match bounded PD request")
                 requested.flags.writeable = False
+            ff, fb = None, None
+            if feedforward:
+                ff, fb = [
+                    archive[f"{key}_{name}_torques_nm"].copy()
+                    for name in ("feedforward", "feedback")
+                ]
+                if any(v.shape != (n, 2) or not np.isfinite(v).all() for v in (ff, fb)):
+                    raise ValueError("Invalid feedforward/feedback arrays")
+                if not np.allclose(requested, ff + fb, rtol=0, atol=1e-12):
+                    raise ValueError("Torque components do not add to the total request")
+                if key == "pd" and np.any(ff != 0):
+                    raise ValueError("The PD-only baseline must not contain feedforward")
+                ff.flags.writeable = fb.flags.writeable = False
             for value in arrays:
                 value.flags.writeable = False
             replays.append(
-                PathReplay(case, states, points, torques, dt, desired, qref, dqref, requested)
+                PathReplay(
+                    case, states, points, torques, dt, desired, qref, dqref, requested, ff, fb
+                )
             )
     if not replays:
         raise ValueError("No executed trajectories to replay")
@@ -126,6 +146,7 @@ def load_replays(directory):
 class PathDemo(ArmDemo):
     def __init__(self, root, replays, speed=0.25, rejected_cases=()):
         self.is_timing = replays[0].metadata.get("lesson") == 12
+        self.is_feedforward = replays[0].metadata.get("lesson") == 13
         self.rejected_cases = rejected_cases
         # Open on the new method, while retaining all three case choices and old controls.
         preferred = (
@@ -133,7 +154,13 @@ class PathDemo(ArmDemo):
             if any(r.metadata["key"] == "waypoint_ik" for r in replays)
             else "jacobian_path"
         )
-        colors = {**METHOD_COLORS, **{key: color for key, _, color in TIMINGS}}
+        if self.is_feedforward:
+            preferred = "feedforward_pd"
+        colors = {
+            **METHOD_COLORS,
+            **{key: color for key, _, color in TIMINGS},
+            **FEEDFORWARD_COLORS,
+        }
         self.method_styles = [
             (r.metadata["key"], r.metadata["label"], colors[r.metadata["key"]]) for r in replays
         ]
@@ -142,7 +169,11 @@ class PathDemo(ArmDemo):
         root.title(WINDOW_TITLE)
         self.heading_label.configure(text="到达终点 ≠ 沿直线到达：Jacobian 把两种速度联系起来")
         trial = self.replay.metadata.get("trial")
-        if self.is_timing:
+        if self.is_feedforward:
+            name = trial["id"]
+            root.title(f"第十三课 · 模型前馈与 PD 修正：{name}")
+            self.heading_label.configure(text=f"第十三课 · {name}：提前出力，再修正误差")
+        elif self.is_timing:
             name = trial["id"]
             root.title(f"第十二课 · 动作时间与电机限制：{name}")
             self.heading_label.configure(text=f"第十二课 · {name}：同一路径，8 / 4 / 2 秒")
@@ -157,6 +188,8 @@ class PathDemo(ArmDemo):
         self.tabs.tab(1, text="② 三种方案：真实动力学慢放")
         if self.is_timing:
             self.tabs.tab(1, text="② 不同时长：真实动力学慢放")
+        if self.is_feedforward:
+            self.tabs.tab(1, text="② 原 PD / 前馈 + PD：4秒路径对照")
         self.geometry_hint.configure(
             text="静态速度预测：滑块直接设姿态，不驱动电机。红箭头为希望向世界 +X 移动，绿箭头为 J·dq 的预测。"
         )
@@ -254,6 +287,35 @@ class PathDemo(ArmDemo):
                 f"{command}\n全段截断 {r.metadata['clipped_steps']} 步"
             )
 
+        if self.is_feedforward:
+            self.status.set(self.status.get() + "　｜ 两方案均 4s 动作 + 3s 停留")
+            if hasattr(self, "replay_footer"):
+                self.replay_footer.configure(
+                    text="前馈仅用预定参考和已知模型；PD读取实际状态。合计后统一限幅 ±0.25 N·m；回放倍率不改变物理。"
+                )
+            command = "已结束，无下一步力矩"
+            if i < self.clock.steps:
+                ff, fb, requested = (
+                    r.feedforward_torques[i],
+                    r.feedback_torques[i],
+                    r.requested_torques[i],
+                )
+                clipped = np.any(np.abs(requested) > 0.25 + 1e-12)
+                command = (
+                    f"下一步力矩（肩 / 肘，N·m）\n"
+                    f"模型前馈 {ff[0]:+.3f}，{ff[1]:+.3f}\n"
+                    f"PD修正 {fb[0]:+.3f}，{fb[1]:+.3f}\n"
+                    f"合计请求 {requested[0]:+.3f}，{requested[1]:+.3f}\n"
+                    f"实际施加 {r.torques[i, 0]:+.3f}，{r.torques[i, 1]:+.3f}\n"
+                    f"限幅：{'正在截断' if clipped else '未截断'}"
+                )
+            self.stats.set(
+                f"{r.metadata['label']}\n同一 4s 动作 + 3s 停留\n"
+                f"偏离线段 {cross:.3f} mm\n时间误差 {timed:.3f} mm\n"
+                f"移动期最大偏离 {r.metadata['max_cross_track_mm']:.3f} mm\n{check}\n\n"
+                f"{command}\n全段截断 {r.metadata['clipped_steps']} 步"
+            )
+
     @staticmethod
     def replay_result_text(replay):
         case = replay.metadata
@@ -323,7 +385,7 @@ class PathDemo(ArmDemo):
             )
         for t in sorted({0, min(4, duration), min(8, duration), duration}):
             c.create_text(left + (right - left) * t / duration, bottom + 15, text=f"{t:g}s")
-        if self.is_timing:
+        if self.is_timing or self.is_feedforward:
             bound = bottom - (bottom - top) * 2 / peak
             c.create_line(left, bound, right, bound, fill="#94a3b8", dash=(3, 3))
             c.create_text(right, bound - 8, text="2 mm 门限", anchor="e", fill="#64748b")

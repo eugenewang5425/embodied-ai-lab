@@ -16,9 +16,15 @@ from embodied_learning.planar_arm import MODEL_PATH, forward_kinematics, vector2
 from embodied_learning.plotting import configure_plot_font
 
 
-def load_source(source, *, experiment="planar_2r_path_batch"):
+def load_source(
+    source,
+    *,
+    experiment="planar_2r_path_batch",
+    manifest_name="manifest.json",
+    hash_key="manifest_sha256",
+):
     source = Path(source)
-    raw = (source / "manifest.json").read_bytes()
+    raw = (source / manifest_name).read_bytes()
     manifest = json.loads(raw)
     summary = json.loads((source / "summary.json").read_text(encoding="utf-8"))
     if summary.get("experiment") != experiment or manifest.get("schema_version") != 1:
@@ -27,7 +33,7 @@ def load_source(source, *, experiment="planar_2r_path_batch"):
     if isinstance(count, bool) or not isinstance(count, int) or not 1 <= count <= 100:
         raise ValueError("Invalid source group size")
     digest = hashlib.sha256(raw).hexdigest()
-    if summary.get("manifest_sha256") != digest:
+    if summary.get(hash_key) != digest:
         raise ValueError("Source manifest byte hash does not match; use the verified lesson10 _v2")
     if summary.get("model_xml_sha256") != hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest():
         raise ValueError("Source model differs; this would not be a single-factor comparison")

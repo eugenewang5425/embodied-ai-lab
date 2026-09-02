@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import mujoco
 import numpy as np
 
+from embodied_learning.arm_dynamics import feedforward_reference
 from embodied_learning.arm_path import (
     DAMPING,
     HOLD_SECONDS,
@@ -78,23 +79,39 @@ def run_path(
     target=TARGET,
     move_seconds=MOVE_SECONDS,
     hold_seconds=HOLD_SECONDS,
+    controller="pd",
 ):
+    if controller not in ("pd", "feedforward_pd"):
+        raise ValueError("Unknown joint controller")
+    if controller == "feedforward_pd" and method != "waypoint_ik":
+        raise ValueError("Feedforward is scoped to the waypoint IK reference")
     initial_q, target = vector2(initial_q), vector2(target)
     sim = ArmSimulation()
     reference = generate_reference(
         method, initial_q, target, dt=sim.dt, move_seconds=move_seconds, hold_seconds=hold_seconds
     )
+    ff, ddq = (
+        feedforward_reference(sim.model, reference, sim.dt)
+        if controller == "feedforward_pd"
+        else (None, None)
+    )
     state = sim.reset(initial_q)
     states, points, torques = [state], [sim.points()], []
-    requested_torques = []
+    requested_torques, feedback_torques = [], []
     failure = ""
-    for qref, dqref in zip(reference["q_reference"][:-1], reference["dq_reference"], strict=True):
-        requested_torques.append(KP * angle_error(qref, state[:2]) + KD * (dqref - state[2:]))
+    for k, (qref, dqref) in enumerate(
+        zip(reference["q_reference"][:-1], reference["dq_reference"], strict=True)
+    ):
+        feedback = KP * angle_error(qref, state[:2]) + KD * (dqref - state[2:])
+        feedback_torques.append(feedback)
+        requested_torques.append(feedback if ff is None else feedback + ff[k])
         command = (
             joint_pd(state[:2], state[2:], qref)
             if method == "endpoint_pd"
             else tracking_pd(state[:2], state[2:], qref, dqref)
         )
+        if ff is not None:
+            command = np.clip(requested_torques[-1], -TORQUE_LIMIT, TORQUE_LIMIT)
         state, torque, failure = sim.step(command)
         states.append(state)
         points.append(sim.points())
@@ -112,6 +129,12 @@ def run_path(
             for key, value in reference.items()
         },
     }
+    if ff is not None:
+        arrays.update(
+            feedforward_torques_nm=ff[:n],
+            feedback_torques_nm=np.asarray(feedback_torques),
+            ddq_reference=ddq[:n],
+        )
     tip = arrays["points"][:, -1]
     times = np.arange(n + 1) * sim.dt
     tracking = np.linalg.norm(tip - arrays["desired_points"], axis=1)
