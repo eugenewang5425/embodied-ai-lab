@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from embodied_learning.differential_drive import (
+    SENSOR_IN_BODY,
     DriveGeometry,
     compose,
     integrate_pose,
@@ -22,7 +23,6 @@ from embodied_learning.plotting import configure_plot_font
 
 DT, SECONDS = 0.04, 4.0
 GEOMETRY = DriveGeometry()
-SENSOR_IN_BODY = np.array([0.12, 0.04, np.pi / 6])
 LANDMARK_WORLD = np.array([1.1, 0.8])
 CASES = (
     ("straight", "两轮同速：直行", "#2563eb"),

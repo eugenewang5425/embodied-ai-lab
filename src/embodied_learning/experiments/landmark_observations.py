@@ -14,18 +14,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
 import platform
 from pathlib import Path
 
 import numpy as np
 
-from embodied_learning.differential_drive import (
-    DriveGeometry,
-    compose,
-    rotation,
-    to_child,
-)
+from embodied_learning.differential_drive import DriveGeometry
 from embodied_learning.experiments.mobile_frames import DT, SENSOR_IN_BODY, wheel_schedule
 from embodied_learning.experiments.mobile_noise import (
     INTERVAL_NOISE_STD_RAD,
@@ -35,6 +29,16 @@ from embodied_learning.experiments.mobile_noise import (
     noisy_readings,
 )
 from embodied_learning.experiments.mobile_odometry import SCENARIOS, schedule, simulate_truth
+from embodied_learning.landmark_localization import (
+    LANDMARKS,
+    OBS_BEARING_STD_RAD,
+    OBS_PERIOD_STEPS,
+    OBS_RANGE_STD_M,
+    bearing_reading,  # noqa: F401 - backwards-compatible public lesson-18 helper
+    inverse_pose,  # noqa: F401 - backwards-compatible public lesson-18 helper
+    observe,
+    solve_pose,
+)
 
 LONG_SCENARIO = ("long", "长直行 32 秒（6.4 m）", 800)
 SCENARIOS = SCENARIOS + (LONG_SCENARIO,)
@@ -43,11 +47,7 @@ from embodied_learning.odometry import estimate_poses, heading_error
 EXPERIMENT = "differential_drive_landmark_observations"
 # Known control points in world coordinates; identification is assumed.
 # The three landmarks form a wide, non-degenerate triangle around the routes.
-LANDMARKS = np.array([[0.0, 1.6], [2.6, 1.0], [1.6, -0.9]])
 # Sensor samples every OBS_PERIOD_STEPS intervals (2 s), all three landmarks.
-OBS_PERIOD_STEPS = 50
-OBS_RANGE_STD_M = 0.01
-OBS_BEARING_STD_RAD = 0.01
 DEFAULT_RUNS = 20
 DEFAULT_SEED = 0
 GEOMETRY = DriveGeometry()
@@ -57,74 +57,6 @@ LONG_SEED_OFFSET = 2_000_000
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def inverse_pose(pose):
-    """Inverse SE(2): pose^-1 such that compose(pose, inverse) is identity."""
-    pose = np.asarray(pose, dtype=float)
-    if pose.shape != (3,) or not np.isfinite(pose).all():
-        raise ValueError("Expected finite [x, y, yaw] pose")
-    shift = -(rotation(pose[2]).T @ pose[:2])
-    return np.array([shift[0], shift[1], -pose[2]])
-
-
-def bearing_reading(landmark, sensor_pose):
-    """Distance and bearing of a known landmark IN THE SENSOR FRAME.
-
-    The sensor axis rotates with the body: bearing must be measured against the
-    sensor frame, exactly as the lesson-14 coordinate chain insists. Using world
-    axes here would silently ignore the sensor's +30 deg yaw and any turning.
-    """
-    point = to_child(sensor_pose, np.asarray(landmark, dtype=float))
-    return float(np.linalg.norm(point)), float(math.atan2(point[1], point[0]))
-
-
-def observe(pose, landmarks, rng, range_std=OBS_RANGE_STD_M, bearing_std=OBS_BEARING_STD_RAD):
-    """One sample: noisy distance+bearing of every landmark from the sensor.
-
-    The sensor frame is SENSOR_IN_BODY attached to the true pose. Noise is
-    independent per landmark and per sample; nothing here knows the estimator.
-    """
-    sensor = compose(pose, SENSOR_IN_BODY)
-    readings = np.empty((len(landmarks), 2))
-    for index, landmark in enumerate(landmarks):
-        distance, bearing = bearing_reading(landmark, sensor)
-        readings[index] = [
-            distance + rng.normal(0.0, range_std),
-            bearing + rng.normal(0.0, bearing_std),
-        ]
-    return readings
-
-
-def solve_pose(readings, landmarks):
-    """Sensor pose from noisy distance+bearing to >=2 known landmarks.
-
-    Converts polar readings to sensor-frame coordinates, then fits the rigid
-    rotation+translation that maps sensor coordinates onto world control points
-    (2D orthogonal Procrustes, closed form). The sensor installation pose is
-    then inverted to recover the body pose. No scaling is fitted: metres are the
-    unit on both sides and range noise was drawn in metres.
-    """
-    readings = np.asarray(readings, dtype=float)
-    landmarks = np.asarray(landmarks, dtype=float)
-    if readings.ndim != 2 or readings.shape != (len(landmarks), 2):
-        raise ValueError("Readings must match landmarks")
-    if len(landmarks) < 2 or not np.isfinite(readings).all() or not np.isfinite(landmarks).all():
-        raise ValueError("Need at least two finite landmarks")
-    if np.any(readings[:, 0] <= 0):
-        raise ValueError("Range readings must be positive")
-    # Sensor-frame coordinates implied by each (range, bearing) reading.
-    polar = np.column_stack(
-        [readings[:, 0] * np.cos(readings[:, 1]), readings[:, 0] * np.sin(readings[:, 1])]
-    )
-    center_z, center_l = polar.mean(axis=0), landmarks.mean(axis=0)
-    zz, ll = polar - center_z, landmarks - center_l
-    dot = float(zz[:, 0] @ ll[:, 0] + zz[:, 1] @ ll[:, 1])
-    cross = float(zz[:, 0] @ ll[:, 1] - zz[:, 1] @ ll[:, 0])
-    yaw = math.atan2(cross, dot)
-    translation = center_l - rotation(yaw) @ center_z
-    sensor_pose = [translation[0], translation[1], yaw]
-    return compose(sensor_pose, inverse_pose(SENSOR_IN_BODY))
 
 
 def hold_estimate(poses_at, observation_frames, initial=(0.0, 0.0, 0.0), steps=None):
@@ -271,6 +203,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
             name: digest(Path(__file__).resolve().parents[1] / name)
             for name in [
                 "differential_drive.py",
+                "landmark_localization.py",
                 "odometry.py",
                 "experiments/mobile_frames.py",
                 "experiments/mobile_odometry.py",

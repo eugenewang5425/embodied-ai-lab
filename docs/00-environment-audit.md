@@ -1,6 +1,6 @@
 # 本机环境审计
 
-审计日期：2026-08-09
+初始审计日期：2026-08-09。机器人运行环境于 2026-09-03 补充核验；下方硬件、磁盘空间及无关工具仍是初始快照，不当作当前状态。
 
 ## 硬件与系统
 
@@ -27,8 +27,9 @@
 | Conda / Mamba | 未安装；本项目当前不需要 |
 | CMake / GCC / G++ | 未安装 |
 | Docker | 未安装 |
-| WSL | 命令存在，但 Linux 子系统/发行版尚未完成安装 |
-| ROS 2 / Gazebo / MuJoCo | 未安装 |
+| WSL | 2026-09-03 核验：WSL2，已有 `Ubuntu-24.04`（Ubuntu 24.04.4） |
+| ROS 2 / Gazebo | 2026-09-03 核验：已有 ROS 2 Jazzy / Gazebo Sim 8.15.0；本课实际运行 rclpy 节点与 tf2，不启动 Gazebo 世界 |
+| WSL Python / NumPy | 3.12.3 / 1.26.4，与 Windows 项目虚拟环境分离 |
 
 ## 决策
 
@@ -38,7 +39,7 @@ MuJoCo 官方提供 Windows 预编译支持，Python 包可以直接通过 PyPI 
 
 ### 第二阶段：WSL2 + ROS 2 Jazzy + Gazebo Harmonic
 
-Gazebo 在 Windows 上属于尽力支持且存在已知运行问题。官方对新用户推荐 Ubuntu 24.04、ROS 2 Jazzy 和 Gazebo Harmonic 的组合，因此后续通过 WSL2 建立独立的 Linux 机器人开发环境。
+独立 Linux 机器人环境已存在，本轮没有重新安装。第二十课在 WSL2 中运行真实 ROS 节点、消息与 TF，Windows 只负责导出测量和只读教学回放。相关入口和验收见[第二十课](22-session-20-ros2-messages-and-tf.md)。Gazebo 虽已安装，但本课没有增加物理环境或传感器仿真。
 
 ### 暂缓：Isaac Lab 完整工作流
 
@@ -55,4 +56,3 @@ Gazebo 在 Windows 上属于尽力支持且存在已知运行问题。官方对�
 ## 中文路径兼容说明
 
 MuJoCo 在 Windows 上不能直接用原生路径加载当前中文项目目录下的 MJCF 文件。项目中的 `UnicodeSafeInvertedPendulumEnv` 先由 Python 读取 XML 内容，再通过 `MjModel.from_xml_string` 加载模型，因此无需重命名或移动项目目录。该兼容方案已通过自动测试和实际渲染验证。
-

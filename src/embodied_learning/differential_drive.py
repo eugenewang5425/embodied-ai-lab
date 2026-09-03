@@ -7,6 +7,9 @@ from dataclasses import dataclass
 
 import numpy as np
 
+# Shared installation pose: sensor frame expressed in body coordinates.
+SENSOR_IN_BODY = np.array([0.12, 0.04, np.pi / 6])
+
 
 def finite_vector(value, size):
     result = np.asarray(value, dtype=float)
