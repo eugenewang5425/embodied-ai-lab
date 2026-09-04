@@ -32,6 +32,8 @@ from embodied_learning.experiments.pinhole_projection import (
 )
 
 DEFAULT_RESULTS = "results/mobile_pinhole_2026-09-03"
+# Visual zoom for the depth-noise error vectors (real mean is 4.2 cm).
+ERROR_ZOOM = 20
 IMAGE_PLANE_F_M = 1.5  # drawn image-plane distance for the 3D frustum
 
 
@@ -317,40 +319,40 @@ class PinholeDemo:
             )
             ax.legend(fontsize=8, loc="upper left")
         else:
-            ax.set_title("深度噪声：误差向量放大 ×10（真实均值 4.2 cm）")
+            ax.set_title("深度噪声：误差箭头放大 ×20（真实均值 4.2 cm）")
             noisy = self.data["noisy_world"]
-            error_vectors = noisy - visible
-            # True error is ~4 cm; scale drawn vectors by 10 so the direction
-            # (along the observation ray) becomes visible.
-            drawn = visible + error_vectors * 10
+            error_vectors = (noisy - visible) * ERROR_ZOOM
+            drawn = visible + error_vectors
             ax.scatter(
                 drawn[:, 0],
                 drawn[:, 1],
                 drawn[:, 2],
                 color="#ea580c",
-                s=7,
+                s=10,
                 depthshade=False,
-                label="还原点云（放大×10 后的位置）",
+                label=f"还原点云（误差放大 ×{ERROR_ZOOM} 后的位置）",
             )
-            for i in range(len(visible)):
-                ax.plot(
-                    [visible[i, 0], drawn[i, 0]],
-                    [visible[i, 1], drawn[i, 1]],
-                    [visible[i, 2], drawn[i, 2]],
-                    color="#9333ea",
-                    lw=0.8,
-                    alpha=0.6,
-                )
+            ax.quiver(
+                visible[:, 0],
+                visible[:, 1],
+                visible[:, 2],
+                error_vectors[:, 0],
+                error_vectors[:, 1],
+                error_vectors[:, 2],
+                color="#9333ea",
+                linewidth=2.2,
+                arrow_length_ratio=0.18,
+                label="误差向量（方向=该点观测射线）",
+            )
             ax.scatter(
                 visible[:, 0],
                 visible[:, 1],
                 visible[:, 2],
                 color="#2563eb",
-                s=6,
+                s=7,
                 depthshade=False,
                 label="真值点（误差起点）",
             )
-            ax.plot([], [], color="#9333ea", lw=2.0, label="误差向量（方向=该点观测射线）")
             ax.legend(fontsize=8, loc="upper right")
         ax.set_xlabel("东 / m")
         ax.set_ylabel("北 / m")
@@ -463,9 +465,10 @@ class PinholeDemo:
             x, y = xy(payload["pixel"])
             c.create_oval(x - 6, y - 6, x + 6, y + 6, outline="#0891b2", width=3)
         else:
-            for u, v in pixels:
+            for index, (u, v) in enumerate(pixels):
                 x, y = xy([u, v])
-                c.create_oval(x - 2.0, y - 2.0, x + 2.0, y + 2.0, fill="#2563eb", outline="")
+                fill = "#ea580c" if pole_mask[index] else "#2563eb"
+                c.create_oval(x - 2.0, y - 2.0, x + 2.0, y + 2.0, fill=fill, outline="")
 
     def fill_stats(self, mode):
         report = self.data["report"]
