@@ -317,36 +317,40 @@ class PinholeDemo:
             )
             ax.legend(fontsize=8, loc="upper left")
         else:
-            ax.set_title("深度噪声：橙=还原点云，蓝=真值，紫线=逐点误差")
+            ax.set_title("深度噪声：误差向量放大 ×10（真实均值 4.2 cm）")
+            noisy = self.data["noisy_world"]
+            error_vectors = noisy - visible
+            # True error is ~4 cm; scale drawn vectors by 10 so the direction
+            # (along the observation ray) becomes visible.
+            drawn = visible + error_vectors * 10
+            ax.scatter(
+                drawn[:, 0],
+                drawn[:, 1],
+                drawn[:, 2],
+                color="#ea580c",
+                s=7,
+                depthshade=False,
+                label="还原点云（放大×10 后的位置）",
+            )
+            for i in range(len(visible)):
+                ax.plot(
+                    [visible[i, 0], drawn[i, 0]],
+                    [visible[i, 1], drawn[i, 1]],
+                    [visible[i, 2], drawn[i, 2]],
+                    color="#9333ea",
+                    lw=0.8,
+                    alpha=0.6,
+                )
             ax.scatter(
                 visible[:, 0],
                 visible[:, 1],
                 visible[:, 2],
                 color="#2563eb",
-                s=10,
+                s=6,
                 depthshade=False,
-                label="真值点",
+                label="真值点（误差起点）",
             )
-            noisy = self.data["noisy_world"]
-            ax.scatter(
-                noisy[:, 0],
-                noisy[:, 1],
-                noisy[:, 2],
-                color="#ea580c",
-                s=8,
-                depthshade=False,
-                label="种子 #0 噪声点云（σ=5 cm）",
-            )
-            step = max(1, len(visible) // 10)
-            for i in list(range(0, len(visible), step))[:12]:
-                ax.plot(
-                    [visible[i, 0], noisy[i, 0]],
-                    [visible[i, 1], noisy[i, 1]],
-                    [visible[i, 2], noisy[i, 2]],
-                    color="#9333ea",
-                    lw=1.2,
-                    alpha=0.8,
-                )
+            ax.plot([], [], color="#9333ea", lw=2.0, label="误差向量（方向=该点观测射线）")
             ax.legend(fontsize=8, loc="upper right")
         ax.set_xlabel("东 / m")
         ax.set_ylabel("北 / m")
