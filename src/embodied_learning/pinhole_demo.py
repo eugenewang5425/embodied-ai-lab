@@ -174,7 +174,7 @@ class PinholeDemo:
         c.create_text(
             ox + 8,
             oy + 14,
-            text="图像平面 640×480 px（主点黄色叉）",
+            text="图像平面 640×480 px（红叉=主点）",
             anchor="nw",
             font=("Microsoft YaHei", 9),
             fill="#64748b",
