@@ -60,8 +60,8 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-03）
 
-- **主线课程 1–21 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）。
-- **自动验收**：`uv run pytest -q` 全量 **443 项通过**，Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–22 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知入门（针孔相机/投影反投影/深度误差传播）。
+- **自动验收**：`uv run pytest -q` 全量 **454 项通过**（含本轮新增 11 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 位于 `D:\wsl\ubuntu`，约 8 GB）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
 - **下一步**：完成各课讲义的"学员待解释"清单（见文末），再按[学习路线](docs/01-learning-roadmap.md)推进三维感知/ROS 2 导航或机器人学习；不自动开始下一课。
 
@@ -120,7 +120,8 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 21-session-19-landmark-fusion.md
 │   ├── 22-session-20-ros2-messages-and-tf.md
 │   ├── 23-session-21-goal-feedback.md
-│   └── 23a-session-21-stopping-tolerance.md
+│   ├── 23a-session-21-stopping-tolerance.md
+│   └── 24-session-22-pinhole-projection.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
@@ -422,6 +423,18 @@ uv run python -m embodied_learning.threshold_demo
 
 近／远目标、两种定位、20 种子共 240 回合，逐数组复现；2 cm 的 80 回合与上一课完全一致。远目标融合通过／超时数为 11/0、13/4、7/13（各 20 次）；门限更小不保证任务更好。全量 443 项测试通过，慢放及超时对照已实际检查。正式结果 `results/goal_thresholds_2026-09-03/`，见[补充实验讲义](docs/23a-session-21-stopping-tolerance.md)。原默认门限不变，旧结果保留。
 
+## 第二十二课：针孔相机与投影-反投影（阶段 4：三维感知）
+
+进入三维感知阶段的第一课。已知坐标的 3D 场景（地面网格 + 竖直杆）经针孔相机投影到 640×480 图像（fx=600、主点 (320,240)），再按四种信息条件反投影：有精确深度时**往返一致**（最大 1.47e-15 m）；无深度时同一像素只给一条射线（三个深度猜测共线且重投影相同——单目本质无尺度）；深度 σ=5 cm 噪声使点云误差均值 5.24 cm，且**误差 ∝ 射线长度 |K⁻¹[u,v,1]|**（误差÷倍率恢复出 3.9 cm ≈ σ·√(2/π) 的机制验证）；相机平移 0.5 m 后反投影回同一世界系仍一致（1.37e-15 m）。
+
+```powershell
+uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole_2026-09-03
+```
+
+三种模式共用同一组像素：① 精确深度（往返误差与近裁剪面说明）、② 无深度（高亮像素的三个深度候选与共线证明）、③ 深度噪声（20 种子统计与机制数字）。默认窗口 1180×640，按 Esc 退出。
+
+复现需新目录：`uv run python -m embodied_learning.experiments.pinhole_projection --output results/mobile_pinhole_my_run --runs 20 --seed 0`。新增 11 项测试；全量 454 项通过。完整原理、假设与停止点见[第二十二课讲义](docs/24-session-22-pinhole-projection.md)。下一步是"单目相对深度 ↔ 米制标定"的讨论与设计，不直接开始训练。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -453,6 +466,7 @@ uv run python -m embodied_learning.threshold_demo
 - [x] 第二十课：真实 ROS 三进程、时间戳配对、TF 坐标链与逐帧核验；运动优先改版后 406 项全量通过
 - [x] 第二十一课：目标点反馈、估计驱动轮速、80 回合配对、实际到达／误判区分和运动慢放
 - [x] 第二十一课补充：2 / 1 / 0.5 cm 停车门限单变量对照、240 回合、实际误差／耗时／超时与重新调整慢放
+- [x] 第二十二课：针孔相机投影/反投影、往返一致、无深度射线、深度噪声误差传播与射线倍率机制、位姿一致性；454 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
