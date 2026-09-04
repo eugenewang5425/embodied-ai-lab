@@ -72,42 +72,52 @@ def to_world(points_camera, rotation, translation):
 
 
 def project(points_world, rotation, translation, intrinsic=K_INTRINSIC, near_plane=None):
-    """Project world points to pixels; near-plane points are dropped.
+    """Project world points to pixels; outside-FOV and near-plane points drop.
 
-    near_plane=None uses NEAR_PLANE_M; pass 0.0 when re-projecting points that
-    already live in front of the camera (back-projected clouds).
+    Visibility = in front of the near plane AND inside the 640x480 image
+    rectangle. near_plane=None uses NEAR_PLANE_M; pass 0.0 when re-projecting
+    points that already live in front of the camera (back-projected clouds).
     """
     if near_plane is None:
         near_plane = NEAR_PLANE_M
     camera = to_camera(points_world, rotation, translation)
-    z_mask = camera[:, 2] > near_plane
-    camera = camera[z_mask]
+    keep = np.zeros(len(camera), dtype=bool)
     pixels = np.empty((len(camera), 2))
     for index, (x, y, z) in enumerate(camera):
+        if z <= near_plane:
+            continue
         v = intrinsic @ np.array([x, y, z])
         if v[2] <= 0:
             raise ValueError("Invalid projection")
-        pixels[index] = [v[0] / v[2], v[1] / v[2]]
-    return pixels, z_mask, camera
+        u, vv = v[0] / v[2], v[1] / v[2]
+        if 0.0 <= u < WIDTH_PX and 0.0 <= vv < HEIGHT_PX:
+            pixels[index] = [u, vv]
+            keep[index] = True
+    return pixels[keep], keep, camera[keep]
 
 
 def project_with_depth(points_world, rotation, translation, intrinsic=K_INTRINSIC):
     """Project and return aligned (pixels, depths, world) for visible points.
 
-    depth is the camera-frame z; the near plane (0.5 m) acts as the minimum
-    working distance, mirroring real stereo/depth sensors.
+    Visible = in front of the near plane (0.5 m) AND inside the 640x480 image.
+    depth is the camera-frame z. Points outside the image rectangle (like the
+    pole top above the upper image border) are NOT visible to this camera.
     """
     camera = to_camera(points_world, rotation, translation)
-    keep = camera[:, 2] > NEAR_PLANE_M
-    camera_visible = camera[keep]
-    world_visible = np.asarray(points_world, dtype=float)[keep]
-    pixels = np.empty((len(camera_visible), 2))
-    for index, (x, y, z) in enumerate(camera_visible):
+    keep = np.zeros(len(camera), dtype=bool)
+    pixel_list = []
+    for index, (x, y, z) in enumerate(camera):
+        if z <= NEAR_PLANE_M:
+            continue
         v = intrinsic @ np.array([x, y, z])
         if v[2] <= 0:
             raise ValueError("Invalid projection")
-        pixels[index] = [v[0] / v[2], v[1] / v[2]]
-    return pixels, camera_visible[:, 2], world_visible
+        u, vv = v[0] / v[2], v[1] / v[2]
+        if 0.0 <= u < WIDTH_PX and 0.0 <= vv < HEIGHT_PX:
+            keep[index] = True
+            pixel_list.append([u, vv])
+    pixels = np.asarray(pixel_list, dtype=float).reshape(np.sum(keep), 2)
+    return pixels, camera[keep][:, 2], np.asarray(points_world, dtype=float)[keep]
 
 
 def unproject(pixels, depth, rotation, translation, intrinsic=K_INTRINSIC):
@@ -240,8 +250,12 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
         "noisy_max_error_m": float(noisy["errors_m"].max()),
         "noisy_mean_reprojection_px": float(noisy["reprojection_px"].mean()),
         "noise_estimate_mean_m": float(ratio.mean()),
-        "noise_estimate_at_near_m": float(ratio[:, noisy["depths"] < 1.5].mean()),
-        "noise_estimate_at_far_m": float(ratio[:, noisy["depths"] > 3.5].mean()),
+        "noise_estimate_at_near_m": float(
+            ratio[:, noisy["depths"] <= np.quantile(noisy["depths"], 0.15)].mean()
+        ),
+        "noise_estimate_at_far_m": float(
+            ratio[:, noisy["depths"] >= np.quantile(noisy["depths"], 0.85)].mean()
+        ),
         "mean_error_by_depth": noisy["mean_error_by_depth"].tolist(),
         "depth_bins": noisy["depth_bins"].tolist(),
         "ray_payload": {

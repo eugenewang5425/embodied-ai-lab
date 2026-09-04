@@ -88,6 +88,7 @@ def load_replays(directory):
     clouds = unproject(np.asarray(pixels), np.asarray(fresh_depths), rotation, translation)
     if not np.allclose(np.linalg.norm(clouds - fresh_world, axis=1), 0, atol=1e-12):
         raise ValueError("Round trip inconsistent")
+    pole_mask = (np.abs(fresh_world[:, 0] - 4.2) < 1e-9) & (np.abs(fresh_world[:, 1] - 3.6) < 1e-9)
     return {
         "report": report,
         "points": points,
@@ -96,6 +97,7 @@ def load_replays(directory):
         "translation": translation,
         "visible_world": fresh_world,
         "noisy_world": noisy_world,
+        "pole_mask": pole_mask,
     }
 
 
@@ -438,9 +440,20 @@ class PinholeDemo:
             font=("Microsoft YaHei", 9),
             fill="#64748b",
         )
-        for u, v in pixels:
+        pole_mask = self.data["pole_mask"]
+        for index, (u, v) in enumerate(pixels):
             x, y = xy([u, v])
-            c.create_oval(x - 2.0, y - 2.0, x + 2.0, y + 2.0, fill="#cbd5e1", outline="")
+            fill = "#ea580c" if pole_mask[index] else "#cbd5e1"
+            c.create_oval(x - 2.0, y - 2.0, x + 2.0, y + 2.0, fill=fill, outline="")
+        if pole_mask.any():
+            c.create_text(
+                ox + 8,
+                oy + 32,
+                text="橙色=竖直杆：底部 2 点在画面内；杆顶超出图像上边界（视场）",
+                anchor="nw",
+                font=("Microsoft YaHei", 8),
+                fill="#ea580c",
+            )
         if mode == "ray":
             payload = self.data["report"]["ray_payload"]
             x, y = xy(payload["pixel"])
