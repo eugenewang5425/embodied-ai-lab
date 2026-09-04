@@ -68,6 +68,7 @@ def load_replays(directory):
             "camera_points",
             "roundtrip_error_m",
             "ray_points",
+            "noisy_cloud_points",
             "ray_depths",
             "noisy_cloud_errors_m",
             "noisy_cloud_reprojection_px",
@@ -83,7 +84,7 @@ def load_replays(directory):
             raise ValueError("Unexpected archive arrays")
         points = npz["world_points"].copy()
         pixels = npz["projected_pixels"].copy()
-        noisy_world = npz["cloud_world"].copy()
+        noisy_world = npz["noisy_cloud_points"][0].copy()  # seed #0 cloud
     rotation, translation = look_at(EYE, TARGET)
     fresh_pixels, fresh_depths, fresh_world = project_with_depth(points, rotation, translation)
     if not np.array_equal(fresh_pixels, pixels):
@@ -91,6 +92,8 @@ def load_replays(directory):
     clouds = unproject(np.asarray(pixels), np.asarray(fresh_depths), rotation, translation)
     if not np.allclose(np.linalg.norm(clouds - fresh_world, axis=1), 0, atol=1e-12):
         raise ValueError("Round trip inconsistent")
+    if np.allclose(noisy_world, fresh_world):
+        raise ValueError("Stored noisy cloud equals truth (bug guard)")
     pole_mask = (np.abs(fresh_world[:, 0] - 4.2) < 1e-9) & (np.abs(fresh_world[:, 1] - 3.6) < 1e-9)
     return {
         "report": report,

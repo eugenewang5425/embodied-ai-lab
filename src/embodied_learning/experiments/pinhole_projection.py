@@ -149,13 +149,14 @@ def repeated_noisy_cloud(seed_count, seed, depth_std=DEPTH_NOISE_STD_M):
     exact_pixels, depths_exact, world_exact = project_with_depth(points, rotation, translation)
     # Data: pixels, exact depths, world points that survived the projection.
     pixel_of, depth_of, world_of = [], [], []
-    errors, reprojection = [], []
+    errors, reprojection, clouds_of = [], [], []
     for s in range(seed_count):
         rng = np.random.default_rng(seed + 1000 * s)
         noisy = depths_exact + rng.normal(0.0, depth_std, size=len(depths_exact))
         clouds = unproject(exact_pixels, noisy, rotation, translation)
         error = np.linalg.norm(clouds - world_exact, axis=1)
         errors.append(error)
+        clouds_of.append(clouds)
         back, _, _ = project(clouds, rotation, translation, near_plane=0.0)
         reprojection.append(np.linalg.norm(back - exact_pixels, axis=1))
         if s == 0:
@@ -168,6 +169,7 @@ def repeated_noisy_cloud(seed_count, seed, depth_std=DEPTH_NOISE_STD_M):
         "world": world_of,
         "errors_m": errors,
         "reprojection_px": reprojection,
+        "clouds_m": np.asarray(clouds_of),
         "mean_error_by_depth": np.array(
             [
                 errors[:, depth_of >= d].mean() if np.any(depth_of >= d) else 0.0
@@ -218,6 +220,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
         "noisy_cloud_reprojection_px": noisy["reprojection_px"],
         "cloud_depths": noisy["depths"],
         "cloud_world": noisy["world"],
+        "noisy_cloud_points": noisy["clouds_m"],
         "mean_error_by_depth": noisy["mean_error_by_depth"],
         "depth_bins": noisy["depth_bins"],
         "pose_error_m": pose_error,

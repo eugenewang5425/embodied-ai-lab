@@ -158,6 +158,16 @@ def test_run_experiment_guards(recording):
         run_experiment(output.parent / "x", runs=1, seed=0)
 
 
+def test_stored_noisy_cloud_is_actually_noisy(recording):
+    output, _ = recording
+    with np.load(output / "trajectories.npz", allow_pickle=False) as npz:
+        truth = npz["cloud_world"]
+        noisy = npz["noisy_cloud_points"]
+    assert noisy.shape[0] == 6 and noisy.shape[1] == truth.shape[0]
+    mean_error = np.linalg.norm(noisy[0] - truth, axis=1).mean()
+    assert 0.10 < mean_error < 0.15  # sigma=0.15 -> mean |e| ~ 12 cm
+
+
 def test_recording_rejects_tampering(tmp_path):
     output = tmp_path / "result"
     report = run_experiment(output, runs=4, seed=9)
