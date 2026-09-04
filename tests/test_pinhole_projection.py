@@ -106,8 +106,8 @@ def test_noisy_depth_is_seeded_and_ray_scaling_is_visible():
     rays = np.column_stack([pixels, np.ones(len(pixels))])
     ray_norm = np.linalg.norm((inverse @ rays.T).T, axis=1)
     ratio = errors / ray_norm
-    # E|N(0, 0.05)| = 0.05*sqrt(2/pi) ~ 3.99 cm; the ratio recovers it.
-    assert 0.03 < ratio.mean() < 0.05
+    # E|N(0, 0.15)| = 0.15*sqrt(2/pi) ~ 11.97 cm; the ratio recovers it.
+    assert 0.10 < ratio.mean() < 0.14
     # Mechanism check: single-seed ratio already recovers E|N(0, sigma)|
     # = sigma*sqrt(2/pi) ~ 3.99 cm (asserted above). No correlation assertion:
     # the in-FOV pixel set spans a narrow ray-norm range, so a correlation
@@ -147,7 +147,7 @@ def test_summary_contract(recording):
     assert report["roundtrip_max_error_m"] < 1e-12
     assert report["pose_consistency_max_error_m"] < 1e-12
     assert report["pose_all_matched"]
-    assert 0.03 < report["noise_estimate_mean_m"] < 0.05
+    assert 0.10 < report["noise_estimate_mean_m"] < 0.14
 
 
 def test_run_experiment_guards(recording):

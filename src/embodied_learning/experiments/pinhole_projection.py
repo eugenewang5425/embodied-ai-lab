@@ -29,7 +29,7 @@ CX_PX, CY_PX = 320.0, 240.0
 K_INTRINSIC = np.array([[FOCAL_PX, 0.0, CX_PX], [0.0, FOCAL_PX, CY_PX], [0.0, 0.0, 1.0]])
 EYE = np.array([2.0, 1.5, 1.4])  # camera position (E, N, U)
 TARGET = np.array([3.0, 3.0, 0.0])  # looking at the middle of the ground grid
-DEPTH_NOISE_STD_M = 0.05
+DEPTH_NOISE_STD_M = 0.15
 # Camera working distance: points closer than this are outside the near plane.
 NEAR_PLANE_M = 0.5
 DEFAULT_RUNS = 20

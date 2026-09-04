@@ -32,8 +32,9 @@ from embodied_learning.experiments.pinhole_projection import (
 )
 
 DEFAULT_RESULTS = "results/mobile_pinhole_2026-09-03"
-# Visual zoom for the depth-noise error vectors (real mean is 4.2 cm).
-ERROR_ZOOM = 20
+# Visual zoom for the depth-noise error vectors (real mean ~12 cm now that
+# the synthetic depth sensor is deliberately coarse: sigma = 15 cm).
+ERROR_ZOOM = 6
 IMAGE_PLANE_F_M = 1.5  # drawn image-plane distance for the 3D frustum
 
 
@@ -319,7 +320,10 @@ class PinholeDemo:
             )
             ax.legend(fontsize=8, loc="upper left")
         else:
-            ax.set_title("深度噪声：误差箭头放大 ×20（真实均值 4.2 cm）")
+            ax.set_title(
+                f"深度噪声：误差箭头放大 ×{ERROR_ZOOM}"
+                f"（真实均值 {self.data['report']['noisy_mean_error_m'] * 100:.1f} cm）"
+            )
             noisy = self.data["noisy_world"]
             error_vectors = (noisy - visible) * ERROR_ZOOM
             drawn = visible + error_vectors
@@ -359,7 +363,7 @@ class PinholeDemo:
         ax.set_zlabel("高 / m")
         ax.set_xlim(0, 6.5)
         ax.set_ylim(0, 6.5)
-        ax.set_zlim(-0.4, 3.4)
+        ax.set_zlim(-0.5, 3.5)
         ax.set_box_aspect((6.5, 6.5, 3.8))
         ax.view_init(elev=26, azim=-58)
         self.canvas3d.draw_idle()
