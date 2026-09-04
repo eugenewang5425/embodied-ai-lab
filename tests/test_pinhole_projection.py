@@ -215,15 +215,17 @@ def test_tk_demo_modes_and_panel():
     root.withdraw()
     routes = load_replays(output)
     demo = PinholeDemo(root, routes)
-    demo.canvas.winfo_width = lambda: 700
-    demo.canvas.winfo_height = lambda: 420
+    demo.canvas.winfo_width = lambda: 460
+    demo.canvas.winfo_height = lambda: 430
     root.update()
     demo.redraw()  # fill the stats panel after the canvas size mock applies
     assert demo.mode.get() == "exact"
+    assert demo.fig is not None and demo.ax3d is not None
+    assert len(demo.ax3d.lines) >= 10  # ground grid + pyramid edges
     assert "往返" in demo.stats.cget("text") or "1e-" in demo.stats.cget("text")
     demo.mode.set("ray")
     demo.redraw()
-    assert "无深度" in demo.stats.cget("text") or "射线" in demo.stats.cget("text")
+    assert "射线" in demo.stats.cget("text")
     demo.mode.set("noisy")
     demo.redraw()
     assert "噪声" in demo.stats.cget("text")

@@ -431,7 +431,7 @@ uv run python -m embodied_learning.threshold_demo
 uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole_2026-09-03
 ```
 
-三种模式共用同一组像素：① 精确深度（往返误差与近裁剪面说明）、② 无深度（高亮像素的三个深度候选与共线证明）、③ 深度噪声（20 种子统计与机制数字）。默认窗口 1180×640，按 Esc 退出。
+窗口左侧是**可旋转 3D 场景视图**（地面+杆+相机金字塔+射线/点云差异，可拖拽旋转缩放），右侧像素平面与数字面板；三种模式：① 精确深度（往返误差与近裁剪面）、② 无深度（射线上三个深度候选与共线证明）、③ 深度噪声（真值 vs 噪声点云与误差连线 + 20 种子统计）。按 Esc 退出。
 
 复现需新目录：`uv run python -m embodied_learning.experiments.pinhole_projection --output results/mobile_pinhole_my_run --runs 20 --seed 0`。新增 11 项测试；全量 454 项通过。完整原理、假设与停止点见[第二十二课讲义](docs/24-session-22-pinhole-projection.md)。下一步是"单目相对深度 ↔ 米制标定"的讨论与设计，不直接开始训练。
 
