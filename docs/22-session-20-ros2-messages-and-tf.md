@@ -196,3 +196,22 @@ ros2 interface show geometry_msgs/msg/PoseStamped
 - [ROS 2 Jazzy 发布与订阅教程](https://github.com/ros2/ros2_documentation/blob/jazzy/source/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.rst)
 - [ROS 2 Jazzy QoS 语义](https://github.com/ros2/ros2_documentation/blob/jazzy/source/Concepts/Intermediate/About-Quality-of-Service-Settings.rst)
 - [REP-105：map、odom、base_link 约定](https://github.com/ros-infrastructure/rep/blob/master/rep-0105.rst)
+
+## 8. 图版：从冻结记录看三进程协作
+
+![第二十课预览：三进程回放图版](docs/img/lesson-20-ros2-timeline.png)
+
+这张图由独立脚本**只读**正式记录重绘，不重跑实验、不写 `results/`，四个面板全部取自 `results/ros2_system_2026-09-03_v2/`（`reference.npz` + `ros_trace.jsonl` + `summary.json`）。再生成命令：
+
+```powershell
+uv run python -m embodied_learning.experiments.record_figures --kind ros2 --record results/ros2_system_2026-09-03_v2 --output docs/img/lesson-20-ros2-timeline.png
+```
+
+四个面板各看什么、与正文哪个数字对上：
+
+1. **左上·方形路线地图**：600 步 / 24 s 的运动学真值（蓝实线）与纯里程计（紫空圈）、地标融合（橙空圈）两种估计，另画三个已知地标（绿三角）。蓝色是显示与评价用的真值，定位节点读不到它（第 1 节）；地标位置取自模块常数，该源文件哈希记录在记录的 `input.json` 里。
+2. **右上·消息时间线**：编码器、里程计位姿、融合位姿三条累计曲线逐帧重合，24 s 时各 601 条；右轴橙色阶梯是地标，每 2 s 一条、累计 12 条。对上第 6 节"收到编码器 601 条、地标 12 条、里程计位姿 601 条、融合位姿 601 条"与第 2 节的采样日程。
+3. **左下·map→odom 修正边**：平移 x/y（左轴，cm）与偏航（右轴，°）只在观测时刻跳变，两次跳变之间保持不变；24 s 末平移 3.22 cm、偏航 −4.33°。左上角文本框是第 0 帧的 `map→sensor` 整链查询 (0.12, 0.04, +30°)，即第 3 节的固定安装关系（`tf_static`）。注意 `ros_trace.jsonl` 里的 `map_to_sensor` 字段是随车移动的整链查询结果，不是这条固定边。
+4. **右下·逐帧定位误差**：两种估计相对真值的距离。最大 3.09 cm（纯里程计，约 23 s 处）/ 2.44 cm（融合）；橙色注释框给出第 6 节的两个核验数字——定位输出与第十九课最大分量差 8.88e-16、TF 链查询差 1.53e-15，均为浮点舍入量级，不是定位精度。首次观测附近融合误差一度变大（校正前预测 0.08 cm → 校正后 1.75 cm，即正文改版验收记录的那次"变差"）。
+
+时间轴统一用记录里的 `time_s`（0–24 s）；消息里的 `stamp_sec` 只有整秒部分，小数在 `stamp_nanosec`，图上不使用它。图上每个数字都能在上述三个文件中找到来源。
