@@ -219,3 +219,20 @@ uv run pytest -q tests/test_session29_ppo_swingup.py
 下一步候选（按 docs/26 第五节序列）：第 30 课进入 ACT/扩散策略的最小操作任务。本课留下的接口是：
 第 7 课基线可充当 RL 示教来源（先示范后微调），第 28 课的复合误差与本课的探索代价合起来，
 是理解"示范＋奖励"混合方法（RLFD/DDPG+BC 一类）动机的现成素材。
+
+## 10. 与文献对照：我们的失败不是孤例，解法有谱系（2026-09-06 补充）
+
+本课四个失败机制都能对上文献中的已知问题类，且有已验证的解法路径（检索于 2026-09-06，链接见正文）：
+
+| 本课机制 | 文献中的问题类 | 已验证解法 |
+| --- | --- | --- |
+| ① 直立区域从未被探索 | 硬探索/稀疏有效奖励——摆起是文献常用典型例（Dulac-Arnold 等 2021 综述）；MathWorks 官方文档明确警告 PPO 在连续摆起上训练不稳定，建议改用 TD3/SAC | 势函数奖励塑形（Ng 等 1999，保持最优策略不变）；反向课程（从目标附近反向生成起始态）；Go-Explore（先返回再探索） |
+| ② 扶稳技能外推成下方恒满偏反射 | 策略分布移（与第 28 课 BC 复合误差同根）；Go-Explore 论文称 detach/derail | 残差 RL：手工控制器做底座 + RL 只学残差（Johannink 等 ICRA 2019） |
+| ③ 出界惩罚经 GAE 压制中间进步 | 任意奖励塑形改变最优策略 | Ng/Harada/Russell 定理：F(s,s′)=γΦ(s′)−Φ(s) 形状的塑形不改最优策略——能量误差恰好可做势函数 |
+| ④ 下方回合 13 步即死、数据占比塌缩 | 起始态分布与采样塌缩 | 反向课程/起始态分布重设计；Go-Explore 的状态档案 |
+
+**与我们有直接亲缘的混合方案**：能量整形/物理控制器做名义控制 + RL 学残差（Residual RL, Johannink et al. ICRA 2019；KU Leuven 的 MPC-informed residual RL 同款）；示教引导的策略梯度 DAPG（Rajeswaran et al. RSS 2018，1 条示教 + 辅助 BC 损失，官方开源 hand_dapg）。两者都指向同一结论：**本课"缺抓取-回中协调"的近失，正确解法不是更多步数，而是把能量注入交给物理控制器（第 7 课已有），把学习容量留给协调问题**。
+
+对本课结论的影响：0/60 与文献中 PPO 在摆起上的系统性失败一致，支持"失败源于问题设定（探索结构）而非实现缺陷"的归因——本课的 FD 梯度核对与截断泄漏守卫已从实现侧排除另一解释。
+
+主要来源：Dulac-Arnold et al. 2021（Springer，real-world RL 挑战综述，摆起为典型探索难题）；MathWorks RL 文档（连续摆起上 PPO 不稳定警告）；Ng, Harada & Russell ICML 1999（potential-based shaping 定理）；Johannink et al. ICRA 2019（Residual RL）；Rajeswaran et al. RSS 2018（DAPG）；Ecoffet et al. 2021（Go-Explore, "First return, then explore", Nature）。
