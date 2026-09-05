@@ -486,6 +486,8 @@ uv run python -m embodied_learning.fusion_demo --results results/mobile_fusion_2
 
 ## 第二十课：ROS 2 节点、消息与坐标链
 
+（本课正式记录为 ROS 消息日志与 TF 链数据，无轨迹汇总图；运行页/消息页/TF 页三页演示见 ros2_system_demo）
+
 沿用第十九课读数和算法，在已有 WSL2 / ROS 2 Jazzy 中真实运行传感器回放、定位、核验三个独立进程。新增的是程序间的数据交接与坐标组织，不是提高定位精度；没有安装新仿真器或启动导航。
 
 ```powershell
@@ -502,6 +504,10 @@ uv run python -m embodied_learning.ros2_system_demo
 
 ## 第二十一课：根据估计位置驶向目标
 
+![第二十一课预览：目标点反馈实际到达对照](docs/img/lesson-21-goal-reaching.png)
+
+预览图由正式记录只读重算生成：`uv run python -m embodied_learning.experiments.goal_figures --source results/goal_reaching_2026-09-03 --output docs/img/lesson-21-goal-reaching.png`
+
 小车不再按预设时间表运动：每 0.04 s 根据估计位置和目标计算左右轮速。左右两次独立实验比较纯里程计与地标融合，控制器和限速不变；估计进入 2 cm 并停稳 0.4 s 后宣布到达，独立验收检查真实车轴中心是否在半径 3 cm 的目标区。
 
 ```powershell
@@ -513,6 +519,10 @@ uv run python -m embodied_learning.goal_demo
 正式结果在 `results/goal_reaching_2026-09-03/`。这是新运行的 Python 反馈运动学实验，不是新 ROS 联调或实车，不增加惯性、打滑、避障或滤波。80 回合逐数组复现一致，全量 429 项测试通过。原理和新目录复现见[第二十一课讲义](docs/23-session-21-goal-feedback.md)。
 
 ### 第二十一课补充：缩小停车门限
+
+![第二十一课补充预览：2/1/0.5 厘米停车门限对照](docs/img/lesson-21a-thresholds.png)
+
+预览图由正式记录只读重算生成：`uv run python -m embodied_learning.experiments.goal_figures --source results/goal_thresholds_2026-09-03 --output docs/img/lesson-21a-thresholds.png`
 
 ```powershell
 uv run python -m embodied_learning.threshold_demo
