@@ -147,13 +147,13 @@ class RealDepthDemo:
         report = self.data["report"]
         ax = self.fig.add_subplot(1, 2, 1)
         err_cm = self.data["real_reference_error_m"] * 100.0
-        im = ax.imshow(err_cm, cmap="magma", origin="upper")
-        ax.set_title("真实 DA V2：标定后全图误差 (cm)", fontsize=10)
+        im = ax.imshow(err_cm, cmap="RdBu_r", origin="upper")
+        ax.set_title("真实 DA V2：标定后有符号误差 Z_hat−Z (cm)", fontsize=10)
         self.fig.colorbar(im, ax=ax, fraction=0.046, pad=0.02)
         ax2 = self.fig.add_subplot(1, 2, 2)
         err_cm_proxy = self.data["proxy_reference_error_m"] * 100.0
         im2 = ax2.imshow(err_cm_proxy, cmap="magma", origin="upper", vmin=0.0)
-        ax2.set_title("第 23 课理想代理：同口径误差 (cm)", fontsize=10)
+        ax2.set_title("第 23 课理想代理：同口径误差 (cm，条纹为 1e-14 数值噪声底)", fontsize=10)
         self.fig.colorbar(im2, ax=ax2, fraction=0.046, pad=0.02)
         fit = report["dense_fit"]
         self.stats.config(

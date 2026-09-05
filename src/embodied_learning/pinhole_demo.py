@@ -512,7 +512,7 @@ class PinholeDemo:
         else:
             text = (
                 "③ 这一幕（目的）\n"
-                "给深度加 σ=5 cm 噪声，看它如何变成点云误差。\n\n"
+                f"给深度加 σ={report['depth_noise_std_m'] * 100:.0f} cm 噪声，看它如何变成点云误差。\n\n"
                 "统计特征与意义：\n"
                 f"  点云误差均值 {report['noisy_mean_error_m'] * 100:.2f} cm，"
                 f"最大 {report['noisy_max_error_m'] * 100:.2f} cm\n"
@@ -520,7 +520,7 @@ class PinholeDemo:
                 f"（近 {report['noise_estimate_at_near_m'] * 100:.2f} / "
                 f"远 {report['noise_estimate_at_far_m'] * 100:.2f}）\n\n"
                 "特征：误差 ∝ |K⁻¹[u,v,1]|（图像上离主点越远越大），\n"
-                "除回倍率后 ≈ σ·√(2/π)=3.99 cm——机制自洽。\n"
+                f"除回倍率后 ≈ σ·√(2/π)={report['depth_noise_std_m'] * 0.7978845608 * 100:.2f} cm——机制自洽。\n"
                 "意义：同样的传感器噪声，在图像边缘（近处大视角）\n"
                 "放得更大；精度不由标称值单独决定。"
             )
