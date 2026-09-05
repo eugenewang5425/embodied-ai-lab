@@ -6,20 +6,20 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **468 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **512 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 23 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration |
-| **Verified** | `uv run pytest -q` → **468 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Status** | 26 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration |
+| **Verified** | `uv run pytest -q` → **512 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-468%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-512%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,10 +60,10 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-05）
 
-- **主线课程 1–23 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定）。
-- **自动验收**：`uv run pytest -q` 全量 **468 项通过**（含第二十三课新增 13 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
-- **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 位于 `D:\wsl\ubuntu`，约 8 GB）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"学员待解释"清单（见文末），再按[学习路线](docs/01-learning-roadmap.md)推进三维感知/ROS 2 导航或机器人学习；不自动开始下一课。
+- **主线课程 1–26 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准）。
+- **自动验收**：`uv run pytest -q` 全量 **512 项通过**（含第 24–26 课新增 44 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
+- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 4 收尾（第 27 课视觉基础模型接地标身份）→ 阶段 5 入口（第 28 课模仿学习 BC）；不自动开始下一课。
 
 ## 课程索引
 
@@ -92,6 +92,9 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 21 课（含 23a 停车门限补充） | 根据估计位置驶向目标 | 估计驱动轮速、估计到达与实际通过区分、停车门限单变量对照 | Algorithm 篇·Robot Navigation 前置 | [讲义](docs/23-session-21-goal-feedback.md) · [补充](docs/23a-session-21-stopping-tolerance.md) |
 | 第 22 课 | 针孔相机与投影-反投影 | 针孔投影/反投影、无深度只剩一条射线、深度噪声误差传播 ∝ 射线长度 | Algorithm 篇·Computer Vision 3D + Hardware 篇·Sensors | [讲义](docs/24-session-22-pinhole-projection.md) |
 | 第 23 课 | 单目相对深度 ↔ 米制尺度标定 | 逆深度仿射歧义、控制点最小二乘标定 (a,b)、N/σ 扫描与 Z² 误差分层 | Algorithm 篇·Vision Foundation Models（相对深度）+ 标定 | [讲义](docs/25-session-23-monocular-metric.md) |
+| 第 24 课 | 真实 DA V2 仿射检验 | R²=0.9974 但残差为结构场（U 形+水平相关 −0.85）、全局仿射 3.2 cm 下限 | Vision Foundation Models（域差距与近似阶） | [讲义](docs/28-session-24-real-depth-affine.md) |
+| 第 25 课 | 张氏内参标定 | 单应 DLT、v 向量闭式解、M/σ 传播、退化姿态与自洽性陷阱 | Computer Vision 3D（相机标定）+ GIS 摄影测量内方位元素 | [讲义](docs/29-session-25-camera-intrinsics.md) |
+| 第 26 课 | 点云 ICP 配准 | 两帧带噪点云、点到点/点到面、收敛半径与几何退化滑动 | Computer Vision 3D（配准）+ GIS 多测站拼合 | [讲义](docs/30-session-26-icp-registration.md) |
 
 ## 当前技术路线
 
@@ -152,7 +155,10 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 24-session-22-pinhole-projection.md
 │   ├── 25-session-23-monocular-metric.md
 │   ├── 26-experiment-review-2026-09-05.md
-│   └── 27-issues-pr-drafts-2026-09-05.md
+│   ├── 27-issues-pr-drafts-2026-09-05.md
+│   ├── 28-session-24-real-depth-affine.md
+│   ├── 29-session-25-camera-intrinsics.md
+│   └── 30-session-26-icp-registration.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
@@ -479,6 +485,37 @@ uv run python -m embodied_learning.monocular_metric_demo --results results/mobil
 
 复现需新目录：`uv run python -m embodied_learning.experiments.monocular_metric --output results/mobile_monocular_my_run --runs 20 --seed 0`。新增 13 项测试；全量 468 项通过。本课是理想仿射代理的误差传播研究，不宣称代替真实深度模型——真实 Depth Anything 的非仿射畸变与控制点布设是下一步。完整原理、N/σ 扫描表与停止点见[第二十三课讲义](docs/25-session-23-monocular-metric.md)。
 
+## 第二十四课：真实单目相对深度的仿射检验（Depth Anything V2）
+
+把第二十三课的理想代理换成真实模型：用第二十二课的合成场景渲染朗伯着色 RGB 图（棋盘格地面 + 杆），经 monocular-depth 子仓的 Depth Anything V2 Small 真实推理（CUDA、518 px 输入、0.33 s），对输出做同一套逆深度仿射拟合与控制点标定。全图拟合 **R²=0.9974**（a=15.60、b=−2.71），残差 std 0.0952（r std 的 5.10%）；但残差**不是白噪声**：1/Z 方向 U 形（分箱 +0.102→−0.053→+0.058）、与像素横坐标相关 −0.846——是平滑结构场。标定后全图米制误差 **3.07 cm**（近 1.41 / 远 7.15，远/近 3.7–5.9 倍）；N 扫描 4.66→3.20 cm，N=10 后饱和——**3 cm 是全局仿射的下限**。结论：仿射是一阶近似，全局标定够厘米级应用，亚厘米需要分段/逐区域标定；真实照片域未做，如实写入"本课不能说明什么"。与第 23 课同口径对照：真实模型 ≈ 该课 σ=3% 水平；"σ=0 时 N 不起作用"在真实模型上不再成立。
+
+```powershell
+monocular-depth/.venv/Scripts/python.exe monocular-depth/bench/affine_check_pinhole.py
+uv run python -m embodied_learning.experiments.real_depth_affine --input <bench npz> --output results/real_depth_affine_my_run
+```
+
+torch 推理留在子仓 bench 脚本，主仓分析只依赖 numpy；新增 11 项测试（合成 npz、已知畸变残差检测、CLI 端到端）。全量 479 项通过。正式记录 `results/real_depth_affine_2026-09-05/`，完整原理、残差结构图与自审见[第二十四课讲义](docs/28-session-24-real-depth-affine.md)。
+
+## 第二十五课：合成棋盘格张氏内参标定
+
+K 从"给定值"变成"被估计量"：合成 9×6 平面棋盘格放到 24 个不同姿态（3 俯仰 × 8 方位 × 3 距离），角点经真值 K 投影加噪声（σ = 0–2 px），用 Hartley 归一化 DLT 单应 → v 向量 SVD → B=K⁻ᵀK⁻¹ 闭式解反解 fx=fy=f、cx、cy（4 参数版，与第 22 课 K 对齐；5 参数与 GN 精化未做、如实标记）。σ=0 时 f 误差 **4.43e-12 px**、往返 3.65e-16 m；M=5/σ=1 px 时 f 误差 20.27 px、真值位姿重投影从"猜的 K"80.74 px 压到估计 K 的 9.34 px（√2σ 地板 1.40 px）；M=20/σ=0.5 px 时 f 误差 ≈1%。机制常数 C=|f̂−f|·√M/σ 中位 62.4 px；cy 误差为 cx 的 1.8–2.9 倍（竖向覆盖小）。**退化反例 ×2**：纯平移与固定俯仰环绕均秩 2、条件数 ~1e20，守卫触发（调试还发现"固定俯仰环绕本身就是退化配置"——平面法线在相机系中恒定）；**自洽性陷阱**：用分解位姿做重投影时错 K 被错位姿吸收、三个水平不可区分——改用真值位姿重投影 + 平面外探针往返两个可区分指标，陷阱本身写入讲义。
+
+```powershell
+uv run python -m embodied_learning.intrinsics_demo --results results/camera_intrinsics_2026-09-05
+```
+
+复现需新目录：`uv run python -m embodied_learning.experiments.camera_intrinsics --output results/camera_intrinsics_my_run --runs 20 --seed 0`。新增 14 项测试（手算单应、退化守卫、契约、进程隔离 Tk）；全量 493 项通过。正式记录 `results/camera_intrinsics_2026-09-05/`，与 GIS 摄影测量内方位元素的对照及自审见[第二十五课讲义](docs/29-session-25-camera-intrinsics.md)。
+
+## 第二十六课：噪声深度图 → 点云 → ICP 配准
+
+同一场景两个相机位姿（B = A 平移 [0.5,−0.3,0.1] + 绕 z −25°）的带噪深度点云（0.1 m 体素降采样 2000 点/片），手写 ICP（点到点 SVD 与点到面双侧残差、特征截断冻结不可观模态、阈值调度）配准。**线性区只在 σ≤0.05 m**（E_obs/σ=0.54）；σ≥0.15 起弱切向模态被噪声淹没。**收敛半径**：平移 ~0.1 m、旋转 ~0°（朴素误差 ~3.04 m/rad 杆杠杆）；点到点/点到面轮数比 6.9；PCA 法线中位偏差 38.3°（σ=0.15）——法线质量是点到面的命门。**退化反例反转**（σ=0.15、0.1 m 平移初值）：仅地面点云 13.0±1.3 cm"收敛但错"20/20（秩 3/6 冻结、确定性），含杆 61.8±144.7 cm 部分种子漂移数米——**部分可观测 + 高噪声比完全不可观 + 冻结更危险**，σ=0.02–0.05 时含杆才见效；绕杆轴自转是精确一维对称族，以商空间指标如实呈现。
+
+```powershell
+uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_2026-09-05
+```
+
+复现需新目录：`uv run python -m embodied_learning.experiments.point_cloud_icp --output results/point_cloud_icp_my_run --runs 20 --seed 0`。新增 19 项测试（无噪精确恢复、手算 NN/SVD、退化守卫、契约、进程隔离 Tk）；全量 512 项通过（本课测试含重型端到端约 6.5 分钟）。正式记录 `results/point_cloud_icp_2026-09-05/`，与 GIS 多测站配准的对照及自审见[第二十六课讲义](docs/30-session-26-icp-registration.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -512,6 +549,9 @@ uv run python -m embodied_learning.monocular_metric_demo --results results/mobil
 - [x] 第二十一课补充：2 / 1 / 0.5 cm 停车门限单变量对照、240 回合、实际误差／耗时／超时与重新调整慢放
 - [x] 第二十二课：针孔相机投影/反投影、往返一致、无深度射线、深度噪声误差传播与射线倍率机制、位姿一致性；454 项全量通过
 - [x] 第二十三课：单目相对深度 ↔ 米制尺度标定、控制点数量/噪声对照、远/近误差分层与机制核对；468 项全量通过
+- [x] 第二十四课：真实 DA V2 仿射检验、残差结构（U 形+水平相关）、N 扫描与全局仿射 3 cm 下限；479 项全量通过
+- [x] 第二十五课：张氏 4 参数内参闭式标定、M/σ 传播、退化姿态守卫与自洽性陷阱教学点；493 项全量通过
+- [x] 第二十六课：两帧带噪点云手写 ICP、点到点/点到面对照、收敛半径与几何退化反转；512 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大

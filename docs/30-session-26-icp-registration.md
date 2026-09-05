@@ -228,8 +228,8 @@ comparison.png，6 面板：配准前/配准后三维点云 / 参考运行迭代
 uv run python -m embodied_learning.experiments.point_cloud_icp --output results/point_cloud_icp_my_run --runs 20 --seed 0
 uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_2026-09-05
 uv run pytest -q tests/test_session26_point_cloud_icp.py
-uv run python -m ruff check src tests
-uv run python -m ruff format --check src tests
+uv run ruff check src tests
+uv run ruff format --check src tests
 ```
 
 输出目录须不存在；`--runs`≥2。产物：`summary.json`、`trajectories.npz`、`comparison.png`

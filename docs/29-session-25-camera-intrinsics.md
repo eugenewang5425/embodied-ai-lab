@@ -207,8 +207,8 @@ fx=fy，共线方程 x = x₀ + f·X_c/Z_c 与本课 u = f·x/z + cx 是同一�
 uv run python -m embodied_learning.experiments.camera_intrinsics --output results/camera_intrinsics_my_run --runs 20 --seed 0
 uv run python -m embodied_learning.intrinsics_demo --results results/camera_intrinsics_2026-09-05
 uv run pytest -q tests/test_session25_camera_intrinsics.py
-uv run python -m ruff check src tests
-uv run python -m ruff format --check src tests
+uv run ruff check src tests
+uv run ruff format --check src tests
 ```
 
 输出目录须不存在；`--runs`≥2。产物：`summary.json`、`trajectories.npz`、`comparison.png`
