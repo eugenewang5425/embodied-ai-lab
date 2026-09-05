@@ -6,20 +6,20 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **526 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **540 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 26 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration |
-| **Verified** | `uv run pytest -q` → **526 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Status** | 28 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior-cloning entry |
+| **Verified** | `uv run pytest -q` → **540 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-526%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-540%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,10 +60,10 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-05）
 
-- **主线课程 1–26 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准）。
-- **自动验收**：`uv run pytest -q` 全量 **526 项通过**（含第 24–27 课新增 57 项与演示验收轮），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–28 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5 入口（行为克隆 BC：开环可学、闭环不成）。
+- **自动验收**：`uv run pytest -q` 全量 **540 项通过**（含第 28 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 4 收尾（第 27 课视觉基础模型接地标身份）→ 阶段 5 入口（第 28 课模仿学习 BC）；不自动开始下一课。
+- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5（第 29 课 RL：摆起 vs 第 7 课能量整形基线，对比样本效率与扰动恢复）；不自动开始下一课。
 
 ## 课程索引
 
@@ -95,6 +95,8 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 24 课 | 真实 DA V2 仿射检验 | R²=0.9974 但残差为结构场（U 形+水平相关 −0.85）、全局仿射 3.2 cm 下限 | Vision Foundation Models（域差距与近似阶） | [讲义](docs/28-session-24-real-depth-affine.md) |
 | 第 25 课 | 张氏内参标定 | 单应 DLT、v 向量闭式解、M/σ 传播、退化姿态与自洽性陷阱 | Computer Vision 3D（相机标定）+ GIS 摄影测量内方位元素 | [讲义](docs/29-session-25-camera-intrinsics.md) |
 | 第 26 课 | 点云 ICP 配准 | 两帧带噪点云、点到点/点到面、收敛半径与几何退化滑动 | Computer Vision 3D（配准）+ GIS 多测站拼合 | [讲义](docs/30-session-26-icp-registration.md) |
+| 第 27 课 | MobileSAM 视觉接地标身份 | 掩码质心+深度反投影、最近邻身份分配、错配爆炸与 δφ=δpx/f 传播 | Vision Foundation Models（替代 assumed identity） | [讲义](docs/31-session-27-visual-grounding.md) |
+| 第 28 课 | 行为克隆（阶段 5 入口） | 手写 MLP+反向传播、开环 MSE 33× vs 闭环 0/75、复合误差与分布移 | Robot Learning（IL 入口；BC 与专家的口径差） | [讲义](docs/32-session-28-bc-imitation.md) |
 
 ## 当前技术路线
 
@@ -158,7 +160,9 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 27-issues-pr-drafts-2026-09-05.md
 │   ├── 28-session-24-real-depth-affine.md
 │   ├── 29-session-25-camera-intrinsics.md
-│   └── 30-session-26-icp-registration.md
+│   ├── 30-session-26-icp-registration.md
+│   ├── 31-session-27-visual-grounding.md
+│   └── 32-session-28-bc-imitation.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
@@ -517,6 +521,26 @@ uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_20
 
 复现需新目录：`uv run python -m embodied_learning.experiments.point_cloud_icp --output results/point_cloud_icp_my_run --runs 20 --seed 0`。新增 19 项测试（无噪精确恢复、手算 NN/SVD、退化守卫、契约、进程隔离 Tk）；全量 512 项通过（本课测试含重型端到端约 6.5 分钟）。正式记录 `results/point_cloud_icp_2026-09-05/`，与 GIS 多测站配准的对照及自审见[第二十六课讲义](docs/30-session-26-icp-registration.md)。
 
+## 第二十七课：MobileSAM 视觉接地标身份
+
+替换第 18–20 课的 declared 假设"地标身份已知"：三柱体地标场景（L1=第 22 课杆位）经 MobileSAM 自动掩码生成（270 个候选掩码、CUDA 4.1–4.4 s/位姿），选中 12 个掩码 IoU 均值 0.928（最小 0.275 的部分掩码身份仍对）；掩码质心经渲染深度反投影 + 最近邻匹配发身份——**12/12 身份正确**，观测送入第 18 课 Procrustes 定位链。定位结果：真值身份基线 3.40±3.02 cm vs 模型掩码 7.35±2.16 cm ≈ 真值掩码 7.38 cm——**瓶颈不是掩码质量**（±8 px 腐蚀膨胀仅 7.37–7.42 cm），而是质心的表面/轴口径差 −6.00 cm=−半径；**强制身份错配爆炸 5.36±0.37 m、朝向 129.6° 且解算器零报错**——身份错配是静默失败，必须显式校验。机制：δφ/(δpx/f) 四档比值 0.981。
+
+```powershell
+uv run python -m embodied_learning.grounding_demo --results results/visual_grounding_2026-09-05
+```
+
+torch 推理留在子仓 bench（`monocular-depth/bench/grounding_inference.py` + 官方 MobileSAM 权重），主仓分析/测试无 torch。新增 12 项测试；全量 526 项通过。正式记录 `results/visual_grounding_2026-09-05/`（source_sha256 与提交版源码漂移如实记录，逐格复现通过），完整结果与自审见[第二十七课讲义](docs/31-session-27-visual-grounding.md)。
+
+## 第二十八课：行为克隆——开环可学、闭环不成（阶段 5 入口）
+
+用数据替代模型：第 13 课专家（前馈+PD，复验 25/25+泛化 25/25）的 (状态， 力矩) 轨迹喂给纯 numpy 手写 MLP（4→64→64→2、4610 参数、手写 Adam），无知觉输入（不看参考/目标/时钟），纯 BC 力矩直驱无 PD 兜底。核心结果（600 回合）：开环训练分布 MSE **1.17e-3→3.50e-5（33 倍）**，但闭环成功率**全档 0/75**——MSE 与成功率脱钩，即复合误差/分布移的实证；泛化 MSE 饱和 ~1e-3、gen/train 比随数据量 2.2→29.3；失败形态=漂移/画圈 + 10–32% 力矩截断，最佳回合 12.6 mm；近失解剖：1 条过路径门限（1.078 mm<2 mm）但末态偏 289 mm——无目标输入收不回终点。这正是第 29 课 RL（奖励信号）的动机。
+
+```powershell
+uv run python -m embodied_learning.bc_demo --results results/bc_imitation_2026-09-05
+```
+
+复现需新目录：`uv run python -m embodied_learning.experiments.bc_imitation --output results/bc_imitation_my_run --seed 0`。新增 14 项测试（有限差分梯度、过拟合、种子确定性、验收与第 13 课对拍 1e-9、截断回合、篡改三路拒绝、isolated_tk 三模式）；全量 540 项通过。正式记录 `results/bc_imitation_2026-09-05/`，与专家的口径差及自审见[第二十八课讲义](docs/32-session-28-bc-imitation.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -553,6 +577,8 @@ uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_20
 - [x] 第二十四课：真实 DA V2 仿射检验、残差结构（U 形+水平相关）、N 扫描与全局仿射 3 cm 下限；479 项全量通过
 - [x] 第二十五课：张氏 4 参数内参闭式标定、M/σ 传播、退化姿态守卫与自洽性陷阱教学点；493 项全量通过
 - [x] 第二十六课：两帧带噪点云手写 ICP、点到点/点到面对照、收敛半径与几何退化反转；512 项全量通过
+- [x] 第二十七课：MobileSAM 掩码接地 + 最近邻身份分配接入定位链、错配静默爆炸实证与 δφ=δpx/f 机制；526 项全量通过
+- [x] 第二十八课：行为克隆阶段 5 入口、开环 MSE 33× vs 闭环 0/75 的复合误差实证、手写 MLP/Adam 与验收对拍；540 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
