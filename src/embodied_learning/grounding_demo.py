@@ -96,14 +96,11 @@ def load_replays(directory):
         raise ValueError("Archive landmark axes disagree with the summary")
     if int(data["identity_ok"].sum()) != report["identity"]["correct"]:
         raise ValueError("Archive identity outcome disagrees with the summary")
-    if (
-        int(data["identity_ok"].size) != report["identity"]["total"]
-        or not np.isclose(
-            report["identity"]["accuracy"],
-            report["identity"]["correct"] / max(report["identity"]["total"], 1),
-            rtol=0.0,
-            atol=1e-12,
-        )
+    if int(data["identity_ok"].size) != report["identity"]["total"] or not np.isclose(
+        report["identity"]["accuracy"],
+        report["identity"]["correct"] / max(report["identity"]["total"], 1),
+        rtol=0.0,
+        atol=1e-12,
     ):
         raise ValueError("Identity accuracy disagrees with the archive outcome")
     return {"report": report, **data}
@@ -194,6 +191,7 @@ class GroundingDemo:
         self.step_label.configure(text=f"位姿 {self.step.get()} / {self.n_poses - 1}")
         if self.mode.get() == "overlays":
             self.draw_overlays()
+            self.fill_stats("overlays")  # per-pose panel numbers must follow the slider
             self.canvas.draw_idle()
 
     # ------------------------------------------------------------------ modes
@@ -345,11 +343,16 @@ class GroundingDemo:
         ax_boom.legend(fontsize=7, loc="upper left")
         ax_boom.grid(alpha=0.2)
         shift_px = np.asarray(self.data["shift_px"], dtype=float)
-        measured = np.degrees(np.nanmean(-self.data["shift_bearing_rad"], axis=(0, 1))) * 1000.0
+        measured = np.nanmean(-np.asarray(self.data["shift_bearing_rad"], dtype=float), axis=(0, 1))
+        measured = measured * 1000.0  # rad -> mrad
         focal = report["scene"]["focal_px"]
         factor = float(np.nanmean(self.data["shift_pred_ratio"]))
-        ax_law.plot(shift_px, measured, "-o", ms=4, color="#dc2626", label="实测 |Δβ|（精确射线差分）")
-        ax_law.plot(shift_px, shift_px / focal * 1000.0, "--", color="#0f172a", label="δpx / f（水平相机）")
+        ax_law.plot(
+            shift_px, measured, "-o", ms=4, color="#dc2626", label="实测 |Δβ|（精确射线差分）"
+        )
+        ax_law.plot(
+            shift_px, shift_px / focal * 1000.0, "--", color="#0f172a", label="δpx / f（水平相机）"
+        )
         ax_law.plot(
             shift_px,
             shift_px / focal * 1000.0 * factor,
@@ -357,7 +360,7 @@ class GroundingDemo:
             color="#2563eb",
             label=f"δpx/f × 俯仰因子 {factor:.2f}",
         )
-        chain = np.degrees(self.data["chain_shift_heading_rad"]) * 1000.0
+        chain = self.data["chain_shift_heading_rad"] * 1000.0  # rad -> mrad
         ax_law.plot(
             shift_px,
             chain,
@@ -386,7 +389,9 @@ class GroundingDemo:
             iou_pose = np.asarray(self.data["chosen_iou"], dtype=float)[pose]
             dist_pose = np.asarray(self.data["chosen_axis_dist_m"], dtype=float)[pose]
             iou_text = "  ".join(f"L{i + 1} {value:.2f}" for i, value in enumerate(iou_pose))
-            dist_text = "  ".join(f"L{i + 1} {value * 100:.1f}" for i, value in enumerate(dist_pose))
+            dist_text = "  ".join(
+                f"L{i + 1} {value * 100:.1f}" for i, value in enumerate(dist_pose)
+            )
             text = (
                 "① 这一幕在摆数据：模型出了掩码，身份由几何决定\n\n"
                 f"  候选掩码（本位姿 / 全部）：\n"
@@ -419,6 +424,10 @@ class GroundingDemo:
                 "  掩码质量（腐蚀/膨胀）几乎不影响质心一阶矩。"
             )
         else:
+            ratio_law = np.nanmean(
+                -np.asarray(self.data["shift_bearing_rad"], dtype=float), axis=(0, 1)
+            ) / (np.asarray(self.data["shift_px"], dtype=float) / report["scene"]["focal_px"])
+            chain_mrad = float(self.data["chain_shift_heading_rad"][-1]) * 1000.0
             text = (
                 "③ 这一幕在量化：身份混淆与质心偏差的传播\n\n"
                 f"  强制循环错配（同读数同噪声）：\n"
@@ -427,10 +436,10 @@ class GroundingDemo:
                 f"  （中位 {groups['mismatch']['pos_median_m'] * 100:.0f} cm，"
                 f"朝向 {groups['mismatch']['heading_mean_deg']:.1f}° ≈ 三点循环 signature）\n\n"
                 f"  传播定律：|Δβ| = δpx/f（f={report['scene']['focal_px']:.0f} px）\n"
-                f"  实测/定律 比值 {report['mechanism']['shift_ratio_to_px_over_f'][-1]:.3f}"
-                f"（一阶公式，偏轴项未建模）\n\n"
+                f"  实测/定律 比值 {ratio_law[-1]:.3f}"
+                f"（四档一致；俯仰与离轴为高阶项）\n\n"
                 f"  整链：共同横移几乎全部进朝向\n"
-                f"  （{np.degrees(self.data['chain_shift_heading_rad'])[-1] * 1000:.1f} mrad @ 8 px），\n"
+                f"  （{chain_mrad:.1f} mrad @ 8 px），\n"
                 f"  位置 {self.data['chain_shift_pos_m'][-1] * 100:.1f} cm 几乎不动\n\n"
                 "  错配是系统性错误：平均不掉，只能靠正确的关联。"
             )
@@ -443,7 +452,9 @@ class GroundingDemo:
         self.slider.configure(from_=0, to=max(0, self.n_poses - 1))
         if mode == "overlays":
             self.draw_overlays()
-            self.step_label.configure(text=f"位姿 {min(self.step.get(), self.n_poses - 1)} / {self.n_poses - 1}")
+            self.step_label.configure(
+                text=f"位姿 {min(self.step.get(), self.n_poses - 1)} / {self.n_poses - 1}"
+            )
         elif mode == "groups":
             self.draw_groups()
         else:

@@ -905,7 +905,7 @@ def make_plot(archive, summary, output):
     shift_px = archive["shift_px"]
     focal = summary["scene"]["focal_px"]
     bearing = archive["shift_bearing_rad"]
-    measured = np.degrees(np.nanmean(-bearing, axis=(0, 1))) * 1000  # mrad, |Δβ|
+    measured = np.nanmean(-bearing, axis=(0, 1)) * 1000.0  # |Δβ|, rad -> mrad
     ax_law.plot(shift_px, measured, "-o", ms=4, color="#dc2626", label="实测 |Δβ|（精确射线几何）")
     ax_law.plot(
         shift_px, shift_px / focal * 1000, "--", color="#0f172a", label="δpx / f（水平相机定律）"
@@ -927,7 +927,7 @@ def make_plot(archive, summary, output):
 
     ax_chain.plot(
         shift_px,
-        np.degrees(archive["chain_shift_heading_rad"]) * 1000,
+        archive["chain_shift_heading_rad"] * 1000.0,  # rad -> mrad
         "-o",
         ms=4,
         color="#9333ea",
