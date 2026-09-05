@@ -174,6 +174,13 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 快速运行
 
+![第一课预览：环境自检与随机基线仿真帧](docs/img/lesson-01-env-check.png)
+
+![第二课预览：PD 控制与随机基线对照](docs/img/lesson-02-pd.png)
+
+![第三课预览：LQR 全状态对比](docs/img/lesson-03-lqr.png)
+
+
 在项目目录打开一个新的 PowerShell：
 
 ```powershell
@@ -193,6 +200,11 @@ uv run python -m embodied_learning.viewer --policy lqr --seconds 15 --seed 7
 模型单位校正：控制输入 `u ∈ [-3, 3]`，实际小车执行器水平力为 `100u N`；物理竖直对应关节角约 `-0.001667 rad`。旧结果文件仍保留，新报告已区分这些概念。
 
 ## 慢速教学演示
+
+![第四课预览：R 权衡与多 R 曲线叠加](docs/img/lesson-04-r-weights.png)
+
+![第五课预览：随机推力扰动与恢复](docs/img/lesson-05-push.png)
+
 
 如果原来的仿真窗口太快，在项目目录运行：
 
@@ -230,6 +242,9 @@ uv run python -m embodied_learning.experiments.lqr_disturbance --output results/
 
 ## 第六课：真实状态与传感读数
 
+![第六课预览：测量噪声三组对照](docs/img/lesson-06-noise.png)
+
+
 固定 R=1，只增加测量噪声，比较 0×、1×、3× 三组；不与上一课推力混合。
 已有结果在 `results/lqr_noise_2026-09-02/`，其中 `comparison.png` 对照真实倾角、传感读数和控制动作，`trajectories.npz` 保留逐步原始数据。
 
@@ -248,6 +263,9 @@ uv run python -m embodied_learning.teaching_demo --noise-results results/lqr_noi
 
 ## 第七课：下垂摆起与强扰动恢复
 
+![第七课预览：摆起与强扰动恢复](docs/img/lesson-07-swingup.png)
+
+
 新增独立的全转动环境：正下方 -180°、左右下方 ±120° 初态，以及在控制持续开启时仍能推倒杆的 ±400 N 扰动。远离直立时用能量摆起，接近直立时切入 LQR；过强的 +600 N 案例保留真实失败。
 
 ```powershell
@@ -264,6 +282,9 @@ uv run python -m embodied_learning.swingup_demo --results results/swingup_2026-0
 
 ## 第八课：两个关节与末端坐标
 
+![第八课预览：平面 2R 到达](docs/img/lesson-08-arm-reaching.png)
+
+
 第八课已进入平面双关节机械臂：两个相对关节角决定末端世界坐标，解析 IK 给目标角，两个电机通过 PD 驱动真实 MuJoCo 运动。
 
 ```powershell
@@ -276,6 +297,9 @@ uv run python -m embodied_learning.arm_demo --results results/arm_reaching_2026-
 
 ## 第九课：沿直线运动与 Jacobian
 
+![第九课预览：直线路径三组对照](docs/img/lesson-09-arm-path.png)
+
+
 沿用同一 2R 模型和电机限制，对比只给终点、关节角插值、Jacobian 直线路径。后两者使用相同 8 秒移动 + 3 秒停留与内层关节 PD。0–8 秒最大偏离线段分别为 76.154、46.241、0.197 mm；三组均停稳，只有 Jacobian 组满足本次 2 mm 路径门限。这是单条固定路径的理想仿真结果，不代表硬件精度。
 
 ```powershell
@@ -287,6 +311,9 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_path_2026
 复现：`uv run python -m embodied_learning.experiments.arm_path --output results/arm_path_my_run`。新目录输出包含三组实际状态、力矩、几何参考、对照图与奇异性探针；完整实验和讲解见[第九课：到达终点，不等于沿直线到达](docs/11-session-09-jacobian-path.md)。未增加噪声、碰撞、自由度或依赖；下一步才是有种子的多路径评估。
 
 ## 第十课：换一批路径后还可靠吗？
+
+![第十课预览：多路径配对评估](docs/img/lesson-10-batch.png)
+
 
 已完成 seed=400 的 24 条随机路径与 1 条固定奇异初态反例，三方法配对共 75 回合；控制器、2R 模型、电机限幅和时间安排不变。Jacobian 内部组路径通过 12/12，近伸直组 8/12；后者四个未通过案例均因关节角误差未连续满足末尾 0.5 s 要求，而非超过路径偏离门限。
 
@@ -306,6 +333,9 @@ uv run python -m embodied_learning.experiments.arm_path_batch --seed 400 --per-g
 
 ## 第十一课：逐点解析 IK 起步
 
+![第十一课预览：逐点解析 IK](docs/img/lesson-11-ik.png)
+
+
 只改变参考生成方式，不改变机械臂、电机、PD、时间表或验收。对原第十课清单重新比较关节插值、Jacobian 和逐点解析 IK；原有两种方法的轨迹逐数组完全一致。
 
 逐点 IK 在原清单上通过内部组 12/12、近伸直组 12/12 和固定反例 1/1；完全伸直向内收时，实际最大偏离 1.342 mm，没有力矩饱和。不是任意任务上的成功保证：近伸直组中途偏离通常比 Jacobian 更大，最接近门限的案例约 1.891 mm。
@@ -318,6 +348,9 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_ik_compar
 
 ## 第十二课：动作时间与电机限制
 
+![第十二课预览：8/4/2 秒时序对照](docs/img/lesson-12-timing.png)
+
+
 同一批 25 条路径、同一逐点 IK/PD/电机，只把动作时间设为 8、4、2 秒，随后均停留 3 秒。8 秒通过 25/25；4 秒通过 13/25，却没有力矩截断；2 秒中 18 条规划速度超限而未执行，其余 7 条有 2 条通过、1 条发生力矩截断。不能把未执行、跟踪偏差和电机饱和混为一谈。
 
 ```powershell
@@ -328,6 +361,9 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_timing_20
 
 ## 第十三课：模型前馈＋原 PD
 
+![第十三课预览：前馈+PD](docs/img/lesson-13-ff.png)
+
+
 这是机械臂基础阶段的收尾实验：沿用第十二课的 25 条路径，统一 4 秒动作＋3 秒停留；只加入参考轨迹逆动力学前馈，不改变 PD 增益、电机上限或参考。原 PD 全部数组与第十二课完全一致，路径通过数从 13/25 提高到 25/25。固定伸直案例仍有一次起步力矩截断，不代表模型失配或真实硬件同样可靠。
 
 ```powershell
@@ -337,6 +373,9 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_feedforwa
 默认暂停、0.25×；橙色原 PD、绿色前馈＋PD。右侧拆分模型前馈、PD 修正、合计请求、实际施加。详见[第十三课讲义](docs/15-session-13-model-feedforward.md)与[学习路线回顾](docs/01-learning-roadmap.md)。全量 215 项测试通过。下一主线为差速移动机器人和坐标系，不继续无限扩展 2R 调参。
 
 ## 第十四课：差速小车与世界/车体/传感器坐标
+
+![第十四课预览：世界/车体/传感器坐标](docs/img/lesson-14-frames.png)
+
 
 进入移动机器人阶段：两个轮速输入决定直行、原地转向、左右圆弧，以及先左转 90° 再前进。新增独立的轻量二维运动学实验，不改变机械臂/倒立摆，也不安装 ROS 2。
 
@@ -356,6 +395,9 @@ uv run python -m embodied_learning.experiments.mobile_frames --output results/mo
 
 ## 第十五课，编码器里程计与累积误差
 
+![第十五课预览：编码器里程计累积误差](docs/img/lesson-15-odometry.png)
+
+
 同一台理想差速车、同一轮速指令，只改变右轮编码器读数比例：0%、+1%、+2%。估计器从编码器增量独立累计位姿，不读取真实位置，不利用地标纠偏。直行 2.4 m 时，+2% 组位置误差 19.40 cm、朝向误差 9.17°；方形一圈后分别为 15.24 cm、15.82°。
 
 ```powershell
@@ -367,6 +409,9 @@ uv run python -m embodied_learning.odometry_demo --results results/mobile_odomet
 复现需新目录：`uv run python -m embodied_learning.experiments.mobile_odometry --output results/mobile_odometry_my_run`。新增 31 项测试；第十四课直行前 4 s 真值与旧记录完全一致。上轮组合回归曾为 281 通过、1 项 Tk 初始化失败；本轮采用窗口测试进程隔离后重复通过，不宣称已确定或修复 Tcl 底层根因。历史证据保留于[第十五课讲义](docs/17-session-15-encoder-odometry.md)，当前验收见第十六课。
 
 ## 第十六课：固定比例标定与独立验证
+
+![第十六课预览：固定比例标定](docs/img/lesson-16-calibration.png)
+
 
 用新生成的 0.4/0.8/1.2/-0.6 m 独立直行测距数据拟合一个右轮修正系数，再验证冻结的第十五课路线。c≈0.980392 由数据求出，不是直接填入真实偏差。另保留“标定测距偏大 1%”反例，说明测量基准的重要性。
 
@@ -382,6 +427,9 @@ uv run python -m embodied_learning.calibration_demo
 
 ## 第十七课：标定之后的随机测量噪声
 
+![第十七课预览：随机噪声统计](docs/img/lesson-17-noise.png)
+
+
 固定系数 c≈0.980392 已经完全抵消右轮多报的 2%：无噪声理想基准下终点误差小于 `1e-10 m`。本课只加一种变化——每个 0.04 s 区间右轮读数再叠加种子化零均值噪声 σ=0.008 rad（约为单步增量 0.16 rad 的 5%），同一条路线重复 20 次，把**系统偏差**（20 次平均）和**随机分散**（标准差/分位）分开统计。
 
 ```powershell
@@ -395,6 +443,9 @@ uv run python -m embodied_learning.mobile_noise_demo --results results/mobile_no
 复现需新目录：`uv run python -m embodied_learning.experiments.mobile_noise --output results/mobile_noise_my_run --runs 20 --seed 0`。新增 16 项测试；全量 331 项连续两次通过，Ruff 静态及格式检查通过（62 个 Python 文件）。完整原理、假设、统计口径与停止点见[第十七课讲义](docs/19-session-17-random-noise.md)。是否引入外部观测/滤波由任务精度要求决定，不自动加卡尔曼或 SLAM。
 
 ## 第十八课：已知地标（控制点）观测与里程计对照
+
+![第十八课预览：地标观测与配准](docs/img/lesson-18-landmarks.png)
+
 
 本课增加第二种信息来源：装在车上的传感器每 2 s 对三个**已知世界坐标的地标**测一次距离和方位角（测距标准差 1 cm、测角标准差 0.57°，不是误差上限），
 用 2D Procrustes 闭式解（旋转+平移刚体配准，无缩放）从观测反算车体位姿——就是 GIS 控制点配准的机器人版。里程计与地标观测各自独立估计，**不做融合**。
@@ -416,6 +467,9 @@ uv run python -m embodied_learning.landmark_demo --results results/mobile_landma
 完整原理、假设与停止点见[第十八课讲义](docs/20-session-18-landmark-observations.md)。最简融合现已在第十九课实现。
 
 ## 第十九课：看观测 → 解位置 → 最简融合
+
+![第十九课预览：最简融合三组对照](docs/img/lesson-19-fusion.png)
+
 
 同一批测量比较纯里程计、纯观测保持、观测重置＋里程计三组。新演示先显示三组原始测距/测角、局部坐标与配准残差，再解释传感器位姿如何扣除安装偏移得到车体位姿；第二页提供三色慢放、校正前后和“看一次校正变差”。默认暂停、0.25×。
 
@@ -467,6 +521,9 @@ uv run python -m embodied_learning.threshold_demo
 
 ## 第二十二课：针孔相机与投影-反投影（阶段 4：三维感知）
 
+![第二十二课预览：针孔投影与点云](docs/img/lesson-22-pinhole.png)
+
+
 进入三维感知阶段的第一课。已知坐标的 3D 场景（地面网格 + 竖直杆）经针孔相机投影到 640×480 图像（fx=600、主点 (320,240)）。**可见性 = 深度大于近裁剪 0.5 m 且像素落在图像内**（43 点；杆顶超出图像上边界被视场切掉——见②③演示中的橙色杆点）。有精确深度时**往返一致**（最大 1.47e-15 m）；无深度时同一像素只给一条射线（三个深度猜测共线且重投影相同——单目本质无尺度）；深度噪声上调到 σ=15 cm（贴近廉价深度传感器的粗糙测距量级）：点云误差均值 12.67 cm、最大 60.32 cm，且**误差 ∝ 射线长度 |K⁻¹[u,v,1]|**（误差÷倍率近/远段 11.10/11.61 cm ≈ σ·√(2/π) 机制验证）；相机平移 0.5 m 后反投影回同一世界系仍一致（1.37e-15 m）。
 
 ```powershell
@@ -478,6 +535,9 @@ uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole
 复现需新目录：`uv run python -m embodied_learning.experiments.pinhole_projection --output results/mobile_pinhole_my_run --runs 20 --seed 0`。新增 11 项测试；全量 454 项通过。完整原理、假设与停止点见[第二十二课讲义](docs/24-session-22-pinhole-projection.md)。"单目相对深度 ↔ 米制标定"已在第二十三课完成；阶段 4 的剩余建议依次为真实 Depth Anything 仿射检验 → 内参标定 → 点云/ICP，不直接开始训练。
 
 ## 第二十三课：单目相对深度 ↔ 米制尺度标定
+
+![第二十三课预览：相对深度米制标定](docs/img/lesson-23-metric.png)
+
 
 承接第二十二课"单目本质无尺度"的结论：单目相对深度模型输出 r = a·(1/Z) + b，任何 (a,b) 描述同一几何，只有尺度与原点漂移——这就是"无尺度"的代数形式。本课不重训练、不加载权重，只做一件事：抽 N 个已知深度的控制点（模拟稀疏激光测距/GIS 控制点，要求 1/Z 跨度 ≥ 0.1），对 r 做逆深度仿射最小二乘标定 (a,b)，再全图反演 Z_hat = a/(r−b) 得到米制深度图。相机与场景逐项沿用第二十二课，对地面＋竖直杆做逐像素解析光线投射（有效像素 280 687，深度 1.51–4.71 m）。无标定基线（把 r 直接当 1/Z 用）全图平均误差 193.2 cm；σ=0 时 N≥2 即 ~1e-13 cm 复原——N 的价值只在压噪声；σ=1%/3% 下 N=5 全图平均 2.06/4.19 cm、N=10 时 1.10/3.45 cm；σ=3% 远/近误差比 2.5–7.8 倍（机制为 δZ ≈ Z²·|δ(1/Z)|，b 的误差在远处被平方放大）；控制点挤在近处的坏布设最差 775 cm 案例如实保留。拟合参数的三明治协方差与 2000 次经验协方差比值 0.990–1.018，公式自洽。
 
@@ -491,6 +551,9 @@ uv run python -m embodied_learning.monocular_metric_demo --results results/mobil
 
 ## 第二十四课：真实单目相对深度的仿射检验（Depth Anything V2）
 
+![第二十四课预览：真实 DA V2 仿射检验](docs/img/lesson-24-affine.png)
+
+
 把第二十三课的理想代理换成真实模型：用第二十二课的合成场景渲染朗伯着色 RGB 图（棋盘格地面 + 杆），经 monocular-depth 子仓的 Depth Anything V2 Small 真实推理（CUDA、518 px 输入、0.33 s），对输出做同一套逆深度仿射拟合与控制点标定。全图拟合 **R²=0.9974**（a=15.60、b=−2.71），残差 std 0.0952（r std 的 5.10%）；但残差**不是白噪声**：1/Z 方向 U 形（分箱 +0.102→−0.053→+0.058）、与像素横坐标相关 −0.846——是平滑结构场。标定后全图米制误差 **3.07 cm**（近 1.41 / 远 7.15，远/近 3.7–5.9 倍）；N 扫描 4.66→3.20 cm，N=10 后饱和——**3 cm 是全局仿射的下限**。结论：仿射是一阶近似，全局标定够厘米级应用，亚厘米需要分段/逐区域标定；真实照片域未做，如实写入"本课不能说明什么"。与第 23 课同口径对照：真实模型 ≈ 该课 σ=3% 水平；"σ=0 时 N 不起作用"在真实模型上不再成立。
 
 ```powershell
@@ -503,6 +566,9 @@ torch 推理留在子仓 bench 脚本，主仓分析只依赖 numpy；新增 12 
 
 ## 第二十五课：合成棋盘格张氏内参标定
 
+![第二十五课预览：张氏内参标定](docs/img/lesson-25-intrinsics.png)
+
+
 K 从"给定值"变成"被估计量"：合成 9×6 平面棋盘格放到 24 个不同姿态（3 俯仰 × 8 方位 × 3 距离），角点经真值 K 投影加噪声（σ = 0–2 px），用 Hartley 归一化 DLT 单应 → v 向量 SVD → B=K⁻ᵀK⁻¹ 闭式解反解 fx=fy=f、cx、cy（4 参数版，与第 22 课 K 对齐；5 参数与 GN 精化未做、如实标记）。σ=0 时 f 误差 **4.43e-12 px**、往返 3.65e-16 m；M=5/σ=1 px 时 f 误差 20.27 px、真值位姿重投影从"猜的 K"80.74 px 压到估计 K 的 9.34 px（√2σ 地板 1.40 px）；M=20/σ=0.5 px 时 f 误差 ≈1%。机制常数 C=|f̂−f|·√M/σ 中位 62.4 px；cy 误差为 cx 的 1.8–2.9 倍（竖向覆盖小）。**退化反例 ×2**：纯平移与固定俯仰环绕均秩 2、条件数 ~1e20，守卫触发（调试还发现"固定俯仰环绕本身就是退化配置"——平面法线在相机系中恒定）；**自洽性陷阱**：用分解位姿做重投影时错 K 被错位姿吸收、三个水平不可区分——改用真值位姿重投影 + 平面外探针往返两个可区分指标，陷阱本身写入讲义。
 
 ```powershell
@@ -512,6 +578,9 @@ uv run python -m embodied_learning.intrinsics_demo --results results/camera_intr
 复现需新目录：`uv run python -m embodied_learning.experiments.camera_intrinsics --output results/camera_intrinsics_my_run --runs 20 --seed 0`。新增 14 项测试（手算单应、退化守卫、契约、进程隔离 Tk）；全量 493 项通过。正式记录 `results/camera_intrinsics_2026-09-05/`，与 GIS 摄影测量内方位元素的对照及自审见[第二十五课讲义](docs/29-session-25-camera-intrinsics.md)。
 
 ## 第二十六课：噪声深度图 → 点云 → ICP 配准
+
+![第二十六课预览：点云 ICP 配准](docs/img/lesson-26-icp.png)
+
 
 同一场景两个相机位姿（B = A 平移 [0.5,−0.3,0.1] + 绕 z −25°）的带噪深度点云（0.1 m 体素降采样 2000 点/片），手写 ICP（点到点 SVD 与点到面双侧残差、特征截断冻结不可观模态、阈值调度）配准。**线性区只在 σ≤0.05 m**（E_obs/σ=0.54）；σ≥0.15 起弱切向模态被噪声淹没。**收敛半径**：平移 ~0.1 m、旋转 ~0°（朴素误差 ~3.04 m/rad 杆杠杆）；点到点/点到面轮数比 6.9；PCA 法线中位偏差 38.3°（σ=0.15）——法线质量是点到面的命门。**退化反例反转**（σ=0.15、0.1 m 平移初值）：仅地面点云 13.0±1.3 cm"收敛但错"20/20（秩 3/6 冻结、确定性），含杆 61.8±144.7 cm 部分种子漂移数米——**部分可观测 + 高噪声比完全不可观 + 冻结更危险**，σ=0.02–0.05 时含杆才见效；绕杆轴自转是精确一维对称族，以商空间指标如实呈现。
 
@@ -523,6 +592,9 @@ uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_20
 
 ## 第二十七课：MobileSAM 视觉接地标身份
 
+![第二十七课预览：MobileSAM 视觉接地](docs/img/lesson-27-grounding.png)
+
+
 替换第 18–20 课的 declared 假设"地标身份已知"：三柱体地标场景（L1=第 22 课杆位）经 MobileSAM 自动掩码生成（270 个候选掩码、CUDA 4.1–4.4 s/位姿），选中 12 个掩码 IoU 均值 0.928（最小 0.275 的部分掩码身份仍对）；掩码质心经渲染深度反投影 + 最近邻匹配发身份——**12/12 身份正确**，观测送入第 18 课 Procrustes 定位链。定位结果：真值身份基线 3.40±3.02 cm vs 模型掩码 7.35±2.16 cm ≈ 真值掩码 7.38 cm——**瓶颈不是掩码质量**（±8 px 腐蚀膨胀仅 7.37–7.42 cm），而是质心的表面/轴口径差 −6.00 cm=−半径；**强制身份错配爆炸 5.36±0.37 m、朝向 129.6° 且解算器零报错**——身份错配是静默失败，必须显式校验。机制：δφ/(δpx/f) 四档比值 0.981。
 
 ```powershell
@@ -532,6 +604,9 @@ uv run python -m embodied_learning.grounding_demo --results results/visual_groun
 torch 推理留在子仓 bench（`monocular-depth/bench/grounding_inference.py` + 官方 MobileSAM 权重），主仓分析/测试无 torch。新增 12 项测试；全量 526 项通过。正式记录 `results/visual_grounding_2026-09-05/`（source_sha256 与提交版源码漂移如实记录，逐格复现通过），完整结果与自审见[第二十七课讲义](docs/31-session-27-visual-grounding.md)。
 
 ## 第二十八课：行为克隆——开环可学、闭环不成（阶段 5 入口）
+
+![第二十八课预览：行为克隆数据量-成功率](docs/img/lesson-28-bc.png)
+
 
 用数据替代模型：第 13 课专家（前馈+PD，复验 25/25+泛化 25/25）的 (状态， 力矩) 轨迹喂给纯 numpy 手写 MLP（4→64→64→2、4610 参数、手写 Adam），无知觉输入（不看参考/目标/时钟），纯 BC 力矩直驱无 PD 兜底。核心结果（600 回合）：开环训练分布 MSE **1.17e-3→3.50e-5（33 倍）**，但闭环成功率**全档 0/75**——MSE 与成功率脱钩，即复合误差/分布移的实证；泛化 MSE 饱和 ~1e-3、gen/train 比随数据量 2.2→29.3；失败形态=漂移/画圈 + 10–32% 力矩截断，最佳回合 12.6 mm；近失解剖：1 条过路径门限（1.078 mm<2 mm）但末态偏 289 mm——无目标输入收不回终点。这正是第 29 课 RL（奖励信号）的动机。
 
