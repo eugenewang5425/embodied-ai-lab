@@ -6,20 +6,20 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **514 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **526 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
 | **Status** | 26 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration |
-| **Verified** | `uv run pytest -q` → **514 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Verified** | `uv run pytest -q` → **526 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-514%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-526%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -61,7 +61,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 ## 当前状态（2026-09-05）
 
 - **主线课程 1–26 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准）。
-- **自动验收**：`uv run pytest -q` 全量 **514 项通过**（含第 24–27 课与演示验收轮新增），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **自动验收**：`uv run pytest -q` 全量 **526 项通过**（含第 24–27 课新增 57 项与演示验收轮），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
 - **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 4 收尾（第 27 课视觉基础模型接地标身份）→ 阶段 5 入口（第 28 课模仿学习 BC）；不自动开始下一课。
 
