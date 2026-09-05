@@ -6,7 +6,7 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **540 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **554 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
@@ -19,7 +19,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-540%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-554%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,11 +60,11 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-05）
 
-- **主线课程 1–28 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5 入口（行为克隆 BC：开环可学、闭环不成）。
-- **自动验收**：`uv run pytest -q` 全量 **540 项通过**（含第 28 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–29 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成）。
+- **自动验收**：`uv run pytest -q` 全量 **554 项通过**（含第 29 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5（第 29 课 RL：摆起 vs 第 7 课能量整形基线，对比样本效率与扰动恢复）；不自动开始下一课。
+- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收尾（PPO 失败归因的后续：奖励塑形消融、第 7 课基线作示教源）→ 第 30 课 ACT/扩散策略最小实验；不自动开始下一课。
 
 ## 课程索引
 
@@ -98,6 +98,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 26 课 | 点云 ICP 配准 | 两帧带噪点云、点到点/点到面、收敛半径与几何退化滑动 | Computer Vision 3D（配准）+ GIS 多测站拼合 | [讲义](docs/30-session-26-icp-registration.md) |
 | 第 27 课 | MobileSAM 视觉接地标身份 | 掩码质心+深度反投影、最近邻身份分配、错配爆炸与 δφ=δpx/f 传播 | Vision Foundation Models（替代 assumed identity） | [讲义](docs/31-session-27-visual-grounding.md) |
 | 第 28 课 | 行为克隆（阶段 5 入口） | 手写 MLP+反向传播、开环 MSE 33× vs 闭环 0/75、复合误差与分布移 | Robot Learning（IL 入口；BC 与专家的口径差） | [讲义](docs/32-session-28-bc-imitation.md) |
+| 第 29 课 | PPO 摆起（RL 对照） | 手写 numpy PPO（GAE/clip）、扶稳子技能学到但完整摆起 0/60、基线 20/20 的诚实对照 | Robot Learning（RL 入口；奖励在环 vs 监督分布） | [讲义](docs/33-session-29-ppo-swingup.md) |
 
 ## 当前技术路线
 
@@ -618,6 +619,20 @@ uv run python -m embodied_learning.bc_demo --results results/bc_imitation_2026-0
 
 复现需新目录：`uv run python -m embodied_learning.experiments.bc_imitation --output results/bc_imitation_my_run --seed 0`。新增 14 项测试（有限差分梯度、过拟合、种子确定性、验收与第 13 课对拍 1e-9、截断回合、篡改三路拒绝、isolated_tk 三模式）；全量 540 项通过。正式记录 `results/bc_imitation_2026-09-05/`，与专家的口径差及自审见[第二十八课讲义](docs/32-session-28-bc-imitation.md)。
 
+## 第二十九课：手写 numpy PPO 摆起——扶稳学到、完整摆起未成（阶段 5 RL）
+
+不注入任何模型知识，纯 numpy 手写 PPO（高斯策略+价值网络、GAE(λ)、clip surrogate、手写反向传播与 Adam）从第 7 课同一全转动摆环境的奖励中学习：8 env × 25 万步 × 3 种子（共 150 万环境步）。
+
+**主结果是诚实的"未学会完整摆起"**：训练奖励 0.14→0.41–0.42，随机起点上的抓取/扶稳子技能真实学到（训练终止率→0）——这正是第 28 课 BC 0/75 学不到的闭环能力；但下方初态评估 **0/60**、150 万步内首次成功不存在，同口径基线（第 7 课能量整形+LQR，零样本）为 **20/20、中位 4.76 s**。±200 N 扰动配对：基线 20/20 恢复（2.88 s），PPO 0/60 且全部在推力时刻之前 0.5 s 量级就已撞墙——分布外"没有行为可恢复"。
+
+失败四机制（讲义 §3.4 逐条量化）：直立区域从未被探索（σ≤1.5 噪声探针无一过水平）；扶稳技能外推成下方恒 −3 满偏反射；出界惩罚经 GAE 递归压制中间进步；下方回合 13 步即死、数据占比塌缩。近失案例：杆端推到高度 0.990 但车撞边界——缺抓取-回中协调。
+
+```powershell
+uv run python -m embodied_learning.ppo_demo --results results/ppo_swingup_2026-09-06
+```
+
+新增 14 项测试（GAE 手算、截断泄漏守卫、有限差分梯度、微型训练逐位一致、评估与第 7 课对拍、端到端、篡改三路拒绝、isolated_tk）；全量 554 项通过。正式记录 `results/ppo_swingup_2026-09-06/`，奖励/观测/课程三处"隐形手工"的讨论与自审见[第二十九课讲义](docs/33-session-29-ppo-swingup.md)。"未学会"按项目纪律作为正式结论入库。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -656,6 +671,7 @@ uv run python -m embodied_learning.bc_demo --results results/bc_imitation_2026-0
 - [x] 第二十六课：两帧带噪点云手写 ICP、点到点/点到面对照、收敛半径与几何退化反转；512 项全量通过
 - [x] 第二十七课：MobileSAM 掩码接地 + 最近邻身份分配接入定位链、错配静默爆炸实证与 δφ=δpx/f 机制；526 项全量通过
 - [x] 第二十八课：行为克隆阶段 5 入口、开环 MSE 33× vs 闭环 0/75 的复合误差实证、手写 MLP/Adam 与验收对拍；540 项全量通过
+- [x] 第二十九课：手写 numpy PPO 摆起——扶稳子技能学到、完整摆起 0/60 vs 基线 20/20 的诚实对照与失败四机制；554 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
