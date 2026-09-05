@@ -118,6 +118,10 @@ RADIUS_SHIFT_M = (0.0, 0.1, 0.3, 0.5)
 # error floor grows ~linearly with sigma (see the sigma sweep) and would sit
 # above the 2 cm criterion at 0.05 m, leaving no criterion margin.
 RADIUS_SIGMA_M = 0.02
+# light-mode (test fixture) variants of the convergence-radius study
+LIGHT_RADIUS_YAW_DEG = (0.0, 10.0)
+LIGHT_RADIUS_SHIFT_M = (0.0, 0.1)
+LIGHT_MAX_ITERS = 40
 DEGEN_SIGMA_INDEX = 1  # degenerate counterexample at sigma = 0.15 m
 DEFAULT_RUNS = 20
 DEFAULT_SEED = 0
@@ -725,12 +729,18 @@ def _agg(values, sigma):
     }
 
 
-def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
+def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED, light=False):
     output = Path(output)
     if output.exists():
         raise FileExistsError(output)
     if runs < 2:
         raise ValueError("Need at least two repetitions for noise statistics")
+    # light=True keeps every mechanism and contract identical but shrinks the
+    # convergence-radius grid and its iteration budget; used only by tests so a
+    # full-suite run does not re-run the formal-size study four times over.
+    radius_yaw = LIGHT_RADIUS_YAW_DEG if light else RADIUS_YAW_DEG
+    radius_shift = LIGHT_RADIUS_SHIFT_M if light else RADIUS_SHIFT_M
+    radius_max_iters = LIGHT_MAX_ITERS if light else MAX_ITERS
     scene = scene_and_poses()
     gt_rotation, gt_translation = scene["gt_rotation"], scene["gt_translation"]
     sweep_rotation0, sweep_translation0 = gt_rotation, gt_translation
@@ -771,6 +781,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
         )
 
     def run_pair(clouds, normals, rotation0, translation0, **kwargs):
+        kwargs.setdefault("max_iters", radius_max_iters)
         fixed_normals, moving_normals = normals
         return {
             objective: icp_register(
@@ -932,7 +943,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
     #      along the scene's spin symmetry, so the naive translation error
     #      carries the symmetry coordinate (footprint ~ lever x spin) that no
     #      amount of iteration can remove.
-    radius_frac = np.zeros((1, len(RADIUS_YAW_DEG), len(RADIUS_SHIFT_M)))
+    radius_frac = np.zeros((1, len(radius_yaw), len(radius_shift)))
     radius_err_obs = np.zeros_like(radius_frac)
     radius_err_naive = np.zeros_like(radius_frac)
     radius_spin = np.zeros_like(radius_frac)
@@ -948,8 +959,8 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
     for repetition in range(runs):
         clouds = radius_clouds(repetition)
         normals = make_normals(clouds)
-        for yi, yaw in enumerate(RADIUS_YAW_DEG):
-            for xi, shift_value in enumerate(RADIUS_SHIFT_M):
+        for yi, yaw in enumerate(radius_yaw):
+            for xi, shift_value in enumerate(radius_shift):
                 yaw_signed = yaw if repetition % 2 == 0 else -yaw
                 shift = np.array([shift_value, 0.0, 0.0])
                 if (repetition // 2) % 2 == 1:
@@ -963,6 +974,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
                     init_rotation=rotation0,
                     init_translation=translation0,
                     objective="point_to_plane",
+                    max_iters=radius_max_iters,
                 )
                 _, _, _, quotient = score(res["rotation"], res["translation"])
                 radius_frac[0, yi, xi] += quotient["trans_err_obs_m"] < CONVERGED_TRANS_M
@@ -998,7 +1010,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
     for array in (radius_frac, radius_err_obs, radius_err_naive, radius_spin, radius_iters):
         array /= runs
     # measured yaw footprint on the symmetry coordinate: shift=0 cells
-    footprint = radius_spin[0, :, 0] / np.maximum(np.asarray(RADIUS_YAW_DEG), 1e-9)
+    footprint = radius_spin[0, :, 0] / np.maximum(np.asarray(radius_yaw), 1e-9)
 
     # ---- degenerate counterexample: ground-only clouds (pole removed)
     degen = {
@@ -1117,8 +1129,8 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
         "sweep_converged_count": sweep["converged_count"],
         "sweep_mean_pair_dist_m": sweep["mean_pair_dist_m"],
         "sweep_vec_mean_m": sweep_vec_mean,
-        "radius_yaw_values": np.asarray(RADIUS_YAW_DEG),
-        "radius_shift_values": np.asarray(RADIUS_SHIFT_M),
+        "radius_yaw_values": np.asarray(radius_yaw),
+        "radius_shift_values": np.asarray(radius_shift),
         "radius_converged_fraction": radius_frac,
         "radius_mean_trans_obs_m": radius_err_obs,
         "radius_mean_trans_naive_m": radius_err_naive,
@@ -1154,9 +1166,25 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
     }
     output.mkdir(parents=True, exist_ok=False)
     np.savez_compressed(output / "trajectories.npz", **archive)
-    edge_cells = ((1, 1), (1, 2), (2, 2), (2, 3), (3, 1), (3, 3))
+    edge_cells = sorted(
+        {
+            (0, 0),
+            (0, len(radius_shift) - 1),
+            (len(radius_yaw) - 1, 0),
+            (len(radius_yaw) - 1, len(radius_shift) - 1),
+            (1, 1),
+            (1, 2),
+            (2, 2),
+            (2, 3),
+            (3, 1),
+            (3, 3),
+        }
+    )
+    edge_cells = [
+        (yi, xi) for yi, xi in edge_cells if yi < len(radius_yaw) and xi < len(radius_shift)
+    ]
     radius_edge = {
-        f"{RADIUS_YAW_DEG[yi]:.0f}deg_{RADIUS_SHIFT_M[xi]:.1f}m": {
+        f"{radius_yaw[yi]:.0f}deg_{radius_shift[xi]:.1f}m": {
             "converged_fraction": float(radius_frac[0, yi, xi]),
             "mean_trans_obs_m": float(radius_err_obs[0, yi, xi]),
             "mean_trans_naive_m": float(radius_err_naive[0, yi, xi]),
@@ -1203,7 +1231,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
             "normals": "analytic surface normals (ground plane + pole cylinder)",
             "normals_pca_knn_median_err_deg": pca_median_err_deg,
             "nearest": "vectorized Gram-trick O(N^2) on float32, downsampled clouds",
-            "max_iters": MAX_ITERS,
+            "max_iters": radius_max_iters,
             "tol": TOL,
             "tau0_m": TAU0_M,
             "tau_gamma": TAU_GAMMA,
@@ -1289,8 +1317,8 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
             "objective": "point_to_plane",
             "init": "perturbed truth (yaw about world z, x-shift; sign alternates per seed)",
             "convergence_metric": "observable-subspace translation error (symmetry quotient)",
-            "rotation_perturb_deg": list(RADIUS_YAW_DEG),
-            "translation_perturb_m": list(RADIUS_SHIFT_M),
+            "rotation_perturb_deg": list(radius_yaw),
+            "translation_perturb_m": list(radius_shift),
             "converged_fraction": radius_frac[0].tolist(),
             "mean_trans_obs_m": radius_err_obs[0].tolist(),
             "mean_trans_naive_m": radius_err_naive[0].tolist(),
@@ -1301,7 +1329,7 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
             "selected_cells": radius_edge,
             "spin_retention_by_row": {
                 f"{yaw:.0f}deg": float(footprint[yi])
-                for yi, yaw in enumerate(RADIUS_YAW_DEG)
+                for yi, yaw in enumerate(radius_yaw)
                 if yaw > 0
             },
             "p2p_matrix_note": (
@@ -1375,6 +1403,8 @@ def run_experiment(output, *, runs=DEFAULT_RUNS, seed=DEFAULT_SEED):
             ),
         ],
     }
+    if light:
+        summary["light_mode"] = True
     (output / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
@@ -1505,10 +1535,15 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--runs", type=int, default=DEFAULT_RUNS)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    parser.add_argument(
+        "--light",
+        action="store_true",
+        help="shrink the convergence-radius grid and its iteration budget (test fixture)",
+    )
     args = parser.parse_args()
     if args.runs < 2:
         parser.error("--runs must be at least 2 for noise statistics")
-    report = run_experiment(args.output, runs=args.runs, seed=args.seed)
+    report = run_experiment(args.output, runs=args.runs, seed=args.seed, light=args.light)
     reference = report["reference_run"]
     p2plane = reference["final_trans_err_m"]["point_to_plane"]
     truth = report["radius_study"]["truth_init"]["point_to_plane"]

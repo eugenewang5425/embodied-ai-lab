@@ -23,13 +23,12 @@ from embodied_learning.experiments.point_cloud_icp import (
     DEGEN_SIGMA_INDEX,
     EIGEN_CUTOFF,
     EXPERIMENT,
+    LIGHT_MAX_ITERS,
     MAX_CLOUD_POINTS,
     MAX_ITERS,
     POSE_DELTA_M,
     POSE_YAW_DEG,
-    RADIUS_SHIFT_M,
     RADIUS_SIGMA_M,
-    RADIUS_YAW_DEG,
     SIGMA_VALUES,
     TAU0_M,
     TAU_FLOOR_M,
@@ -127,7 +126,8 @@ def load_replays(directory):
         or report.get("sigma_values_m") != list(SIGMA_VALUES)
         or report.get("downsample", {}).get("voxel_size_m") != VOXEL_SIZE_M
         or report.get("downsample", {}).get("max_points") != MAX_CLOUD_POINTS
-        or report.get("icp", {}).get("max_iters") != MAX_ITERS
+        or report.get("icp", {}).get("max_iters")
+        != (LIGHT_MAX_ITERS if report.get("light_mode") else MAX_ITERS)
         or report.get("icp", {}).get("tau0_m") != TAU0_M
         or report.get("icp", {}).get("tau_gamma") != TAU_GAMMA
         or report.get("icp", {}).get("tau_floor_m") != TAU_FLOOR_M
@@ -319,6 +319,7 @@ class IcpDemo:
         )
 
     def draw_error(self):
+        self.fig.clear()
         ax_sigma, ax_degen = self.fig.subplots(1, 2)
         sigma_values = self.data["sigma_values"]
         for oi, (color, label) in enumerate(zip(("#ea580c", "#2563eb"), ("点到点", "点对面"))):
@@ -350,8 +351,10 @@ class IcpDemo:
                 ax_degen.text(
                     xi, yi, f"{fraction[yi, xi]:.0%}", ha="center", va="center", fontsize=9
                 )
-        ax_degen.set_xticks(range(len(RADIUS_SHIFT_M)), [f"{v}" for v in RADIUS_SHIFT_M])
-        ax_degen.set_yticks(range(len(RADIUS_YAW_DEG)), [f"{v}°" for v in RADIUS_YAW_DEG])
+        yaw_values = np.asarray(self.data["radius_yaw_values"])
+        shift_values = np.asarray(self.data["radius_shift_values"])
+        ax_degen.set_xticks(range(len(shift_values)), [f"{v}" for v in shift_values])
+        ax_degen.set_yticks(range(len(yaw_values)), [f"{v}°" for v in yaw_values])
         ax_degen.set(
             xlabel="平移初值扰动 / m（世界系 x）",
             ylabel="旋转初值扰动（绕世界 z）",
@@ -374,7 +377,8 @@ class IcpDemo:
                 "① 这一幕在摆数据：两台相机、两片带噪点云\n\n"
                 f"  相机 B = A 平移 {gt['delta_world_m']} m、绕 z 转 {gt['yaw_deg']}°\n"
                 f"  真值变换：旋转 {gt['gt_rotation_deg']:.1f}°（绕世界 z）\n"
-                f"  平移 {gt['gt_translation_m']}（模长 {gt['gt_translation_norm_m']:.3f} m）\n\n"
+                f"  平移 [{gt['gt_translation_m'][0]:.3f}, {gt['gt_translation_m'][1]:.3f}, "
+                f"{gt['gt_translation_m'][2]:.3f}] m（模长 {gt['gt_translation_norm_m']:.3f} m）\n\n"
                 f"  渲染像素：A {pixels['valid_a']}（杆 {pixels['pole_a']}），\n"
                 f"  B {pixels['valid_b']}（杆 {pixels['pole_b']}）\n"
                 f"  降采样：{down['voxel_size_m']} m 体素各取 1 点 →\n"

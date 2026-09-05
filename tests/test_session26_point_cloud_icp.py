@@ -23,9 +23,7 @@ from embodied_learning.experiments.point_cloud_icp import (
     OBJECTIVES,
     POSE_DELTA_M,
     POSE_YAW_DEG,
-    RADIUS_SHIFT_M,
     RADIUS_SIGMA_M,
-    RADIUS_YAW_DEG,
     SIGMA_VALUES,
     VOXEL_SIZE_M,
     analytic_normals,
@@ -281,7 +279,7 @@ def test_identity_init_lands_far_along_the_symmetry_valley():
 @pytest.fixture(scope="module")
 def recording(tmp_path_factory):
     output = tmp_path_factory.mktemp("icp") / "result"
-    report = run_experiment(output, runs=2, seed=0)
+    report = run_experiment(output, runs=2, seed=0, light=True)
     return output, report
 
 
@@ -294,11 +292,13 @@ def test_run_experiment_guards_and_contract(recording):
     assert report["pose_b"]["delta_world_m"] == list(POSE_DELTA_M)
     assert report["pose_b"]["yaw_deg"] == POSE_YAW_DEG
     assert report["icp"]["objectives"] == list(OBJECTIVES)
-    assert report["icp"]["max_iters"] == MAX_ITERS
+    expected_max_iters = 40 if report.get("light_mode") else MAX_ITERS
+    assert report["icp"]["max_iters"] == expected_max_iters
     assert report["icp"]["p2plane_eigen_cutoff"] == EIGEN_CUTOFF
     assert report["radius_study"]["sigma_m"] == RADIUS_SIGMA_M
-    assert report["radius_study"]["rotation_perturb_deg"] == list(RADIUS_YAW_DEG)
-    assert report["radius_study"]["translation_perturb_m"] == list(RADIUS_SHIFT_M)
+    # light fixture: the radius grid is the shrunk 2x2 test variant
+    assert report["radius_study"]["rotation_perturb_deg"] == [0.0, 10.0]
+    assert report["radius_study"]["translation_perturb_m"] == [0.0, 0.1]
     assert report["pixels"]["pole_b"] > 0
     assert (output / "comparison.png").exists()
     with pytest.raises(FileExistsError):
@@ -339,8 +339,9 @@ def test_radius_matrix_and_valley_footprint(recording):
     assert identity["mean_rot_err_deg"] > 5.0
     # the yaw footprint: with no translation perturbation the naive error is
     # dominated by the valley coordinate and grows with the init yaw
-    assert naive[3, 0] > 10.0 * naive[0, 0]
-    assert abs(spin[3, 0]) > abs(spin[1, 0])
+    # (light fixture grid: rows are yaw 0 deg and 10 deg)
+    assert naive[1, 0] > 10.0 * naive[0, 0]
+    assert abs(spin[1, 0]) > abs(spin[0, 0])
 
 
 def test_degenerate_counterexample_recorded(recording):
@@ -356,8 +357,8 @@ def test_degenerate_counterexample_recorded(recording):
 
 
 def test_seed_determinism(tmp_path):
-    first = run_experiment(tmp_path / "first", runs=2, seed=7)
-    second = run_experiment(tmp_path / "second", runs=2, seed=7)
+    first = run_experiment(tmp_path / "first", runs=2, seed=7, light=True)
+    second = run_experiment(tmp_path / "second", runs=2, seed=7, light=True)
     assert json.dumps(first, sort_keys=True) == json.dumps(second, sort_keys=True)
     digest_first = hashlib.sha256(
         (tmp_path / "first" / "trajectories.npz").read_bytes()
@@ -387,7 +388,7 @@ def test_npz_arrays_and_reference_bundle(recording):
     assert rotations.shape[0] == len(mean_dist) + 1
     assert rotations.shape[1:] == (3, 3)
     assert translations.shape == (len(mean_dist) + 1, 3)
-    assert radius_frac.shape == (1, len(RADIUS_YAW_DEG), len(RADIUS_SHIFT_M))
+    assert radius_frac.shape == (1, 2, 2)  # light fixture grid
     np.testing.assert_array_equal(sigma_values, np.asarray(SIGMA_VALUES))
     # per-step transforms actually move the cloud monotonically closer
     assert mean_dist[-1] <= mean_dist[0]
@@ -395,7 +396,7 @@ def test_npz_arrays_and_reference_bundle(recording):
 
 def test_recording_rejects_tampering(tmp_path):
     output = tmp_path / "result"
-    report = run_experiment(output, runs=2, seed=9)
+    report = run_experiment(output, runs=2, seed=9, light=True)
     path = output / "trajectories.npz"
     assert report["trajectories_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
     summary_path = output / "summary.json"
@@ -426,6 +427,7 @@ def test_cli_end_to_end(tmp_path):
             "2",
             "--seed",
             "3",
+            "--light",
         ],
         capture_output=True,
         text=True,
@@ -462,7 +464,7 @@ def test_tk_demo_modes_and_panel(tmp_path):
     import tkinter as tk
 
     output = tmp_path / "recording"
-    run_experiment(output, runs=2, seed=1)
+    run_experiment(output, runs=2, seed=1, light=True)
     data = load_replays(output)
     root = tk.Tk()
     root.withdraw()

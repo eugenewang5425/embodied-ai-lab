@@ -321,6 +321,7 @@ class IntrinsicsDemo:
             ylabel="角点重投影 RMS / px",
             title=f"真值位姿下的重投影（参考组 M={REFERENCE_M}）",
         )
+        ax_bar.set_ylim(top=max(values) * 5)
 
     def draw_converge(self):
         report = self.data["report"]
