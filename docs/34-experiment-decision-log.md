@@ -84,6 +84,12 @@
 触发：第 29 课失败四机制（docs/33 §3.4）与文献系统性证据对上——摆起是硬探索典型例，PPO 在该任务上被官方文档标记不稳定；解法谱系（Residual RL/DAPG/PBRS）见 docs/33 §10。
 证据：results/ppo_swingup_2026-09-06（0/60、近失 0.990 高度撞界）；docs/33 §10 文献对照表。
 
+**D-2026-09-06-02｜第 20/21/21a 课｜历史记录可视化补全：图版统一由 record_figures.py 只读重绘**
+变更：新增独立图版脚本 `src/embodied_learning/experiments/record_figures.py`（`--kind ros2 / goal / threshold`，Agg 后端，输出降采样到 880 px 与 docs/img 现有规范一致），只读冻结正式记录、不写 `results/`、不改任何实验源码；docs/22/23/23a 各追加 §8 图版说明，README 第 20/21/21a 课图行统一指向该脚本。
+触发：(1) 第 20 课正式记录只有消息日志无汇总图，README 曾留"无轨迹汇总图"占位说明，第 21/21a 课也只有演示、缺静态预览；(2) 先行的 goal_figures 工具包（commit 5b0a46f）与本轮在同一交付位冲突——lesson-21a-thresholds.png 同名覆盖、README 图行指向两套脚本，需统一口径；(3) 数据字段与预期不符的取舍：ros2 记录不含地标的地图坐标（sensor_input.npz 只有传感器局部观测），图版地标改用 `landmark_localization.LANDMARKS` 模块常数绘制且不标数值，该源文件哈希锚定在记录 `input.json` 的 source_sha256 中。
+证据：图上数字全部可溯源——601/12/601/601、8.88e-16、1.53e-15（ros2 记录）；16/20→20/20、5/20→11/20、平均 2.505/1.146/7.095/2.553 cm（goal 记录）；12 组计数含 13/3/4、7/0/13，样本 #1 的 3.856/0.994/1.923/2.675 cm（threshold 记录）；对应 tests/test_record_figures.py 6 项 Agg 冒烟与对拍断言。数据字段陷阱见 F21–F24（docs/27 第五节）。
+影响：goal_figures.py 与 lesson-21-goal-reaching.png 保留在库但不再被 README 引用；lesson-21a-thresholds.png 以 record_figures 版本为准；README 第 20 课占位说明由图行取代；`ros_trace.jsonl`/`stamp_sec`/`map_to_sensor` 的口径注记写入 docs/22 §8。不改任何 results/ 既有文件，不改实验源码，正式记录哈希不变。
+
 ## 开放事项（转 issue 跟踪）
 
 - 摆起探索难题的解法方案与文献谱系 → docs/27 Issue 14；
