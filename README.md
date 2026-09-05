@@ -62,6 +62,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 - **主线课程 1–28 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5 入口（行为克隆 BC：开环可学、闭环不成）。
 - **自动验收**：`uv run pytest -q` 全量 **540 项通过**（含第 28 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
 - **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5（第 29 课 RL：摆起 vs 第 7 课能量整形基线，对比样本效率与扰动恢复）；不自动开始下一课。
 
@@ -162,7 +163,8 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 29-session-25-camera-intrinsics.md
 │   ├── 30-session-26-icp-registration.md
 │   ├── 31-session-27-visual-grounding.md
-│   └── 32-session-28-bc-imitation.md
+│   ├── 32-session-28-bc-imitation.md
+│   └── 34-experiment-decision-log.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
