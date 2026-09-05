@@ -233,13 +233,13 @@ class PinholeDemo:
             lw=1.6,
         )
         ax.text(
-            *(np.array(eye) + np.array(TARGET)) / 2 + [0, 0, 0.15],
+            *(np.array(eye) + 0.3 * (np.array(TARGET) - np.array(eye))) + [0.0, -0.55, 0.3],
             "光轴（视线）",
             fontsize=9,
             color="#0f172a",
         )
         ax.text(
-            *(corners_world[0] + [0, 0, 0.12]),
+            *(corners_world[0] + [0.05, 0.1, 0.42]),
             "图像平面 640×480 (1.5 m)",
             fontsize=8,
             color="#0ea5e9",
@@ -411,7 +411,8 @@ class PinholeDemo:
             ls="--",
             lw=1.8,
         )
-        ax.text(*(hit_world + [0, 0, 0.1]), "此点变成的像素", fontsize=8, color="#f59e0b")
+        # 采样射线不做场景内文字标注：默认视角下相机区标签过密（见 docs/26 验收台账 F20），
+        # 语义已由①模式底部说明覆盖（"从光心到世界点的细线穿过图像平面变成像素"）。
 
     def redraw(self):
         if not hasattr(self, "canvas"):
