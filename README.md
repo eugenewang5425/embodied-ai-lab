@@ -179,7 +179,11 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ![第一课预览：环境自检与随机基线仿真帧](docs/img/lesson-01-env-check.png)
 
+![第二课演示画面：MuJoCo 实时 PD 控制窗口](docs/img/lesson-02-demo.png)
+
 ![第二课预览：PD 控制与随机基线对照](docs/img/lesson-02-pd.png)
+
+![第三课演示画面：MuJoCo 实时 LQR 控制窗口](docs/img/lesson-03-demo.png)
 
 ![第三课预览：LQR 全状态对比](docs/img/lesson-03-lqr.png)
 
@@ -204,7 +208,11 @@ uv run python -m embodied_learning.viewer --policy lqr --seconds 15 --seed 7
 
 ## 慢速教学演示
 
+![第四课演示画面：教学回放与多 R 叠加](docs/img/lesson-04-demo.png)
+
 ![第四课预览：R 权衡与多 R 曲线叠加](docs/img/lesson-04-r-weights.png)
+
+![第五课演示画面：扰动注入与恢复回放](docs/img/lesson-05-demo.png)
 
 ![第五课预览：随机推力扰动与恢复](docs/img/lesson-05-push.png)
 
@@ -245,6 +253,8 @@ uv run python -m embodied_learning.experiments.lqr_disturbance --output results/
 
 ## 第六课：真实状态与传感读数
 
+![第六课演示画面：测量噪声三组对照回放](docs/img/lesson-06-demo.png)
+
 ![第六课预览：测量噪声三组对照](docs/img/lesson-06-noise.png)
 
 
@@ -266,6 +276,8 @@ uv run python -m embodied_learning.teaching_demo --noise-results results/lqr_noi
 
 ## 第七课：下垂摆起与强扰动恢复
 
+![第七课演示画面：摆起与扶稳窗口](docs/img/lesson-07-demo.png)
+
 ![第七课预览：摆起与强扰动恢复](docs/img/lesson-07-swingup.png)
 
 
@@ -285,6 +297,8 @@ uv run python -m embodied_learning.swingup_demo --results results/swingup_2026-0
 
 ## 第八课：两个关节与末端坐标
 
+![第八课演示画面：机械臂到达窗口](docs/img/lesson-08-demo.png)
+
 ![第八课预览：平面 2R 到达](docs/img/lesson-08-arm-reaching.png)
 
 
@@ -300,6 +314,8 @@ uv run python -m embodied_learning.arm_demo --results results/arm_reaching_2026-
 
 ## 第九课：沿直线运动与 Jacobian
 
+![第九课演示画面：直线路径三方案对照窗口](docs/img/lesson-09-demo.png)
+
 ![第九课预览：直线路径三组对照](docs/img/lesson-09-arm-path.png)
 
 
@@ -314,6 +330,8 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_path_2026
 复现：`uv run python -m embodied_learning.experiments.arm_path --output results/arm_path_my_run`。新目录输出包含三组实际状态、力矩、几何参考、对照图与奇异性探针；完整实验和讲解见[第九课：到达终点，不等于沿直线到达](docs/11-session-09-jacobian-path.md)。未增加噪声、碰撞、自由度或依赖；下一步才是有种子的多路径评估。
 
 ## 第十课：换一批路径后还可靠吗？
+
+![第十课演示画面：多路径批量回放窗口](docs/img/lesson-10-demo.png)
 
 ![第十课预览：多路径配对评估](docs/img/lesson-10-batch.png)
 
@@ -336,6 +354,8 @@ uv run python -m embodied_learning.experiments.arm_path_batch --seed 400 --per-g
 
 ## 第十一课：逐点解析 IK 起步
 
+![第十一课演示画面：逐点解析 IK 对照窗口](docs/img/lesson-11-demo.png)
+
 ![第十一课预览：逐点解析 IK](docs/img/lesson-11-ik.png)
 
 
@@ -351,6 +371,8 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_ik_compar
 
 ## 第十二课：动作时间与电机限制
 
+![第十二课演示画面：时序与力矩对照窗口](docs/img/lesson-12-demo.png)
+
 ![第十二课预览：8/4/2 秒时序对照](docs/img/lesson-12-timing.png)
 
 
@@ -364,6 +386,8 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_timing_20
 
 ## 第十三课：模型前馈＋原 PD
 
+![第十三课演示画面：前馈+PD 拆分窗口](docs/img/lesson-13-demo.png)
+
 ![第十三课预览：前馈+PD](docs/img/lesson-13-ff.png)
 
 
@@ -376,6 +400,8 @@ uv run python -m embodied_learning.arm_path_demo --results results/arm_feedforwa
 默认暂停、0.25×；橙色原 PD、绿色前馈＋PD。右侧拆分模型前馈、PD 修正、合计请求、实际施加。详见[第十三课讲义](docs/15-session-13-model-feedforward.md)与[学习路线回顾](docs/01-learning-roadmap.md)。全量 215 项测试通过。下一主线为差速移动机器人和坐标系，不继续无限扩展 2R 调参。
 
 ## 第十四课：差速小车与世界/车体/传感器坐标
+
+![第十四课演示画面：三坐标系窗口](docs/img/lesson-14-demo.png)
 
 ![第十四课预览：世界/车体/传感器坐标](docs/img/lesson-14-frames.png)
 
@@ -398,6 +424,8 @@ uv run python -m embodied_learning.experiments.mobile_frames --output results/mo
 
 ## 第十五课，编码器里程计与累积误差
 
+![第十五课演示画面：里程计累积误差窗口](docs/img/lesson-15-demo.png)
+
 ![第十五课预览：编码器里程计累积误差](docs/img/lesson-15-odometry.png)
 
 
@@ -412,6 +440,8 @@ uv run python -m embodied_learning.odometry_demo --results results/mobile_odomet
 复现需新目录：`uv run python -m embodied_learning.experiments.mobile_odometry --output results/mobile_odometry_my_run`。新增 31 项测试；第十四课直行前 4 s 真值与旧记录完全一致。上轮组合回归曾为 281 通过、1 项 Tk 初始化失败；本轮采用窗口测试进程隔离后重复通过，不宣称已确定或修复 Tcl 底层根因。历史证据保留于[第十五课讲义](docs/17-session-15-encoder-odometry.md)，当前验收见第十六课。
 
 ## 第十六课：固定比例标定与独立验证
+
+![第十六课演示画面：标定三页流程窗口](docs/img/lesson-16-demo.png)
 
 ![第十六课预览：固定比例标定](docs/img/lesson-16-calibration.png)
 
@@ -430,6 +460,8 @@ uv run python -m embodied_learning.calibration_demo
 
 ## 第十七课：标定之后的随机测量噪声
 
+![第十七课演示画面：噪声统计窗口](docs/img/lesson-17-demo.png)
+
 ![第十七课预览：随机噪声统计](docs/img/lesson-17-noise.png)
 
 
@@ -446,6 +478,8 @@ uv run python -m embodied_learning.mobile_noise_demo --results results/mobile_no
 复现需新目录：`uv run python -m embodied_learning.experiments.mobile_noise --output results/mobile_noise_my_run --runs 20 --seed 0`。新增 16 项测试；全量 331 项连续两次通过，Ruff 静态及格式检查通过（62 个 Python 文件）。完整原理、假设、统计口径与停止点见[第十七课讲义](docs/19-session-17-random-noise.md)。是否引入外部观测/滤波由任务精度要求决定，不自动加卡尔曼或 SLAM。
 
 ## 第十八课：已知地标（控制点）观测与里程计对照
+
+![第十八课演示画面：地标观测窗口](docs/img/lesson-18-demo.png)
 
 ![第十八课预览：地标观测与配准](docs/img/lesson-18-landmarks.png)
 
@@ -471,6 +505,8 @@ uv run python -m embodied_learning.landmark_demo --results results/mobile_landma
 
 ## 第十九课：看观测 → 解位置 → 最简融合
 
+![第十九课演示画面：融合慢放窗口](docs/img/lesson-19-demo.png)
+
 ![第十九课预览：最简融合三组对照](docs/img/lesson-19-fusion.png)
 
 
@@ -485,6 +521,8 @@ uv run python -m embodied_learning.fusion_demo --results results/mobile_fusion_2
 固定标定修正编码器比例；位姿重置修正累计漂移；两者都不能自动校正错误地图、错误安装参数或消除随机噪声。新增 30 项测试，全量 376 项通过；真值与旧两种估计和第十八课逐数组一致，旧产物不覆盖。详见[第十九课讲义与复现](docs/21-session-19-landmark-fusion.md)。本课不实现卡尔曼、SLAM、ROS 节点或运动控制，学完后回到移动机器人系统主线。
 
 ## 第二十课：ROS 2 节点、消息与坐标链
+
+![第二十课演示画面：三进程运动与定位窗口](docs/img/lesson-20-demo.png)
 
 ![第二十课预览：三进程回放图版](docs/img/lesson-20-ros2-timeline.png)
 
@@ -506,6 +544,8 @@ uv run python -m embodied_learning.ros2_system_demo
 
 ## 第二十一课：根据估计位置驶向目标
 
+![第二十一课演示画面：目标反馈运动窗口](docs/img/lesson-21-demo.png)
+
 ![第二十一课预览：目标反馈停车结果图版](docs/img/lesson-21-goal-outcomes.png)
 
 预览图由冻结记录只读重绘生成：`uv run python -m embodied_learning.experiments.record_figures --kind goal --record results/goal_reaching_2026-09-03 --output docs/img/lesson-21-goal-outcomes.png`
@@ -522,6 +562,8 @@ uv run python -m embodied_learning.goal_demo
 
 ### 第二十一课补充：缩小停车门限
 
+![第二十一课补充演示画面：门限对照窗口](docs/img/lesson-21a-demo.png)
+
 ![第二十一课补充预览：2/1/0.5 厘米停车门限对照](docs/img/lesson-21a-thresholds.png)
 
 预览图由冻结记录只读重绘生成：`uv run python -m embodied_learning.experiments.record_figures --kind threshold --record results/goal_thresholds_2026-09-03 --output docs/img/lesson-21a-thresholds.png`
@@ -535,6 +577,8 @@ uv run python -m embodied_learning.threshold_demo
 近／远目标、两种定位、20 种子共 240 回合，逐数组复现；2 cm 的 80 回合与上一课完全一致。远目标融合通过／超时数为 11/0、13/4、7/13（各 20 次）；门限更小不保证任务更好。全量 443 项测试通过，慢放及超时对照已实际检查。正式结果 `results/goal_thresholds_2026-09-03/`，见[补充实验讲义](docs/23a-session-21-stopping-tolerance.md)。原默认门限不变，旧结果保留。
 
 ## 第二十二课：针孔相机与投影-反投影（阶段 4：三维感知）
+
+![第二十二课演示画面：针孔 3D 场景窗口](docs/img/lesson-22-demo.png)
 
 ![第二十二课预览：针孔投影与点云](docs/img/lesson-22-pinhole.png)
 
@@ -551,6 +595,8 @@ uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole
 
 ## 第二十三课：单目相对深度 ↔ 米制尺度标定
 
+![第二十三课演示画面：相对深度标定窗口](docs/img/lesson-23-demo.png)
+
 ![第二十三课预览：相对深度米制标定](docs/img/lesson-23-metric.png)
 
 
@@ -565,6 +611,8 @@ uv run python -m embodied_learning.monocular_metric_demo --results results/mobil
 复现需新目录：`uv run python -m embodied_learning.experiments.monocular_metric --output results/mobile_monocular_my_run --runs 20 --seed 0`。新增 13 项测试；全量 468 项通过。本课是理想仿射代理的误差传播研究，不宣称代替真实深度模型——真实 Depth Anything 的非仿射畸变与控制点布设是下一步。完整原理、N/σ 扫描表与停止点见[第二十三课讲义](docs/25-session-23-monocular-metric.md)。
 
 ## 第二十四课：真实单目相对深度的仿射检验（Depth Anything V2）
+
+![第二十四课演示画面：DA V2 仿射检验窗口](docs/img/lesson-24-demo.png)
 
 ![第二十四课预览：真实 DA V2 仿射检验](docs/img/lesson-24-affine.png)
 
@@ -581,6 +629,8 @@ torch 推理留在子仓 bench 脚本，主仓分析只依赖 numpy；新增 12 
 
 ## 第二十五课：合成棋盘格张氏内参标定
 
+![第二十五课演示画面：内参标定窗口](docs/img/lesson-25-demo.png)
+
 ![第二十五课预览：张氏内参标定](docs/img/lesson-25-intrinsics.png)
 
 
@@ -593,6 +643,8 @@ uv run python -m embodied_learning.intrinsics_demo --results results/camera_intr
 复现需新目录：`uv run python -m embodied_learning.experiments.camera_intrinsics --output results/camera_intrinsics_my_run --runs 20 --seed 0`。新增 14 项测试（手算单应、退化守卫、契约、进程隔离 Tk）；全量 493 项通过。正式记录 `results/camera_intrinsics_2026-09-05/`，与 GIS 摄影测量内方位元素的对照及自审见[第二十五课讲义](docs/29-session-25-camera-intrinsics.md)。
 
 ## 第二十六课：噪声深度图 → 点云 → ICP 配准
+
+![第二十六课演示画面：ICP 配准窗口](docs/img/lesson-26-demo.png)
 
 ![第二十六课预览：点云 ICP 配准](docs/img/lesson-26-icp.png)
 
@@ -607,6 +659,8 @@ uv run python -m embodied_learning.icp_demo --results results/point_cloud_icp_20
 
 ## 第二十七课：MobileSAM 视觉接地标身份
 
+![第二十七课演示画面：视觉接地窗口](docs/img/lesson-27-demo.png)
+
 ![第二十七课预览：MobileSAM 视觉接地](docs/img/lesson-27-grounding.png)
 
 
@@ -619,6 +673,8 @@ uv run python -m embodied_learning.grounding_demo --results results/visual_groun
 torch 推理留在子仓 bench（`monocular-depth/bench/grounding_inference.py` + 官方 MobileSAM 权重），主仓分析/测试无 torch。新增 12 项测试；全量 526 项通过。正式记录 `results/visual_grounding_2026-09-05/`（source_sha256 与提交版源码漂移如实记录，逐格复现通过），完整结果与自审见[第二十七课讲义](docs/31-session-27-visual-grounding.md)。
 
 ## 第二十八课：行为克隆——开环可学、闭环不成（阶段 5 入口）
+
+![第二十八课演示画面：行为克隆结果窗口](docs/img/lesson-28-demo.png)
 
 ![第二十八课预览：行为克隆数据量-成功率](docs/img/lesson-28-bc.png)
 
