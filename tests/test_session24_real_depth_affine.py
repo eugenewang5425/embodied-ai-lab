@@ -309,3 +309,49 @@ def test_cli_end_to_end_subprocess(bench_inputs, tmp_path):
             cwd=str(source_root),
             check=True,
         )
+
+
+@pytest.mark.isolated_tk
+def test_tk_demo_modes_and_panel(tmp_path):
+    import tkinter as tk
+
+    from embodied_learning.real_depth_demo import RealDepthDemo, load_analysis
+
+    rendered = render_depth_map()
+    depth, valid, pole = rendered["depth_m"], rendered["valid"], rendered["pole"]
+    u = 1.0 / depth[valid]
+    ideal = np.full(depth.shape, np.nan)
+    ideal[valid] = A_TRUE * u + B_TRUE
+    bench = tmp_path / "bench.npz"
+    write_bench_npz(bench, depth, valid, pole, ideal)
+    output = tmp_path / "recording"
+    run_experiment(bench, output, runs=2, seed=RNG_SEED)
+    data = load_analysis(output)  # digest + contract checks
+    root = tk.Tk()
+    root.withdraw()
+    demo = RealDepthDemo(root, data)
+    root.update()
+    assert demo.mode.get() == "scales"
+    assert "本幕在对照" in demo.stats.cget("text")
+    assert len(demo.fig.axes) == 4  # two imshows + two colorbars
+    # redraw must not accumulate axes: the lesson-26 residual-axis guard
+    demo.redraw()
+    demo.redraw()
+    assert len(demo.fig.axes) == 4
+    demo.mode.set("structure")
+    demo.redraw()
+    assert "U 形" in demo.stats.cget("text")
+    assert len(demo.fig.axes) == 3  # imshow + colorbar + binned curve
+    demo.mode.set("scan")
+    demo.redraw()
+    assert "饱和" in demo.stats.cget("text")
+    assert len(demo.fig.axes) == 2
+    # tampered summary is rejected by the demo loader
+    broken = json.loads((output / "summary.json").read_text(encoding="utf-8"))
+    broken["dense_fit"]["a"] = 99.0
+    (output / "summary.json").write_text(
+        json.dumps(broken, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    with pytest.raises(ValueError):
+        load_analysis(output)
+    demo.close()
