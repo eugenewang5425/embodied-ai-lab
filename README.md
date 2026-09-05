@@ -6,23 +6,23 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **443 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **468 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 21 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → encoder odometry & calibration → landmark observation & simplest fusion → ROS 2 nodes & TF → goal feedback |
-| **Verified** | `uv run pytest -q` → **443 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
-| **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12/3.13 |
+| **Status** | 23 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration |
+| **Verified** | `uv run pytest -q` → **468 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-443%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-468%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
-[![Python](https://img.shields.io/badge/Python-3.12%20%2F%203.13-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![License](https://img.shields.io/github/license/eugenewang5425/embodied-ai-lab?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Stars](https://img.shields.io/github/stars/eugenewang5425/embodied-ai-lab?style=flat-square&logo=github)](https://github.com/eugenewang5425/embodied-ai-lab)
 
@@ -58,12 +58,40 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-09-03）
+## 当前状态（2026-09-05）
 
-- **主线课程 1–22 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知入门（针孔相机/投影反投影/深度误差传播）。
-- **自动验收**：`uv run pytest -q` 全量 **454 项通过**（含本轮新增 11 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–23 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定）。
+- **自动验收**：`uv run pytest -q` 全量 **468 项通过**（含第二十三课新增 13 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 位于 `D:\wsl\ubuntu`，约 8 GB）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
 - **下一步**：完成各课讲义的"学员待解释"清单（见文末），再按[学习路线](docs/01-learning-roadmap.md)推进三维感知/ROS 2 导航或机器人学习；不自动开始下一课。
+
+## 课程索引
+
+| 课号 | 主题 | 核心概念 | 对应 Embodied-AI-Guide 章节 | 讲义链接 |
+| --- | --- | --- | --- | --- |
+| 第 1 课 | 环境与实验规范 | 环境自检、随机动作基线、依赖锁定与可复现实验记录 | Infrastructure 篇（Simulators/Benchmarks） | [讲义](docs/03-session-01.md) |
+| 第 2 课 | PD 控制与随机基线对照 | 比例-微分反馈、配对对照与稳定指标 | Control 篇（6.2.1 经典控制） | [讲义](docs/04-session-02-pd-control.md) |
+| 第 3 课 | 离散 LQR 全状态对比 | 基于真实平衡点的离散 LQR、输入代价 R | Control 篇（6.2.2 现代控制·最优控制） | [讲义](docs/05-session-03-lqr.md) |
+| 第 4 课 | LQR 权重与慢放对照 | R 权重扫描、教学回放与多 R 曲线叠加 | Control 篇（6.2.2 现代控制·最优控制） | [讲义](docs/06-session-04-lqr-weights-and-demo.md) |
+| 第 5 课 | 随机外部扰动 | 配对随机推力、恢复时间与失败率 | Control 篇（6.2.2 现代控制·最优控制） | [讲义](docs/07-session-05-disturbance.md) |
+| 第 6 课 | 真实状态与传感读数 | 测量噪声 0×/1×/3× 对照、真实状态与读数辨别 | Control 篇（6.2.2 现代控制·最优控制） | [讲义](docs/08-session-06-measurement-noise.md) |
+| 第 7 课 | 下垂摆起与强扰动恢复 | 能量摆起与 LQR 切换、失败边界 | Control 篇（6.2.3 先进控制入口） | [讲义](docs/09-session-07-swingup.md) |
+| 第 8 课 | 两个关节与末端坐标 | 平面 2R FK、解析双分支 IK、关节 PD 到达 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/10-session-08-planar-arm.md) |
+| 第 9 课 | 沿直线运动与 Jacobian | Jacobian 直线路径、奇异位形的瞬时方向限制 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/11-session-09-jacobian-path.md) |
+| 第 10 课 | 换一批路径后还可靠吗 | 有种子多路径配对评估、参考/执行/验收分层 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/12-session-10-path-coverage.md) |
+| 第 11 课 | 逐点解析 IK 起步 | 逐点解析 IK 参考、连续分支与速度规划边界 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/13-session-11-waypoint-ik.md) |
+| 第 12 课 | 动作时间与电机限制 | 8/4/2 秒对照、规划拒绝与力矩截断分层 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/14-session-12-timing-and-torque.md) |
+| 第 13 课 | 模型前馈＋原 PD | 逆动力学前馈、前馈/反馈/限幅职责区分 | Control 篇·机器人学导论（6.3.2 运动学与动力学） | [讲义](docs/15-session-13-model-feedforward.md) |
+| 第 14 课 | 差速小车与世界/车体/传感器坐标 | 差速运动学、坐标变换链、错误映射反例 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/16-session-14-mobile-frames.md) |
+| 第 15 课 | 编码器里程计与累积误差 | 位姿递推、比例偏差的累积误差 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/17-session-15-encoder-odometry.md) |
+| 第 16 课 | 固定比例标定与独立验证 | 对照测量→求系数→换路线验证、错误基准反例 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/18-session-16-encoder-calibration.md) |
+| 第 17 课 | 标定之后的随机测量噪声 | 种子化逐区间噪声、系统偏差与随机分散分离 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/19-session-17-random-noise.md) |
+| 第 18 课 | 已知地标（控制点）观测与里程计对照 | 测距测角、2D Procrustes 位姿解算、累积 vs 不累积 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/20-session-18-landmark-observations.md) |
+| 第 19 课 | 看观测 → 解位置 → 最简融合 | 观测重置＋里程计填充、三组配对与坏观测反例 | Control 篇·里程计与 SLAM 前置/状态估计动机 | [讲义](docs/21-session-19-landmark-fusion.md) |
+| 第 20 课 | ROS 2 节点、消息与坐标链 | 三进程消息交接、时间戳配对、TF 坐标链 | Infrastructure 篇（ROS 2 工程生态） | [讲义](docs/22-session-20-ros2-messages-and-tf.md) |
+| 第 21 课（含 23a 停车门限补充） | 根据估计位置驶向目标 | 估计驱动轮速、估计到达与实际通过区分、停车门限单变量对照 | Algorithm 篇·Robot Navigation 前置 | [讲义](docs/23-session-21-goal-feedback.md) · [补充](docs/23a-session-21-stopping-tolerance.md) |
+| 第 22 课 | 针孔相机与投影-反投影 | 针孔投影/反投影、无深度只剩一条射线、深度噪声误差传播 ∝ 射线长度 | Algorithm 篇·Computer Vision 3D + Hardware 篇·Sensors | [讲义](docs/24-session-22-pinhole-projection.md) |
+| 第 23 课 | 单目相对深度 ↔ 米制尺度标定 | 逆深度仿射歧义、控制点最小二乘标定 (a,b)、N/σ 扫描与 Z² 误差分层 | Algorithm 篇·Vision Foundation Models（相对深度）+ 标定 | [讲义](docs/25-session-23-monocular-metric.md) |
 
 ## 当前技术路线
 
@@ -72,7 +100,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
    - 第一批实验：环境自检、倒立摆、二维机械臂到达。
 2. **WSL2 / Ubuntu 24.04：ROS 2 Jazzy + Gazebo Harmonic（2026-09-03 已安装）**
    - 用于机器人系统、传感器、LiDAR、SLAM、导航与多节点通信。
-   - 已安装：Ubuntu 24.04.4（WSL `Ubuntu-24.04`，vhd 在 `D:\wsl\ubuntu`，约 8 GB）、ROS 2 Jazzy（ros-jazzy-desktop，287 个包）、Gazebo Harmonic（gz sim 8.15.0）、colcon；Linux 用户 `eugen`，Linux 侧 Python 3.12.3。
+   - 已安装：Ubuntu 24.04.4（WSL 发行版 `Ubuntu-24.04`，vhd 约 8 GB，位于本机自定义路径）、ROS 2 Jazzy（ros-jazzy-desktop，287 个包）、Gazebo Harmonic（gz sim 8.15.0）、colcon；Linux 侧 Python 3.12.3。
    - 使用：任意终端输入 `wsl` 进入；`~/.bashrc` 已自动加载 ROS 2；`gz sim` 打开 Gazebo 窗口。环境核验见[环境审计](docs/00-environment-audit.md)。
    - 第二十课已在此环境运行真实 ROS 消息与 TF；暂不启动 Gazebo 世界或导航。
 3. **Isaac Lab：暂不进入主线**
@@ -121,10 +149,14 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 22-session-20-ros2-messages-and-tf.md
 │   ├── 23-session-21-goal-feedback.md
 │   ├── 23a-session-21-stopping-tolerance.md
-│   └── 24-session-22-pinhole-projection.md
+│   ├── 24-session-22-pinhole-projection.md
+│   ├── 25-session-23-monocular-metric.md
+│   ├── 26-experiment-review-2026-09-05.md
+│   └── 27-issues-pr-drafts-2026-09-05.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
+├── monocular-depth/   # 单目深度独立子项目
 ├── pyproject.toml
 ├── uv.lock
 └── .gitignore
@@ -425,7 +457,7 @@ uv run python -m embodied_learning.threshold_demo
 
 ## 第二十二课：针孔相机与投影-反投影（阶段 4：三维感知）
 
-进入三维感知阶段的第一课。已知坐标的 3D 场景（地面网格 + 竖直杆）经针孔相机投影到 640×480 图像（fx=600、主点 (320,240)）。**可见性 = 深度大于近裁剪 0.5 m 且像素落在图像内**（43 点；杆顶超出图像上边界被视场切掉——见②③演示中的橙色杆点）。有精确深度时**往返一致**（最大 1.47e-15 m）；无深度时同一像素只给一条射线（三个深度猜测共线且重投影相同——单目本质无尺度）；深度噪声压低到 σ=15 cm（粗糙测距量级）：点云误差均值 12.67 cm、最大 60.32 cm，且**误差 ∝ 射线长度 |K⁻¹[u,v,1]|**（误差÷倍率近/远段 11.10/11.61 cm ≈ σ·√(2/π) 机制验证）；相机平移 0.5 m 后反投影回同一世界系仍一致（1.37e-15 m）。
+进入三维感知阶段的第一课。已知坐标的 3D 场景（地面网格 + 竖直杆）经针孔相机投影到 640×480 图像（fx=600、主点 (320,240)）。**可见性 = 深度大于近裁剪 0.5 m 且像素落在图像内**（43 点；杆顶超出图像上边界被视场切掉——见②③演示中的橙色杆点）。有精确深度时**往返一致**（最大 1.47e-15 m）；无深度时同一像素只给一条射线（三个深度猜测共线且重投影相同——单目本质无尺度）；深度噪声上调到 σ=15 cm（贴近廉价深度传感器的粗糙测距量级）：点云误差均值 12.67 cm、最大 60.32 cm，且**误差 ∝ 射线长度 |K⁻¹[u,v,1]|**（误差÷倍率近/远段 11.10/11.61 cm ≈ σ·√(2/π) 机制验证）；相机平移 0.5 m 后反投影回同一世界系仍一致（1.37e-15 m）。
 
 ```powershell
 uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole_2026-09-03
@@ -433,7 +465,19 @@ uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole
 
 窗口左侧是**可旋转 3D 场景视图**（地面+杆+光心/光轴/图像平面/视锥+射线与点云差异，可拖拽旋转缩放），右侧像素平面（杆点橙色高亮）与数字面板；三种模式：① 精确深度（往返误差与近裁剪面）、② 无深度（射线上三个深度候选与共线证明）、③ 深度噪声（真值 vs 噪声点云与误差连线 + 20 种子统计）。按 Esc 退出。
 
-复现需新目录：`uv run python -m embodied_learning.experiments.pinhole_projection --output results/mobile_pinhole_my_run --runs 20 --seed 0`。新增 11 项测试；全量 454 项通过。完整原理、假设与停止点见[第二十二课讲义](docs/24-session-22-pinhole-projection.md)。下一步是"单目相对深度 ↔ 米制标定"的讨论与设计，不直接开始训练。
+复现需新目录：`uv run python -m embodied_learning.experiments.pinhole_projection --output results/mobile_pinhole_my_run --runs 20 --seed 0`。新增 11 项测试；全量 454 项通过。完整原理、假设与停止点见[第二十二课讲义](docs/24-session-22-pinhole-projection.md)。"单目相对深度 ↔ 米制标定"已在第二十三课完成；阶段 4 的剩余建议依次为真实 Depth Anything 仿射检验 → 内参标定 → 点云/ICP，不直接开始训练。
+
+## 第二十三课：单目相对深度 ↔ 米制尺度标定
+
+承接第二十二课"单目本质无尺度"的结论：单目相对深度模型输出 r = a·(1/Z) + b，任何 (a,b) 描述同一几何，只有尺度与原点漂移——这就是"无尺度"的代数形式。本课不重训练、不加载权重，只做一件事：抽 N 个已知深度的控制点（模拟稀疏激光测距/GIS 控制点，要求 1/Z 跨度 ≥ 0.1），对 r 做逆深度仿射最小二乘标定 (a,b)，再全图反演 Z_hat = a/(r−b) 得到米制深度图。相机与场景逐项沿用第二十二课，对地面＋竖直杆做逐像素解析光线投射（有效像素 280 687，深度 1.51–4.71 m）。无标定基线（把 r 直接当 1/Z 用）全图平均误差 193.2 cm；σ=0 时 N≥2 即 ~1e-13 cm 复原——N 的价值只在压噪声；σ=1%/3% 下 N=5 全图平均 2.06/4.19 cm、N=10 时 1.10/3.45 cm；σ=3% 远/近误差比 2.5–7.8 倍（机制为 δZ ≈ Z²·|δ(1/Z)|，b 的误差在远处被平方放大）；控制点挤在近处的坏布设最差 775 cm 案例如实保留。拟合参数的三明治协方差与 2000 次经验协方差比值 0.990–1.018，公式自洽。
+
+```powershell
+uv run python -m embodied_learning.monocular_metric_demo --results results/mobile_monocular_2026-09-05
+```
+
+静态图像演示（无动画），三种模式：① 相对深度图 vs 米制深度图 vs 无标定误读图并排（同样的深浅次序、完全不同的米制世界）；② 深度图上的控制点与逆深度域仿射拟合（真值线虚线对比）；③ 逐像素误差图与 N–误差对数曲线（三条 σ、近/远分层虚线与无标定基线）。Esc 退出；加载时校验 summary 契约、npz 哈希，并从第二十二课相机与场景常量重算深度图比对。
+
+复现需新目录：`uv run python -m embodied_learning.experiments.monocular_metric --output results/mobile_monocular_my_run --runs 20 --seed 0`。新增 13 项测试；全量 468 项通过。本课是理想仿射代理的误差传播研究，不宣称代替真实深度模型——真实 Depth Anything 的非仿射畸变与控制点布设是下一步。完整原理、N/σ 扫描表与停止点见[第二十三课讲义](docs/25-session-23-monocular-metric.md)。
 
 ## 进度清单
 
@@ -467,6 +511,7 @@ uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole
 - [x] 第二十一课：目标点反馈、估计驱动轮速、80 回合配对、实际到达／误判区分和运动慢放
 - [x] 第二十一课补充：2 / 1 / 0.5 cm 停车门限单变量对照、240 回合、实际误差／耗时／超时与重新调整慢放
 - [x] 第二十二课：针孔相机投影/反投影、往返一致、无深度射线、深度噪声误差传播与射线倍率机制、位姿一致性；454 项全量通过
+- [x] 第二十三课：单目相对深度 ↔ 米制尺度标定、控制点数量/噪声对照、远/近误差分层与机制核对；468 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
@@ -489,3 +534,4 @@ uv run python -m embodied_learning.pinhole_demo --results results/mobile_pinhole
 - [ROS 2 Jazzy 官方文档](https://docs.ros.org/en/jazzy/)
 - [Gazebo 与 ROS 的推荐组合](https://gazebosim.org/docs/jetty/ros_installation/)
 - [Isaac Lab 安装与系统要求](https://isaac-sim.github.io/IsaacLab/v2.3.1/source/setup/installation/index.html)
+- [Embodied-AI-Guide（具身智能知识库）](https://github.com/TianxingChen/Embodied-AI-Guide) —— 各课讲义"理论对应"小节的知识地图参照
