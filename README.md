@@ -6,7 +6,7 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **587 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **601 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
@@ -19,7 +19,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-587%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-601%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,7 +60,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-05）
 
-- **主线课程 1–29 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达）。
+- **主线课程 1–29 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态）。
 - **自动验收**：`uv run pytest -q` 全量 **554 项通过**（含第 29 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
@@ -101,6 +101,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 29 课 | PPO 摆起（RL 对照） | 手写 numpy PPO（GAE/clip）、扶稳子技能学到但完整摆起 0/60、基线 20/20 的诚实对照 | Robot Learning（RL 入口；奖励在环 vs 监督分布） | [讲义](docs/33-session-29-ppo-swingup.md) |
 | 第 30 课 | 残差 RL 摆起 | 能量整形底座 + 限幅残差、a=0 守卫逐位一致、朴素残差触限 95.8–99.6% 毁掉底座 | Robot Learning（Residual RL；探索噪声非无害） | [讲义](docs/35-session-30-residual-swingup.md) |
 | 第 31 课 | PBRS 势函数塑形 | 能量梯子不改最优策略、cE=2 种子 1 于 150k 步首次触达直立区、"对的能量≠对的姿态" | Robot Learning（reward shaping；Ng 1999 定理） | [讲义](docs/36-session-31-pbrs-shaping.md) |
+| 第 32 课 | DAPG 示教空投 | 8 条基线示教 + BC 正则、直立首达 33/60 成为常态、BC 记忆分化（0.218 vs 1.24） | Robot Learning（RL from demonstrations；DAPG RSS 2018） | [讲义](docs/37-session-32-dapg-swingup.md) |
 
 ## 当前技术路线
 
@@ -723,6 +724,8 @@ uv run python -m embodied_learning.residual_demo --results results/residual_swin
 
 ## 第三十一课：PBRS 势函数塑形——给悬崖修梯子，山顶不动
 
+![第三十一课演示画面：势函数塑形窗口](docs/img/lesson-31-demo.png)
+
 四种过崖方式第二试（修梯子）：第 29 课纯 PPO 原样保留，只在奖励上加
 `γΦ(s′) − Φ(s)`，其中 `Φ = −cE·|E − E_top|`（能量即天然势函数；E_top=0、正下方 −29.54 J）。
 Ng/Harada/Russell 1999 定理保证这种塑形**不改变最优策略**——梯子修得再密，山顶位置不变。
@@ -740,6 +743,28 @@ uv run python -m embodied_learning.pbrs_demo --results results/pbrs_swingup_2026
 新增 14 项测试（势函数手算、cE=0 守卫、γΦ 契约、微型训练冒烟、直立首达指标、篡改三路、
 isolated_tk 三模式）；全量 587 项通过。正式记录 `results/pbrs_swingup_2026-09-06/`。
 四种过崖进度（缆车✗ 梯子◐ 空投/地图待试）与自审见[第三十一课讲义](docs/36-session-31-pbrs-shaping.md)。
+
+## 第三十二课：DAPG 式示教空投
+
+![第三十二课演示画面：DAPG 示教窗口](docs/img/lesson-32-demo.png)
+
+DAPG 原味简化：第 7 课基线（抖动初态）生成 8 条成功示教（8/8 过质量闸门、6000 对 (s,a)、
+SHA-256 入册），PPO 目标加 `w_BC·MSE(μ_θ(s_demo), a_demo)` 辅助项并线性退火，
+w_BC ∈ {10, 1} × 3 种子 × 50 万步；w_BC=0 双守卫（环境流与训练曲线/权重逐位）。
+
+**主结果：成功率仍 0/60（0→1 未出现），但探索被质变修复——直立首达从三课一次变为评估常态：
+w=10 达 33/60（中位 2.12 s）、w=1 达 27/60（2.04 s）**；BC 记忆分化（w=10 末段 MSE 0.136–0.152
+示教被记住，w=1 拆锚后回升至 1.0+）。缺口收缩为**闭环精度**：评估出界 117/120、
+推力下超时未稳 30/120 首次成规模出现"活着但稳不住"——开环 BC 回归（9–15 N 力偏差）
+给不出 ≥2 s 的 ±0.01 rad/s 闭环不变量，第 28 课复合误差在 RL 内重演。
+
+```powershell
+uv run python -m embodied_learning.dapg_demo --results results/dapg_swingup_2026-09-06
+```
+
+新增 14 项测试（BC 手算、w=0 双守卫、退火契约、示教哈希校验、篡改三路、isolated_tk 三模式）；
+全量 601 项通过。正式记录 `results/dapg_swingup_2026-09-06/`，Q-filter/DAgger 未做项与自审见
+[第三十二课讲义](docs/37-session-32-dapg-swingup.md)。
 
 ## 进度清单
 
@@ -782,6 +807,7 @@ isolated_tk 三模式）；全量 587 项通过。正式记录 `results/pbrs_swi
 - [x] 第二十九课：手写 numpy PPO 摆起——扶稳子技能学到、完整摆起 0/60 vs 基线 20/20 的诚实对照与失败四机制；554 项全量通过
 - [x] 第三十课：残差 RL（能量整形底座+限幅残差）——a=0 守卫逐位一致、朴素残差触限 95.8–99.6% 劣化基线（0/60）与机制归因；573 项全量通过
 - [x] 第三十一课：PBRS 势函数塑形——悬崖顶首次触达（cE=2 种子 1 @150k 步）但 0/60 仍未稳定；"对的能量≠对的姿态"；587 项全量通过
+- [x] 第三十二课：DAPG 示教空投——直立首达 33/60 成为常态、缺口收缩为闭环精度；w=0 双守卫逐位；601 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
