@@ -106,6 +106,14 @@
 触发：2026-09-06 文献检索证实用户假设——两阶段目标是摆起 RL 标准做法（MDPI 2024"reward function and two-phase learning protocol"；Dulac-Arnold 2021 stage-switching）；SAC 原论文（Haarnoja 2018）的成名 benchmark 恰为 cart-pole swing-up 无示教从零学会，MathWorks 实测 SAC 成功而 PPO 不被推荐（on-policy 数据用一次即弃，稀有奖励探索效率过低——正是第 29 课 0/60 的文献解释）。
 证据：docs/39（34 课）、results/twophase_swingup_2026-09-06；检索来源清单入 docs/39 引言。
 
+
+**D-2026-09-06-04｜第 35 课｜SAC 0/60 的判定实验：设计原因（半）+ 任务瓶颈（半）**
+变更：随机起始 × SAC 诊断（task_envs=0）用于区分"设计收走课程"与"算法不匹配"。
+触发：第 35 课 SAC 全精确下方初态 0/60（首达 0/60、α 坍缩、回放熵归零）；诊断后：
+首达 0/60→5/60、α 稳定 0.2、训练奖励 0.61–0.74——探索层是设计设定所致；
+成功率仍 0/60——稳定层仍是任务瓶颈（闭环精度需在线纠错/更强表示）。
+证据：results/sac_swingup_random_start_diag/ 临时记录（未入库，结论写入 docs/40 §11）。
+
 ## 开放事项（转 issue 跟踪）
 
 - 摆起探索难题的解法方案与文献谱系 → docs/27 Issue 14；
