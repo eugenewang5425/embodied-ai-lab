@@ -693,6 +693,8 @@ uv run python -m embodied_learning.bc_demo --results results/bc_imitation_2026-0
 
 ## 第二十九课：手写 numpy PPO 摆起——扶稳学到、完整摆起未成（阶段 5 RL）
 
+![第二十九课演示画面：三模式合览](docs/img/lesson-29-demo.png)
+
 不注入任何模型知识，纯 numpy 手写 PPO（高斯策略+价值网络、GAE(λ)、clip surrogate、手写反向传播与 Adam）从第 7 课同一全转动摆环境的奖励中学习：8 env × 25 万步 × 3 种子（共 150 万环境步）。
 
 **主结果是诚实的"未学会完整摆起"**：训练奖励 0.14→0.41–0.42，随机起点上的抓取/扶稳子技能真实学到（训练终止率→0）——这正是第 28 课 BC 0/75 学不到的闭环能力；但下方初态评估 **0/60**、150 万步内首次成功不存在，同口径基线（第 7 课能量整形+LQR，零样本）为 **20/20、中位 4.76 s**。±200 N 扰动配对：基线 20/20 恢复（2.88 s），PPO 0/60 且全部在推力时刻之前 0.5 s 量级就已撞墙——分布外"没有行为可恢复"。
@@ -706,6 +708,8 @@ uv run python -m embodied_learning.ppo_demo --results results/ppo_swingup_2026-0
 新增 14 项测试（GAE 手算、截断泄漏守卫、有限差分梯度、微型训练逐位一致、评估与第 7 课对拍、端到端、篡改三路拒绝、isolated_tk）；全量 554 项通过。正式记录 `results/ppo_swingup_2026-09-06/`，奖励/观测/课程三处"隐形手工"的讨论与自审见[第二十九课讲义](docs/33-session-29-ppo-swingup.md)。"未学会"按项目纪律作为正式结论入库。
 
 ## 第三十课：残差强化学习——底座管能量注入，PPO 只学限幅残差
+
+![第三十课演示画面：三模式合览](docs/img/lesson-30-demo.png)
 
 执行第 29 课停止点的方案：第 7 课能量整形+LQR 底座零改动，PPO 只输出限幅残差
 `u = clip(u_energy + clip(u_RL, ±a), ±300 N)`，a ∈ {25, 50, 100} N × 3 种子 × 25 万步。
@@ -768,6 +772,8 @@ uv run python -m embodied_learning.dapg_demo --results results/dapg_swingup_2026
 [第三十二课讲义](docs/37-session-32-dapg-swingup.md)。
 
 ## 第三十三课：Go-Explore 画地图——稳定带被找到并捕获 417 次
+
+![第三十三课演示画面：三模式合览](docs/img/lesson-33-demo.png)
 
 四种过崖方式第四试（画地图）：档案=（杆角 12 bin × 车位 6 bin）72 格，成员准则按字典序（稳定误差→拼接步数→创建时间），父链按对象冻结（格子被替换不破坏拼接物理一致性）。
 阶段一（档案探索）：随机 ±3 + 第 7 课 LQR 保持层，6000 段 270,416 步——**覆盖 72/72（100%）、
