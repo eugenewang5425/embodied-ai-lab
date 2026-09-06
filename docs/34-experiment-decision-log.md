@@ -100,6 +100,12 @@
 三种剩余方式各自攻打的机制：PBRS→"下方无梯度"（给密集能量梯度且 Ng 定理保证最优策略不变）；示教→"bang-bang 无锚"（BC 项把策略锚在底座行为附近，残差学习变成增量修正）；Go-Explore→"直立区从未被访问"（状态档案+仿真内直接重置到档案态，绕过"返回问题"）。
 证据：results/residual_swingup_2026-09-06（guard 逐位一致、触限 95.8–99.6%）；docs/33 §10、docs/35。
 
+
+**D-2026-09-06-03｜第 34–35 课｜按文献修正路线：两阶段奖励（34）→ 手写 numpy SAC（35）**
+变更：DAGger/Go-Explore 线挂起（登记为未做项），第 34 课改为**两阶段奖励**（荡起阶段奖励=−能量误差、上方阈值后切换角度稳定奖励；出界只终止不给大罚——修正第 29 课机制③），第 35 课改为**手写 numpy SAC**（回放池+孪生 Q+目标网络+最大熵）。
+触发：2026-09-06 文献检索证实用户假设——两阶段目标是摆起 RL 标准做法（MDPI 2024"reward function and two-phase learning protocol"；Dulac-Arnold 2021 stage-switching）；SAC 原论文（Haarnoja 2018）的成名 benchmark 恰为 cart-pole swing-up 无示教从零学会，MathWorks 实测 SAC 成功而 PPO 不被推荐（on-policy 数据用一次即弃，稀有奖励探索效率过低——正是第 29 课 0/60 的文献解释）。
+证据：docs/39（34 课）、results/twophase_swingup_2026-09-06；检索来源清单入 docs/39 引言。
+
 ## 开放事项（转 issue 跟踪）
 
 - 摆起探索难题的解法方案与文献谱系 → docs/27 Issue 14；
