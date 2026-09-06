@@ -236,3 +236,21 @@ uv run pytest -q tests/test_session29_ppo_swingup.py
 对本课结论的影响：0/60 与文献中 PPO 在摆起上的系统性失败一致，支持"失败源于问题设定（探索结构）而非实现缺陷"的归因——本课的 FD 梯度核对与截断泄漏守卫已从实现侧排除另一解释。
 
 主要来源：Dulac-Arnold et al. 2021（Springer，real-world RL 挑战综述，摆起为典型探索难题）；MathWorks RL 文档（连续摆起上 PPO 不稳定警告）；Ng, Harada & Russell ICML 1999（potential-based shaping 定理）；Johannink et al. ICRA 2019（Residual RL）；Rajeswaran et al. RSS 2018（DAPG）；Ecoffet et al. 2021（Go-Explore, "First return, then explore", Nature）。
+
+## 10. 课程调整补实验：全随机起始 × PPO（2026-09-06，results/ppo_swingup_curriculum_2026-09-06/）
+
+第 29 课原设定是"4/8 精确下方 + 4/8 全周随机"双库课程（TASK_ENVS=4）。Issue 15 判定：
+"首达从未"的归因可能部分来自随机化不足。本补实验把训练起始改为 **task_envs=0（全部全随机）**，
+**评估仍为精确下方初态（第 7 课口径不变）**，其余完全不变。
+
+| 组 | 成功率 | 首达 | 训练奖励（末值） |
+| --- | --- | --- | --- |
+| 第 29 课（双库 4/8） | 0/60 | 从未 | 0.42（0.14→0.42） |
+| **全新随机（task_envs=0）** | 0/60 | 0/60（从未） | **0.67–0.70** |
+
+**结论**：全随机课程让训练奖励显著更高（0.67–0.70 vs 0.42），说明 on-policy PPO 也从起态多样性中获益
+（行为更接近任务要求）；但**评估端仍 0/60、首达从未**——策略学到的是"从随机库开始"的行为，
+评估要求它从最难的正对称静止点开始，训练↔评估分布 gap 直接压掉了首达。
+**这确认了"到顶"层对 PPO 不是单纯缺随机化**：on-policy 下随机课程是被动探索，
+无法建立"从精确下方泵动"的行为；与 35 课 SAC 的结论汇合：
+起态多样性必要非充分，且两种算法（on/off-policy）都败于"评估从最难点开始"。
