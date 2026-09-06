@@ -6,7 +6,7 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **614 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **628 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
@@ -19,7 +19,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-614%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-628%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -64,7 +64,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 - **自动验收**：`uv run pytest -q` 全量 **554 项通过**（含第 29 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收尾（第 32 课 DAPG 式示教——直接瞄准"最后一公里"；第 33 课 Go-Explore）→ ACT/扩散策略最小实验；不自动开始下一课。
+- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收尾（第 35 课手写 numpy SAC——文献正主）→ DAgger 在线纠错 / ACT/扩散策略最小实验；不自动开始下一课。
 
 ## 课程索引
 
@@ -103,6 +103,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 31 课 | PBRS 势函数塑形 | 能量梯子不改最优策略、cE=2 种子 1 于 150k 步首次触达直立区、"对的能量≠对的姿态" | Robot Learning（reward shaping；Ng 1999 定理） | [讲义](docs/36-session-31-pbrs-shaping.md) |
 | 第 32 课 | DAPG 示教空投 | 8 条基线示教 + BC 正则、直立首达 33/60 成为常态、BC 记忆分化（0.218 vs 1.24） | Robot Learning（RL from demonstrations；DAPG RSS 2018） | [讲义](docs/37-session-32-dapg-swingup.md) |
 | 第 33 课 | Go-Explore 画地图 | 72 格档案全覆盖、稳定带捕获 417 次、BC 鲁棒化 0/20（找到但学不会走） | Robot Learning（hard exploration；Go-Explore Nature 2021） | [讲义](docs/38-session-33-goexplore-swingup.md) |
+| 第 34 课 | 两阶段奖励（分阶段目标） | 荡起=能量误差、上方切角度奖励；首达 2/3 种子（100k+200k）但首成仍 0/60 | Robot Learning（stage-switching；MDPI 2024 两阶段协议） | [讲义](docs/39-session-34-twophase-swingup.md) |
 
 ## 当前技术路线
 
@@ -794,6 +795,25 @@ uv run python -m embodied_learning.goexplore_demo --results results/goexplore_sw
 全量 614 项通过。正式记录 `results/goexplore_swingup_2026-09-06/`，四方式进度表收官见
 [第三十三课讲义](docs/38-session-33-goexplore-swingup.md)。
 
+## 第三十四课：两阶段奖励——能量梯子处处有糖，首次到达变 2/3 种子
+
+![第三十四课演示画面：三模式合览](docs/img/lesson-34-demo.png)
+
+文献验证的"分阶段目标"路线（MDPI 2024 两阶段学习协议；Dulac-Arnold 综述称摆起+平衡为 stage-switching 问题）：
+纯 PPO 不动，荡起阶段奖励 = −cE_switch·|E−E_top|（处处密集梯度），过 α_switch=0.3 阈值后切角度奖励；
+出界只终止不重罚（修第 29 课机制③的大罚压制）。骨架完全复用第 29 课；
+守卫 = 关掉阶段切换退化为第 29 课奖励逐位一致。
+
+主结果：直立首达 **2/3 种子（100k+200k 检查点）**——比第 31 课 PBRS 的 1/3 进一步；
+失败形态出界 60/60（触限率 95.8%→出界主导）；但首次成功仍 0/60：能上崖顶、不能"在顶上站稳 2 秒"。
+
+```powershell
+uv run python -m embodied_learning.twophase_demo --results results/twophase_swingup_2026-09-06
+```
+
+新增 14 项测试；全量 628 项通过。正式记录 `results/twophase_swingup_2026-09-06/`，
+六种过崖方式总结与自审见[第三十四课讲义](docs/39-session-34-twophase-swingup.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -837,6 +857,7 @@ uv run python -m embodied_learning.goexplore_demo --results results/goexplore_sw
 - [x] 第三十一课：PBRS 势函数塑形——悬崖顶首次触达（cE=2 种子 1 @150k 步）但 0/60 仍未稳定；"对的能量≠对的姿态"；587 项全量通过
 - [x] 第三十二课：DAPG 示教空投——直立首达 33/60 成为常态、缺口收缩为闭环精度；w=0 双守卫逐位；601 项全量通过
 - [x] 第三十三课：Go-Explore——稳定带被找到并捕获 417 次、BC 鲁棒化 0/20（找到但学不会走）；614 项全量通过
+- [x] 第三十四课：两阶段奖励——直立首达 2/3 种子（PBRS 1/3 进一步）、首成仍 0/60、出界主导；628 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
