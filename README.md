@@ -108,6 +108,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 36 课 | DAgger 在线纠错 | 教师逐帧标注、w=0 对照证明数据有效只修到达、首达 0→5/60 但 0/60 | Robot Learning（DAgger；Ross 2010 在线聚合） | [讲义](docs/41-session-36-dagger-swingup.md) |
 | 第 37 课 | 多峰块策略（ACT 最小版） | 门控混合专家、确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60 | Robot Learning（多峰表示；ACT/扩散基础思想） | [讲义](docs/42-session-37-act-swingup.md) |
 | 第 38 课 | 倒立摆组合学习 | 能量底座+多峰块残差、保护性✓（120/120 到达零出界）增值性✗（0/60 劣化基线） | Robot Learning（Residual RL；Johannink 2019 框架的边界实证） | [讲义](docs/43-session-38-combo-swingup.md) |
+| 第 41 课 | 分阶段最小验证 | 底座已最优、线性修正无改善信号（10 次探索全等 4.76s）、裁决=base_optimal_no_headroom | 方法论（最小验证+过门协议） | [讲义](docs/46-session-41-staged-verification.md) |
 | 第 39 课 | 差速小车纯学习 | 手写 SAC、接近学到但到达输给目标熵、悬停画像 | Robot Learning（全驱动 RL；最大熵探索边界） | [讲义](docs/44-session-39-rl-goal-reaching.md) |
 | 第 40 课 | 2R 臂纯学习 | 全驱动红利再证、跨任务目标熵均衡收敛、戳进球但停不住 | Robot Learning（全驱动第二系统对照） | [讲义](docs/45-session-40-rl-arm-reaching.md) |
 
@@ -946,6 +947,26 @@ uv run python -m embodied_learning.rl_arm_demo --results results/rl_arm_reaching
 四路篡改、isolated_tk 三模式）；全量 710 项通过。正式记录 `results/rl_arm_reaching_2026-09-06/`，
 跨任务目标熵收敛分析见[第四十课讲义](docs/45-session-40-rl-arm-reaching.md)。
 
+## 第四十一课：分阶段最小验证——底座已最优、线性修正无改善空间
+
+![第四十一课演示画面：三步验证](docs/img/lesson-41-demo.png)
+
+按用户方法论"从最基础开始、走完验证路线、再谈升级"：三步走——
+**第一步**（底座复验）：20/20、4.76s 逐位一致 ✓。
+**第二步**（线性修正 ±5N）：10 次探索全等 4.76s、残差均值 0.800N（仅 16.3% 预算）、
+不劣化 ✓ 但改善 ✗——裁决 = **base_optimal_no_headroom**。
+**第三步**（MLP）：按协议跳过（第二步未过改善门）。
+
+结论：底座在当前任务定义下已是局部最优——5 参数线性修正不存在可度量的改善信号。
+过程证据比终态更强：±0.05N 探索在 0.04s 分辨率下从不改变稳定时刻。
+
+```powershell
+uv run python -m embodied_learning.staged_demo --results results/staged_verification_2026-09-06
+```
+
+新增 12 项测试；全量 694 项通过。正式记录 `results/staged_verification_2026-09-06/`，
+"分阶段验证+过门协议"作为方法论模板见[第四十一课讲义](docs/46-session-41-staged-verification.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -994,6 +1015,7 @@ uv run python -m embodied_learning.rl_arm_demo --results results/rl_arm_reaching
 - [x] 第三十六课：DAgger 在线纠错——w=0 对照证明数据有效只修到达（首达 0→5/60）、仍 0/60；655 项全量通过
 - [x] 第三十七课：多峰块策略——确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60；669 项全量通过
 - [x] 第三十八课：倒立摆组合学习——保护性成立（120/120 到达零出界）增值性不成立（0/60 劣化基线）；682 项全量通过
+- [x] 第四十一课：分阶段最小验证——底座已最优、线性修正无改善信号、裁决=base_optimal_no_headroom；694 项全量通过
 - [x] 第三十九课：差速小车纯学习——接近学到但到达输给目标熵、悬停画像；696 项全量通过
 - [x] 第四十课：2R 臂纯学习——跨任务目标熵均衡收敛、戳进球但停不住；710 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
