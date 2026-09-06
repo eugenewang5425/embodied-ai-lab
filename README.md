@@ -6,7 +6,7 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **601 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **614 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
@@ -19,7 +19,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-601%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-614%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,7 +60,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-05）
 
-- **主线课程 1–29 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态）。
+- **主线课程 1–29 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次）。
 - **自动验收**：`uv run pytest -q` 全量 **554 项通过**（含第 29 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
@@ -102,6 +102,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 30 课 | 残差 RL 摆起 | 能量整形底座 + 限幅残差、a=0 守卫逐位一致、朴素残差触限 95.8–99.6% 毁掉底座 | Robot Learning（Residual RL；探索噪声非无害） | [讲义](docs/35-session-30-residual-swingup.md) |
 | 第 31 课 | PBRS 势函数塑形 | 能量梯子不改最优策略、cE=2 种子 1 于 150k 步首次触达直立区、"对的能量≠对的姿态" | Robot Learning（reward shaping；Ng 1999 定理） | [讲义](docs/36-session-31-pbrs-shaping.md) |
 | 第 32 课 | DAPG 示教空投 | 8 条基线示教 + BC 正则、直立首达 33/60 成为常态、BC 记忆分化（0.218 vs 1.24） | Robot Learning（RL from demonstrations；DAPG RSS 2018） | [讲义](docs/37-session-32-dapg-swingup.md) |
+| 第 33 课 | Go-Explore 画地图 | 72 格档案全覆盖、稳定带捕获 417 次、BC 鲁棒化 0/20（找到但学不会走） | Robot Learning（hard exploration；Go-Explore Nature 2021） | [讲义](docs/38-session-33-goexplore-swingup.md) |
 
 ## 当前技术路线
 
@@ -766,6 +767,27 @@ uv run python -m embodied_learning.dapg_demo --results results/dapg_swingup_2026
 全量 601 项通过。正式记录 `results/dapg_swingup_2026-09-06/`，Q-filter/DAgger 未做项与自审见
 [第三十二课讲义](docs/37-session-32-dapg-swingup.md)。
 
+## 第三十三课：Go-Explore 画地图——稳定带被找到并捕获 417 次
+
+四种过崖方式第四试（画地图）：档案=（杆角 12 bin × 车位 6 bin）72 格，成员准则按字典序（稳定误差→拼接步数→创建时间），父链按对象冻结（格子被替换不破坏拼接物理一致性）。
+阶段一（档案探索）：随机 ±3 + 第 7 课 LQR 保持层，6000 段 270,416 步——**覆盖 72/72（100%）、
+首入直立带 8,992 步、稳定带 79,183 步首次捕获并经第 7 课验收复核**：第 29–32 课从未有策略
+在山顶住满 2 s，本课共捕获 417 次。set_state 往返 + 拼接切片全新环境重放双逐位一致——
+教师数据是真实物理。
+
+阶段二（BC 鲁棒化）：8 条跨格教师（4,912 对）MSE 1.861→0.089，闭环下方初态 **0/20**
+（历史性 0→1 未实现）：出界 20/20 但直立首达 11/20（55%）。随机教师在任意状态均值≈0，
+BC 只能学到"平均别乱动"+保持段——开环回归给不出闭环不变量（第 28 课复合误差第三次重演）。
+结论如实入库：**"地图找到山顶、BC 学不会走"**，指向 DAgger/以档案态为起点的 PG 微调。
+
+```powershell
+uv run python -m embodied_learning.goexplore_demo --results results/goexplore_swingup_2026-09-06
+```
+
+新增 13 项测试（分格已知答案、双逐位守卫、拼接重放、捕获判据对拍、篡改五路、isolated_tk 三模式）；
+全量 614 项通过。正式记录 `results/goexplore_swingup_2026-09-06/`，四方式进度表收官见
+[第三十三课讲义](docs/38-session-33-goexplore-swingup.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -808,6 +830,7 @@ uv run python -m embodied_learning.dapg_demo --results results/dapg_swingup_2026
 - [x] 第三十课：残差 RL（能量整形底座+限幅残差）——a=0 守卫逐位一致、朴素残差触限 95.8–99.6% 劣化基线（0/60）与机制归因；573 项全量通过
 - [x] 第三十一课：PBRS 势函数塑形——悬崖顶首次触达（cE=2 种子 1 @150k 步）但 0/60 仍未稳定；"对的能量≠对的姿态"；587 项全量通过
 - [x] 第三十二课：DAPG 示教空投——直立首达 33/60 成为常态、缺口收缩为闭环精度；w=0 双守卫逐位；601 项全量通过
+- [x] 第三十三课：Go-Explore——稳定带被找到并捕获 417 次、BC 鲁棒化 0/20（找到但学不会走）；614 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
