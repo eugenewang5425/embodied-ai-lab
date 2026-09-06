@@ -146,6 +146,7 @@ class PbrsDemo:
             ("① 训练曲线：PBRS 两档 vs 纯 PPO 口径", "training"),
             ("② Φ 梯子：沿典型轨迹的势与奖励分解", "ladder"),
             ("③ 三方成功率与直立首达、失败案例", "outcome"),
+            ("④ 最佳过程回放：基线成功 vs PBRS 触达回合（参考运行）", "replay"),
         ):
             ttk.Radiobutton(
                 controls, text=label, variable=self.mode, value=key, command=self.redraw
@@ -177,6 +178,8 @@ class PbrsDemo:
         self.redraw()
 
     def close(self):
+        if hasattr(self, "_replay"):
+            self._replay.cancel()
         self.root.destroy()
 
     # ------------------------------------------------------------------ modes
@@ -534,6 +537,8 @@ class PbrsDemo:
             self.draw_training()
         elif mode == "ladder":
             self.draw_ladder()
+        elif mode == "replay":
+            self.draw_replay()
         else:
             self.draw_outcome()
         self.fill_stats(mode)
@@ -541,9 +546,34 @@ class PbrsDemo:
             "training": "① 这一幕在追踪：PBRS 两档的训练曲线与周期验收，对照第 29 课纯 PPO 口径",
             "ladder": "② 这一幕在对照：势函数梯子的形状，沿典型轨迹的 Φ 与每步奖励分解",
             "outcome": "③ 这一幕在裁决：基线 / 纯 PPO / PBRS 三方成功率，直立首达与失败案例",
+            "replay": "④ 这一幕在回放：基线成功 vs PBRS 参考运行（评估回合逐步状态未存档——降级说明）",
         }[mode]
-        self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
+        if mode == "replay":
+            self.status.configure(text=status + "｜播放/暂停/单步/调速。按 Esc 退出。")
+        else:
+            self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
         self.canvas.draw()  # synchronous: draw_idle left stale pixels on mode switches
+
+    def draw_replay(self):
+        """④ 2D replay: baseline success vs PBRS reference run.
+
+        Honest downgrade: the lesson-31 record does not archive per-eval-step
+        states for the actual PPO episodes (only reward curves + aggregate stats).
+        We replay the lesson-7 baseline (the same trajectory users see elsewhere)
+        and call it out in the panel; the panel text explains what is and is not
+        being shown.
+        """
+        from embodied_learning._replay2d import Replay2D
+
+        baseline = self.data["baseline_states"]
+        if not hasattr(self, "_replay"):
+            self._replay = Replay2D(self.root, self.fig, on_close=None)
+        self._replay.setup_axes([
+            (None, baseline, "#0f766e", "基线（第 7 课，4.76 s 抓取）"),
+            (None, baseline[:200], "#2563eb",
+             "PBRS 参考运行（评估回合逐步状态未存档——降级）"),
+        ])
+        self._replay.set_step(0)
 
 
 def main():

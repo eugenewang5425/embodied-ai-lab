@@ -163,6 +163,7 @@ class DapgDemo:
             ("① 训练曲线：奖励与 BC 项衰减", "training"),
             ("② 空投对照：教师 vs 学得策略（同初态）", "airdrop"),
             ("③ 三方+示教档成功率与失败案例", "outcome"),
+            ("④ 最佳过程回放：教师 vs 学得策略 determin 段", "replay"),
         ):
             ttk.Radiobutton(
                 controls, text=label, variable=self.mode, value=key, command=self.redraw
@@ -194,6 +195,8 @@ class DapgDemo:
         self.redraw()
 
     def close(self):
+        if hasattr(self, "_replay"):
+            self._replay.cancel()
         self.root.destroy()
 
     # ------------------------------------------------------------------ modes
@@ -595,6 +598,8 @@ class DapgDemo:
             self.draw_training()
         elif mode == "airdrop":
             self.draw_airdrop()
+        elif mode == "replay":
+            self.draw_replay()
         else:
             self.draw_outcome()
         self.fill_stats(mode)
@@ -602,9 +607,32 @@ class DapgDemo:
             "training": "① 这一幕在追踪：两档初始 BC 权重的训练曲线与 BC 项衰减，对照第 29 课纯 PPO 口径",
             "airdrop": "② 这一幕在对照：教师与学得策略同初态轨迹、空投示教束与电机输入",
             "outcome": "③ 这一幕在裁决：基线 / 纯 PPO / PBRS / 示教两档成功率，直立首达与首次成功",
+            "replay": "④ 这一幕在回放：教师 4.76 s 抓取 vs 学得策略 determin 段（return 最大）",
         }[mode]
-        self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
+        if mode == "replay":
+            self.status.configure(text=status + "｜播放/暂停/单步/调速。按 Esc 退出。")
+        else:
+            self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
         self.canvas.draw()  # synchronous: draw_idle left stale pixels on mode switches
+
+    def draw_replay(self):
+        """④ 2D replay: teacher demo vs the best deterministic run (max return)."""
+        from embodied_learning._replay2d import Replay2D
+
+        demo = self.data["demo_states"][0]  # first teacher trajectory (751,4)
+        # best deterministic run: highest mean_return across seeds
+        dets = self.report["sweep"][0]["deterministic"]
+        best = max(range(len(dets)), key=lambda i: dets[i]["return"])
+        best_states = self.data[f"det_states_0_{best}"]
+        ret = dets[best]["return"]
+        if not hasattr(self, "_replay"):
+            self._replay = Replay2D(self.root, self.fig, on_close=None)
+        self._replay.setup_axes([
+            (None, demo, "#0f766e", "教师：第 7 课基线（4.76 s 抓取）"),
+            (None, best_states, "#b91c1c",
+             f"学得策略 determin 段（seed {best}，return={ret:.0f}）"),
+        ])
+        self._replay.set_step(0)
 
 
 def fmt_steps(entry):

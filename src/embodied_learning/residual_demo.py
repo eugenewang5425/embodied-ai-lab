@@ -134,6 +134,7 @@ class ResidualDemo:
             ("① 训练曲线：三档残差预算", "training"),
             ("② 同一下方初态：基线 vs 残差（交接段）", "trajectories"),
             ("③ 残差幅值分布与 ±200 N 推力对照", "usage"),
+            ("④ 最佳过程回放：基线成功 vs 残差最佳失败回合", "replay"),
         ):
             ttk.Radiobutton(
                 controls, text=label, variable=self.mode, value=key, command=self.redraw
@@ -168,6 +169,8 @@ class ResidualDemo:
         self.redraw()
 
     def close(self):
+        if hasattr(self, "_replay"):
+            self._replay.cancel()
         self.root.destroy()
 
     # ------------------------------------------------------------------ modes
@@ -523,6 +526,8 @@ class ResidualDemo:
             self.draw_training()
         elif mode == "trajectories":
             self.draw_trajectories()
+        elif mode == "replay":
+            self.draw_replay()
         else:
             self.draw_usage()
         self.fill_stats(mode)
@@ -530,9 +535,34 @@ class ResidualDemo:
             "training": "① 这一幕在追踪：三档残差预算下的训练曲线与周期验收",
             "trajectories": "② 这一幕在对照：能量底座 vs 底座+限幅残差的交接段",
             "usage": "③ 这一幕在追问：RL 实际用了多少残差预算，推力下是否守住",
+            "replay": "④ 这一幕在回放：基线 4.76 s 抓取 vs 残差最佳失败回合（max|cart|≈1.85 m）",
         }[mode]
-        self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
+        if mode == "replay":
+            self.status.configure(text=status + "｜播放/暂停/单步/调速。按 Esc 退出。")
+        else:
+            self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
         self.canvas.draw()  # synchronous: draw_idle left stale pixels on mode switches
+
+    def draw_replay(self):
+        """④ 2D replay: baseline success vs the best failed residual run."""
+        from embodied_learning._replay2d import Replay2D
+
+        baseline = self.data["baseline_states"]
+        # best episode by mean_return (per seed)
+        # residual sweeps 3 amps × 3 seeds = 9 eval trajectories; pick highest determin return
+        amp = 0  # use the first amplitude (a=25N) for selection
+        dets = self.report["sweep"][amp]["deterministic"]
+        best_idx = int(np.argmax([d["return"] for d in dets]))
+        eval_states = self.data[f"det_states_0_{best_idx}"]
+        ret = float(dets[best_idx]["return"])
+        if not hasattr(self, "_replay"):
+            self._replay = Replay2D(self.root, self.fig, on_close=None)
+        self._replay.setup_axes([
+            (None, baseline, "#0f766e", "基线（第 7 课，4.76 s 抓取）"),
+            (None, eval_states, "#b91c1c",
+             f"残差 a=25N best determin 回合（seed {best_idx}，return={ret:.0f}）"),
+        ])
+        self._replay.set_step(0)
 
 
 def main():

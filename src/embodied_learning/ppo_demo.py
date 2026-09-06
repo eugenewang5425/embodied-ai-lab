@@ -16,8 +16,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+import time
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from embodied_learning.experiments.ppo_swingup import EXPERIMENT, expected_npz_keys
@@ -130,6 +133,7 @@ class PpoDemo:
             ("① 训练曲线：奖励与验收（3 训练种子）", "training"),
             ("② 同一下方初态：基线 vs PPO 轨迹与成功率", "trajectories"),
             ("③ ±200 N 推力恢复对照 + 失败案例", "push"),
+            ("④ 最佳过程回放：基线成功 vs PPO 失败回合", "replay"),
         ):
             ttk.Radiobutton(
                 controls, text=label, variable=self.mode, value=key, command=self.redraw
@@ -164,6 +168,11 @@ class PpoDemo:
         self.redraw()
 
     def close(self):
+        if hasattr(self, '_replay_state') and self._replay_state.get('after_id'):
+            try:
+                self.root.after_cancel(self._replay_state['after_id'])
+            except Exception:  # noqa: BLE001, S110
+                pass
         self.root.destroy()
 
     # ------------------------------------------------------------------ modes
@@ -497,6 +506,8 @@ class PpoDemo:
             self.draw_training()
         elif mode == "trajectories":
             self.draw_trajectories()
+        elif mode == "replay":
+            self.draw_replay()
         else:
             self.draw_push()
         self.fill_stats(mode)
@@ -504,9 +515,126 @@ class PpoDemo:
             "training": "① 这一幕在追踪：奖励曲线、周期验收与训练预算",
             "trajectories": "② 这一幕在对照：第七课手工控制器与只凭奖励训练出的策略",
             "push": "③ 这一幕在扰动：训练分布之外的推力与失败形态",
+            "replay": "④ 这一幕在回放：基线成功 vs PPO 最佳回合逐步状态（2D 小车+摆杆+杆端拖尾）",
         }[mode]
-        self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
+        if mode == "replay":
+            self.status.configure(text=status + "｜播放/暂停/单步/调速。按 Esc 退出。")
+        else:
+            self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
         self.canvas.draw()  # synchronous: draw_idle left stale pixels on mode switches
+
+    # ------------------------------------------------------------------ ④ replay
+    def draw_replay(self):
+        """④ playback of two best trajectories: baseline success vs PPO eval seed 0."""
+        self.fig.clear()
+        if not hasattr(self, "_replay_state"):
+            self._replay_state = {
+                "running": False, "t0": 0.0, "dt": 0.04, "i": 0, "after_id": None,
+            }
+        ds = self._replay_state
+        # Select: baseline 0 (always succeeds) vs PPO eval_seed 0 (best of three by return)
+        baseline = self.data["baseline_states"]  # (steps, 4): x, alpha, v, omega
+        # best PPO seed by mean return
+        per_seed = self.report["ppo_evaluation"]["per_training_seed"]
+        best_seed = int(np.argmax([p["final_reward_mean"] for p in per_seed]))
+        eval_states = self.data["eval_states"][best_seed][: int(self.data["eval_lengths"][best_seed])]
+        eval_return = float(per_seed[best_seed]["final_reward_mean"])
+        n_b = len(baseline)
+        n_p = len(eval_states)
+        n = max(n_b, n_p)
+        cart_w = 0.2
+        pole_l = 0.5
+        limit = 2.4
+        ax_l, ax_r = self.fig.subplots(1, 2, sharey=True)
+        for ax, states, label, color, suffix, ret in (
+            (ax_l, baseline, "基线（第 7 课，零样本，20/20）", "#0f766e", "", 4.76),
+            (ax_r, eval_states, f"PPO 评估回合（seed {best_seed}，return={eval_return:.1f}）", "#b91c1c", "\n（未通过验收：本课最佳回合仍 0/60）", float("nan")),
+        ):
+            ax.set_xlim(-limit - 0.1, limit + 0.1)
+            ax.set_ylim(-pole_l - 0.05, pole_l + 0.05)
+            ax.axhline(0, color="#475569", lw=1)
+            ax.axvline(-limit, color="#dc2626", ls=":", lw=0.8)
+            ax.axvline(limit, color="#dc2626", ls=":", lw=0.8)
+            ax.set_xlabel("车位 x (m)")
+            ax.set_ylabel("摆角 α (rad, 上=0)")
+            ax.set_aspect("equal")
+            ax.set_title(label + suffix, fontsize=9)
+            # Store everything we need to draw current frame
+            ax._states = states
+            ax._cart_w = cart_w
+            ax._pole_l = pole_l
+            ax._color = color
+            ax._max = len(states) - 1
+            # trace pole tip
+            xs = np.asarray([s[0] for s in states])
+            alphas = np.asarray([s[1] for s in states])
+            tip_x = xs + pole_l * np.sin(alphas)
+            tip_y = pole_l * np.cos(alphas)
+            ax.plot(tip_x, tip_y, color=color, lw=0.6, alpha=0.25)
+        # Controls: Space=play/pause, Right=step, Esc=quit. (Slider omitted: each step is a click.)
+        self.root.bind("<space>", lambda _: self._toggle_play())
+        self.root.bind("<Right>", lambda _: self._step_replay())
+        ds["i"] = min(ds["i"], n - 1)
+        self._draw_replay_frame()
+        self.fig.canvas.draw_idle()
+
+    def _draw_replay_frame(self):
+        for ax in self.fig.axes:
+            states = ax._states
+            i = min(self._replay_state["i"], len(states) - 1)
+            x, alpha, _v, _omega = states[i]
+            # clear non-axis artists
+            for coll in list(ax.collections):
+                coll.remove()
+            for patch in list(ax.patches):
+                patch.remove()
+            # cart
+            ax.add_patch(plt.Rectangle((x - ax._cart_w / 2, -0.05), ax._cart_w, 0.1, color=ax._color, alpha=0.7))
+            # pole (rotated rectangle)
+            from matplotlib.transforms import Affine2D
+            t = Affine2D().rotate_deg_around(x, 0, math.degrees(alpha)) + ax.transData
+            ax.add_patch(plt.Rectangle((x - 0.02, 0), 0.04, ax._pole_l, color=ax._color, transform=t, alpha=0.9))
+            # time cursor
+            ax.axvline(x, color="#0f172a", lw=0.8, alpha=0.5)
+        self.fig.suptitle(
+            f"④ 最佳过程回放 — 时间步 {self._replay_state['i']}    （Space 播放/暂停，→ 单步，Esc 退出）",
+            fontsize=10,
+        )
+        self.fig.canvas.draw_idle()
+
+    def _toggle_play(self):
+        ds = self._replay_state
+        ds["running"] = not ds["running"]
+        ds["t0"] = time.perf_counter()
+        if ds["running"]:
+            self._replay_tick()
+
+    def _step_replay(self):
+        ds = self._replay_state
+        ds["running"] = False
+        ds["i"] = min(ds["i"] + 1, self._max_i())
+        self._draw_replay_frame()
+
+    def _max_i(self):
+        m = 0
+        for ax in self.fig.axes:
+            if hasattr(ax, "_max"):
+                m = max(m, ax._max)
+        return m
+
+    def _replay_tick(self):
+        ds = self._replay_state
+        if not ds["running"]:
+            return
+        now = time.perf_counter()
+        ds["i"] = min(ds["i"] + max(1, int((now - ds["t0"]) / ds["dt"])), self._max_i())
+        ds["t0"] = now
+        if ds["i"] >= self._max_i():
+            ds["running"] = False
+        self._draw_replay_frame()
+        if ds["running"]:
+            ds["after_id"] = self.root.after(20, self._replay_tick)
+
 
 
 def main():

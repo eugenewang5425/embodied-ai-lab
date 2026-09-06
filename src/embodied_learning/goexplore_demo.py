@@ -178,6 +178,8 @@ class GoExploreDemo:
         self.redraw()
 
     def close(self):
+        if hasattr(self, "_replay"):
+            self._replay.cancel()
         self.root.destroy()
 
     # ------------------------------------------------------------------ modes
@@ -494,6 +496,8 @@ class GoExploreDemo:
             self.draw_archive()
         elif mode == "capture":
             self.draw_capture()
+        elif mode == "replay":
+            self.draw_replay()
         else:
             self.draw_outcome()
         self.fill_stats(mode)
@@ -501,9 +505,25 @@ class GoExploreDemo:
             "archive": "① 这一幕在看：杆角×车位的档案覆盖、选格轨迹与覆盖曲线（红星 = 稳定带格）",
             "capture": "② 这一幕在看：第一次捕获的完整段轨迹，绿区为连续 ≥2 s 的稳定尾段",
             "outcome": "③ 这一幕在裁决：四种过崖方式同口径对照，BC 闭环评估与失败案例",
+            "replay": "④ 这一幕在回放：稳定带捕获链条（垂下→入轨→稳定）2D 动画",
         }[mode]
-        self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
+        if mode == "replay":
+            self.status.configure(text=status + "｜播放/暂停/单步/调速。按 Esc 退出。")
+        else:
+            self.status.configure(text=status + "｜静态图，无动画。按 Esc 退出。")
         self.canvas.draw()  # synchronous: draw_idle left stale pixels on mode switches
+
+    def draw_replay(self):
+        """④ 2D replay of the stable-band capture chain (Go-Explore's landmark)."""
+        from embodied_learning._replay2d import Replay2D
+
+        seg = self.data["capture0_seg_states"]
+        if not hasattr(self, "_replay"):
+            self._replay = Replay2D(self.root, self.fig, on_close=None)
+        self._replay.setup_axes([
+            (None, seg, "#16a34a", "稳定带捕获链条（垂下→入轨→稳定 ≥2 s）"),
+        ])
+        self._replay.set_step(0)
 
 
 def main():
