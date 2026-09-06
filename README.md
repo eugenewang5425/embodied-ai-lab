@@ -6,20 +6,20 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **655 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **669 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 36 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction |
-| **Verified** | `uv run pytest -q` → **655 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Status** | 37 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (deterministic arc-reach!) |
+| **Verified** | `uv run pytest -q` → **669 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-655%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-669%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -60,11 +60,11 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-06）
 
-- **主线课程 1–36 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达，2s 稳半秒仍未破）。
-- **自动验收**：`uv run pytest -q` 全量 **655 项通过**（含第 36 课新增 13 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–37 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3），稳半秒仍未破）。
+- **自动验收**：`uv run pytest -q` 全量 **669 项通过**（含第 37 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收官（八种方式全试：探索/数据通路排除，稳定半秒是表示层——ACT/扩散策略最小实验）；不自动开始下一课。
+- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收官（到顶与稳住双瓶颈：到顶可由多峰表示单独修复，稳住仍待目标函数层裁决——滚动合成误差/停留加权 NLL）；不自动开始下一课。
 
 ## 课程索引
 
@@ -106,6 +106,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 34 课 | 两阶段奖励（分阶段目标） | 荡起=能量误差、上方切角度奖励；首达 2/3 种子（100k+200k）但首成仍 0/60 | Robot Learning（stage-switching；MDPI 2024 两阶段协议） | [讲义](docs/39-session-34-twophase-swingup.md) |
 | 第 35 课 | 手写 numpy SAC | 回放池+孪生 Q+最大熵、α 坍缩 0.0000–0.0009、回放熵归零；首达成 0/60 首达 0/60 | Robot Learning（off-policy SAC 原论文 benchmark） | [讲义](docs/40-session-35-sac-swingup.md) |
 | 第 36 课 | DAgger 在线纠错 | 教师逐帧标注、w=0 对照证明数据有效只修到达、首达 0→5/60 但 0/60 | Robot Learning（DAgger；Ross 2010 在线聚合） | [讲义](docs/41-session-36-dagger-swingup.md) |
+| 第 37 课 | 多峰块策略（ACT 最小版） | 门控混合专家、确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60 | Robot Learning（多峰表示；ACT/扩散基础思想） | [讲义](docs/42-session-37-act-swingup.md) |
 
 ## 当前技术路线
 
@@ -857,6 +858,27 @@ uv run python -m embodied_learning.dagger_demo --results results/dagger_swingup_
 新增 13 项测试；全量 655 项通过。正式记录 `results/dagger_swingup_2026-09-06/`，
 八种方式收官评估（探索层/数据通路排除）与自审见[第三十六课讲义](docs/41-session-36-dagger-swingup.md)。
 
+## 第三十七课：多峰块策略最小实验——表示层修复到达，均值路径首次过崖顶
+
+![第三十七课演示画面：三模式合览](docs/img/lesson-37-demo.png)
+
+检验第 36 课的“表示层是剩余瓶颈”归因：同一份 8,877 对教师标注（按第 36 课种子流重跑复现，
+18 轮-种子累计大小与数值标签 ≤1e-9 逐位校验），唯一变量是策略表示——
+numpy 手写**块输出（H=8/16）+ 多峰门控（K=1/2/4）**，共享 5-64-64 ReLU 主干，
+目标=门控混合最大似然。
+
+头条（历史首次）：**确定性均值路径到达从 0/3（单步MSE，复现 32/36）→ K=1 块 2/3 → 多峰 K=4 3/3**
+（2.40/2.44/2.72 s），主档 12/12 检查点稳定到达；门控学到分段切换（TV 随 K 单调升，K=4 种子 1
+平衡相位专家 1 占 0.731——“多峰表达分段滞回教师”的机制证据）。**成功层仍 0/60**——
+表示不是稳定尾段瓶颈，剩余疑犯=任务精度边界或目标函数信息缺口（似然无“稳定尾段”权重）。
+
+```powershell
+uv run python -m embodied_learning.act_demo --results results/act_swingup_2026-09-06
+```
+
+新增 14 项测试；全量 669 项通过。正式记录 `results/act_swingup_2026-09-06/`，
+阶段 5 收官更新（到顶由表示单独修复/稳住待目标函数层）与自审见[第三十七课讲义](docs/42-session-37-act-swingup.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -903,6 +925,7 @@ uv run python -m embodied_learning.dagger_demo --results results/dagger_swingup_
 - [x] 第三十四课：两阶段奖励——直立首达 2/3 种子（PBRS 1/3 进一步）、首成仍 0/60、出界主导；628 项全量通过
 - [x] 第三十五课：手写 numpy SAC——α 坍缩与回放熵归零、首达 0/60 比 31/34 课更差；642 项全量通过
 - [x] 第三十六课：DAgger 在线纠错——w=0 对照证明数据有效只修到达（首达 0→5/60）、仍 0/60；655 项全量通过
+- [x] 第三十七课：多峰块策略——确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60；669 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
