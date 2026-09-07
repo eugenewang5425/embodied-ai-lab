@@ -401,3 +401,29 @@ New issue 页：`https://github.com/eugenewang5425/embodied-ai-lab/issues/new?ti
 - 验收标准：两组课程实验的 summary 与讲义一致；讲义结论按"有无课程"分层表述
 
 **验收**：补跑完成后更新两课讲义对应章节 + 决策日志 D-2026-09-06-05。
+
+## 八、发布台账（2026-09-07）与第 43 课新登记
+
+### 已发布为 GitHub issue（2026-09-07，API 直发，含历史开放草稿与本轮新问题）
+
+| 编号 | 标题 | 对应草稿/来源 |
+| --- | --- | --- |
+| [#15](https://github.com/eugenewang5425/embodied-ai-lab/issues/15) | [全课程] README 摘要引用成功率丢失"有限样本"限定，且无区间估计（n=20） | 本稿 Issue 6（开放） |
+| [#16](https://github.com/eugenewang5425/embodied-ai-lab/issues/16) | [全课程] 全量测试时长随课程增长，建议引入慢速标记分层 | 本稿 Issue 8（开放）+ F12 |
+| [#17](https://github.com/eugenewang5425/embodied-ai-lab/issues/17) | [全课程] 正式记录 source_sha256 与提交版源码漂移 | 本稿 Issue 9（开放） |
+| [#18](https://github.com/eugenewang5425/embodied-ai-lab/issues/18) | [第二十三/二十四/二十七课] 单目深度米制标定技术跟进 | 本稿 Issue 12（开放） |
+| [#19](https://github.com/eugenewang5425/embodied-ai-lab/issues/19) | [演示验收] 真机验收标准已确立，第 1–22 课逐课复验待 Tk 自动化后统一执行 | 本稿 Issue 10（待办延后） |
+| [#20](https://github.com/eugenewang5425/embodied-ai-lab/issues/20) | [第四十三课] 导航栈两次冻结（已修复）与开放跟进 | 新增（第 43 课调试弯路 + docs/48 §6 局限） |
+| [#21](https://github.com/eugenewang5425/embodied-ai-lab/issues/21) | [文档链] 各课"全量 N 项通过"与实测不符（多轮出现） | 新增（第 43 课收尾自查） |
+
+未单独开 issue（按"已修复留档"惯例）：第 43 课两个已修复缺陷（F26/F27）、README 坏链与
+计数勘误（F28）；摆起难题解法路线（本稿 Issue 14）第 30–42 课已用系列实验消耗，不再作为
+开放 issue；第 29/35 课缺训练起始随机化（Issue 15）判定实验与讲义改写已完成（D-2026-09-06-05）。
+
+### 第 43 课缺陷登记（2026-09-07，全部已修复，留档）
+
+| # | 缺陷 | 证据 | 修复 |
+| --- | --- | --- | --- |
+| F26 | 前向刹车反射把左右轮速全清零，同时杀掉差速车唯一脱困手段（原地转），与逐步重规划死循环冻结：B 组 8/15、重规划 ~2000 次/回合、覆盖率 <0.16 | results/grid_nav_2026-09-06_brake_livelock_probe/ | docs/48 §3.5：刹车只抑制平移、保留偏航；前瞻同时钳制到正前方最近射线 |
+| F27 | 规划膨胀（2 格）允许的真实间隙低于刹车门限（0.30 m），须穿窄廊的路径被反射永久拦截：B 组 10/15 同签名冻结 | results/grid_nav_2026-09-06_probe_inflate2_brake030/ | docs/48 §3.5：膨胀 3 格（0.30 m）+ 刹车门限 0.2207 m 全局一致配对；15/15 |
+| F28 | README 引用 docs/img/lesson-39-demo.png、lesson-42-demo.png 但两图从未生成（坏链）；各课"全量 N 项通过"与 `uv run pytest -q` 实测不符（第 42 课提交称 707，实测为 748） | 第 43 课收尾自查（README.md:912/973 引用缺失文件；git log 无该两图提交） | 84e54eb：补生成两图 + 新增 lesson-43 合览图；README/路线图/讲义自第 43 课起以实测 765 项为准并加勘误说明；防复发流程见 Issue 21 |
