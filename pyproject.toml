@@ -9,6 +9,7 @@ dependencies = [
     "matplotlib>=3.9,<4",
     "numpy>=2,<3",
     "scipy>=1.16,<2",
+    "torch>=2.14.0",
 ]
 
 [dependency-groups]
