@@ -109,6 +109,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 37 课 | 多峰块策略（ACT 最小版） | 门控混合专家、确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60 | Robot Learning（多峰表示；ACT/扩散基础思想） | [讲义](docs/42-session-37-act-swingup.md) |
 | 第 38 课 | 倒立摆组合学习 | 能量底座+多峰块残差、保护性✓（120/120 到达零出界）增值性✗（0/60 劣化基线） | Robot Learning（Residual RL；Johannink 2019 框架的边界实证） | [讲义](docs/43-session-38-combo-swingup.md) |
 | 第 41 课 | 分阶段最小验证 | 底座已最优、线性修正无改善信号（10 次探索全等 4.76s）、裁决=base_optimal_no_headroom | 方法论（最小验证+过门协议） | [讲义](docs/46-session-41-staged-verification.md) |
+| 第 42 课 | ACT/torch 到达 | Transformer 块策略 683k 参数、0/60 但归因清晰化：信息-精度硬墙 | Robot Learning（Transformer 策略表示） | [讲义](docs/47-session-42-act-torch-reaching.md) |
 | 第 39 课 | 差速小车纯学习 | 手写 SAC、接近学到但到达输给目标熵、悬停画像 | Robot Learning（全驱动 RL；最大熵探索边界） | [讲义](docs/44-session-39-rl-goal-reaching.md) |
 | 第 40 课 | 2R 臂纯学习 | 全驱动红利再证、跨任务目标熵均衡收敛、戳进球但停不住 | Robot Learning（全驱动第二系统对照） | [讲义](docs/45-session-40-rl-arm-reaching.md) |
 
@@ -967,6 +968,28 @@ uv run python -m embodied_learning.staged_demo --results results/staged_verifica
 新增 12 项测试；全量 694 项通过。正式记录 `results/staged_verification_2026-09-06/`，
 "分阶段验证+过门协议"作为方法论模板见[第四十一课讲义](docs/46-session-41-staged-verification.md)。
 
+## 第四十二课：ACT/torch 策略——0/60 但归因清晰化：信息-精度硬墙
+
+![第四十二课演示画面：三模式合览](docs/img/lesson-42-demo.png)
+
+ACT 最小版（无 CVAE——教师确定性故多峰无对象，如实声明）：
+ActTransformer 683,522 参数（2 层 pre-LN TransformerEncoder/Decoder、4 头、d_model 128），
+输入最近 T=4 步观测，输出 H=16 步动作块；教师=第 8 课解析 IK+PD 36 条完整轨迹（18,000 环境步）。
+训练三种子损失几乎重合（0.099→0.0145 等 6 倍收敛）。
+
+主结果：0/20 × 3 种子 = 0/60——但归因清晰化：ACT 学会了"冲"
+（种子 0 有 3/20 目标瞬时穿进 2mm 球、最好 0.48mm），但执行比教师快一倍。
+**表示层从主嫌降级**；"观测无 dq 标签歧义 + 力矩直驱复合误差"升级为剩余主嫌——
+在本项目信息条件下（观测不含角速度 dq、力矩直驱无内环）是**信息-精度硬墙**。
+
+```powershell
+uv run python -m embodied_learning.act_torch_demo --results results/act_torch_reaching_2026-09-06
+```
+
+新增 13 项测试；全量 707 项通过。正式记录 `results/act_torch_reaching_2026-09-06/`，
+阶段 5 收官追加（到达级精度墙对 RL 与 BC/模仿共有且在最优教师+最强表示条件下依旧成立）
+见[第四十二课讲义](docs/47-session-42-act-torch-reaching.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -1016,6 +1039,7 @@ uv run python -m embodied_learning.staged_demo --results results/staged_verifica
 - [x] 第三十七课：多峰块策略——确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60；669 项全量通过
 - [x] 第三十八课：倒立摆组合学习——保护性成立（120/120 到达零出界）增值性不成立（0/60 劣化基线）；682 项全量通过
 - [x] 第四十一课：分阶段最小验证——底座已最优、线性修正无改善信号、裁决=base_optimal_no_headroom；694 项全量通过
+- [x] 第四十二课：ACT/torch 策略——0/60 但归因清晰化：信息-精度硬墙；707 项全量通过
 - [x] 第三十九课：差速小车纯学习——接近学到但到达输给目标熵、悬停画像；696 项全量通过
 - [x] 第四十课：2R 臂纯学习——跨任务目标熵均衡收敛、戳进球但停不住；710 项全量通过
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
