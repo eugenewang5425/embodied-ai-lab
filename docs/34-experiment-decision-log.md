@@ -247,3 +247,15 @@ lstsq + gauge）；回环从 pairwise 相对边改为**末节点绝对锚（unar
 黄金锚末端 0.016 m；σ 权重=保形/闭合连续旋钮（手工对照入册+测试钉住）。
 证据：results/pose_graph_2026-09-07/；docs/52。
 下一步：鲁棒核（Huber）与权重自适应 → 特征化回环检测 → Nav2 AMCL 对照。
+
+
+**D-2026-09-07-07｜第 48 课｜鲁棒位姿图：受控毒化注入与单核两难定论（2026-09-07）**
+变更：新开第 48 课（docs/53）——同 46/47 课采集-重放数据 + 受控毒化回环边注入（真值
+delta 旋转 ±90° + 平移），四后端对照（LS-G/LS-B/HUB-B/HUB-G）；Huber 调度经历三版
+（60% LS 预热→δ 退火→from-scratch 定版）。
+结论：脆弱性✓（LS-B 7.63 m > N 4.82 m，末端 12.59 m——一条坏边比无回环更糟）；
+抵抗✓（from-scratch Huber 5.22 m ≈ N）；**单核两难如实入册**——同核使好回环末端
+8.79 m 无法闭合（vs LS-G 0.015 m）；δ 退火（graduated non-convexity）阴性（毒化边
+先入为主后残差归零，G-N 局部极小不可自愈）——SC/MM 是文献正解（下一课）。
+证据：results/robust_graph_2026-09-07/；docs/53。
+下一步：switchable constraints / max-mixtures → 特征化回环检测 → Nav2 AMCL 对照。
