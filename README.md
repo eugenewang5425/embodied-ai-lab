@@ -6,20 +6,20 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **710 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by **765 automated tests**, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 40 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) |
-| **Verified** | `uv run pytest -q` → **710 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Status** | 43 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) → occupancy-grid mapping + A* planning + pure pursuit (back to the perception–mapping–planning mainline, 15/15 collision-free vs blind 3/15) |
+| **Verified** | `uv run pytest -q` → **765 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-710%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-765%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -58,13 +58,13 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-09-06）
+## 当前状态（2026-09-07）
 
-- **主线课程 1–40 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛）。
-- **自动验收**：`uv run pytest -q` 全量 **710 项通过**（含第 40 课新增 14 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
+- **主线课程 1–43 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞）。
+- **自动验收**：`uv run pytest -q` 全量 **765 项通过**（实测口径，含第 43 课新增 17 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
 - **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：完成各课讲义的"思考题"与"学员待解释"清单（见文末），按[学习路线](docs/01-learning-roadmap.md)与[审查报告](docs/26-experiment-review-2026-09-05.md)的建议推进：阶段 5 收官（九种方式全试：倒立摆闭环精度是底座/学习/表示三方的共同边界——精确控制器已最优，组合只增保护性不增值）；不自动开始下一课。
+- **下一步**：按[学习路线](docs/01-learning-roadmap.md)推进导航栈（决策日志 D-2026-09-07-01：阶段 5 十四种方式全试、信息-精度硬墙入册后回主线）——第 43 课分层栈（建图/规划/追踪）已验证；后续放开"位姿已知"（定位误差传播）→ 栅格 SLAM 最小版 → 动态障碍与局部规划（docs/48 §9）。
 
 ## 课程索引
 
@@ -112,6 +112,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 42 课 | ACT/torch 到达 | Transformer 块策略 683k 参数、0/60 但归因清晰化：信息-精度硬墙 | Robot Learning（Transformer 策略表示） | [讲义](docs/47-session-42-act-torch-reaching.md) |
 | 第 39 课 | 差速小车纯学习 | 手写 SAC、接近学到但到达输给目标熵、悬停画像 | Robot Learning（全驱动 RL；最大熵探索边界） | [讲义](docs/44-session-39-rl-goal-reaching.md) |
 | 第 40 课 | 2R 臂纯学习 | 全驱动红利再证、跨任务目标熵均衡收敛、戳进球但停不住 | Robot Learning（全驱动第二系统对照） | [讲义](docs/45-session-40-rl-arm-reaching.md) |
+| 第 43 课 | 占据栅格建图 + A* 规划 + 纯追踪（回主线） | Bresenham log-odds 建图、8 邻域 A*（膨胀=刹车门限一致）、差速适配纯追踪；有障碍 15/15 无碰撞到达 vs 盲飞 3/15 | Algorithm 篇·Robot Navigation（costmap/planner/controller 最小版） | [讲义](docs/48-session-43-grid-nav.md) |
 
 ## 当前技术路线
 
@@ -178,7 +179,22 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 │   ├── 30-session-26-icp-registration.md
 │   ├── 31-session-27-visual-grounding.md
 │   ├── 32-session-28-bc-imitation.md
-│   └── 34-experiment-decision-log.md
+│   ├── 33-session-29-ppo-swingup.md
+│   ├── 34-experiment-decision-log.md
+│   ├── 35-session-30-residual-swingup.md
+│   ├── 36-session-31-pbrs-shaping.md
+│   ├── 37-session-32-dapg-swingup.md
+│   ├── 38-session-33-goexplore-swingup.md
+│   ├── 39-session-34-twophase-swingup.md
+│   ├── 40-session-35-sac-swingup.md
+│   ├── 41-session-36-dagger-swingup.md
+│   ├── 42-session-37-act-swingup.md
+│   ├── 43-session-38-combo-swingup.md
+│   ├── 44-session-39-rl-goal-reaching.md
+│   ├── 45-session-40-rl-arm-reaching.md
+│   ├── 46-session-41-staged-verification.md
+│   ├── 47-session-42-act-torch-reaching.md
+│   └── 48-session-43-grid-nav.md
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
@@ -990,6 +1006,32 @@ uv run python -m embodied_learning.act_torch_demo --results results/act_torch_re
 阶段 5 收官追加（到达级精度墙对 RL 与 BC/模仿共有且在最优教师+最强表示条件下依旧成立）
 见[第四十二课讲义](docs/47-session-42-act-torch-reaching.md)。
 
+## 第四十三课：占据栅格建图 + A\* 路径规划——回到感知-建图-规划主线
+
+![第四十三课演示画面：三模式合览](docs/img/lesson-43-demo.png)
+
+阶段 5（28–42 课）以"信息-精度硬墙"收官后回到主线（决策日志 D-2026-09-07-01）。
+同一台第 14/21 课差速车升级为"知道世界长什么样"：理想 16 射线测距 → Bresenham 对数概率
+占据栅格 → 已知栅格 8 邻域 A\*（障碍膨胀 3 格 = 0.30 m，与刹车门限一致）→ 差速适配纯追踪
+（原地转分支 + 急弯/近障碍前瞻钳制）+ 前向刹车反射（只刹平移、保留偏航）。
+
+主结果（6 场景 × 3 初始化 × 2 组配对，预注册判据满足）：有障碍 15 回合 **B 组 15/15 到达、
+0 碰撞**；A 组（第 21 课盲飞、真值位姿）**3/15、1005 次碰撞事件**（顶住障碍直到 100 s 超时）。
+无障碍对照两组 3/3（控制器健全性闸门）。B 组路径比中位 0.979（≈ 全知最短）、建图覆盖率
+均值 47.4%——半张地图足够走出与全知等长的路径；零训练、12.6 s 墙钟。两次调参弯路
+（刹车互锁冻结 8/15、膨胀-刹车间隙不一致 10/15）完整保留为探针记录——**分层栈各层的
+安全常数必须全局一致**是本课比 15/15 更想教的一课。
+
+```powershell
+uv run python -m embodied_learning.experiments.grid_nav --output results/grid_nav_my_run --seed 0
+uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_2026-09-06
+```
+
+新增 17 项测试；全量 **765 项通过**（实测口径勘误：此前各课"全量 N 项"与
+`uv run pytest -q` 实测不符——第 42 课时实测应为 748 项，自本课起以实测输出为准）。
+正式记录 `results/grid_nav_2026-09-06/`（含两个探针目录），分层架构定位与下一步
+（放开位姿已知 → 栅格 SLAM → 动态障碍）见[第四十三课讲义](docs/48-session-43-grid-nav.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -1042,6 +1084,7 @@ uv run python -m embodied_learning.act_torch_demo --results results/act_torch_re
 - [x] 第四十二课：ACT/torch 策略——0/60 但归因清晰化：信息-精度硬墙；707 项全量通过
 - [x] 第三十九课：差速小车纯学习——接近学到但到达输给目标熵、悬停画像；696 项全量通过
 - [x] 第四十课：2R 臂纯学习——跨任务目标熵均衡收敛、戳进球但停不住；710 项全量通过
+- [x] 第四十三课：占据栅格建图 + A\* 规划 + 纯追踪——回主线；有障碍 15/15 无碰撞到达 vs 盲飞 3/15、0 vs 1005 碰撞、路径比 ≈ 全知、覆盖率 47%；765 项全量通过（实测口径）
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
