@@ -180,11 +180,27 @@ class Obstacle:
             raise ValueError("Circle radius must be positive")
 
     def distance(self, x, y):
-        """Signed distance from a point to the obstacle surface (negative inside)."""
+        """Signed distance from a point to the obstacle surface.
+
+        Circle and rectangle branches: strictly inside returns NEGATIVE (the
+        distance to the nearest edge with a minus sign), strictly outside
+        returns positive, on the surface returns 0.  The rect branch inside
+        test is the signed extension of the `max(..., 0.0, ...)` clamp: a
+        point inside a rectangle would otherwise report 0 for every interior
+        point (fix from the lesson-44 work: true_occupancy and collision
+        clearance both rely on negative-in-side semantics).
+        """
         if self.kind == "circle":
             return math.hypot(x - self.cx, y - self.cy) - self.r
         dx = max(self.cx - self.hx - x, 0.0, x - (self.cx + self.hx))
         dy = max(self.cy - self.hy - y, 0.0, y - (self.cy + self.hy))
+        if dx == 0.0 and dy == 0.0:
+            return -min(
+                x - (self.cx - self.hx),
+                (self.cx + self.hx) - x,
+                y - (self.cy - self.hy),
+                (self.cy + self.hy) - y,
+            )
         return math.hypot(dx, dy)
 
     def extent(self):

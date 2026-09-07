@@ -32,7 +32,7 @@ from embodied_learning.experiments.grid_nav import (
     true_occupancy,
 )
 
-DEFAULT_RESULTS = "results/grid_nav_2026-09-06"
+DEFAULT_RESULTS = "results/grid_nav_2026-09-06_v2"  # the v2 record (see docs/48 §7 erratum)
 GROUP_LABELS = {"A": "A 盲飞（第 21 课控制器）", "B": "B 建图 + A* 规划 + 纯追踪"}
 
 
