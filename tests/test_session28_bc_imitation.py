@@ -354,6 +354,7 @@ def test_demo_loader_validates_and_rejects_tampering(small_run, tmp_path):
 
 
 # ------------------------------------------------------------------- CLI and UI
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(

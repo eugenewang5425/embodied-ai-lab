@@ -209,6 +209,7 @@ def test_paired_starts_with_lesson43():
     np.testing.assert_allclose(mine, ref, atol=1e-12)
 
 
+@pytest.mark.slow
 def test_truth_same_index_and_t_zero_error():
     """T estimate = truth at the SAME index (no phase offset), error exactly 0."""
     config = SMALL_CONFIG
@@ -220,6 +221,7 @@ def test_truth_same_index_and_t_zero_error():
     assert metrics["mean_position_error_m"] < 1e-9
 
 
+@pytest.mark.slow
 def test_error_hierarchy_small_run(small_run):
     """Over identical pairs: O2 error > O1 error > ~0, F bounded by observations."""
     output, _report = small_run
@@ -234,6 +236,7 @@ def test_error_hierarchy_small_run(small_run):
     assert abs(t) < 1e-9
 
 
+@pytest.mark.slow
 def test_micro_run_deterministic(tmp_path):
     first = run_experiment(tmp_path / "one", seed=0, config=TINY_CONFIG, log=None)
     second = run_experiment(tmp_path / "two", seed=0, config=TINY_CONFIG, log=None)
@@ -243,6 +246,7 @@ def test_micro_run_deterministic(tmp_path):
     )
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(small_run, tmp_path):
     output, report = small_run
     assert report["experiment"] == EXPERIMENT and report["schema_version"] == 1
@@ -270,6 +274,7 @@ def test_small_run_record_contract(small_run, tmp_path):
         run_experiment(output, seed=0, config=SMALL_CONFIG, log=None)
 
 
+@pytest.mark.slow
 def test_hypothesis_keys(small_run):
     _, report = small_run
     h = report["hypothesis"]
@@ -278,6 +283,7 @@ def test_hypothesis_keys(small_run):
     assert set(h["results"]["counts"]) == set(GROUPS4)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -310,6 +316,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
         assert (out / name).is_file()
 
 
+@pytest.mark.slow
 def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
     output, _report = small_run
     data = load_replays(output)
@@ -362,6 +369,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
 
 
 @pytest.mark.isolated_tk
+@pytest.mark.slow
 def test_tk_demo_modes_and_panel(small_run):
     import tkinter as tk
 

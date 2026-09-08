@@ -356,6 +356,7 @@ def test_push_plans_are_paired_and_aligned():
 
 
 # ------------------------------------------------------ shrunk end-to-end record
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     assert report["experiment"] == EXPERIMENT
@@ -421,6 +422,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
 
 
 # ------------------------------------------------------------------- CLI and UI
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(

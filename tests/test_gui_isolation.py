@@ -30,7 +30,7 @@ def test_child_failure_is_parent_failure(monkeypatch, tmp_path, returncode):
     else:
         assert conftest.pytest_pyfunc_call(item(tmp_path)) is True
     assert len(calls) == 1  # No automatic retry.
-    assert calls[0][1]["timeout"] == 120
+    assert calls[0][1]["timeout"] == conftest.SUBPROCESS_TIMEOUT_S
     assert calls[0][1]["env"]["EMBODIED_TK_TEST_NODE"] == item(tmp_path).nodeid
 
 

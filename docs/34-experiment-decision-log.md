@@ -259,3 +259,15 @@ delta 旋转 ±90° + 平移），四后端对照（LS-G/LS-B/HUB-B/HUB-G）；H
 先入为主后残差归零，G-N 局部极小不可自愈）——SC/MM 是文献正解（下一课）。
 证据：results/robust_graph_2026-09-07/；docs/53。
 下一步：switchable constraints / max-mixtures → 特征化回环检测 → Nav2 AMCL 对照。
+
+
+**D-2026-09-08-01｜测试分层：开发口径 29:39 → 73 s（issue #16 落地）**
+变更：tests/conftest.py 注册 slow 标记并两条自动规则——isolated_tk（真实 Tk 窗口）
+自动带 slow；请求重采集-重放 fixture（small_run/light_stream）的任何测试自动带 slow。
+额外显式打标：第 26 课点云 ICP 记录契约/种子确定性/CLI 端到端/防篡改 4+5 项、
+第 47/48 课 demo-loader 交叉校验与防篡改 2 项（各完整跑一遍 run_experiment，60–95 s/项）。
+子进程超时 120→600 s 并收敛为 conftest 常量（test_gui_isolation 由硬编码 120 改引用常量）。
+结论：开发口径 `uv run pytest -q -m "not slow"` 684 项 73.3 s（原全量 29:39，六项占 80% 时长）；
+全量 833 项仍为推送门禁。分层阈值：>5 s 的测试承担"记录完整性/真值复现/真实窗口"职责，
+一律入慢速层，开发迭代不支付。
+下一步：SC/MM → 特征化回环检测 → Nav2 AMCL 对照。

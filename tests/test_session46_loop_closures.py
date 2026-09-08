@@ -73,6 +73,7 @@ def small_run(tmp_path_factory):
 
 
 # ------------------------------------------------------------------ primitives
+@pytest.mark.slow
 def test_collector_stream_shape():
     """The truth-controlled patrol returns a coherent stream with 4 legs."""
     config = SMALL_CONFIG
@@ -88,6 +89,7 @@ def test_collector_stream_shape():
     assert np.isfinite(stream["ranges"]).all()
 
 
+@pytest.mark.slow
 def test_n_chain_equals_dead_reckoning():
     """The N chain reproduces hand-computed scaled-encoder integration."""
     config = SMALL_CONFIG
@@ -102,6 +104,7 @@ def test_n_chain_equals_dead_reckoning():
     np.testing.assert_allclose(est[1], ref, atol=1e-12)
 
 
+@pytest.mark.slow
 def test_shared_matcher_chain_prefix():
     """S/L/LT share the same matcher chain (identical first 200 frames)."""
     config = SMALL_CONFIG
@@ -115,6 +118,7 @@ def test_shared_matcher_chain_prefix():
     np.testing.assert_allclose(s, lt, atol=1e-9)
 
 
+@pytest.mark.slow
 def test_loop_detection_oracle_conditions():
     """Loop fires only late in the patrol and only near the start."""
     config = SMALL_CONFIG
@@ -183,6 +187,7 @@ def test_arc_length_correction_known_answer():
     assert np.all(np.diff(cd) >= -1e-12)
 
 
+@pytest.mark.slow
 def test_lt_gold_endpoint_closure(small_run):
     _output, report = small_run
     lt = report["aggregates"]["LT"]
@@ -190,6 +195,7 @@ def test_lt_gold_endpoint_closure(small_run):
     assert lt["final_position_error_relaxed_m"] < 0.5  # sub-meter closure
 
 
+@pytest.mark.slow
 def test_hypothesis_keys(small_run):
     _, report = small_run
     h = report["hypothesis"]
@@ -198,6 +204,7 @@ def test_hypothesis_keys(small_run):
     assert set(h["results"]["errors"]) == {"N", "S", "L", "LT", "L_relaxed", "LT_relaxed"}
 
 
+@pytest.mark.slow
 def test_micro_run_deterministic(tmp_path):
     first = run_experiment(tmp_path / "one", seed=0, config=TINY_CONFIG, log=None)
     second = run_experiment(tmp_path / "two", seed=0, config=TINY_CONFIG, log=None)
@@ -207,6 +214,7 @@ def test_micro_run_deterministic(tmp_path):
     )
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     protocol = report["protocol"]
@@ -224,6 +232,7 @@ def test_small_run_record_contract(small_run):
         run_experiment(output, seed=0, config=SMALL_CONFIG, log=None)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -253,6 +262,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
     assert (out / "summary.json").is_file()
 
 
+@pytest.mark.slow
 def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
     output, _report = small_run
     data = load_replays(output)
@@ -277,6 +287,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
 
 
 @pytest.mark.isolated_tk
+@pytest.mark.slow
 def test_tk_demo_modes_and_panel(small_run):
     import tkinter as tk
 

@@ -345,6 +345,7 @@ def test_run_experiment_synthetic_contract(tmp_path):
         run_experiment(input_npz, tmp_path / "runs1", runs=1, seed=0)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     input_npz = write_synthetic_npz(tmp_path / "bench.npz")
     result = subprocess.run(

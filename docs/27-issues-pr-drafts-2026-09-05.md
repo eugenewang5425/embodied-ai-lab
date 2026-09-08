@@ -433,7 +433,7 @@ New issue 页：`https://github.com/eugenewang5425/embodied-ai-lab/issues/new?ti
 | 编号 | 标题 | 对应草稿/来源 |
 | --- | --- | --- |
 | [#15](https://github.com/eugenewang5425/embodied-ai-lab/issues/15) | [全课程] README 摘要引用成功率丢失"有限样本"限定，且无区间估计（n=20） | 本稿 Issue 6（开放） |
-| [#16](https://github.com/eugenewang5425/embodied-ai-lab/issues/16) | [全课程] 全量测试时长随课程增长，建议引入慢速标记分层 | 本稿 Issue 8（开放）+ F12 |
+| [#16](https://github.com/eugenewang5425/embodied-ai-lab/issues/16) | [全课程] 全量测试时长随课程增长，建议引入慢速标记分层 | 本稿 Issue 8（已解决 2026-09-08，D-2026-09-08-01）+ F12 |
 | [#17](https://github.com/eugenewang5425/embodied-ai-lab/issues/17) | [全课程] 正式记录 source_sha256 与提交版源码漂移 | 本稿 Issue 9（开放） |
 | [#18](https://github.com/eugenewang5425/embodied-ai-lab/issues/18) | [第二十三/二十四/二十七课] 单目深度米制标定技术跟进 | 本稿 Issue 12（开放） |
 | [#19](https://github.com/eugenewang5425/embodied-ai-lab/issues/19) | [演示验收] 真机验收标准已确立，第 1–22 课逐课复验待 Tk 自动化后统一执行 | 本稿 Issue 10（待办延后） |

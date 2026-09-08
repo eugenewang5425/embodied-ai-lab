@@ -283,6 +283,7 @@ def recording(tmp_path_factory):
     return output, report
 
 
+@pytest.mark.slow
 def test_run_experiment_guards_and_contract(recording):
     output, report = recording
     assert report["experiment"] == EXPERIMENT
@@ -307,6 +308,7 @@ def test_run_experiment_guards_and_contract(recording):
         run_experiment(output.parent / "other", runs=1, seed=0)
 
 
+@pytest.mark.slow
 def test_sigma_sweep_mechanism(recording):
     _, report = recording
     sweep = report["sigma_sweep"]
@@ -322,6 +324,7 @@ def test_sigma_sweep_mechanism(recording):
     assert obs[1, 1] > obs[1, 0]
 
 
+@pytest.mark.slow
 def test_radius_matrix_and_valley_footprint(recording):
     _, report = recording
     radius = report["radius_study"]
@@ -344,6 +347,7 @@ def test_radius_matrix_and_valley_footprint(recording):
     assert abs(spin[1, 0]) > abs(spin[0, 0])
 
 
+@pytest.mark.slow
 def test_degenerate_counterexample_recorded(recording):
     _, report = recording
     degen = report["degenerate"]
@@ -356,6 +360,7 @@ def test_degenerate_counterexample_recorded(recording):
     assert reference["converged"] and reference["rank_last"] == 3
 
 
+@pytest.mark.slow
 def test_seed_determinism(tmp_path):
     first = run_experiment(tmp_path / "first", runs=2, seed=7, light=True)
     second = run_experiment(tmp_path / "second", runs=2, seed=7, light=True)
@@ -369,6 +374,7 @@ def test_seed_determinism(tmp_path):
     assert digest_first == digest_second
 
 
+@pytest.mark.slow
 def test_npz_arrays_and_reference_bundle(recording):
     output, _ = recording
     with np.load(output / "trajectories.npz", allow_pickle=False) as data:
@@ -394,6 +400,7 @@ def test_npz_arrays_and_reference_bundle(recording):
     assert mean_dist[-1] <= mean_dist[0]
 
 
+@pytest.mark.slow
 def test_recording_rejects_tampering(tmp_path):
     output = tmp_path / "result"
     report = run_experiment(output, runs=2, seed=9, light=True)
@@ -415,6 +422,7 @@ def test_recording_rejects_tampering(tmp_path):
         load_replays(output)
 
 
+@pytest.mark.slow
 def test_cli_end_to_end(tmp_path):
     result = subprocess.run(
         [

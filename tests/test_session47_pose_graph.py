@@ -123,6 +123,7 @@ def test_weights_decide_closure_vs_shape():
     assert res_soft < res_stiff
 
 
+@pytest.mark.slow
 def test_gold_anchor_closure(light_stream):
     """With the gold anchor the factor graph closes the tail to sub-meter."""
     config = LIGHT_CONFIG
@@ -143,6 +144,7 @@ def test_gold_anchor_closure(light_stream):
     assert final < 1.0  # the gold anchor closes the tail
 
 
+@pytest.mark.slow
 def test_error_at_alignment(light_stream):
     nodes = np.array([[1.0, 1.0, 0.0], [2.0, 1.0, 0.0]])
     node_steps = np.array([100, 200], dtype=int)
@@ -154,6 +156,7 @@ def test_error_at_alignment(light_stream):
     assert final == pytest.approx(np.linalg.norm(nodes[-1, :2] - truth_pts[-1, :2]))
 
 
+@pytest.mark.slow
 def test_build_backends_structure(light_stream):
     built = build_backends(light_stream, LIGHT_CONFIG)
     assert built["nodes"].shape[1] == 3
@@ -162,6 +165,7 @@ def test_build_backends_structure(light_stream):
     assert isinstance(built["fg_history"], list)
 
 
+@pytest.mark.slow
 def test_hypothesis_keys():
     # construct the hypothesis by running the real (small) pipeline once is
     # expensive: validate the config validation instead + the record contract
@@ -174,6 +178,7 @@ def test_hypothesis_keys():
         PoseGraphConfig(gn_iterations=0)
 
 
+@pytest.mark.slow
 def test_micro_run_deterministic(tmp_path):
     from embodied_learning.experiments.pose_graph import run_experiment
 
@@ -185,6 +190,7 @@ def test_micro_run_deterministic(tmp_path):
     )
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(tmp_path):
     from embodied_learning.experiments.pose_graph import run_experiment
 
@@ -202,6 +208,7 @@ def test_small_run_record_contract(tmp_path):
         run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -231,6 +238,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
     assert (out / "summary.json").is_file()
 
 
+@pytest.mark.slow
 def test_demo_loader_rejects_tampering(tmp_path):
     from embodied_learning.experiments.pose_graph import run_experiment
 

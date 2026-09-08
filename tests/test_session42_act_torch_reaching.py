@@ -273,6 +273,7 @@ def test_micro_training_deterministic_and_converging():
 
 
 # ---------------------------------------------------------- shrunk end-to-end
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     assert report["experiment"] == EXPERIMENT
@@ -322,6 +323,7 @@ def test_small_run_record_contract(small_run):
         )
 
 
+@pytest.mark.slow
 def test_teacher_digest_recomputable_from_summary(small_run):
     """The recorded teacher hash is the digest of the regenerated dataset."""
     _output, report = small_run
@@ -333,6 +335,7 @@ def test_teacher_digest_recomputable_from_summary(small_run):
     assert report["teacher"]["digest_sha256"] == dataset_digest(observations, actions)
 
 
+@pytest.mark.slow
 def test_attention_maps_in_archive(small_run):
     """Archived attention maps are proper softmax rows at the protocol shapes."""
     _output, report = small_run
@@ -352,6 +355,7 @@ def test_attention_maps_in_archive(small_run):
     assert first["attention_plan_index"] == ATTENTION_PLAN_INDEX
 
 
+@pytest.mark.slow
 def test_demo_loader_rejects_tampering(small_run, tmp_path):
     output, _report = small_run
     data = load_replays(output)  # the pristine record passes every cross-check
@@ -408,6 +412,7 @@ def test_demo_loader_rejects_tampering(small_run, tmp_path):
         load_replays(work4)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -488,6 +493,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
 
 
 @pytest.mark.isolated_tk
+@pytest.mark.slow
 def test_tk_demo_modes_and_panel(small_run):
     import tkinter as tk
 

@@ -117,6 +117,7 @@ def test_config_and_poison_contract():
         RobustConfig(gn_iterations=0)
 
 
+@pytest.mark.slow
 def test_build_groups_contract(light_stream):
     built = build_groups(light_stream, LIGHT_CONFIG)
     assert built["nodes"].shape[1] == 3
@@ -127,6 +128,7 @@ def test_build_groups_contract(light_stream):
         assert np.linalg.norm(bad_m[:2] - good_m[:2]) > 1.0
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(tmp_path):
     from embodied_learning.experiments.robust_graph import run_experiment
 
@@ -148,6 +150,7 @@ def test_small_run_record_contract(tmp_path):
         re(out, seed=0, config=LIGHT_CONFIG, log=None)
 
 
+@pytest.mark.slow
 def test_hypothesis_keys(tmp_path):
     from embodied_learning.experiments.robust_graph import run_experiment
 
@@ -159,6 +162,7 @@ def test_hypothesis_keys(tmp_path):
     assert set(h["errors"]) == set(GROUPS)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -187,6 +191,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
     assert set(payload["aggregates"]) == set(GROUPS)
 
 
+@pytest.mark.slow
 def test_demo_loader_crosscheck(tmp_path):
     from embodied_learning.experiments.robust_graph import run_experiment
 

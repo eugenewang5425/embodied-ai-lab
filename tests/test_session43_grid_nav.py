@@ -347,6 +347,7 @@ def test_behavior_contrast_wall_gap():
     assert metrics_b["path_length_m"] / shortest < 2.0
 
 
+@pytest.mark.slow
 def test_micro_run_deterministic(tmp_path):
     """The same tiny config reproduces the archive bitwise."""
     first = run_experiment_with(tmp_path / "one", TINY_CONFIG)
@@ -358,6 +359,7 @@ def test_micro_run_deterministic(tmp_path):
     assert first["scenarios"] == second["scenarios"]
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(small_run, tmp_path):
     """Shrunk end-to-end: files, episodes, pairing, archive keys, no overwrite."""
     from embodied_learning.experiments.grid_nav import run_experiment
@@ -465,6 +467,7 @@ def test_true_shortest_empty_scene():
     )
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     """CLI micro run: stdout JSON, files on disk, new directory never overwritten."""
     out = tmp_path / "cli_run"
@@ -524,6 +527,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
     assert again.returncode != 0  # new directories are never overwritten
 
 
+@pytest.mark.slow
 def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
     """The pristine record passes; hash, key-set, aggregate and map tampering fail."""
     output, _report = small_run
@@ -581,6 +585,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
 
 
 @pytest.mark.isolated_tk
+@pytest.mark.slow
 def test_tk_demo_modes_and_panel(small_run):
     import tkinter as tk
 

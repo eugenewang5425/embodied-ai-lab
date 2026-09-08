@@ -32,7 +32,8 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 ```powershell
 uv sync
-uv run pytest -q
+uv run pytest -q                       # 全量门禁：833 项
+uv run pytest -q -m "not slow"         # 开发快速口径：684 项约 73 s（慢速分层见 tests/conftest.py）
 uv run python -m embodied_learning.swingup_demo --results results/swingup_2026-09-02
 ```
 

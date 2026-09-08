@@ -145,6 +145,7 @@ def test_collinear_degeneracy_rejected():
     assert delta.shape == (3,)
 
 
+@pytest.mark.slow
 def test_small_run_gate_truth(small_run):
     _output, report = small_run
     assert report["experiment"] == EXPERIMENT
@@ -158,6 +159,7 @@ def test_paired_starts_with_lesson43():
     np.testing.assert_allclose(mine, ref, atol=1e-12)
 
 
+@pytest.mark.slow
 def test_truth_same_index_zero_error():
     config = SMALL_CONFIG
     scene = build_scenarios(config.config, 0)[1]
@@ -168,6 +170,7 @@ def test_truth_same_index_zero_error():
     assert metrics["mean_position_error_m"] < 1e-9
 
 
+@pytest.mark.slow
 def test_estimation_chain_equals_odometry():
     """The incremental E/S chain equals the pure odometry chain (no matches
     accepted on the first frames)."""
@@ -179,6 +182,7 @@ def test_estimation_chain_equals_odometry():
     assert metrics["match_attempts"] is None
 
 
+@pytest.mark.slow
 def test_match_stats_shape(small_run):
     output, _report = small_run
     with np.load(output / "trajectories.npz", allow_pickle=False) as archive:
@@ -192,6 +196,7 @@ def test_match_stats_shape(small_run):
     assert np.all(finite <= 0.031)
 
 
+@pytest.mark.slow
 def test_hypothesis_keys(small_run):
     _, report = small_run
     h = report["hypothesis"]
@@ -200,6 +205,7 @@ def test_hypothesis_keys(small_run):
     assert set(h["results"]["counts"]) == set(GROUPS3)
 
 
+@pytest.mark.slow
 def test_micro_run_deterministic(tmp_path):
     first = run_experiment(tmp_path / "one", seed=0, config=TINY_CONFIG, log=None)
     second = run_experiment(tmp_path / "two", seed=0, config=TINY_CONFIG, log=None)
@@ -209,6 +215,7 @@ def test_micro_run_deterministic(tmp_path):
     )
 
 
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     protocol = report["protocol"]
@@ -233,6 +240,7 @@ def test_small_run_record_contract(small_run):
         run_experiment(output, seed=0, config=SMALL_CONFIG, log=None)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
@@ -265,6 +273,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
         assert (out / name).is_file()
 
 
+@pytest.mark.slow
 def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
     output, _report = small_run
     data = load_replays(output)
@@ -292,6 +301,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
 
 
 @pytest.mark.isolated_tk
+@pytest.mark.slow
 def test_tk_demo_modes_and_panel(small_run):
     import tkinter as tk
 

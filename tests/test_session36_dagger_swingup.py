@@ -490,6 +490,7 @@ def test_teacher_quality_gate_and_baseline():
 
 
 # ------------------------------------------------------ shrunk end-to-end
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     assert report["experiment"] == EXPERIMENT
@@ -600,6 +601,7 @@ def test_demo_loader_cross_checks_and_rejects_tampering(small_run, tmp_path):
         load_replays(work)
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(

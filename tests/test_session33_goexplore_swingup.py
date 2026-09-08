@@ -326,6 +326,7 @@ def test_exploration_smoke_and_seed_determinism(design_and_reward):
 
 
 # ------------------------------------------------------------ shrunk e2e
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     assert report["experiment"] == EXPERIMENT
@@ -485,6 +486,7 @@ def test_phase2_null_path_when_no_capture(tmp_path):
         assert "bc_loss_curve" not in archive.files and "eval_states" not in archive.files
 
 
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(

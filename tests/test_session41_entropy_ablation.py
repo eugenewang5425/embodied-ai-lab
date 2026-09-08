@@ -290,6 +290,7 @@ def test_episode_profile_matches_truth_recomputation():
 
 
 # --------------------------------------------------------------- shrunk end-to-end
+@pytest.mark.slow
 def test_small_run_record_contract(small_run):
     output, report = small_run
     assert report["experiment"] == ea.EXPERIMENT
@@ -332,6 +333,7 @@ def test_small_run_record_contract(small_run):
         )
 
 
+@pytest.mark.slow
 def test_arm_aggregates_and_verdict_consistent(small_run):
     _output, report = small_run
     for arm in report["arms"]:
@@ -420,6 +422,7 @@ def test_lesson39_reference_loader(tmp_path):
 
 
 # ----------------------------------------------------------------- tamper rejection
+@pytest.mark.slow
 def test_record_loader_rejects_tampering(small_run, tmp_path):
     output, _report = small_run
     pristine = ea.load_entropy_record(output)
@@ -462,6 +465,7 @@ def test_record_loader_rejects_tampering(small_run, tmp_path):
 
 
 # ------------------------------------------------------------------------------ CLI
+@pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     out = tmp_path / "cli_run"
     result = subprocess.run(
