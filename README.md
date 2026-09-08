@@ -12,14 +12,14 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 48 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) → occupancy-grid mapping + A* planning + pure pursuit (back to the perception–mapping–planning mainline, 15/15 collision-free vs blind 3/15) → pose-error propagation through the stack (truth 15/15, encoder 1%/2% both 0/15, landmark fusion restores 15/15 at 2.5 cm) → minimal grid SLAM: scan matching is a RELATIVE anchor only (no beacons, 0/15 like pure odometry; absolute anchors are required) → loop closure: the second absolute anchor (patrol end-to-end 9.2 m to 0.14 m; factor-graph shape fixing next) → weighted pose-graph back-end: the shape claim holds (FG mean 5.03 < arc 5.33) with the closure-vs-shape sigma trade-off quantified) → robust pose graphs: a poisoned loop edge is WORSE than no loop (LS 7.63 vs 4.82 m), Huber-IRLS contains it (5.22 m), single-kernel dilemma recorded |
-| **Verified** | `uv run pytest -q` → **833 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
+| **Status** | 49 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) → occupancy-grid mapping + A* planning + pure pursuit (back to the perception–mapping–planning mainline, 15/15 collision-free vs blind 3/15) → pose-error propagation through the stack (truth 15/15, encoder 1%/2% both 0/15, landmark fusion restores 15/15 at 2.5 cm) → minimal grid SLAM: scan matching is a RELATIVE anchor only (no beacons, 0/15 like pure odometry; absolute anchors are required) → loop closure: the second absolute anchor (patrol end-to-end 9.2 m to 0.14 m; factor-graph shape fixing next) → weighted pose-graph back-end: the shape claim holds (FG mean 5.03 < arc 5.33) with the closure-vs-shape sigma trade-off quantified) → robust pose graphs: a poisoned loop edge is WORSE than no loop (LS 7.63 vs 4.82 m), Huber-IRLS contains it (5.22 m), single-kernel dilemma recorded → loop matcher engineering: the acceptance ladder 0.32→0.43→0.52→0.76 (K) but direction correctness ≤5.4% — alignment quality cannot separate the true loop from straight-wall slide impostors (pre-registered acceptance claim falsified, degeneracy quantified; the protocol rebuild exposed four lesson-46 design conditions) |
+| **Verified** | `uv run pytest -q` → **849 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
 <p align="center">
 
-[![tests](https://img.shields.io/badge/tests-833%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
+[![tests](https://img.shields.io/badge/tests-849%20passing-2ea44f?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?style=flat-square&logo=ros)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![MuJoCo](https://img.shields.io/badge/MuJoCo-native-8A2BE2?style=flat-square)](https://github.com/eugenewang5425/embodied-ai-lab)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)](https://github.com/eugenewang5425/embodied-ai-lab)
@@ -32,7 +32,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 ```powershell
 uv sync
-uv run pytest -q                       # 全量门禁：833 项
+uv run pytest -q                       # 全量门禁：849 项
 uv run pytest -q -m "not slow"         # 开发快速口径：684 项约 73 s（慢速分层见 tests/conftest.py）
 uv run python -m embodied_learning.swingup_demo --results results/swingup_2026-09-02
 ```
