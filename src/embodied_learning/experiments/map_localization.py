@@ -164,7 +164,7 @@ def marker_map_from_stream(stream, primitives, ids, cfg, world_seed):
     from embodied_learning.experiments.rgbd_loops import CAM_MAX_RANGE_M
 
     rng = np.random.default_rng([world_seed, 56001])
-    n_m = int(round(cfg.base.world_size_m / MARKER_CELL_M))
+    n_m = round(cfg.base.world_size_m / MARKER_CELL_M)
     marker_map = np.zeros((n_m, n_m, MARKER_PALETTE))
     est = [stream["truth"][0]]
     for k in range(len(stream["wheels"])):
@@ -177,7 +177,9 @@ def marker_map_from_stream(stream, primitives, ids, cfg, world_seed):
         pose = est[k]
         offsets = np.linspace(-math.pi, math.pi, 120, endpoint=False)
         angles = pose[2] + offsets
-        ranges, hit, idx = cast_rays_ids(pose[0], pose[1], angles, primitives, ids, CAM_MAX_RANGE_M)
+        _ranges, hit, idx = cast_rays_ids(
+            pose[0], pose[1], angles, primitives, ids, CAM_MAX_RANGE_M
+        )
         # paint at the OBSERVATION POSE (not the ray endpoint): the reseed
         # index must answer "what would I see if I stood here" - endpoint
         # painting seeds particles inside walls (the recorded bug)
@@ -269,7 +271,7 @@ class ParticleFilter:
         valid = obs < 3.9
         n_g = self.lf.shape[0]
         weights = np.zeros(len(self.p))
-        offs = np.stack([self.ray_off, np.arange(PF_RAYS) * 0.0], axis=1)
+        np.stack([self.ray_off, np.arange(PF_RAYS) * 0.0], axis=1)
         for i in range(len(self.p)):
             th = self.p[i, 2]
             angles = th + self.ray_off
@@ -481,7 +483,13 @@ def run_experiment(output, *, seed=0, config=None, log=print):
             obs[k] = np.clip(
                 r_cast + rng_obs.normal(0.0, config.range_noise_sigma_m, r_cast.shape), 0.0, None
             )
-        pf = ParticleFilter(true_map.astype(float), base.res_m, config.pf_particles, rng_pf, init_pose=truth[kidnap_at] * 0 + truth[0])
+        pf = ParticleFilter(
+            true_map.astype(float),
+            base.res_m,
+            config.pf_particles,
+            rng_pf,
+            init_pose=truth[kidnap_at] * 0 + truth[0],
+        )
         pf_error = np.zeros(n_frames + 1)
         reseed_frame = None
         post_frames = 0
