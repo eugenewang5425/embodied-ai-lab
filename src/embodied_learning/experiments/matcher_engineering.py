@@ -342,6 +342,7 @@ def collect_patrol_laps(obstacles, start_pose, config, walls=None, patrol=None):
         "hit": np.asarray(hit_log),
         "legs": leg_index,
         "laps_done": leg_index // 4,
+        "grid": grid,
     }
 
 
