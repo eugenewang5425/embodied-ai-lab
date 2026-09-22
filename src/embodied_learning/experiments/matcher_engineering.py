@@ -260,19 +260,23 @@ def coarse_to_pose(cand, cur, cfg):
 
 
 # -------------------------------------------------------------- collectors
-def collect_patrol_laps(obstacles, start_pose, config):
+def collect_patrol_laps(obstacles, start_pose, config, walls=None, patrol=None):
     """Truth-controlled patrol over `laps` laps (mirror of the lesson-46
     collector; the controlled replay protocol is data-partition precedent).
+
+    walls=None uses the square boundary; the lesson-54 anisotropic arm
+    passes an irregular polygon of segment walls.
 
     Returns truth chain + wheels + ranges (one range frame per step, fired
     at the current pose), with each frame k paired to truth pose k.
     """
     base = config.config
-    walls = build_walls(base.world_size_m, base.res_m)
+    if walls is None:
+        walls = build_walls(base.world_size_m, base.res_m)
     all_obstacles = (*obstacles, *walls)
     n = base.grid_cells
     res = base.res_m
-    legs = [np.asarray(g, dtype=float) for g in PATROL] * config.laps
+    legs = [np.asarray(g, dtype=float) for g in (patrol or PATROL)] * config.laps
     pose = finite_vector(start_pose, 3).copy()
     grid = np.zeros((n, n))
     offsets = np.arange(base.rays) * (2.0 * math.pi / base.rays)
@@ -693,6 +697,32 @@ def match_once(ref_pts, cur_pts, cfg, group):
 
 
 # ------------------------------------------------------------- evaluation
+def implied_pose(delta, est_k):
+    """World pose implied by a matcher delta applied at est frame k.
+
+    The matcher aligns CONTENT (scan points) onto the reference submap;
+    its delta lives in the est composition frame, so the measurable pose
+    it asserts for frame k is delta composed with est_k  -  NOT delta
+    itself.  The lesson-49 correctness target (true_delta, the est-pose
+    delta) baked the estimator drift into the target, which content
+    alignment cannot see; the corrected metric (lesson 54) compares the
+    IMPLIED POSE against the truth pose of frame k.
+    """
+    c, s = math.cos(delta[2]), math.sin(delta[2])
+    return np.array(
+        [
+            c * est_k[0] - s * est_k[1] + delta[0],
+            s * est_k[0] + c * est_k[1] + delta[1],
+            est_k[2] + delta[2],
+        ]
+    )
+
+
+def is_correct_implied(implied, truth_k, trans_m=0.5, rot_deg=5.0):
+    err_t = math.hypot(implied[0] - truth_k[0], implied[1] - truth_k[1])
+    err_r = abs(math.degrees(angle_diff(implied[2], truth_k[2])))
+    return bool(err_t < trans_m and err_r < rot_deg)
+
 def true_delta(est, k):
     """Ground truth in the MATCHER parameterization (rotate-then-translate)
     for the ESTIMATED world: the ideal matcher output is the relative pose

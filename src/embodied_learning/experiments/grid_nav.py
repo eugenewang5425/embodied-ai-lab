@@ -159,7 +159,13 @@ class GridNavConfig:
 # ------------------------------------------------------------------- world
 @dataclass(frozen=True)
 class Obstacle:
-    """Axis-aligned rectangle (cx, cy, half extents) or circle (cx, cy, r)."""
+    """Axis-aligned rectangle, circle, or finite segment.
+
+    Segment: endpoints (cx-hx, cy-hy) .. (cx+hx, cy+hy) with half-thickness
+    r (the slab the ray test and clearance both see); (hx, hy) must not both
+    be zero.  Signed-distance semantics match rect/circle: negative inside
+    the slab, positive outside (lesson-54 anisotropic walls).
+    """
 
     kind: str
     cx: float
@@ -169,8 +175,8 @@ class Obstacle:
     r: float = 0.0
 
     def __post_init__(self):
-        if self.kind not in ("rect", "circle"):
-            raise ValueError("kind must be 'rect' or 'circle'")
+        if self.kind not in ("rect", "circle", "segment"):
+            raise ValueError("kind must be 'rect', 'circle', or 'segment'")
         values = (self.cx, self.cy, self.hx, self.hy, self.r)
         if not all(math.isfinite(v) for v in values):
             raise ValueError("Obstacle parameters must be finite")
@@ -178,6 +184,11 @@ class Obstacle:
             raise ValueError("Rectangle half extents must be positive")
         if self.kind == "circle" and self.r <= 0:
             raise ValueError("Circle radius must be positive")
+        if self.kind == "segment":
+            if self.hx == 0.0 and self.hy == 0.0:
+                raise ValueError("Segment half-vector must be non-zero")
+            if self.r <= 0:
+                raise ValueError("Segment half-thickness must be positive")
 
     def distance(self, x, y):
         """Signed distance from a point to the obstacle surface.
@@ -192,6 +203,13 @@ class Obstacle:
         """
         if self.kind == "circle":
             return math.hypot(x - self.cx, y - self.cy) - self.r
+        if self.kind == "segment":
+            # point-to-segment distance minus the half-thickness slab
+            ex, ey = 2.0 * self.hx, 2.0 * self.hy
+            wx, wy = x - (self.cx - self.hx), y - (self.cy - self.hy)
+            len2 = ex * ex + ey * ey
+            s = 0.0 if len2 <= 0.0 else max(0.0, min(1.0, (wx * ex + wy * ey) / len2))
+            return math.hypot(wx - s * ex, wy - s * ey) - self.r
         dx = max(self.cx - self.hx - x, 0.0, x - (self.cx + self.hx))
         dy = max(self.cy - self.hy - y, 0.0, y - (self.cy + self.hy))
         if dx == 0.0 and dy == 0.0:
@@ -204,7 +222,11 @@ class Obstacle:
         return math.hypot(dx, dy)
 
     def extent(self):
-        return self.r if self.kind == "circle" else math.hypot(self.hx, self.hy)
+        if self.kind == "circle":
+            return self.r
+        if self.kind == "segment":
+            return math.hypot(self.hx, self.hy) + self.r
+        return math.hypot(self.hx, self.hy)
 
     def to_dict(self):
         return {
@@ -361,6 +383,25 @@ def cast_rays(px, py, angles, obstacles, walls, max_range):
     primitives = (*obstacles, *walls)
     circles = [o for o in primitives if o.kind == "circle"]
     rects = [o for o in primitives if o.kind == "rect"]
+    segments = [o for o in primitives if o.kind == "segment"]
+    if segments:
+        # ray p + t d vs segment a + s e (e = b - a), s in [0, 1], t >= 0:
+        # t = cross(a - p, e) / cross(d, e); vectorized rays x segments
+        ax = np.array([o.cx - o.hx for o in segments])
+        ay = np.array([o.cy - o.hy for o in segments])
+        ex = np.array([2.0 * o.hx for o in segments])
+        ey = np.array([2.0 * o.hy for o in segments])
+        wx = ax[None, :] - px
+        wy = ay[None, :] - py
+        cross_de = dx[:, None] * ey[None, :] - dy[:, None] * ex[None, :]
+        t_num = wx * ey[None, :] - wy * ex[None, :]
+        s_num = wx * dy[:, None] - wy * dx[:, None]
+        with np.errstate(divide="ignore", invalid="ignore"):
+            t = t_num / cross_de
+            s = s_num / cross_de
+        ok = (np.abs(cross_de) > 1e-15) & (t >= 0.0) & (s >= 0.0) & (s <= 1.0)
+        t = np.where(ok, t, np.inf)
+        best = np.minimum(best, np.min(t, axis=1))
     if circles:
         cx = np.array([o.cx for o in circles])
         cy = np.array([o.cy for o in circles])
