@@ -75,5 +75,6 @@ n=36 属小样本，但方向明确不支撑"各向异性改善判别"）；勘�
 
 ```powershell
 uv run python -m embodied_learning.experiments.aniso_env
+uv run python -m embodied_learning.aniso_env_demo --results results/aniso_env_2026-09-09
 uv run pytest tests/test_session54_aniso_env.py -q
 ```

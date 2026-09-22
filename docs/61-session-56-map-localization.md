@@ -70,5 +70,6 @@ PF 的 2.62 m 是**有界振荡**的采样点（直墙无特征段的沿墙滑�
 
 ```powershell
 uv run python -m embodied_learning.experiments.map_localization
+uv run python -m embodied_learning.map_localization_demo --results results/map_localization_2026-09-09
 uv run pytest tests/test_session56_map_localization.py -q
 ```

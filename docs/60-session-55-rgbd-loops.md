@@ -54,5 +54,6 @@
 
 ```powershell
 uv run python -m embodied_learning.experiments.rgbd_loops
+uv run python -m embodied_learning.rgbd_loops_demo --results results/rgbd_loops_2026-09-09
 uv run pytest tests/test_session55_rgbd_loops.py -q
 ```
