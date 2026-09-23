@@ -1151,81 +1151,75 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ## 第四十八课：鲁棒位姿图——一条坏回环比没有回环更糟
 
-对建好的位姿图注入受控毒化回环边（真值 delta 旋转 ±90°+平移），四后端对照：普通最小二乘被毒化边拖到 7.63 m（比无回环的 4.82 m 更糟）；Huber-IRLS 压回 5.22 m；但同一把核让好回环也无法闭合（单核两难）。
+对位姿图注入受控毒化回环边（真值 delta 旋转 ±90°+平移），四后端对照。左图：LS-B（毒化+最小二乘）平均误差 7.63 m，**比不做回环的 4.82 m 还糟**——回环边错了比没有更危险；右图：同一把 Huber 核压回毒化（5.22 m）却让好回环也无法闭合（8.79 m）——单核两难，为 51-53 课埋线。
 
-![第四十八课演示画面：五方判定](docs/img/lesson-48-verdict.png)
-![第四十八课演示画面：毒化拖歪轨迹](docs/img/lesson-48-drag.png)
-![第四十八课演示画面：Huber 机制](docs/img/lesson-48-mechanics.png)
+![第四十八课图：左=四后端平均误差（毒化边最高）；右=末端误差（Huber 下好回环 8.79 m 无法闭合）](docs/img/lesson-48-charts.png)
 
-讲义与复现：[docs/53](docs/53-session-48-robust-graph.md)。
+讲义：[docs/53](docs/53-session-48-robust-graph.md)；演示窗口：`uv run python -m embodied_learning.robust_graph_demo`。
 
-## 第四十九课：回环匹配器工程化——预登记主张如实证伪
+## 第四十九课：回环匹配器工程化——接受率上去了，方向正确率没上去
 
-108 个回环候选对上基准化四组匹配器（单假设/点对面抛光/当前帧弧长重采样/top-5 假设）：接受率阶梯单调 0.32→0.76，但方向正确率 ≤5.4%——预登记"K 双线达标"如实证伪。（后续第 54 课勘误：该指标本身有评估目标错误，见下。）
+108 个回环候选对上对照四组匹配器。左图：工程化三件套让接受率从 0.32 单调爬到 0.76（可用候选变多）；右图：但方向正确率仅 ≤5.4%，远低于 80% 线——"找到能对齐的候选"不等于"对齐到了正确的地方"。（第 54 课勘误：该指标本身有评估目标错误。）
 
-![第四十九课演示画面：候选展示](docs/img/lesson-49-candidates.png)
-![第四十九课演示画面：指标对照](docs/img/lesson-49-metrics.png)
-![第四十九课演示画面：top-k 机制](docs/img/lesson-49-mechanism.png)
+![第四十九课图：左=接受率阶梯 B/P/R/K；右=旧判据方向正确率与 80% 线](docs/img/lesson-49-charts.png)
 
-讲义与复现：[docs/54](docs/54-session-49-matcher-engineering.md)。
+讲义：[docs/54](docs/54-session-49-matcher-engineering.md)；演示窗口：`uv run python -m embodied_learning.matcher_engineering_demo`。
 
-## 第五十课：特征化回环检测——三项判别机制全部无判别力（阴性记录）
+## 第五十课：特征化回环检测——三个判别器全部无判别力（阴性）
 
-排序直方图／环移角剖面／建图一致相关峰三种判别器接入无 oracle 管线：方向正确率 2.6%（基线 4.9%）。长直墙结构指纹同质——单帧/配准/占据三个维度都没有判别信息。
+左图：三种判别机制（排序直方图/环移剖面/建图一致相关峰）的评分分布重叠度——建图一致高达 1.00（估计链自建地图与自身永远一致）；右图：管线级方向正确率 2.6% vs oracle 基线 4.9%。长直墙结构指纹同质，判别信息不在几何维度。
 
-![第五十课演示画面：判别分布](docs/img/lesson-50-separation.png)
-![第五十课演示画面：结论对照](docs/img/lesson-50-verdict.png)
+![第五十课图：左=三判别器重叠度；右=管线正确率对照](docs/img/lesson-50-charts.png)
 
-讲义与复现：[docs/55](docs/55-session-50-feature-loops.md)。
+讲义：[docs/55](docs/55-session-50-feature-loops.md)；演示窗口：`uv run python -m embodied_learning.feature_loops_demo`。
 
-## 第五十一课：SC/MM 可切换约束——λ 可行域为空（阴性记录）
+## 第五十一课：SC/MM 可切换约束——λ 可行域为空（阴性）
 
-第 48 课同款毒化注入下，λ 扫描 17 组：λ≤20 好边被开关杀死、λ≥50 毒化被保留拖拽（两切换带反相重叠）；MM 硬组件选择开链死锁。单开关给不出第二自由度。
+左图：λ 从 0.5 扫到 1000，绿线（好边闭合）与红线（毒化拖拽）此消彼长、两失效带反相重叠——不存在同时满足两线的 λ；右图：各后端末端对比，SC λ=50 与 MM-G 均无法兼顾。单开关不是第二自由度。
 
-![第五十一课演示画面：λ 敏感性曲线](docs/img/lesson-51-curve.png)
-![第五十一课演示画面：两难对决](docs/img/lesson-51-verdict.png)
+![第五十一课图：左=λ 敏感性曲线（绿=治疗线、红=预防线）；右=四后端末端误差](docs/img/lesson-51-charts.png)
 
-讲义与复现：[docs/56](docs/56-session-51-switchable-graph.md)。
+讲义：[docs/56](docs/56-session-51-switchable-graph.md)；演示窗口：`uv run python -m embodied_learning.switchable_demo`。
 
 ## 第五十二课：相对回环边——脆弱性跨边型，连续开关≠分类器
 
-回环边换成匹配器真正输出的相对测量：毒化相对边同样拖坏 LS（5.42 > N 4.84 m）；90°+1 m 注入与真值仅差 ~2 m，开关给出 s=0.61 的"半信半疑"折中而非拒绝。本课无演示窗口（后端对照实验，图表见讲义）。
+换成匹配器真正输出的相对测量后毒化依旧（左图：SC-B/REL-LS-B 均高于 N 基线虚线）；右图：开关终值 s=0.61——"半信半疑地闭一半"，而判据需要的是非黑即白的拒绝。音量旋钮不是法官。
 
-讲义与复现：[docs/57](docs/57-session-52-relative-loops.md)。
+![第五十二课图：左=六后端平均误差（虚线=N 基线）；右=SC 开关终值与拒绝线](docs/img/lesson-52-charts.png)
+
+讲义：[docs/57](docs/57-session-52-relative-loops.md)。本课无演示窗口（后端对照，图表即本节）。
 
 ## 第五十三课：生产求解器对照——失败是问题属性
 
-同一道毒化题交给 scipy least_squares（huber/soft_l1 × 尺度扫描）：生产核同样不拒绝毒化边（6.32 > N 4.86），损失×尺度网格无解。失败是问题的属性，不是实现的产物。本课无演示窗口（同上，求解器对照）。
+同一道毒化题交给 scipy least_squares。左图：huber/soft_l1 × 三档尺度的 6 种组合没有一个把毒化边压回 N+0.5 线内；右图：好边闭合正常（LS-G）而毒化边全线失守。生产实现也救不了——失败是问题的属性。
 
-讲义与复现：[docs/58](docs/58-session-53-production-solver.md)。
+![第五十三课图：左=损失×尺度扫描；右=EST/scipy-LS/scipy-HUB-B 对照](docs/img/lesson-53-charts.png)
+
+讲义：[docs/58](docs/58-session-53-production-solver.md)。本课无演示窗口（同上）。
 
 ## 第五十四课：度量勘误——"方向正确率 5%"是评估伪影
 
-发现并修正第 49/50 课的评估目标错误：旧指标拿 est 位姿差值当对齐目标，烤入了链漂移——内容对齐原理上不可见漂移。修正判据（隐含位姿 vs 真值位姿）后匹配器 58-72% 正确；各向异性环境假设配对证伪（ANISO 0.583 反而低于 ISO 0.722）。
+左图：同一匹配器，旧判据（est 位姿差值目标，烤入链漂移）下 0.00/0.60，修正判据（隐含位姿 vs 真值）下 0.58/0.72——匹配器一直是对的，是目标错了；右图：修正判据下各向异性环境（0.583）反而低于方墙（0.722）——环境假设配对证伪。
 
-![第五十四课演示画面：度量勘误](docs/img/lesson-54-erratum.png)
-![第五十四课演示画面：环境判定](docs/img/lesson-54-verdict.png)
+![第五十四课图：左=旧/新判据对比；右=修正判据下 ISO vs ANISO](docs/img/lesson-54-charts.png)
 
-讲义与复现：[docs/59](docs/59-session-54-aniso-env.md)。
+讲义：[docs/59](docs/59-session-54-aniso-env.md)；演示窗口：`uv run python -m embodied_learning.aniso_env_demo`。
 
 ## 第五十五课：RGB-D 视觉回环——外观检索补上判别（正结果）
 
-全向标记词袋检索 top-12 + 几何验证：精确率 1.0、方向正确率 1.000（无检索基线 0.302）、管线成功、审查量仅 4%。检索层供判别、验证层供精度——行业标准架构在自建仿真上跑通。
+左图：方向正确率从无检索基线的 0.302 提到 top-12 检索后的 1.000；右图：检索迹线——红点（真回环帧）被外观相似度干净地托到顶部，top-12（大点）全为真回环。检索层供判别、验证层供精度，审查量只花 4%。
 
-![第五十五课演示画面：三组对照](docs/img/lesson-55-groups.png)
-![第五十五课演示画面：检索迹线](docs/img/lesson-55-retrieval.png)
+![第五十五课图：左=三组方向正确率；右=检索迹线（红=真回环、大点=top-12）](docs/img/lesson-55-charts.png)
 
-讲义与复现：[docs/60](docs/60-session-55-rgbd-loops.md)。
+讲义：[docs/60](docs/60-session-55-rgbd-loops.md)；演示窗口：`uv run python -m embodied_learning.rgbd_loops_demo`。
 
 ## 第五十六课：建图-定位分离——世界模型把漂移变成有界跟踪
 
-建图（est 位姿栅格+标记图）与定位（400 粒子似然场 PF）分离：末端误差 7.37→2.62 m（2.8×）。直墙沿墙滑移让均值未达 0.6 m 预登记线；绑架重定位 0/5 如实阴性。鸡生蛋量化：自建图命中率 0.23——图质量是定位的上限。
+左图：三条误差曲线——EST（红）随里程累积发散到 7 m+，PF-TRUEMAP（绿）被图钉住、有界振荡（末端 7.37→2.62 m，2.8×），PF-SELFBUILT（灰）居中（自建图被建图时的漂移涂抹）；右图：轨迹三链可见 PF 贴着真值而 EST 漂走。绑架重定位 0/5 如实阴性（稀疏标记图+4 重对称+粒子不足）。
 
-![第五十六课演示画面：误差曲线](docs/img/lesson-56-curves.png)
-![第五十六课演示画面：轨迹三链](docs/img/lesson-56-chains.png)
-![第五十六课演示画面：绑架试验](docs/img/lesson-56-kidnap.png)
+![第五十六课图：左=EST/PF-SELFBUILT/PF-TRUEMAP 误差曲线；右=绑架五时点恢复误差](docs/img/lesson-56-charts.png)
 
-讲义与复现：[docs/61](docs/61-session-56-map-localization.md)。
+讲义：[docs/61](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
 
 ## 进度清单
 
