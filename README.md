@@ -12,7 +12,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 56 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) → occupancy-grid mapping + A* planning + pure pursuit (back to the perception–mapping–planning mainline, 15/15 collision-free vs blind 3/15) → pose-error propagation through the stack (truth 15/15, encoder 1%/2% both 0/15, landmark fusion restores 15/15 at 2.5 cm) → minimal grid SLAM: scan matching is a RELATIVE anchor only (no beacons, 0/15 like pure odometry; absolute anchors are required) → loop closure: the second absolute anchor (patrol end-to-end 9.2 m to 0.14 m; factor-graph shape fixing next) → weighted pose-graph back-end: the shape claim holds (FG mean 5.03 < arc 5.33) with the closure-vs-shape sigma trade-off quantified) → robust pose graphs: a poisoned loop edge is WORSE than no loop (LS 7.63 vs 4.82 m), Huber-IRLS contains it (5.22 m), single-kernel dilemma recorded → loop matcher engineering: the acceptance ladder 0.32→0.43→0.52→0.76 (K) while the ≤5.4% direction-correctness figure used the later-corrected evaluation target (the protocol rebuild exposed four lesson-46 design conditions) → featureized loop detection: three discriminator score distributions overlap; the 2.6% vs 4.9% direction-correctness comparison used the later-corrected evaluation target → switchable constraints / max-mixtures: under the lesson-48 absolute-anchor injection the single-switch λ feasible set is EMPTY (good anchors killed at λ≤20, poisoned anchors dragged at λ≥50) and hard-component max-mixtures deadlock → relative loop edges: fragility persists across the edge type (poisoned relative edge 5.42 > N 4.84 m), but the 90-deg/1-m poison is only ~2 m from truth — the switch compromise s=0.61 half-closes instead of rejecting and annealed MM stays at valid=0: a continuous switch is not a classifier → production-solver comparison: the SAME poisoned relative edge through scipy least_squares (huber/soft_l1 x scale sweep) is likewise NOT rejected (6.32 > N 4.86) and no loss/scale pair clears both bars - the dilemma is the problem's property, not the implementation's; classifiers must come from beyond the measurement layer (lesson 53) → metric erratum + anisotropic-environment control: the lesson-49/50 direction-correctness numbers (~5%/2.6%) were an EVALUATION artifact (the est-pose-delta target bakes in chain drift, which content alignment cannot see; implied-pose-vs-truth is the corrected metric) — corrected, the matcher is 58-72% correct and the anisotropy hypothesis is falsified (docs/59) → RGB-D visual loop closure: omnidirectional marker-bag retrieval + geometric verification reaches precision 1.0, correctness 1.0, pipeline success on 4% of candidates, oracle-free — appearance supplies the discrimination geometry lacks (lesson 55) → mapping-localization separation: the world model improves final error 7.37→2.62 m (2.8×), but its intermediate error peaks at 13.19 m and the pre-registered 0.6 m bar and kidnap relocalization (0/5: sparse marker map + 4-fold-symmetric arena) are honestly missed — the map is only as good as the poses that built it, the SLAM chicken-and-egg made measurable (lesson 56) |
+| **Status** | 56 lessons complete (Sep 2026): PD → LQR → swing-up → planar 2R arm (FK / IK / Jacobian / paths) → differential drive → odometry & calibration → landmark observation & fusion → ROS 2 nodes & TF → goal feedback → pinhole camera & depth-error propagation → monocular relative-depth metric calibration → real Depth-Anything affine check → camera intrinsic calibration → point-cloud ICP registration → MobileSAM landmark grounding → behavior cloning → reward-only PPO (honest negative) → residual RL (honest negative) → PBRS shaping → DAPG demonstrations → Go-Explore → two-phase reward → hand-written numpy SAC (alpha collapse) → DAgger online correction → multi-modal chunked policy (arc-reach) → combo (protective not value-adding) → differential drive pure learning → 2R arm pure learning (cross-task entropy convergence) → occupancy-grid mapping + A* planning + pure pursuit (back to the perception–mapping–planning mainline, 15/15 collision-free vs blind 3/15) → pose-error propagation through the stack (truth 15/15, encoder 1%/2% both 0/15, landmark fusion restores 15/15 at 2.5 cm) → minimal grid SLAM: scan matching is a RELATIVE anchor only (no beacons, 0/15 like pure odometry; absolute anchors are required) → loop closure: the second absolute anchor (patrol end-to-end 9.2 m to 0.14 m; factor-graph shape fixing next) → weighted pose-graph back-end: the shape claim holds (FG mean 5.03 < arc 5.33) with the closure-vs-shape sigma trade-off quantified) → robust pose graphs: a poisoned loop edge is WORSE than no loop (LS 7.63 vs 4.82 m), Huber-IRLS contains it (5.22 m), single-kernel dilemma recorded → loop matcher engineering: the acceptance ladder 0.32→0.43→0.52→0.76 (K) while the ≤5.4% direction-correctness figure used the later-corrected evaluation target (the protocol rebuild exposed four lesson-46 design conditions) → featureized loop detection: three discriminator score distributions overlap; the 2.6% vs 4.9% direction-correctness comparison used the later-corrected evaluation target → switchable constraints / max-mixtures: under the lesson-48 absolute-anchor injection the single-switch λ feasible set is EMPTY (good anchors killed at λ≤20, poisoned anchors dragged at λ≥50) and hard-component max-mixtures deadlock → relative loop edges: fragility persists across the edge type (poisoned relative edge 5.42 > N 4.84 m), but the 90-deg/1-m poison is only ~2 m from truth — the switch compromise s=0.61 half-closes instead of rejecting and annealed MM stays at valid=0: a continuous switch is not a classifier → production-solver comparison: the SAME poisoned relative edge through scipy least_squares (huber/soft_l1 x scale sweep) is likewise NOT rejected (6.32 > N 4.86) and no loss/scale pair clears both bars - the dilemma is the problem's property, not the implementation's; classifiers must come from beyond the measurement layer (lesson 53) → metric erratum + anisotropic-environment control: the lesson-49/50 direction-correctness numbers (~5%/2.6%) were an EVALUATION artifact (the est-pose-delta target bakes in chain drift, which content alignment cannot see; implied-pose-vs-truth is the corrected metric) — corrected, the matcher is 58-72% correct and the anisotropy hypothesis is falsified (docs/59) → RGB-D visual loop closure: omnidirectional marker-bag retrieval + geometric verification reaches precision 1.0, correctness 1.0, pipeline success on 4% of candidates in the original truth-arc-filtered pool; a fully oracle-free rerun is pending — appearance supplies discrimination in this abstract scene (lesson 55) → mapping-localization separation: the world model improves final error 7.37→2.62 m (2.8×), but its intermediate error peaks at 13.19 m and the pre-registered 0.6 m bar and kidnap relocalization (0/5: sparse marker map + 4-fold-symmetric arena) are honestly missed — the map is only as good as the poses that built it, the SLAM chicken-and-egg made measurable (lesson 56) |
 | **Verified** | `uv run pytest -q` → **910 passing** · Ruff clean · per-lesson reproducible reports (`results/`, gitignored) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
@@ -61,11 +61,11 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ## 当前状态（2026-09-11）
 
-- **主线课程 1–56 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞 → 第 44 课：定位误差穿栈——真值位姿 15/15 而复用第 15 课里程计后 0/15（1% 偏差即崩），融合观测后 15/15、误差 2.5 cm 与真值组几乎等价 → 第 45 课：最小栅格 SLAM（帧间扫描匹配，无信标）0/15 与纯里程计同量级——相对锚不能闭环 → 第 46 课：回环闭合（绝对锚第二形态，末端 9.2 m→0.14 m）→ 第 47 课：加权位姿图优化——形状修复成立（FG 均值 5.03 < 弧长 5.33 m）、黄金锚末端 0.016 m、末端精度 vs 全程形状的 σ 权衡入册 → 第 48 课：鲁棒位姿图——毒化回环注入实验（LS 7.63 m 比无回环更糟；Huber 压回 5.22 m；单核两难：好回环在同核下无法闭合，SC/MM 是解法 → 第 49 课：回环匹配器工程化——接受率阶梯 0.32→0.43→0.52→0.76（K）；当时方向正确率 ≤5.4% 使用了第 54 课勘误的旧判据 → 第 50 课：特征化回环检测——三项特征评分分布重叠；2.6% vs oracle 4.9% 为后来勘误的旧判据 → 第 51 课：SC/MM 可切换约束——第 48 课同款绝对锚注入下 λ 可行域为空、MM 硬组件选择死锁，正解需要相对回环边 → 第 52 课：相对回环边下毒化同样毒、开关折中 s=0.61 → 第 53 课：同题交 scipy 生产求解器仍不拒绝——失败是问题属性 → 第 54 课：度量勘误（旧方向正确率是评估目标伪影，修正后匹配器 58-72% 正确）→ 第 55 课：RGB-D 外观检索 + 几何验证（精确率 1.0/正确率 1.0/效率 4%，四判据全达成）→ 第 56 课：建图-定位分离（末端误差 7.37→2.62 m，但途中峰值 13.19 m；绑架重定位与自建图涂抹如实阴性））。
+- **主线课程 1–56 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞 → 第 44 课：定位误差穿栈——真值位姿 15/15 而复用第 15 课里程计后 0/15（1% 偏差即崩），融合观测后 15/15、误差 2.5 cm 与真值组几乎等价 → 第 45 课：最小栅格 SLAM（帧间扫描匹配，无信标）0/15 与纯里程计同量级——相对锚不能闭环 → 第 46 课：回环闭合（绝对锚第二形态，末端 9.2 m→0.14 m）→ 第 47 课：加权位姿图优化——形状修复成立（FG 均值 5.03 < 弧长 5.33 m）、黄金锚末端 0.016 m、末端精度 vs 全程形状的 σ 权衡入册 → 第 48 课：鲁棒位姿图——毒化回环注入实验（LS 7.63 m 比无回环更糟；Huber 压回 5.22 m；单核两难：好回环在同核下无法闭合，SC/MM 是解法 → 第 49 课：回环匹配器工程化——接受率阶梯 0.32→0.43→0.52→0.76（K）；当时方向正确率 ≤5.4% 使用了第 54 课勘误的旧判据 → 第 50 课：特征化回环检测——三项特征评分分布重叠；2.6% vs oracle 4.9% 为后来勘误的旧判据 → 第 51 课：SC/MM 可切换约束——第 48 课同款绝对锚注入下 λ 可行域为空、MM 硬组件选择死锁，正解需要相对回环边 → 第 52 课：相对回环边下毒化同样毒、开关折中 s=0.61 → 第 53 课：同题交 scipy 生产求解器仍不拒绝——失败是问题属性 → 第 54 课：度量勘误（旧方向正确率是评估目标伪影，修正后匹配器 58-72% 正确）→ 第 55 课：RGB-D 外观检索 + 几何验证（原候选池精确率 1.0/正确率 1.0/审查量 4%；严格无真值待复验）→ 第 56 课：建图-定位分离（末端误差 7.37→2.62 m，但途中峰值 13.19 m；绑架重定位与自建图涂抹如实阴性））。
 - **自动验收**：`uv run pytest -q` 全量 **910 项通过**（实测口径；第 43–56 课 17/17/15/15/13/9/16/9/9/10/7/9/8/9 项），Ruff 静态与格式检查通过；旧实验输出目录未改写，新记录见 `results/`（受 Git 忽略，长期保留需另行归档）。
-- **记录体系**：审查报告与 issue/PR 文稿见 [docs/26](docs/26-experiment-review-2026-09-05.md)、[docs/27](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（append-only）；演示真机验收标准见 docs/26 第六节。
+- **记录体系**：审查报告与 issue/PR 文稿见[实验审查报告](docs/26-experiment-review-2026-09-05.md)、[问题与 PR 草稿](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（只追加）；演示真机验收标准见实验审查报告第六节。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
-- **下一步**：[学习路线](docs/01-learning-roadmap.md)上导航/SLAM 主线已闭环（43 建图 → 44 误差传播 → 45-53 无图回环与鲁棒性 → 54 度量勘误 → 55 外观检索 → 56 建图-定位分离）。开放方向：Nav2 AMCL 生产对照（WSL 需装 nav2）、更密图/更强描述子的绑架重定位、动态环境地图维护；或转入课程阶段小结。
+- **下一步**：[学习路线](docs/01-learning-roadmap.md)转入导航集成验证：先把第 55 课的真值弧长排除环换成里程计弧长并新目录重跑，再做跨场景配对定位基准和地图质量消融；在自建图定位有明确改善后，接 Nav2 AMCL 与实际导航对照。第 56 课只证明本轮优质图 PF 终点改善，尚未完成可靠自建图定位。
 
 ## 课程索引
 
@@ -109,10 +109,10 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 36 课 | DAgger 在线纠错 | 教师逐帧标注、w=0 对照证明数据有效只修到达、首达 0→5/60 但 0/60 | Robot Learning（DAgger；Ross 2010 在线聚合） | [讲义](docs/41-session-36-dagger-swingup.md) |
 | 第 37 课 | 多峰块策略（ACT 最小版） | 门控混合专家、确定性均值路径到达 0/3→3/3（历史首次）、成功仍 0/60 | Robot Learning（多峰表示；ACT/扩散基础思想） | [讲义](docs/42-session-37-act-swingup.md) |
 | 第 38 课 | 倒立摆组合学习 | 能量底座+多峰块残差、保护性✓（120/120 到达零出界）增值性✗（0/60 劣化基线） | Robot Learning（Residual RL；Johannink 2019 框架的边界实证） | [讲义](docs/43-session-38-combo-swingup.md) |
-| 第 41 课 | 分阶段最小验证 | 底座已最优、线性修正无改善信号（10 次探索全等 4.76s）、裁决=base_optimal_no_headroom | 方法论（最小验证+过门协议） | [讲义](docs/46-session-41-staged-verification.md) |
-| 第 42 课 | ACT/torch 到达 | Transformer 块策略 683k 参数、0/60 但归因清晰化：信息-精度硬墙 | Robot Learning（Transformer 策略表示） | [讲义](docs/47-session-42-act-torch-reaching.md) |
 | 第 39 课 | 差速小车纯学习 | 手写 SAC、接近学到但到达输给目标熵、悬停画像 | Robot Learning（全驱动 RL；最大熵探索边界） | [讲义](docs/44-session-39-rl-goal-reaching.md) |
 | 第 40 课 | 2R 臂纯学习 | 全驱动红利再证、跨任务目标熵均衡收敛、戳进球但停不住 | Robot Learning（全驱动第二系统对照） | [讲义](docs/45-session-40-rl-arm-reaching.md) |
+| 第 41 课 | 分阶段最小验证 | 底座已最优、线性修正无改善信号（10 次探索全等 4.76s）、裁决=base_optimal_no_headroom | 方法论（最小验证+过门协议） | [讲义](docs/46-session-41-staged-verification.md) |
+| 第 42 课 | ACT/torch 到达 | Transformer 块策略 683k 参数、0/60 但归因清晰化：信息-精度硬墙 | Robot Learning（Transformer 策略表示） | [讲义](docs/47-session-42-act-torch-reaching.md) |
 | 第 43 课 | 占据栅格建图 + A* 规划 + 纯追踪（回主线） | Bresenham log-odds 建图、8 邻域 A*（膨胀=刹车门限一致）、差速适配纯追踪；有障碍 15/15 无碰撞到达 vs 盲飞 3/15 | Algorithm 篇·Robot Navigation（costmap/planner/controller 最小版） | [讲义](docs/48-session-43-grid-nav.md) |
 | 第 44 课 | 定位误差穿栈（位姿不确定下） | 第 43 课栈三组位姿对照：真值 15/15、里程计 1% 0/15（误差 1.22 m）、2% 0/15（2.25 m）、2%+地标融合 15/15（2.5 cm 与真值几乎等价） | Algorithm 篇·Robot Navigation（定位误差传播；SLAM 前置） | [讲义](docs/49-session-44-nav-pose-error.md) |
 | 第 45 课 | 最小栅格 SLAM（帧间扫描匹配） | 无信标扫描匹配闭环：S 与 E 同 0/15（2.47 vs 2.25 m）、匹配器接受率 4.6%：相对锚不能闭环，绝对锚（信标/回环）必要 | Algorithm 篇·Robot Navigation（scan-to-submap；回环前置） | [讲义](docs/50-session-45-scan-slam.md) |
@@ -125,7 +125,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 | 第 52 课 | 相对回环边（SC/MM 真实工作域） | 毒化相对边同样毒（5.42 > N 4.84）；90°+1 m 注入与真值仅差 ~2 m，开关折中 s=0.61 半闭合而非拒绝；MM 退火后 valid 仍 0——连续开关≠分类器 | Algorithm 篇·Robot Navigation（相对边下的鲁棒核语义） | [讲义](docs/57-session-52-relative-loops.md) |
 | 第 53 课 | 生产求解器对照（问题属性判定） | 同题交 scipy least_squares（huber/soft_l1 × 尺度扫描）：生产核同样不拒绝毒化边（6.32 > N 4.86）、网格无解——失败是问题属性，不是实现产物 | Algorithm 篇·Robot Navigation（与生产实现的对照方法论） | [讲义](docs/58-session-53-production-solver.md) |
 | 第 54 课 | 度量勘误 + 各向异性对照 | 49/50 课方向正确率是评估目标伪影（est 位姿差值烤入漂移）；修正判据（隐含位姿 vs 真值）后 ISO 0.722/ANISO 0.583；环境假设证伪 | Algorithm 篇·Robot Navigation（评估目标与信息载体一致性） | [讲义](docs/59-session-54-aniso-env.md) |
-| 第 55 课 | RGB-D 视觉回环（正结果） | 全向标记词袋检索 top-12 + K 几何验证：精确率 1.0、正确率 1.0（基线 0.302）、管线成功、效率 4%——外观补上几何缺的判别 | Algorithm 篇·Robot Navigation（place recognition 正解落地） | [讲义](docs/60-session-55-rgbd-loops.md) |
+| 第 55 课 | 标记外观回环（候选筛选待复验） | 全向标记词袋检索 top-12 + K 几何验证：精确率 1.0、正确率 1.0（基线 0.302）、管线成功、效率 4%——外观补上几何缺的判别 | Algorithm 篇·Robot Navigation（place recognition 抽象验证） | [讲义](docs/60-session-55-rgbd-loops.md) |
 | 第 56 课 | 建图-定位分离（世界模型） | 末端误差 7.37→2.62 m（2.8×），但途中 PF 峰值 13.19 m；绑架重定位 0/5 阴性；鸡生蛋量化：自建图命中率 0.23，图质量=定位上限 | Algorithm 篇·Robot Navigation（AMCL 式定位 + SLAM 鸡生蛋） | [讲义](docs/61-session-56-map-localization.md) |
 
 ## 当前技术路线
@@ -146,7 +146,7 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 每个主题都按以下顺序推进：
 
-每份逐课讲义现在先把**本课新出现的量是什么、它怎样影响下一步动作、实验固定与改变了什么、结果数字究竟支持什么**连成一条推理链，再给出原理推导、完整实验表格、失败条件和复现命令。结果图直接嵌在对应讲义中；读图时先对照推理链，再查后面的原始条件与指标口径。
+每份逐课讲义先把**本课新出现的量是什么、它怎样影响下一步动作、实验固定与改变了什么、结果数字究竟支持什么**连成一条推理链，再给出原理、实验表格、失败条件和复现命令。第 1–56 课均有“理论对应”和“思考题”：先用图表回答每课的问题，再尝试用思考题解释数字、设计下一次单变量对照。
 
 1. 物理直觉与任务定义；
 2. 坐标系、状态、动作与数学模型；
@@ -1435,7 +1435,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第 48 课二维轨迹图：真实运动、LS 好边与 LS 毒化边的位姿](docs/img/lesson-48-trajectory.png)
 
-讲义：[docs/53](docs/53-session-48-robust-graph.md)；演示窗口：`uv run python -m embodied_learning.robust_graph_demo`。
+讲义：[第四十八课讲义](docs/53-session-48-robust-graph.md)；演示窗口：`uv run python -m embodied_learning.robust_graph_demo`。
 
 ## 第四十九课：回环匹配器工程化——接受率提升与旧判据勘误
 
@@ -1443,7 +1443,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第四十九课数据图：上=B/P/R/K 接受率，下=旧判据方向正确率与 80% 判据线；该旧判据在第 54 课勘误](docs/img/lesson-49-charts.png)
 
-讲义：[docs/54](docs/54-session-49-matcher-engineering.md)；演示窗口：`uv run python -m embodied_learning.matcher_engineering_demo`。
+讲义：[第四十九课讲义](docs/54-session-49-matcher-engineering.md)；演示窗口：`uv run python -m embodied_learning.matcher_engineering_demo`。
 
 ## 第五十课：特征化回环检测——评分重叠与旧判据边界
 
@@ -1451,7 +1451,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第五十课数据图：上=三判别器评分重叠度与 0.3 线，下=旧判据方向正确率与 80% 线；旧判据在第 54 课勘误](docs/img/lesson-50-charts.png)
 
-讲义：[docs/55](docs/55-session-50-feature-loops.md)；演示窗口：`uv run python -m embodied_learning.feature_loops_demo`。
+讲义：[第五十课讲义](docs/55-session-50-feature-loops.md)；演示窗口：`uv run python -m embodied_learning.feature_loops_demo`。
 
 ## 第五十一课：SC/MM 可切换约束——λ 可行域为空（阴性）
 
@@ -1459,7 +1459,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第五十一课数据图：上=SC 好边末端误差与毒化边平均误差的 λ 扫描，下=四后端好边末端误差；虚线为对应判据](docs/img/lesson-51-charts.png)
 
-讲义：[docs/56](docs/56-session-51-switchable-graph.md)；演示窗口：`uv run python -m embodied_learning.switchable_demo`。
+讲义：[第五十一课讲义](docs/56-session-51-switchable-graph.md)；演示窗口：`uv run python -m embodied_learning.switchable_demo`。
 
 ## 第五十二课：相对回环边——脆弱性跨边型，连续开关≠分类器
 
@@ -1469,7 +1469,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第 52 课二维轨迹图：同一里程计链的三种相对边后端位姿](docs/img/lesson-52-trajectory.png)
 
-讲义：[docs/57](docs/57-session-52-relative-loops.md)。本课无演示窗口（后端对照，图表即本节）。
+讲义：[第五十二课讲义](docs/57-session-52-relative-loops.md)。本课无演示窗口（后端对照，图表即本节）。
 
 ## 第五十三课：生产求解器对照——失败是问题属性
 
@@ -1479,7 +1479,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第 53 课二维轨迹图：同一里程计链的三种求解器后端位姿](docs/img/lesson-53-trajectory.png)
 
-讲义：[docs/58](docs/58-session-53-production-solver.md)。本课无演示窗口（同上）。
+讲义：[第五十三课讲义](docs/58-session-53-production-solver.md)。本课无演示窗口（同上）。
 
 ## 第五十四课：度量勘误——"方向正确率 5%"是评估伪影
 
@@ -1487,15 +1487,15 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第五十四课数据图：上=ISO 和 ANISO 在旧/新判据下的正确率，下=修正判据下 ISO 与 ANISO 对照；虚线为 80% 目标](docs/img/lesson-54-charts.png)
 
-讲义：[docs/59](docs/59-session-54-aniso-env.md)；演示窗口：`uv run python -m embodied_learning.aniso_env_demo`。
+讲义：[第五十四课讲义](docs/59-session-54-aniso-env.md)；演示窗口：`uv run python -m embodied_learning.aniso_env_demo`。
 
-## 第五十五课：RGB-D 视觉回环——外观检索补上判别（正结果）
+## 第五十五课：标记外观回环——候选筛选需无真值复验
 
-上图：方向正确率从无检索基线的 0.302 提到 top-12 检索后的 1.000；下图：检索迹线中红点是真回环帧，黑圈圈出的点是 top-12 候选，入选点全是真回环。检索层供判别、验证层供精度，审查量只花 4%。
+上图：方向正确率从无检索基线的 0.302 提到 top-12 检索后的 1.000；下图：检索迹线中红点是真回环帧，黑圈圈出的点是 top-12 候选，入选点全是真回环。在原先用真值弧长筛出的候选池内，检索层提供判别、验证层提供精度，审查量约 4%；整条管线的无真值主张仍待重跑。
 
 ![第五十五课数据图：上=三组方向正确率与 80% 目标线，下=红色真回环帧、灰色其他帧及黑圈标出的 top-12 候选](docs/img/lesson-55-charts.png)
 
-讲义：[docs/60](docs/60-session-55-rgbd-loops.md)；演示窗口：`uv run python -m embodied_learning.rgbd_loops_demo`。
+讲义：[第五十五课讲义](docs/60-session-55-rgbd-loops.md)；演示窗口：`uv run python -m embodied_learning.rgbd_loops_demo`。
 
 ## 第五十六课：建图-定位分离——末端改善，途中仍有大偏差
 
@@ -1505,7 +1505,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第 56 课二维轨迹图：同一巡游的真实运动、EST 和 PF 真值图二维位姿](docs/img/lesson-56-trajectory.png)
 
-讲义：[docs/61](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
+讲义：[第五十六课讲义](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
 
 ## 进度清单
 

@@ -380,3 +380,18 @@ PF-SELFBUILT 均值 7.38 > PF-TRUEMAP 5.08。
 （端点涂色把粒子种进墙里）；绑架用跨流模型（刚性平移剩余路径必撞墙）。
 证据：results/map_localization_2026-09-09/；docs/61。
 下一步： richer maps/更强描述子的绑架重定位；Nav2 AMCL 生产对照；阶段小结。
+
+
+**D-2026-09-23-01｜第 55/56 课｜评估口径复核与下一阶段过门**
+触发：第 55 课 `rgbd_loops.py` 用 `stream["truth"]` 累计弧长，再以 15 m
+排除环筛选 `probes`。这会改变 top-k 的候选池；旧报告中的
+`retrieval.oracle_free=true` 和 `truth_uses=仅评估` 不准确。原场景内
+top-12 的 12/12 与 12/289 仍是旧候选池的真实统计，但无真值管线主张待重测。
+第 56 课优质图 PF 末端 7.367→2.624 m，平均 5.931→5.084 m，途中峰值
+13.19 m（高于无图链 10.95 m），五次绑架恢复 0/5；旧条目“有界跟踪”
+因此撤回，保留“本轮终点改善”。自建图平均 7.380 m、地图命中率 0.234。
+变更：先以可观测的里程计弧长重跑第 55 课到新目录，再做跨场景配对定位基准；
+按地图质量、定位器与绑架重定位分别过门，随后才接 Nav2 AMCL 和图像感知。
+证据：`src/embodied_learning/experiments/rgbd_loops.py` 候选筛选代码；
+`results/rgbd_loops_2026-09-09/summary.json`、
+`results/map_localization_2026-09-09/summary.json`、第 55/56 课讲义。
