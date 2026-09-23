@@ -211,7 +211,7 @@ def recompute_errors(light_stream):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
+def test_seed_determinism(light_stream, tmp_path):
     from embodied_learning.experiments.grid_nav import GridNavConfig
     from embodied_learning.experiments.map_localization import MapLocConfig, run_experiment
 
@@ -219,7 +219,7 @@ def test_seed_determinism(tmp_path):
         base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
         pf_particles=100,
     )
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
+    _out, first = light_stream
     second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1

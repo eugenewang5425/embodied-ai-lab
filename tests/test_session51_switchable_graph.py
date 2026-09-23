@@ -9,8 +9,6 @@ import pytest
 
 from embodied_learning.experiments.grid_nav import GridNavConfig
 
-LIGHT_GRID = GridNavConfig(obstacle_scenes=1, inits=1, rays=64, max_range_m=4.0)
-
 
 def cfg(switch_lambda=1.0):
     from embodied_learning.experiments.switchable_graph import SwitchableConfig
@@ -92,14 +90,24 @@ def test_groups_declare_split():
 
 
 # ------------------------------------------------------------- records
+def light_config():
+    from embodied_learning.experiments.loop_closures import LoopConfig
+    from embodied_learning.experiments.pose_graph import PoseGraphConfig
+    from embodied_learning.experiments.switchable_graph import SwitchableConfig
+
+    base = GridNavConfig(rays=24, max_range_m=4.0, obstacle_scenes=1, inits=1)
+    return SwitchableConfig(
+        base=PoseGraphConfig(base=LoopConfig(base=base), gn_iterations=3),
+        gn_iterations=3,
+    )
+
+
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
     """One light full-record run (reduced protocol size)."""
-    from embodied_learning.experiments.loop_closures import LoopConfig
-    from embodied_learning.experiments.pose_graph import PoseGraphConfig
-    from embodied_learning.experiments.switchable_graph import SwitchableConfig, run_experiment
+    from embodied_learning.experiments.switchable_graph import run_experiment
 
-    conf = SwitchableConfig(base=PoseGraphConfig(base=LoopConfig(base=LIGHT_GRID)))
+    conf = light_config()
     out = tmp_path_factory.mktemp("sw51") / "run"
     report = run_experiment(out, seed=0, config=conf, log=None)
     return out, report
@@ -119,6 +127,8 @@ def test_light_run_contract(light_stream):
     ):
         assert key in r["results"]
     assert report["protocol"]["switch"]["kind"].startswith("switchable")
+    assert r["results"]["collector_met"] is True
+    assert len(r["results"]["lambda_curve"]) == 6
     assert (out / "trajectories.npz").exists()
     assert (out / "summary.json").exists()
 
@@ -150,13 +160,11 @@ def signal_recheck(light_stream):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
-    from embodied_learning.experiments.loop_closures import LoopConfig
-    from embodied_learning.experiments.pose_graph import PoseGraphConfig
-    from embodied_learning.experiments.switchable_graph import SwitchableConfig, run_experiment
+def test_seed_determinism(light_stream, tmp_path):
+    from embodied_learning.experiments.switchable_graph import run_experiment
 
-    conf = SwitchableConfig(base=PoseGraphConfig(base=LoopConfig(base=LIGHT_GRID)))
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
+    conf = light_config()
+    _out, first = light_stream
     second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1

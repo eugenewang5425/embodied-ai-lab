@@ -14,8 +14,10 @@ import hashlib
 import json
 import math
 import os
+import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 os.environ.setdefault("MPLBACKEND", "Agg")
 
@@ -55,6 +57,18 @@ def light_stream():
     scenes = build_scenarios(config.base.config, 0)
     start = initial_poses(config.base.config, 0, 1)[0]
     return collect_patrol(scenes[1]["obstacles"], start, config.base)
+
+
+@pytest.fixture(scope="module")
+def light_record(tmp_path_factory):
+    from embodied_learning.experiments.pose_graph import run_experiment
+
+    shared = os.environ.get("EMBODIED_TK_SHARED_RECORD")
+    if shared:
+        out = Path(shared)
+        return out, json.loads((out / "summary.json").read_text(encoding="utf-8"))
+    out = tmp_path_factory.mktemp("pose47") / "run"
+    return out, run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
 
 
 # ------------------------------------------------------------------ primitives
@@ -179,10 +193,10 @@ def test_hypothesis_keys():
 
 
 @pytest.mark.slow
-def test_micro_run_deterministic(tmp_path):
+def test_micro_run_deterministic(light_record, tmp_path):
     from embodied_learning.experiments.pose_graph import run_experiment
 
-    first = run_experiment(tmp_path / "one", seed=0, config=LIGHT_CONFIG, log=None)
+    _out, first = light_record
     second = run_experiment(tmp_path / "two", seed=0, config=LIGHT_CONFIG, log=None)
     assert first["trajectories_sha256"] == second["trajectories_sha256"]
     assert json.dumps(first["aggregates"], sort_keys=True) == json.dumps(
@@ -191,11 +205,10 @@ def test_micro_run_deterministic(tmp_path):
 
 
 @pytest.mark.slow
-def test_small_run_record_contract(tmp_path):
+def test_small_run_record_contract(light_record):
     from embodied_learning.experiments.pose_graph import run_experiment
 
-    out = tmp_path / "run"
-    report = run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+    out, report = light_record
     assert report["experiment"] == EXPERIMENT
     assert report["hypothesis"]["results"]["collector_met"] is True
     assert (
@@ -239,11 +252,10 @@ def test_cli_subprocess_end_to_end(tmp_path):
 
 
 @pytest.mark.slow
-def test_demo_loader_rejects_tampering(tmp_path):
-    from embodied_learning.experiments.pose_graph import run_experiment
-
+def test_demo_loader_rejects_tampering(light_record, tmp_path):
+    source, _report = light_record
     out = tmp_path / "run"
-    run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+    shutil.copytree(source, out)
     data = load_replays(out)
     assert data["report"]["experiment"] == EXPERIMENT
     # tamper: flip a number in the summary (the loader must reject)
@@ -259,14 +271,12 @@ def test_demo_loader_rejects_tampering(tmp_path):
 
 
 @pytest.mark.isolated_tk
-def test_tk_demo_modes_and_panel(tmp_path):
+def test_tk_demo_modes_and_panel(light_record):
     import tkinter as tk
 
-    from embodied_learning.experiments.pose_graph import run_experiment
     from embodied_learning.pose_graph_demo import PoseGraphDemo
 
-    out = tmp_path / "run"
-    report = run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+    out, report = light_record
     data = load_replays(out)
     root = tk.Tk()
     root.withdraw()

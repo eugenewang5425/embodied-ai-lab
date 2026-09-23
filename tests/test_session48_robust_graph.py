@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -51,6 +52,14 @@ def light_stream():
     scenes = build_scenarios(LIGHT_CONFIG.base.base.config, 0)
     start = initial_poses(LIGHT_CONFIG.base.base.config, 0, 1)[0]
     return collect_patrol(scenes[1]["obstacles"], start, LIGHT_CONFIG.base.base)
+
+
+@pytest.fixture(scope="module")
+def light_record(tmp_path_factory):
+    from embodied_learning.experiments.robust_graph import run_experiment
+
+    out = tmp_path_factory.mktemp("robust48") / "run"
+    return out, run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
 
 
 def _chain_nodes():
@@ -129,11 +138,8 @@ def test_build_groups_contract(light_stream):
 
 
 @pytest.mark.slow
-def test_small_run_record_contract(tmp_path):
-    from embodied_learning.experiments.robust_graph import run_experiment
-
-    out = tmp_path / "run"
-    report = run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+def test_small_run_record_contract(light_record):
+    out, report = light_record
     assert report["experiment"] == EXPERIMENT
     assert report["hypothesis"]["results"]["collector_met"] is True
     assert report["hypothesis"]["results"]["fragility_met"] is True
@@ -151,11 +157,8 @@ def test_small_run_record_contract(tmp_path):
 
 
 @pytest.mark.slow
-def test_hypothesis_keys(tmp_path):
-    from embodied_learning.experiments.robust_graph import run_experiment
-
-    out = tmp_path / "run"
-    report = run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+def test_hypothesis_keys(light_record):
+    _out, report = light_record
     h = report["hypothesis"]["results"]
     for key in ("collector_met", "fragility_met", "cure_met", "dilemma_recorded"):
         assert isinstance(h[key], bool)
@@ -192,11 +195,10 @@ def test_cli_subprocess_end_to_end(tmp_path):
 
 
 @pytest.mark.slow
-def test_demo_loader_crosscheck(tmp_path):
-    from embodied_learning.experiments.robust_graph import run_experiment
-
+def test_demo_loader_crosscheck(light_record, tmp_path):
+    source, _report = light_record
     out = tmp_path / "run"
-    run_experiment(out, seed=0, config=LIGHT_CONFIG, log=None)
+    shutil.copytree(source, out)
     data = load_replays(out)
     assert data["report"]["experiment"] == EXPERIMENT
     # tamper: swap the fragility order in the summary

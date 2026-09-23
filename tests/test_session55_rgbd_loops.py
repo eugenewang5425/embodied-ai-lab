@@ -169,11 +169,11 @@ def recompute_precision(light_stream):
     assert abs(recomputed - data["hypothesis"]["results"]["precision_topk"]) < 1e-9
 
 
-def test_seed_determinism(tmp_path):
+def test_seed_determinism(light_stream, tmp_path):
     from embodied_learning.experiments.rgbd_loops import run_experiment
 
     conf = light_config()
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
+    _out, first = light_stream
     second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1

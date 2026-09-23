@@ -99,21 +99,28 @@ def test_coarse_search_recovers_known_shift_on_corner_map():
 
 
 # ------------------------------------------------------------- records
+def light_config():
+    from embodied_learning.experiments.feature_loops import FeatureLoopConfig
+    from embodied_learning.experiments.grid_nav import GridNavConfig
+
+    return FeatureLoopConfig(
+        base=GridNavConfig(rays=24, max_range_m=4.0, obstacle_scenes=1, inits=1),
+        probe_stride=200,
+        search_x_m=4.0,
+        search_step_m=1.0,
+        search_theta_deg=20.0,
+        search_step_deg=10.0,
+        refine_submap_frames=20,
+    )
+
+
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
     """One light full-record run (single scene, sparse probes)."""
-    from embodied_learning.experiments.feature_loops import (
-        FeatureLoopConfig,
-        run_experiment,
-    )
-    from embodied_learning.experiments.grid_nav import GridNavConfig
+    from embodied_learning.experiments.feature_loops import run_experiment
 
-    conf = FeatureLoopConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        probe_stride=200,
-    )
     out = tmp_path_factory.mktemp("feat50") / "run"
-    report = run_experiment(out, seed=0, config=conf, log=None)
+    report = run_experiment(out, seed=0, config=light_config(), log=None)
     return out, report
 
 
@@ -133,6 +140,9 @@ def test_light_run_contract(light_stream):
     ):
         assert key in res
     assert 0.0 <= res["direction_correctness"] <= 1.0
+    assert res["detections"] > 0
+    assert res["accepted"] > 0
+    assert res["correct"] > 0
     assert report["protocol"]["detection"]["oracle_free"] is True
     assert (out / "trajectories.npz").exists()
     assert (out / "summary.json").exists()
@@ -165,19 +175,11 @@ def compute_verdict(light_stream):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
-    from embodied_learning.experiments.feature_loops import (
-        FeatureLoopConfig,
-        run_experiment,
-    )
-    from embodied_learning.experiments.grid_nav import GridNavConfig
+def test_seed_determinism(light_stream, tmp_path):
+    from embodied_learning.experiments.feature_loops import run_experiment
 
-    conf = FeatureLoopConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        probe_stride=100,
-    )
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
-    second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
+    _out, first = light_stream
+    second = run_experiment(tmp_path / "b", seed=0, config=light_config(), log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1
     )

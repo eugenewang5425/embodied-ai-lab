@@ -13,7 +13,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 | | |
 |---|---|
 | **Status** | 56 课教学实验已完成；第 55 课用里程计弧长重跑模拟标记检索（top-12 真回环 12/12、几何方向正确 11/12）；第 56 课修正采集路线后，理想图 PF 在本轮平均误差 0.322 m，自建图 PF 3.443 m；理想图绑架恢复 4/5。跨场景导航基准试跑未过门，见 [基准报告](docs/62-navigation-benchmark.md)。 |
-| **Verified** | 745 fast tests passed; 44 selected full tests passed (lessons 43/55/56 + navigation benchmark); Ruff clean · full-repository slow suite was interrupted, not counted as passed |
+| **Verified** | 745 quick tests passed in 79 s; 37 selected record tests and 1 GUI test passed; Ruff clean. The full-repository slow suite has not passed as a whole. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -41,14 +41,17 @@ Full per-lesson demo & reproduction commands are in the Chinese sections below.
 
 ### 测试流程
 
-改动某课后，先运行相关文件的快速测试，再运行全仓快速测试。`quick` 会排除真实窗口、完整记录重放和其他标为 `slow` 的用例，并在首个失败处停下。推送前对改动相关课运行 `full`（带测试文件参数，包含这些课的慢速用例）；改动共用规划器等基础模块或做阶段验收时，再跑全仓 `full`。若全量失败，可用 `slow` 单独定位慢速层。统一入口给 Windows 子进程设置 UTF-8，并报告每层耗时及最慢的 10 项，避免本地代码页造成假失败。
+改动某课后，先运行该课的快速测试，再运行全仓快速测试；按改动范围选该课的慢层。`quick` 排除真实窗口、完整记录重放和训练重放，并在首个失败处停下。`record` 包含实验记录、CLI 和其他非训练慢测；`gui` 测隔离窗口；`training` 测第 28–42 课训练回放。三类互不重叠，`slow` 是合集。需要一次运行某课所有测试时用带文件参数的 `full`；改动共用基础模块或做阶段验收时，再跑全仓 `full`。统一入口给 Windows 子进程设置 UTF-8，并报告总耗时及最慢的 10 项。
 
 ```powershell
 uv run python scripts/test.py quick tests/test_session55_rgbd_loops.py tests/test_session56_map_localization.py tests/test_navigation_benchmark.py
 uv run python scripts/test.py quick
-uv run python scripts/test.py full tests/test_session43_grid_nav.py tests/test_session55_rgbd_loops.py tests/test_session56_map_localization.py tests/test_navigation_benchmark.py
-uv run python scripts/test.py full          # 共用基础模块变更或阶段验收时
-uv run python scripts/test.py slow          # 只在定位慢速失败时单独运行
+uv run python scripts/test.py record tests/test_session55_rgbd_loops.py tests/test_session56_map_localization.py
+uv run python scripts/test.py gui tests/test_session47_pose_graph.py
+uv run python scripts/test.py training tests/test_session40_rl_arm_reaching.py
+uv run python scripts/test.py full tests/test_session55_rgbd_loops.py  # 单课所有测试
+uv run python scripts/test.py full          # 共用基础模块变更或阶段验收
+uv run python scripts/test.py slow          # 三类慢测合集
 uv run ruff check src tests scripts docs/img/make_readme_figures.py
 ```
 

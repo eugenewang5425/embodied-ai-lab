@@ -114,22 +114,29 @@ def test_mm_relative_good_uses_valid_component():
 
 
 # ------------------------------------------------------------- records
-@pytest.fixture(scope="module")
-def light_stream(tmp_path_factory):
+def light_config():
     from embodied_learning.experiments.grid_nav import GridNavConfig
     from embodied_learning.experiments.loop_closures import LoopConfig
     from embodied_learning.experiments.pose_graph import PoseGraphConfig
-    from embodied_learning.experiments.relative_loop_edges import RelativeConfig, run_experiment
+    from embodied_learning.experiments.relative_loop_edges import RelativeConfig
 
-    conf = RelativeConfig(
+    return RelativeConfig(
         base=PoseGraphConfig(
             base=LoopConfig(
-                base=GridNavConfig(obstacle_scenes=1, inits=1, rays=64, max_range_m=4.0)
-            )
-        )
+                base=GridNavConfig(obstacle_scenes=1, inits=1, rays=24, max_range_m=4.0)
+            ),
+            gn_iterations=3,
+        ),
+        gn_iterations=3,
     )
+
+
+@pytest.fixture(scope="module")
+def light_stream(tmp_path_factory):
+    from embodied_learning.experiments.relative_loop_edges import run_experiment
+
     out = tmp_path_factory.mktemp("rel52") / "run"
-    report = run_experiment(out, seed=0, config=conf, log=None)
+    report = run_experiment(out, seed=0, config=light_config(), log=None)
     return out, report
 
 
@@ -140,6 +147,10 @@ def test_light_run_contract(light_stream):
     r = report["hypothesis"]["results"]
     for key in ("collector_met", "fragility_met", "treatment_met", "prevention_met", "mm_met"):
         assert key in r
+    assert r["collector_met"] is True
+    assert {"N", "REL-LS-G", "REL-LS-B", "SC-G", "SC-B", "MM-G", "MM-B"} <= set(
+        report["aggregates"]
+    )
     assert report["protocol"]["loop_edge"]["kind"].startswith("relative")
     assert (out / "trajectories.npz").exists()
     assert (out / "summary.json").exists()
@@ -175,21 +186,11 @@ def recompute_prevention(light_stream):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
-    from embodied_learning.experiments.grid_nav import GridNavConfig
-    from embodied_learning.experiments.loop_closures import LoopConfig
-    from embodied_learning.experiments.pose_graph import PoseGraphConfig
-    from embodied_learning.experiments.relative_loop_edges import RelativeConfig, run_experiment
+def test_seed_determinism(light_stream, tmp_path):
+    from embodied_learning.experiments.relative_loop_edges import run_experiment
 
-    conf = RelativeConfig(
-        base=PoseGraphConfig(
-            base=LoopConfig(
-                base=GridNavConfig(obstacle_scenes=1, inits=1, rays=64, max_range_m=4.0)
-            )
-        )
-    )
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
-    second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
+    _out, first = light_stream
+    second = run_experiment(tmp_path / "b", seed=0, config=light_config(), log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1
     )

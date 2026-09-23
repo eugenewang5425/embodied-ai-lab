@@ -6,11 +6,12 @@ import conftest
 import pytest
 
 
-def item(tmp_path):
+def item(tmp_path, funcargs=None):
     return SimpleNamespace(
         nodeid="tests/test_example.py::test_window",
         config=SimpleNamespace(rootpath=tmp_path),
         get_closest_marker=lambda _: True,
+        funcargs={} if funcargs is None else funcargs,
     )
 
 
@@ -38,3 +39,19 @@ def test_child_runs_original_test_without_recursion(monkeypatch, tmp_path):
     test = item(tmp_path)
     monkeypatch.setenv("EMBODIED_TK_TEST_NODE", test.nodeid)
     assert conftest.pytest_pyfunc_call(test) is None
+
+
+def test_child_reuses_parent_record(monkeypatch, tmp_path):
+    monkeypatch.delenv("EMBODIED_TK_TEST_NODE", raising=False)
+    calls = []
+
+    def run(command, **kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.setattr(conftest.subprocess, "run", run)
+    shared_record = tmp_path / "record"
+    assert (
+        conftest.pytest_pyfunc_call(item(tmp_path, {"light_record": (shared_record, {})})) is True
+    )
+    assert calls[0]["env"]["EMBODIED_TK_SHARED_RECORD"] == str(shared_record)

@@ -1,6 +1,6 @@
 """Run the project's pytest tiers with consistent child-process encoding.
 
-Usage: uv run python scripts/test.py [quick|slow|full] [test selectors ...]
+Usage: uv run python scripts/test.py [quick|record|gui|training|slow|full] [test selectors ...]
 """
 
 import argparse
@@ -12,13 +12,18 @@ import time
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("tier", choices=("quick", "slow", "full"), nargs="?", default="quick")
+    parser.add_argument(
+        "tier",
+        choices=("quick", "record", "gui", "training", "slow", "full"),
+        nargs="?",
+        default="quick",
+    )
     parser.add_argument("selectors", nargs="*", help="Optional test files or pytest node IDs")
     args = parser.parse_args()
 
     command = [sys.executable, "-m", "pytest", "-q", "--durations=10", *args.selectors]
     if args.tier != "full":
-        command.extend(("-x", "-m", "slow" if args.tier == "slow" else "not slow"))
+        command.extend(("-x", "-m", "not slow" if args.tier == "quick" else args.tier))
 
     # Several CLI tests decode captured output as UTF-8. Windows otherwise
     # lets the child choose its local code page, yielding false failures.

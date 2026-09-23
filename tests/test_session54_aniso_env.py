@@ -89,14 +89,19 @@ def test_is_correct_implied_thresholds():
 
 
 # ------------------------------------------------------------- records
-@pytest.fixture(scope="module")
-def light_stream(tmp_path_factory):
-    from embodied_learning.experiments.aniso_env import AnisoConfig, run_experiment
+def light_config():
+    from embodied_learning.experiments.aniso_env import AnisoConfig
     from embodied_learning.experiments.grid_nav import GridNavConfig
 
-    conf = AnisoConfig(base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1))
+    return AnisoConfig(base=GridNavConfig(rays=32, max_range_m=4.0, obstacle_scenes=1, inits=1))
+
+
+@pytest.fixture(scope="module")
+def light_stream(tmp_path_factory):
+    from embodied_learning.experiments.aniso_env import run_experiment
+
     out = tmp_path_factory.mktemp("aniso54") / "run"
-    report = run_experiment(out, seed=0, config=conf, log=None)
+    report = run_experiment(out, seed=0, config=light_config(), log=None)
     return out, report
 
 
@@ -109,6 +114,8 @@ def test_light_run_contract(light_stream):
         assert key in r
     # both arms must have completed the patrol (world validity gate)
     assert r["collector_met"]
+    assert r["n_candidates"]["ISO"] > 0
+    assert r["n_candidates"]["ANISO"] > 0
     assert 0.0 <= r["iso_corrected"] <= 1.0
     assert 0.0 <= r["aniso_corrected"] <= 1.0
     assert (out / "summary.json").exists()
@@ -143,12 +150,11 @@ def recompute_iso(light_stream):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
-    from embodied_learning.experiments.aniso_env import AnisoConfig, run_experiment
-    from embodied_learning.experiments.grid_nav import GridNavConfig
+def test_seed_determinism(light_stream, tmp_path):
+    from embodied_learning.experiments.aniso_env import run_experiment
 
-    conf = AnisoConfig(base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1))
-    first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
+    conf = light_config()
+    _out, first = light_stream
     second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
     pop = lambda r: json.dumps(
         {k: v for k, v in r.items() if k != "wall_time_s"}, sort_keys=True, indent=1

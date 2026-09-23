@@ -282,21 +282,23 @@ def test_correctness_uses_rotate_then_translate_convention():
 
 
 # ------------------------------------------------------------- records
+def light_config():
+    from embodied_learning.experiments.grid_nav import GridNavConfig
+    from embodied_learning.experiments.matcher_engineering import MatcherConfig
+
+    return MatcherConfig(
+        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
+        candidate_max=4,
+    )
+
+
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
     """One light full-record run (single scene, capped candidates)."""
-    from embodied_learning.experiments.grid_nav import GridNavConfig
-    from embodied_learning.experiments.matcher_engineering import (
-        MatcherConfig,
-        run_experiment,
-    )
+    from embodied_learning.experiments.matcher_engineering import run_experiment
 
-    cfg = MatcherConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        candidate_max=6,
-    )
     out = tmp_path_factory.mktemp("matcher49") / "run"
-    report = run_experiment(out, seed=0, config=cfg, log=None)
+    report = run_experiment(out, seed=0, config=light_config(), log=None)
     return out, report
 
 
@@ -368,20 +370,12 @@ def load_replays(directory):
 
 
 @pytest.mark.slow
-def test_seed_determinism(tmp_path):
+def test_seed_determinism(light_stream, tmp_path):
     """Two light runs on the same seed replicate the summary bitwise."""
-    from embodied_learning.experiments.grid_nav import GridNavConfig
-    from embodied_learning.experiments.matcher_engineering import (
-        MatcherConfig,
-        run_experiment,
-    )
+    from embodied_learning.experiments.matcher_engineering import run_experiment
 
-    cfg = MatcherConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        candidate_max=4,
-    )
-    first = run_experiment(tmp_path / "a", seed=0, config=cfg, log=None)
-    second = run_experiment(tmp_path / "b", seed=0, config=cfg, log=None)
+    _out, first = light_stream
+    second = run_experiment(tmp_path / "b", seed=0, config=light_config(), log=None)
     pop = lambda report: json.dumps(
         {k: v for k, v in report.items() if k != "wall_time_s"},
         sort_keys=True,
