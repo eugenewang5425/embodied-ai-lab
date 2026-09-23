@@ -1,39 +1,10 @@
-"""Lesson 56: mapping-localization separation - the world model lesson.
+"""Lesson 56: truth-controlled 2D mapping and localization replay.
 
-The stack now has every component of a spatial world model, built across
-separate lessons: occupancy-grid mapping (43), appearance place indexing
-(55), loop closure (46-52), robust back-ends (48/51-53).  This lesson
-JOINS them into the production architecture - mapping and localization as
-separate phases - and measures what a world model buys over the mapless
-loop chains of lessons 49-55:
-
-  phase 1 (mapping):   one truth-controlled patrol; the robot builds an
-                       occupancy grid from its own estimated poses (the
-                       lesson-43 machine) plus a MARKER MAP (coarse-cell
-                       marker histograms - the lesson-55 appearance layer,
-                       painted at estimated poses);
-  phase 2 (localize):  a second patrol (fresh noise instance) is localized
-                       by a bootstrap particle filter (AMCL-style) against
-                       the BUILT map: odometry propagation + grid ray-cast
-                       measurement + ESS resampling;
-  kidnap trials:       five trials teleport the robot mid-patrol; the
-                       filter re-seeds from the marker map (appearance
-                       global search) when the effective sample size
-                       collapses, and must recover to the NEW truth.
-
-Groups / curves:
-  EST     the drifting dead-reckoning chain (no map) - the mapless reference;
-  PF      the particle-filter chain against the self-built map.
-
-Pre-registered claims (all vs the teleported truth):
-  (1) collector gates: both patrols complete 2 laps;
-  (2) BOUNDED ERROR: PF mean error <= 20% of EST mean error AND PF final
-      error <= 0.6 m (a world model turns accumulating drift into
-      bounded tracking error);
-  (3) KIDNAP: >= 4/5 trials relocalized (<= 1.0 m and <= 25 deg at the
-      end of the recovery window; heading converges at the next corner) - the world model is recoverable;
-  (4) honest: reseed trigger rate and map-vs-truth agreement recorded
-      without claims.
+The first patrol maps physical scans using estimated poses. The second patrol
+compares odometry with particle filters against a self-built map, a same-scan
+truth-pose projection, and ideal occupancy. Kidnap trials score the state at
+each recovery-window end. The patrol controller reads truth, so this module
+does not implement autonomous navigation or production SLAM.
 """
 
 from __future__ import annotations
@@ -49,11 +20,12 @@ from pathlib import Path
 
 import numpy as np
 
-from embodied_learning.experiments.aniso_env import _build_world, patrol_start
+from embodied_learning.experiments.aniso_env import PATROL_INSET, _build_world, patrol_start
 from embodied_learning.experiments.grid_nav import (
     DT,
     GEOMETRY,
     GridNavConfig,
+    build_walls,
 )
 from embodied_learning.experiments.grid_nav import (
     cast_rays as cast_rays_world,
@@ -68,12 +40,12 @@ from embodied_learning.experiments.rgbd_loops import (
     MARKER_DROPOUT,
     MARKER_PALETTE,
     build_appearance_world,
-    cast_rays_ids,
+    rgbd_frame,
 )
 
 EXPERIMENT = "map_localization_lesson56"
-SCHEMA_VERSION = 1
-DEFAULT_RESULTS = "results/map_localization_2026-09-09"
+SCHEMA_VERSION = 5
+DEFAULT_RESULTS = "results/map_localization_2026-09-24_v5"
 MARKER_CELL_M = 0.5
 PF_PARTICLES = 400
 PF_RAYS = 32
@@ -103,6 +75,8 @@ class MapLocConfig:
     pf_particles: int = PF_PARTICLES
     pf_rays: int = PF_RAYS
     kidnap_fraction: float = 0.0  # >0 runs a single kidnap at this fraction
+    arm: str = "ISO"
+    run_kidnap: bool = True
     seed: int = 0
 
     def __post_init__(self):
@@ -129,6 +103,10 @@ class MapLocConfig:
             raise ValueError("pf_rays out of range")
         if not (0.0 <= self.kidnap_fraction < 1.0):
             raise ValueError("kidnap_fraction out of range")
+        if self.arm not in ("ISO", "ANISO"):
+            raise ValueError("arm must be ISO or ANISO")
+        if type(self.run_kidnap) is not bool:
+            raise ValueError("run_kidnap must be bool")
         if type(self.seed) is not int or self.seed < 0:
             raise ValueError("seed must be a non-negative integer")
 
@@ -145,54 +123,88 @@ def wrap_arr(a):
     return np.arctan2(np.sin(a), np.cos(a))
 
 
+def measured_body_velocity(delta_wheels_rad, encoder_bias):
+    """Convert biased wheel-angle increments to body-frame rates for one step."""
+    biased = np.asarray(delta_wheels_rad) * np.array([1.0, 1.0 + encoder_bias])
+    distance_step, angle_step = GEOMETRY.body_velocity(biased)
+    return distance_step / DT, angle_step / DT
+
+
 # ---------------------------------------------------------- appearance map
-def first_lap_frames(stream, lap_len_m=32.2):
-    """Frame indexes of the FIRST lap only (arc <= one lap): the mapping
-    quality is bounded by the drift at map time, so map early (the recorded
-    hit-rate 0.29 smear when mapping the whole 2-lap patrol)."""
-    truth = stream["truth"]
-    arc = np.concatenate(([0.0], np.cumsum(np.linalg.norm(np.diff(truth[:, :2], axis=0), axis=1))))
-    return [k for k in range(len(truth) - 1) if arc[k] <= lap_len_m]
-
-
-def marker_map_from_stream(stream, primitives, ids, cfg, world_seed):
-    """Paint coarse-cell marker histograms from the MAPPING patrol.
-
-    Rays are cast from the EST poses (the robot does not know truth); the
-    marker map therefore inherits the small start-phase drift - honest.
-    """
-    from embodied_learning.experiments.rgbd_loops import CAM_MAX_RANGE_M
-
-    rng = np.random.default_rng([world_seed, 56001])
-    n_m = round(cfg.base.world_size_m / MARKER_CELL_M)
-    marker_map = np.zeros((n_m, n_m, MARKER_PALETTE))
-    est = [stream["truth"][0]]
-    for k in range(len(stream["wheels"])):
-        est.append(estimate_step_slam(est[-1], stream["wheels"][k], cfg.matcher.slam.encoder_bias))
-    est = np.asarray(est)
-    lap_frames = set(first_lap_frames(stream))
-    for k in range(0, len(est) - 1, 2):
-        if k not in lap_frames:
-            continue
-        pose = est[k]
-        offsets = np.linspace(-math.pi, math.pi, 120, endpoint=False)
-        angles = pose[2] + offsets
-        _ranges, hit, idx = cast_rays_ids(
-            pose[0], pose[1], angles, primitives, ids, CAM_MAX_RANGE_M
+def first_lap_frames(estimated, lap_len_m=None):
+    """Select approximately one lap using odometry arc and patrol geometry."""
+    if lap_len_m is None:
+        waypoints = np.asarray(PATROL_INSET, dtype=float)
+        lap_len_m = (
+            float(
+                np.linalg.norm(np.diff(np.vstack((waypoints, waypoints[0])), axis=0), axis=1).sum()
+            )
+            + 0.2
         )
-        # paint at the OBSERVATION POSE (not the ray endpoint): the reseed
-        # index must answer "what would I see if I stood here" - endpoint
-        # painting seeds particles inside walls (the recorded bug)
+    arc = np.concatenate(
+        ([0.0], np.cumsum(np.linalg.norm(np.diff(estimated[:, :2], axis=0), axis=1)))
+    )
+    return [k for k in range(len(estimated) - 1) if arc[k] <= lap_len_m]
+
+
+def marker_map_from_observations(observed_histograms, estimated, lap_frames, world_size_m):
+    """Paint observed appearance at estimated poses; no world geometry input."""
+    n_m = round(world_size_m / MARKER_CELL_M)
+    marker_map = np.zeros((n_m, n_m, MARKER_PALETTE))
+    selected = set(lap_frames)
+    for k in range(0, len(observed_histograms), 2):
+        if k not in selected:
+            continue
+        pose = estimated[k]
         ix = min(n_m - 1, max(0, int(pose[0] / MARKER_CELL_M)))
         iy = min(n_m - 1, max(0, int(pose[1] / MARKER_CELL_M)))
-        for ray in np.flatnonzero(hit):
-            if idx[ray] < 0 or rng.uniform() < MARKER_DROPOUT:
-                continue
-            marker = int(ids[idx[ray]])
-            if rng.uniform() < MARKER_CONFUSION:
-                marker = int(rng.integers(0, MARKER_PALETTE))
-            marker_map[iy, ix, marker] += 1.0
+        marker_map[iy, ix] += observed_histograms[k]
     return marker_map
+
+
+def occupancy_from_observations(ranges, hits, poses, frame_ids, base):
+    """Project the same sensed ranges through a chosen pose chain."""
+    hit_count = np.zeros((base.grid_cells, base.grid_cells), dtype=int)
+    offsets = np.arange(base.rays) * (2.0 * math.pi / base.rays)
+    for k in frame_ids:
+        pose = poses[k]
+        for ray in np.flatnonzero(hits[k]):
+            angle = pose[2] + offsets[ray]
+            hx = int((pose[0] + math.cos(angle) * ranges[k, ray]) / base.res_m)
+            hy = int((pose[1] + math.sin(angle) * ranges[k, ray]) / base.res_m)
+            if 0 <= hx < base.grid_cells and 0 <= hy < base.grid_cells:
+                hit_count[hy, hx] += 1
+    return (hit_count >= 2).astype(float)
+
+
+def occupancy_scores(grid, truth):
+    """Precision, recall and IoU of occupied cells against a diagnostic map."""
+    marked = grid > 0
+    actual = truth > 0
+    tp = int((marked & actual).sum())
+    return {
+        "precision": float(tp / max(1, marked.sum())),
+        "recall": float(tp / max(1, actual.sum())),
+        "iou": float(tp / max(1, (marked | actual).sum())),
+    }
+
+
+def scan_map_alignment(grid, reference, res, tolerance_cells=2):
+    """Compare two surface maps made from identical scans, allowing grid quantization."""
+    from scipy.ndimage import distance_transform_edt
+
+    marked = grid > 0
+    expected = reference > 0
+    if not marked.any() or not expected.any():
+        return {"precision": 0.0, "recall": 0.0, "median_offset_m": None}
+    to_reference = distance_transform_edt(~expected) * res
+    to_marked = distance_transform_edt(~marked) * res
+    tolerance_m = tolerance_cells * res
+    return {
+        "precision": float(np.mean(to_reference[marked] <= tolerance_m)),
+        "recall": float(np.mean(to_marked[expected] <= tolerance_m)),
+        "median_offset_m": float(np.median(to_reference[marked])),
+    }
 
 
 def reseed_candidates(marker_map, obs_hist):
@@ -214,7 +226,7 @@ def reseed_candidates(marker_map, obs_hist):
 class ParticleFilter:
     """AMCL-style localization against the built occupancy grid."""
 
-    def __init__(self, grid, res, particles_n, rng, init_pose=None, spread=0.4):
+    def __init__(self, grid, res, particles_n, rng, init_pose=None, spread=0.4, rays_n=PF_RAYS):
         # likelihood field (Thrun Ch.6.4): distance to the nearest occupied
         # cell, precomputed once - tolerant to map discretization where the
         # ray-march model was brittle (the recorded tuning)
@@ -241,7 +253,7 @@ class ParticleFilter:
                 ]
             )
         self.w = np.full(n, 1.0 / n)
-        self.ray_idx = np.linspace(0, 63, PF_RAYS).astype(int)
+        self.ray_idx = np.linspace(0, 63, rays_n).astype(int)
         self.ray_off = self.ray_idx * (2.0 * math.pi / 64)
 
     def propagate(self, d_xy, d_th):
@@ -263,7 +275,7 @@ class ParticleFilter:
             self.p[:, 2] + om * dt + np.radians(self.rng.normal(0, PF_SIGMA_R_DEG, n))
         )
 
-    def measure(self, observed, est_pose):
+    def measure(self, observed, _est_pose):
         """Likelihood-field measurement: endpoint distances to the nearest
         mapped obstacle (only valid-return rays; scale 0.20 m)."""
         idx = self.ray_idx
@@ -271,7 +283,6 @@ class ParticleFilter:
         valid = obs < 3.9
         n_g = self.lf.shape[0]
         weights = np.zeros(len(self.p))
-        np.stack([self.ray_off, np.arange(PF_RAYS) * 0.0], axis=1)
         for i in range(len(self.p)):
             th = self.p[i, 2]
             angles = th + self.ray_off
@@ -309,7 +320,7 @@ class ParticleFilter:
 
     def estimate(self):
         th = self.p[:, 2]
-        mean_th = math.atan2(float(np.mean(np.sin(th))), float(np.mean(np.cos(th))))
+        mean_th = math.atan2(float(self.w @ np.sin(th)), float(self.w @ np.cos(th)))
         return np.array([self.w @ self.p[:, 0], self.w @ self.p[:, 1], mean_th])
 
     def reseed(self, centers, rng, headings=None):
@@ -367,12 +378,16 @@ def kidnap_route(map_truth, loc_truth, kidnap_at):
     return teleported
 
 
-def run_experiment(output, *, seed=0, config=None, log=print):
+def run_experiment(output, *, seed=0, sensor_seed=None, config=None, log=print):
     output = Path(output)
     if output.exists():
         raise FileExistsError(f"Choose a new --output directory: {output}")
     if type(seed) is not int or seed < 0:
         raise ValueError("seed must be a non-negative integer")
+    if sensor_seed is None:
+        sensor_seed = seed
+    if type(sensor_seed) is not int or sensor_seed < 0:
+        raise ValueError("sensor_seed must be a non-negative integer")
     if log is None:
         log = lambda *_message: None
     if config is None:
@@ -383,51 +398,57 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     base = config.base
 
     # ---------------------------------------------------------- phase 1
-    obstacles, walls = _build_world("ISO", seed, base)
+    obstacles, walls = _build_world(config.arm, seed, base)
+    physical_walls = build_walls(base.world_size_m, base.res_m) if walls is None else walls
     map_stream = collect_patrol_laps(
-        obstacles, patrol_start(base, seed)[0], config.matcher, walls=None
+        obstacles,
+        patrol_start(base, seed)[0],
+        config.matcher,
+        walls=physical_walls,
+        patrol=PATROL_INSET,
     )
     if map_stream["laps_done"] < config.laps:
         raise RuntimeError("mapping patrol incomplete")
-    obstacles, walls, ids = build_appearance_world(base, seed)
-    primitives = (*obstacles, *walls)
-    marker_map = marker_map_from_stream(map_stream, primitives, ids, config, seed)
-    # rebuild the occupancy grid over FIRST-lap frames only (the recorded
-    # drift smear: late frames paint walls at wrong places, hit-rate 0.29)
-
-    lap_frames = first_lap_frames(map_stream)
-    built_grid = np.zeros((base.grid_cells, base.grid_cells))
-    m_off = np.arange(base.rays) * (2.0 * math.pi / base.rays)
+    app_obstacles, app_walls, ids = build_appearance_world(
+        base, seed, obstacles=obstacles, world_walls=physical_walls
+    )
+    primitives = (*app_obstacles, *app_walls)
+    # The two mapped grids use identical scans and selected frames.  Only
+    # their pose chain changes: odometry is the deployable mapper; physical
+    # truth is a diagnostic upper bound for attributing map-placement error.
     m_est = [map_stream["truth"][0]]
     for k in range(len(map_stream["wheels"])):
         m_est.append(
             estimate_step_slam(m_est[-1], map_stream["wheels"][k], config.matcher.slam.encoder_bias)
         )
     m_est = np.asarray(m_est)
-    # explicit hit-count build: log-odds thresholding thins the map (misses
-    # along rays outnumber hits; recorded hit-rate 0.08) - a wall cell counts
-    # as occupied when >= 2 first-lap rays hit it
-    from embodied_learning.experiments.grid_nav import bresenham
-
-    hit_count = np.zeros((base.grid_cells, base.grid_cells), dtype=int)
-    for k in lap_frames:
-        pose_cell = (int(m_est[k][0] / base.res_m), int(m_est[k][1] / base.res_m))
-        for ray in np.flatnonzero(map_stream["hit"][k]):
-            ang = m_est[k][2] + m_off[ray]
-            hx = int((m_est[k][0] + math.cos(ang) * map_stream["ranges"][k][ray]) / base.res_m)
-            hy = int((m_est[k][1] + math.sin(ang) * map_stream["ranges"][k][ray]) / base.res_m)
-            for cx, cy in bresenham(pose_cell[0], pose_cell[1], hx, hy)[:-1]:
-                pass  # free-space marking omitted: the PF mask ignores no-return rays
-            if 0 <= hx < base.grid_cells and 0 <= hy < base.grid_cells:
-                hit_count[hy, hx] += 1
-    built_grid = (hit_count >= 2).astype(float)
-    # map-vs-truth agreement on cells the mapper marked occupied
+    lap_frames = first_lap_frames(m_est)
+    if config.run_kidnap:
+        marker_rng = np.random.default_rng([sensor_seed, 56001])
+        observed_markers = np.vstack(
+            [rgbd_frame(pose, primitives, ids, marker_rng) for pose in map_stream["truth"][:-1]]
+        )
+        marker_map = marker_map_from_observations(
+            observed_markers, m_est, lap_frames, base.world_size_m
+        )
+    else:
+        n_marker_cells = round(base.world_size_m / MARKER_CELL_M)
+        marker_map = np.zeros((n_marker_cells, n_marker_cells, MARKER_PALETTE))
+    built_grid = occupancy_from_observations(
+        map_stream["ranges"], map_stream["hit"], m_est, lap_frames, base
+    )
+    sensor_truth_grid = occupancy_from_observations(
+        map_stream["ranges"], map_stream["hit"], map_stream["truth"], lap_frames, base
+    )
     from embodied_learning.experiments.grid_nav import true_occupancy
 
-    true_map = true_occupancy(obstacles, walls, base.grid_cells, base.res_m)
-    built_occ = built_grid > 0.0
-    truth_occ = true_map
-    hit_rate = float((built_occ & truth_occ).sum() / max(1, truth_occ.sum()))
+    true_map = true_occupancy(obstacles, physical_walls, base.grid_cells, base.res_m)
+    map_scores = occupancy_scores(built_grid, true_map)
+    sensor_truth_scores = occupancy_scores(sensor_truth_grid, true_map)
+    paired_scan_alignment = scan_map_alignment(built_grid, sensor_truth_grid, base.res_m)
+    hit_rate = map_scores["recall"]
+    map_precision = map_scores["precision"]
+    map_iou = map_scores["iou"]
     log(
         f"phase1: laps {map_stream['laps_done']} frames {len(map_stream['truth']) - 1} "
         f"map hit-rate {hit_rate:.2f}"
@@ -436,13 +457,17 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     # ---------------------------------------------------------- phase 2
     loc_seed = seed + 500
     loc_stream = collect_patrol_laps(
-        obstacles, patrol_start(base, loc_seed)[0], config.matcher, walls=None
+        obstacles,
+        patrol_start(base, loc_seed)[0],
+        config.matcher,
+        walls=physical_walls,
+        patrol=PATROL_INSET,
     )
     if loc_stream["laps_done"] < config.laps:
         raise RuntimeError("localization patrol incomplete")
     truth = loc_stream["truth"].copy()
     n_frames = len(loc_stream["wheels"])
-    rng_obs = np.random.default_rng([seed, 56002])
+    rng_obs = np.random.default_rng([sensor_seed, 56002])
     ranges_obs = np.clip(
         loc_stream["ranges"]
         + rng_obs.normal(0.0, config.range_noise_sigma_m, loc_stream["ranges"].shape),
@@ -457,14 +482,13 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     est = np.asarray(est)
 
     # ---------------------------------------------------------- PF + kidnap
-    from embodied_learning.experiments.rgbd_loops import rgbd_frame
-
     trials = []
     ray_offsets = np.arange(base.rays) * (2.0 * math.pi / base.rays)
     map_truth = map_stream["truth"]
     map_wheels = map_stream["wheels"]
-    for frac in KIDNAP_FRACTIONS:
-        rng_pf = np.random.default_rng([seed, 56003, int(frac * 100)])
+    kidnap_fractions = KIDNAP_FRACTIONS if config.run_kidnap else ()
+    for frac in kidnap_fractions:
+        rng_pf = np.random.default_rng([sensor_seed, 56003, int(frac * 100)])
         kidnap_at = int(n_frames * frac)
         teleported = kidnap_route(map_truth, truth, kidnap_at)
         # observation re-synthesis: from kidnap_at the ranges come from the
@@ -477,7 +501,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                 teleported[k][1],
                 teleported[k][2] + ray_offsets,
                 obstacles,
-                walls,
+                physical_walls,
                 base.max_range_m,
             )
             obs[k] = np.clip(
@@ -489,21 +513,23 @@ def run_experiment(output, *, seed=0, config=None, log=print):
             config.pf_particles,
             rng_pf,
             init_pose=truth[kidnap_at] * 0 + truth[0],
+            rays_n=config.pf_rays,
         )
         pf_error = np.zeros(n_frames + 1)
         reseed_frame = None
         post_frames = 0
+        end_k = min(n_frames, kidnap_at + RECOVERY_FRAMES)
+        recovery_pose = None
         for k in range(n_frames + 1):
-            if k > 0:
-                if k >= kidnap_at:
+            if k > 0 and k != kidnap_at:
+                if k > kidnap_at:
                     # carried to the new route: its REAL odometry drives the
                     # particles (the abandoned route's deltas are meaningless)
-                    v_m, om_m = GEOMETRY.body_velocity(map_wheels[min(k - 1, len(map_wheels) - 1)])
-                    pf.propagate_body(v_m * (1.0 + config.matcher.slam.encoder_bias), om_m)
+                    source_wheels = map_wheels[min(k - 1, len(map_wheels) - 1)]
                 else:
-                    d_xy = est[k][:2] - est[k - 1][:2]
-                    d_th = wrap(est[k][2] - est[k - 1][2])
-                    pf.propagate(d_xy, d_th)
+                    source_wheels = loc_stream["wheels"][k - 1]
+                v_m, om_m = measured_body_velocity(source_wheels, config.matcher.slam.encoder_bias)
+                pf.propagate_body(v_m, om_m)
             if k % 5 == 0:
                 pf.measure(obs[min(k, n_frames - 1)], est[min(k, n_frames - 1)])
                 ess_before = pf.ess()
@@ -525,25 +551,29 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                 np.linalg.norm(pf.estimate()[:2] - teleported[min(k, len(teleported) - 1), :2])
             )
             pf_error[k] = est_err
+            if k == end_k:
+                recovery_pose = pf.estimate().copy()
             if k >= kidnap_at:
                 post_frames += 1
         window = slice(kidnap_at, min(n_frames, kidnap_at + RECOVERY_FRAMES) + 1)
         # the recovery verdict is read at the WINDOW END: later corridor
         # sliding (the bounded along-wall oscillation of straight-wall
         # localization) is a tracking property, not a relocalization one
-        end_k = min(n_frames, kidnap_at + RECOVERY_FRAMES)
-        end_err = float(np.linalg.norm(pf.estimate()[:2] - teleported[end_k, :2]))
-        end_err_th = abs(math.degrees(wrap(pf.estimate()[2] - teleported[end_k, 2])))
+        assert recovery_pose is not None
+        end_err = float(np.linalg.norm(recovery_pose[:2] - teleported[end_k, :2]))
+        end_err_th = abs(math.degrees(wrap(recovery_pose[2] - teleported[end_k, 2])))
         success = end_err <= 1.0 and end_err_th <= 25.0
         trials.append(
             {
                 "fraction": frac,
                 "kidnap_at": kidnap_at,
                 "reseed_frame": reseed_frame,
+                "recovery_end_frame": end_k,
                 "end_err_m": end_err,
                 "end_err_deg": end_err_th,
                 "success": bool(success),
                 "pf_error_curve": pf_error[window].tolist(),
+                "pf_error_full": pf_error,
             }
         )
         log(
@@ -556,17 +586,25 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     # production AMCL) and against the SELF-BUILT map (the SLAM
     # chicken-and-egg: a map from a drifting chain is smeared)
     def run_pf(grid):
-        rng_pf = np.random.default_rng([seed, 56004])
+        rng_pf = np.random.default_rng([sensor_seed, 56004])
         # the start pose is KNOWN (est[0] == truth[0], zero drift): a blind
         # uniform init over the arena never converges with 400 particles
         # (the recorded failure mode)
-        pf = ParticleFilter(grid, base.res_m, config.pf_particles, rng_pf, init_pose=est[0])
+        pf = ParticleFilter(
+            grid,
+            base.res_m,
+            config.pf_particles,
+            rng_pf,
+            init_pose=est[0],
+            rays_n=config.pf_rays,
+        )
         chain = np.zeros((n_frames + 1, 3))
         for k in range(n_frames + 1):
             if k > 0:
-                d_xy = est[k][:2] - est[k - 1][:2]
-                d_th = wrap(est[k][2] - est[k - 1][2])
-                pf.propagate(d_xy, d_th)
+                v_m, om_m = measured_body_velocity(
+                    loc_stream["wheels"][k - 1], config.matcher.slam.encoder_bias
+                )
+                pf.propagate_body(v_m, om_m)
             if k % 5 == 0:
                 pf.measure(ranges_obs[min(k, n_frames - 1)], est[min(k, n_frames - 1)])
                 if pf.ess() < config.pf_particles / 4:
@@ -575,24 +613,28 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         return chain
 
     pf_true_chain = run_pf(true_map.astype(float))
+    pf_sensor_truth_chain = run_pf(sensor_truth_grid)
     pf_self_chain = run_pf(built_grid)
     est_err_curve = np.linalg.norm(est[: n_frames + 1, :2] - truth[: n_frames + 1, :2], axis=1)
     pf_true_err = np.linalg.norm(pf_true_chain[:, :2] - truth[: n_frames + 1, :2], axis=1)
+    pf_sensor_truth_err = np.linalg.norm(
+        pf_sensor_truth_chain[:, :2] - truth[: n_frames + 1, :2], axis=1
+    )
     pf_self_err = np.linalg.norm(pf_self_chain[:, :2] - truth[: n_frames + 1, :2], axis=1)
     est_mean = float(np.mean(est_err_curve))
     pf_mean = float(np.mean(pf_true_err))
     est_final = float(est_err_curve[-1])
     pf_final = float(pf_true_err[-1])
     pf_self_mean = float(np.mean(pf_self_err))
+    pf_self_final = float(pf_self_err[-1])
     hypothesis = {
         "claim": (
-            "世界模型（自建栅格图 + 标记外观层）把累积漂移问题变成有界跟踪问题："
-            "粒子滤波对自建图定位的误差不随巡游累积（均值 <= 20% 无图链），"
-            "绑架后靠外观重seed 可恢复（>= 4/5 试验）"
+            "修正第 56 课的判据对象与时序：自建图 PF 相对无图链的均值 <=20%、"
+            "末端 <=0.6 m；绑架恢复必须在指定窗口末测量，>=4/5 才成立"
         ),
         "criteria": {
             "collector": "两段巡游均完成 2 圈",
-            "bounded": "PF 均值误差 <= 20% EST 均值 且 PF 末端 <= 0.6 m",
+            "bounded": "PF-SELFBUILT 均值误差 <= 20% EST 均值 且末端 <= 0.6 m",
             "kidnap": "5 次绑架试验中 >= 4 次恢复（优质图上，窗口末 <= 1.0 m / 25 deg）",
             "smear": "PF-SELFBUILT 均值 >= 3× PF-TRUEMAP 均值（自建图涂抹的代价量化）",
         },
@@ -600,55 +642,94 @@ def run_experiment(output, *, seed=0, config=None, log=print):
             "collector_met": bool(
                 map_stream["laps_done"] >= config.laps and loc_stream["laps_done"] >= config.laps
             ),
-            "bounded_met": bool(pf_mean <= 0.2 * est_mean and pf_final <= 0.6),
-            "smear_penalty": pf_self_mean,
+            "bounded_met": bool(pf_self_mean <= 0.2 * est_mean and pf_self_final <= 0.6),
+            "smear_ratio": float(pf_self_mean / max(1e-12, pf_mean)),
             "smear_claim_met": bool(pf_self_mean >= 3.0 * pf_mean),
-            "kidnap_met": bool(sum(1 for t in trials if t.get("success")) >= 4),
+            "kidnap_met": (
+                bool(sum(1 for t in trials if t.get("success")) >= 4) if config.run_kidnap else None
+            ),
             "errors": {
                 "est_mean_m": est_mean,
                 "pf_mean_m": pf_mean,
                 "est_final_m": est_final,
                 "pf_final_m": pf_final,
+                "pf_self_mean_m": pf_self_mean,
+                "pf_self_final_m": pf_self_final,
+                "pf_sensor_truth_mean_m": float(np.mean(pf_sensor_truth_err)),
+                "pf_sensor_truth_final_m": float(pf_sensor_truth_err[-1]),
+                "est_p95_m": float(np.percentile(est_err_curve, 95)),
+                "pf_true_p95_m": float(np.percentile(pf_true_err, 95)),
+                "pf_self_p95_m": float(np.percentile(pf_self_err, 95)),
+                "pf_sensor_truth_p95_m": float(np.percentile(pf_sensor_truth_err, 95)),
             },
             "map_hit_rate": hit_rate,
-            "reseed_rate": float(
-                sum(1 for t in trials if t.get("reseed_frame") is not None) / max(1, len(trials))
+            "map_precision": map_precision,
+            "map_iou": map_iou,
+            "sensor_truth_map": sensor_truth_scores,
+            "paired_scan_alignment": paired_scan_alignment,
+            "reseed_rate": (
+                float(sum(1 for t in trials if t.get("reseed_frame") is not None) / len(trials))
+                if trials
+                else None
             ),
             "kidnap_trials": [
-                {k: v for k, v in t.items() if k != "pf_error_curve"} for t in trials
+                {k: v for k, v in t.items() if k not in ("pf_error_curve", "pf_error_full")}
+                for t in trials
             ],
         },
     }
     archives = {
         "est_err_curve": est_err_curve,
         "pf_true_err": pf_true_err,
+        "pf_sensor_truth_err": pf_sensor_truth_err,
         "pf_self_err": pf_self_err,
         "pf_true_chain": pf_true_chain,
+        "pf_sensor_truth_chain": pf_sensor_truth_chain,
         "pf_self_chain": pf_self_chain,
         "est_chain": est[: n_frames + 1],
         "truth_chain": truth[: n_frames + 1],
         "marker_map": np.max(marker_map, axis=2),
         "built_grid": built_grid,
+        "sensor_truth_grid": sensor_truth_grid,
+        "true_grid": true_map.astype(float),
+        "kidnap_pf_err": (
+            np.vstack([trial["pf_error_full"] for trial in trials])
+            if trials
+            else np.zeros((0, n_frames + 1))
+        ),
     }
     output.mkdir(parents=True, exist_ok=False)
     np.savez_compressed(output / "trajectories.npz", **archives)
     report = {
         "experiment": EXPERIMENT,
-        "schema_version": 1,
+        "schema_version": SCHEMA_VERSION,
         "master_seed": seed,
+        "sensor_seed": sensor_seed,
         "python": platform.python_version(),
         "numpy": np.__version__,
         "protocol": {
-            "phase1": "建图巡游：est 位姿建栅格（第 43 课机器）+ 标记图（0.5 m 格、第 55 课外观层）",
-            "phase2": "定位巡游：新噪声实例；PF 400 粒子/24 线/0.15 m 步进对自建图测量",
-            "kidnap": f"5 次真值瞬移（{[round(f, 2) for f in KIDNAP_FRACTIONS]}），ESS 崩塌触发表观重seed",
+            "arm": config.arm,
+            "phase1": "真值控制巡游；传感观测按里程计估计位姿落图，首圈以估计弧长选取",
+            "phase2": (
+                f"新噪声实例；PF {config.pf_particles} 粒子/{config.pf_rays} 线/"
+                "0.15 m 栅格对优质图与自建图分别测量"
+            ),
+            "kidnap": (
+                f"5 次真值瞬移（{[round(f, 2) for f in KIDNAP_FRACTIONS]}），ESS 塌缩后重播种"
+                if config.run_kidnap
+                else "未运行；定位基准专用"
+            ),
             "appearance": {
                 "palette": MARKER_PALETTE,
                 "confusion": MARKER_CONFUSION,
                 "dropout": MARKER_DROPOUT,
             },
-            "map_truth_agreement": hit_rate,
-            "oracle_free": "地图与标记图均建自 est 位姿；真值仅评估",
+            "map_recall": hit_rate,
+            "map_precision": map_precision,
+            "map_iou": map_iou,
+            "map_alignment_reference": "same scan frames projected at physical truth pose; two-cell tolerance",
+            "truth_use": "真值控制巡游及仿真生成观测；建图落点/首圈筛选/定位决策不读真值；优质图组仅诊断",
+            "metric_correction": "v3 修正地图和绑架评分；v4 使用 PATROL_INSET 巡游；v5 首圈取帧阈值与实际 16 m 巡游一致",
         },
         "hypothesis": hypothesis,
         "wall_time_s": time.perf_counter() - started,
@@ -667,8 +748,18 @@ def main():
     parser = argparse.ArgumentParser(description="lesson-56 map localization record")
     parser.add_argument("--output", default=DEFAULT_RESULTS)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--sensor-seed", type=int, default=None)
+    parser.add_argument("--arm", choices=("ISO", "ANISO"), default="ISO")
+    parser.add_argument("--particles", type=int, default=PF_PARTICLES)
+    parser.add_argument("--no-kidnap", action="store_true")
     args = parser.parse_args()
-    report = run_experiment(args.output, seed=args.seed)
+    cfg = MapLocConfig(
+        seed=args.seed,
+        arm=args.arm,
+        pf_particles=args.particles,
+        run_kidnap=not args.no_kidnap,
+    )
+    report = run_experiment(args.output, seed=args.seed, sensor_seed=args.sensor_seed, config=cfg)
     print(json.dumps(report["hypothesis"]["results"], indent=2))
 
 

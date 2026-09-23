@@ -319,7 +319,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                 ("MM-B", z_bad, "mm"),
             ):
                 if kind == "sc":
-                    x, s, s_hist = solve_rel_sc(nodes, edges, loop_edge, config)
+                    x, s, _s_hist = solve_rel_sc(nodes, edges, loop_edge, config)
                     row[f"{name}_s"] = s
                 elif kind == "mm":
                     x, frac = solve_rel_mm(nodes, edges, loop_edge, config)

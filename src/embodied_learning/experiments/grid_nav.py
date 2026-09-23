@@ -621,6 +621,10 @@ def make_plan(log_odds, pose, goal_xy, config):
         return None
     smooth = smooth_path(cells, passable)
     waypoints = np.array([cell_center(cell, res) for cell in smooth[:-1]] + [goal_xy])
+    if len(waypoints) == 1:
+        # A* can return the start cell alone when the robot is close to a
+        # waypoint. Keep a two-point segment for path_profile/pure_pursuit.
+        waypoints = np.vstack((np.asarray(pose[:2], dtype=float), waypoints[0]))
     return {
         "cells": cells,
         "smooth": smooth,

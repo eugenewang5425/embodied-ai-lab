@@ -1,0 +1,87 @@
+{
+  "experiment": "rgbd_loops_lesson55",
+  "schema_version": 2,
+  "master_seed": 0,
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "protocol": {
+    "arena": "ISO（第 54 课臂）：方墙 + 稀疏障碍，闭圈内方巡游 16 m 圈",
+    "appearance": {
+      "palette": 12,
+      "confusion": 0.08,
+      "dropout": 0.1,
+      "note": "模拟标记直方图，不是 RGB-D 图像；深度值未用于描述子或检索",
+      "camera": "omnidirectional marker rays: 180 / 360 deg / 5.0 m"
+    },
+    "retrieval": {
+      "descriptor": "marker histogram (bag of markers), cosine",
+      "reference": "frames 0..60 pooled",
+      "top_k": 12,
+      "probe_stride": 5,
+      "probe_exclusion": "estimated odometry arc >= 15 m",
+      "oracle_free": true
+    },
+    "verification": "lesson-49 K matcher + drift-envelope acceptance (lesson-54 corrected)",
+    "correctness": "implied pose vs truth pose, 0.5 m / 5 deg (lesson-54 corrected)",
+    "truth_uses": [
+      "simulator observation generation at physical pose",
+      "evaluation labels and oracle reference group only"
+    ]
+  },
+  "aggregates": {
+    "GEO-ALL": {
+      "n_candidates": 292,
+      "accepted": 109,
+      "acceptance": 0.3732876712328767,
+      "direction_correctness": 0.29357798165137616,
+      "correct_accept": 32
+    },
+    "GEO-ORACLE": {
+      "n_candidates": 7,
+      "accepted": 7,
+      "acceptance": 1.0,
+      "direction_correctness": 0.5714285714285714,
+      "correct_accept": 4
+    },
+    "RGBD-TOPK": {
+      "n_candidates": 12,
+      "accepted": 12,
+      "acceptance": 1.0,
+      "direction_correctness": 0.9166666666666666,
+      "correct_accept": 11
+    }
+  },
+  "hypothesis": {
+    "claim": "模拟标记外观检索在候选筛选和排序中不使用轨迹真值；top-k 精确率 >= 80%，几何验证后的方向正确率 >= 80%（修正判据），且只审查 <= 1/3 的候选——外观是几何之外的第二信息源",
+    "criteria": {
+      "precision": "top-k 检索中真回环帧（近起点谓词）占比 >= 80%",
+      "correctness": "RGBD-TOPK accepted 中 correct >= 80%（修正判据）",
+      "efficiency": "RGBD-TOPK 候选数 <= GEO-ALL 的 1/3"
+    },
+    "results": {
+      "precision_topk": 1.0,
+      "precision_met": true,
+      "correctness_met": true,
+      "pipeline_success": true,
+      "efficiency_met": true,
+      "n_candidates": {
+        "GEO-ALL": 292,
+        "GEO-ORACLE": 7,
+        "RGBD-TOPK": 12
+      }
+    }
+  },
+  "wall_time_s": 43.0796339000226,
+  "archive_keys": [
+    "estimated_arc_m",
+    "oracle_frames",
+    "probe_accepted",
+    "probe_correct",
+    "probe_frames",
+    "probe_frames_all",
+    "probe_near_start",
+    "probe_sims",
+    "topk_frames"
+  ],
+  "trajectories_sha256": "4db2f499fa857f3fc574be82986955363680c03ecb16a84ae1450a12903f6cf6"
+}

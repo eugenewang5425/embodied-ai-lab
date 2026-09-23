@@ -1,8 +1,7 @@
 """Lesson 56 viewer: mapping-localization separation - the world model lesson.
 
 Three static modes share one lesson-56 recording:
-1. error curves: EST (mapless) vs PF-TRUEMAP vs PF-SELFBUILT over the run -
-   the bounded-tracking vs accumulating-drift comparison;
+1. error curves: EST and distinct particle-filter map inputs over the run;
 2. trajectories: the truth chain, the drifting EST chain and the PF chain;
 3. kidnap: the five cross-stream kidnap trials (end error bars vs the
    1.0 m recovery line).
@@ -26,7 +25,13 @@ from embodied_learning.experiments.map_localization import (
 def load_replays(directory):
     directory = Path(directory)
     report = json.loads((directory / "summary.json").read_text(encoding="utf-8"))
-    if report.get("experiment") != EXPERIMENT or report.get("schema_version") != 1:
+    if report.get("experiment") != EXPERIMENT or report.get("schema_version") not in (
+        1,
+        2,
+        3,
+        4,
+        5,
+    ):
         raise ValueError("Incompatible lesson-56 recording")
     path = directory / "trajectories.npz"
     if hashlib.sha256(path.read_bytes()).hexdigest() != report.get("trajectories_sha256"):
@@ -60,18 +65,25 @@ class MapLocDemo:
         self.root = root
         self.data = data
         self.report = data["report"]
+        result = self.report["hypothesis"]["results"]
+        errs = result["errors"]
+        n_success = sum(bool(t.get("success")) for t in result["kidnap_trials"])
+        old_record = self.report["schema_version"] != 5
         outer = ttk.Frame(root if parent is None else parent, padding=10)
         outer.pack(fill="both", expand=True)
         ttk.Label(
             outer,
-            text="第五十六课 · 建图-定位分离——世界模型把漂移变成有界跟踪",
+            text="第五十六课 · 建图与定位分离：比较地图输入",
             font=("Microsoft YaHei", 17, "bold"),
         ).pack(anchor="w")
         ttk.Label(
             outer,
             text=(
-                "对自建图定位（似然场 PF）：末端误差 7.37 → 2.62 m（2.8×）；"
-                "直墙沿墙滑移 ±2 m 有界振荡限制均值；绑架重定位 0/5 如实阴性"
+                f"平均位置误差：无图 {errs['est_mean_m']:.2f} m，"
+                f"理想图 PF {errs['pf_mean_m']:.2f} m，"
+                f"自建图 PF {errs.get('pf_self_mean_m', result.get('smear_penalty', float('nan'))):.2f} m；"
+                f"理想图绑架恢复 {n_success}/{len(result['kidnap_trials'])}。"
+                + ("历史记录：评估口径已勘误。" if old_record else "本轮自建图未达有界定位门槛。")
             ),
         ).pack(anchor="w", pady=(2, 4))
         controls = ttk.Frame(outer)
@@ -110,32 +122,40 @@ class MapLocDemo:
         lines = [
             "全程对照（无绑架）",
             f"EST（无图漂移链）均值 {e['est_mean_m']:.2f} / 末端 {e['est_final_m']:.2f} m",
-            f"PF-TRUEMAP（优质图）均值 {e['pf_mean_m']:.2f} / 末端 {e['pf_final_m']:.2f} m",
-            f"PF-SELFBUILT（自建图）均值 {r.get('smear_penalty', float('nan')):.2f} m",
+            f"PF 理想占据图均值 {e['pf_mean_m']:.2f} / 末端 {e['pf_final_m']:.2f} m",
+            f"PF 自建图均值 {e.get('pf_self_mean_m', r.get('smear_penalty', float('nan'))):.2f} m",
             "",
-            f"图命中率 {r['map_hit_rate']:.2f}（首圈 + 双遍更新）",
-            "鸡生蛋：图质量 = 定位上限",
+            f"自建表面端点图与理想占据图精确栅格召回 {r['map_hit_rate']:.2f}（仅参考）",
             "",
-            "绑架试验（跨流模型，恢复窗末判读）",
+            "理想图绑架试验（各自恢复窗末判读）",
         ]
         for t in r["kidnap_trials"]:
             lines.append(
                 f"  {t['fraction']:.2f}: end {t.get('end_err_m', float('nan')):.2f} m "
                 f"success={t.get('success')}"
             )
+        if self.report["schema_version"] != 5:
+            lines.append("历史记录：采集路线与评分口径已勘误")
         return "\n".join(lines)
 
     def draw_curves(self):
         self.fig.clear()
         ax = self.fig.add_subplot(1, 1, 1)
         ax.plot(self.data["est_err_curve"], color="#b91c1c", lw=1.2, label="EST 无图漂移链")
-        ax.plot(self.data["pf_self_err"], color="#9ca3af", lw=1.0, label="PF-SELFBUILT 自建图")
-        ax.plot(self.data["pf_true_err"], color="#0f766e", lw=1.4, label="PF-TRUEMAP 优质图")
+        ax.plot(self.data["pf_self_err"], color="#7c3aed", lw=1.0, label="PF 自建图")
+        if "pf_sensor_truth_err" in self.data:
+            ax.plot(
+                self.data["pf_sensor_truth_err"],
+                color="#2563eb",
+                lw=1.0,
+                label="PF 同帧真值位姿投影图",
+            )
+        ax.plot(self.data["pf_true_err"], color="#0f766e", lw=1.4, label="PF 理想占据图")
         ax.axhline(0.6, color="#0f766e", ls="--", lw=1)
         ax.set_xlabel("帧")
         ax.set_ylabel("位置误差 (m)")
-        ax.legend(fontsize=8)
-        ax.set_title("误差曲线：EST 随里程累积 vs PF 有界振荡（世界模型的价值）", fontsize=10)
+        ax.legend(fontsize=8, ncol=2)
+        ax.set_title("位置误差随帧变化：虚线为 0.6 m 目标", fontsize=10)
 
     def draw_chains(self):
         self.fig.clear()
@@ -145,12 +165,12 @@ class MapLocDemo:
         pf = self.data["pf_true_chain"]
         ax.plot(truth[:, 0], truth[:, 1], "-", color="k", lw=1.5, label="真值")
         ax.plot(est[:, 0], est[:, 1], "-", color="#b91c1c", lw=1.0, label="EST 漂移链")
-        ax.plot(pf[:, 0], pf[:, 1], "-", color="#0f766e", lw=1.0, label="PF 对图定位")
+        ax.plot(pf[:, 0], pf[:, 1], "-", color="#0f766e", lw=1.0, label="PF 理想占据图")
         ax.set_aspect("equal")
         ax.legend(fontsize=8)
         ax.set_xlabel("x (m)")
         ax.set_ylabel("y (m)")
-        ax.set_title("轨迹：PF 被图钉住（有界振荡），EST 单调漂走", fontsize=10)
+        ax.set_title("同一巡游：真实运动与两条估计轨迹", fontsize=10)
 
     def draw_kidnap(self):
         self.fig.clear()
@@ -167,7 +187,10 @@ class MapLocDemo:
         ax.set_xlabel("绑架时点（巡游进度比例）")
         ax.set_ylabel("恢复窗末误差 (m)")
         ax.set_ylim(0, max(ends) * 1.2)
-        ax.set_title("绑架重定位 0/5——稀疏标记图 + 4 重对称 + 粒子不足（阴性入册）", fontsize=10)
+        n_success = sum(bool(t.get("success")) for t in trials)
+        ax.set_title(
+            f"理想图绑架重定位 {n_success}/{len(trials)}：各自恢复窗末位置误差", fontsize=10
+        )
 
     def redraw(self):
         self.stats.configure(text=self.stats_text())

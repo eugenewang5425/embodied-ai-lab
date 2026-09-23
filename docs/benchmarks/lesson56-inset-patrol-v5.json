@@ -1,0 +1,134 @@
+{
+  "experiment": "map_localization_lesson56",
+  "schema_version": 5,
+  "master_seed": 0,
+  "sensor_seed": 0,
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "protocol": {
+    "arm": "ISO",
+    "phase1": "真值控制巡游；传感观测按里程计估计位姿落图，首圈以估计弧长选取",
+    "phase2": "新噪声实例；PF 400 粒子/32 线/0.15 m 栅格对优质图与自建图分别测量",
+    "kidnap": "5 次真值瞬移（[0.2, 0.35, 0.5, 0.65, 0.8]），ESS 塌缩后重播种",
+    "appearance": {
+      "palette": 12,
+      "confusion": 0.08,
+      "dropout": 0.1
+    },
+    "map_recall": 0.28125,
+    "map_precision": 0.14917127071823205,
+    "map_iou": 0.108,
+    "map_alignment_reference": "same scan frames projected at physical truth pose; two-cell tolerance",
+    "truth_use": "真值控制巡游及仿真生成观测；建图落点/首圈筛选/定位决策不读真值；优质图组仅诊断",
+    "metric_correction": "v3 修正地图和绑架评分；v4 使用 PATROL_INSET 巡游；v5 首圈取帧阈值与实际 16 m 巡游一致"
+  },
+  "hypothesis": {
+    "claim": "修正第 56 课的判据对象与时序：自建图 PF 相对无图链的均值 <=20%、末端 <=0.6 m；绑架恢复必须在指定窗口末测量，>=4/5 才成立",
+    "criteria": {
+      "collector": "两段巡游均完成 2 圈",
+      "bounded": "PF-SELFBUILT 均值误差 <= 20% EST 均值 且末端 <= 0.6 m",
+      "kidnap": "5 次绑架试验中 >= 4 次恢复（优质图上，窗口末 <= 1.0 m / 25 deg）",
+      "smear": "PF-SELFBUILT 均值 >= 3× PF-TRUEMAP 均值（自建图涂抹的代价量化）"
+    },
+    "results": {
+      "collector_met": true,
+      "bounded_met": false,
+      "smear_ratio": 10.699443078706041,
+      "smear_claim_met": true,
+      "kidnap_met": true,
+      "errors": {
+        "est_mean_m": 1.984345415110972,
+        "pf_mean_m": 0.3218388748838956,
+        "est_final_m": 4.5400432662632735,
+        "pf_final_m": 0.265300083885365,
+        "pf_self_mean_m": 3.443496722335037,
+        "pf_self_final_m": 9.193894554421338,
+        "pf_sensor_truth_mean_m": 3.66427331240999,
+        "pf_sensor_truth_final_m": 5.973765657420718,
+        "est_p95_m": 3.9218973781735764,
+        "pf_true_p95_m": 1.0112871631129983,
+        "pf_self_p95_m": 8.786924420304807,
+        "pf_sensor_truth_p95_m": 10.280466063283061
+      },
+      "map_hit_rate": 0.28125,
+      "map_precision": 0.14917127071823205,
+      "map_iou": 0.108,
+      "sensor_truth_map": {
+        "precision": 0.05472636815920398,
+        "recall": 0.03819444444444445,
+        "iou": 0.02301255230125523
+      },
+      "paired_scan_alignment": {
+        "precision": 0.35543278084714547,
+        "recall": 0.5174129353233831,
+        "median_offset_m": 0.4357388321059432
+      },
+      "reseed_rate": 1.0,
+      "kidnap_trials": [
+        {
+          "fraction": 0.2,
+          "kidnap_at": 644,
+          "reseed_frame": 680,
+          "recovery_end_frame": 944,
+          "end_err_m": 0.06323975398666808,
+          "end_err_deg": 2.2610427015048047,
+          "success": true
+        },
+        {
+          "fraction": 0.35,
+          "kidnap_at": 1127,
+          "reseed_frame": 1135,
+          "recovery_end_frame": 1427,
+          "end_err_m": 0.07401253620269373,
+          "end_err_deg": 3.039707465314362,
+          "success": true
+        },
+        {
+          "fraction": 0.5,
+          "kidnap_at": 1610,
+          "reseed_frame": 1615,
+          "recovery_end_frame": 1910,
+          "end_err_m": 0.2634223386799095,
+          "end_err_deg": 0.4487175035510143,
+          "success": true
+        },
+        {
+          "fraction": 0.65,
+          "kidnap_at": 2093,
+          "reseed_frame": 2100,
+          "recovery_end_frame": 2393,
+          "end_err_m": 3.7139830089930084,
+          "end_err_deg": 90.22585983728493,
+          "success": false
+        },
+        {
+          "fraction": 0.8,
+          "kidnap_at": 2576,
+          "reseed_frame": 2580,
+          "recovery_end_frame": 2876,
+          "end_err_m": 0.39079145920609026,
+          "end_err_deg": 3.290197954073993,
+          "success": true
+        }
+      ]
+    }
+  },
+  "wall_time_s": 45.47358549997443,
+  "archive_keys": [
+    "built_grid",
+    "est_chain",
+    "est_err_curve",
+    "kidnap_pf_err",
+    "marker_map",
+    "pf_self_chain",
+    "pf_self_err",
+    "pf_sensor_truth_chain",
+    "pf_sensor_truth_err",
+    "pf_true_chain",
+    "pf_true_err",
+    "sensor_truth_grid",
+    "true_grid",
+    "truth_chain"
+  ],
+  "trajectories_sha256": "c743dec8e8713ade6981847a1493ddcd121fc88092dec7f77293be2f917345d4"
+}

@@ -1,17 +1,17 @@
-"""Lesson 55: RGB-D visual loop closure - appearance retrieval as the
+"""Lesson 55: marker-appearance loop retrieval as the
 place discriminator (the corrected-metric treatment).
 
 Lesson 54 corrected the evaluation metric (implied pose vs truth pose) and
 measured the plain geometric matcher at 72% direction correctness on the
-ISO arena.  This lesson adds the industry-standard second sensor: an RGB-D
-camera abstraction (96-ray fan over the lesson-22 camera's 56 deg FOV,
-5 m range, depth noise sigma = 15 cm) whose returns carry an APPEARANCE
+ISO arena.  This lesson adds a simulated omnidirectional appearance sensor
+(180 marker rays, 5 m range; no rendered RGB or usable depth) whose returns carry an APPEARANCE
 marker id - the documented abstraction of texture: every wall patch and
 obstacle carries a marker drawn per seed from a 12-marker palette; returns
 report the marker with 8% confusion and 10% dropout (a real camera's
 appearance noise, not geometry).
 
-Pipeline (oracle-free): per-frame marker histograms (bag of markers) ->
+Pipeline (oracle-free candidate selection): odometry-arc exclusion ->
+per-frame marker histograms (bag of markers) ->
 cosine similarity against the reference (start) descriptor -> top-k
 retrieval -> lesson-49 K geometric verification -> implied pose ->
 corrected correctness.  The geometry sensor (64-ray lidar) is unchanged;
@@ -25,8 +25,7 @@ Groups:
   RGBD-TOPK appearance retrieval top-k -> geometric verify (the treatment).
 
 Pre-registered claims (corrected metric throughout):
-  (1) recall: >= 80% of the oracle (true-loop) frames appear in the
-      RGB-D top-k retrieval;
+  (1) precision: >= 80% of marker top-k candidates are true-loop frames;
   (2) correctness: RGBD-TOPK accepted candidates >= 80% direction
       correctness - appearance retrieval keeps WHAT geometry alone
       (GEO-ALL) dilutes;
@@ -58,7 +57,7 @@ from embodied_learning.experiments.matcher_engineering import (
 from embodied_learning.experiments.scan_slam import ray_points
 
 EXPERIMENT = "rgbd_loops_lesson55"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 GROUPS = ("GEO-ALL", "GEO-ORACLE", "RGBD-TOPK")
 GROUP_NAMES = {
     "GEO-ALL": "纯几何匹配 × 全部探帧（修正判据基线）",
@@ -73,14 +72,13 @@ MARKER_DROPOUT = 0.10
 CAM_FOV_DEG = 360.0
 CAM_RAYS = 180
 CAM_MAX_RANGE_M = 5.0
-CAM_DEPTH_SIGMA_M = 0.15
 REF_FRAMES = 60
 TOP_K = 12
 ACCEPT_MEDIAN_NN_M = 0.15
 DRIFT_T_M = 6.0
 DRIFT_R_DEG = 80.0
 PROBE_STRIDE = 5
-DEFAULT_RESULTS = "results/rgbd_loops_2026-09-09"
+DEFAULT_RESULTS = "results/rgbd_loops_2026-09-23_v2"
 
 
 @dataclass(frozen=True)
@@ -131,8 +129,8 @@ def wrap(a):
 
 
 # ---------------------------------------------------- appearance world
-def build_appearance_world(base, seed):
-    """ISO arena primitives, each carrying an appearance marker id.
+def build_appearance_world(base, seed, *, obstacles=None, world_walls=None):
+    """Markerize the geometry actually used by the physical world.
 
     Wall rectangles are subdivided into patches (each patch its own
     marker); clutter primitives keep one marker each.  Returns
@@ -142,8 +140,9 @@ def build_appearance_world(base, seed):
     from embodied_learning.experiments.grid_nav import Obstacle
 
     rng = np.random.default_rng([seed, 55000])
-    scenarios = build_scenarios(base, seed)
-    obstacles = scenarios[1]["obstacles"]
+    if obstacles is None:
+        scenarios = build_scenarios(base, seed)
+        obstacles = scenarios[1]["obstacles"]
 
     def subdiv(rect, n):
         cx, cy, hx, hy = rect.cx, rect.cy, rect.hx, rect.hy
@@ -177,8 +176,14 @@ def build_appearance_world(base, seed):
     walls = []
     from embodied_learning.experiments.grid_nav import build_walls
 
-    for rect in build_walls(base.world_size_m, base.res_m):
-        walls.extend(subdiv(rect, 6))
+    physical_walls = (
+        build_walls(base.world_size_m, base.res_m) if world_walls is None else world_walls
+    )
+    for wall in physical_walls:
+        if wall.kind == "rect":
+            walls.extend(subdiv(wall, 6))
+        else:
+            walls.append(wall)
     ids = [
         *rng.integers(0, MARKER_PALETTE, len(obstacles)),
         *rng.integers(0, MARKER_PALETTE, len(walls)),
@@ -186,7 +191,7 @@ def build_appearance_world(base, seed):
     return obstacles, tuple(walls), np.asarray(ids, dtype=int)
 
 
-# ------------------------------------------------ RGB-D sensor abstraction
+# --------------------------------------------- simulated marker sensor
 def cast_rays_ids(px, py, angles, primitives, ids, max_range):
     """Nearest-hit ranges + the marker id of the hit primitive per ray.
 
@@ -253,13 +258,9 @@ def cast_rays_ids(px, py, angles, primitives, ids, max_range):
 
 
 def rgbd_frame(pose, primitives, ids, rng):
-    """One RGB-D frame: marker histogram over the FOV fan (with depth noise
-    changing the hit pattern and appearance confusion/dropout)."""
+    """One simulated marker histogram; no image or depth values are used."""
     offsets = np.linspace(-math.radians(CAM_FOV_DEG / 2), math.radians(CAM_FOV_DEG / 2), CAM_RAYS)
     angles = pose[2] + offsets
-    # depth noise perturbs the hit pattern via the sensor's own geometry only
-    # in a real camera; here the marker readout noise below carries the noise
-    _ = np.clip(rng.normal(0.0, CAM_DEPTH_SIGMA_M, angles.shape), -1.0, None)
     _ranges, hit, idx = cast_rays_ids(pose[0], pose[1], angles, primitives, ids, CAM_MAX_RANGE_M)
     hist = np.zeros(MARKER_PALETTE)
     for ray in np.flatnonzero(hit):
@@ -285,6 +286,17 @@ def appearance_descriptors(stream, primitives, ids, cfg):
 def cosine(a, b):
     na, nb = float(np.linalg.norm(a)), float(np.linalg.norm(b))
     return float(a @ b / (na * nb)) if na > 0 and nb > 0 else 0.0
+
+
+def probes_from_odometry(est, n_frames, stride, min_arc_m=15.0):
+    """Choose candidates using only the estimated chain available to the robot."""
+    if est.ndim != 2 or est.shape[1] < 2 or len(est) < n_frames + 1:
+        raise ValueError("estimated chain must contain every observed frame")
+    arc = np.concatenate(
+        ([0.0], np.cumsum(np.linalg.norm(np.diff(est[: n_frames + 1, :2], axis=0), axis=1)))
+    )
+    probes = [k for k in range(0, n_frames, stride) if arc[k] >= min_arc_m]
+    return probes, arc
 
 
 # ------------------------------------------------------------- collectors
@@ -356,14 +368,9 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     oracle_set = set(oracle)
 
     rows = {group: [] for group in GROUPS}
-    # spatial exclusion ring: never retrieve frames the patrol has not left
-    # (arc >= 15 m) - the start's own neighbourhood floods top-k with
-    # trivial self-matches (the recorded first-run failure)
-    truth_seq = stream["truth"]
-    arc = np.concatenate(
-        ([0.0], np.cumsum(np.linalg.norm(np.diff(truth_seq[:, :2], axis=0), axis=1)))
-    )
-    probes = [k for k in range(0, len(ranges), config.probe_stride) if arc[k] >= 15.0]
+    # Spatial exclusion uses the estimated odometry chain.  The historical
+    # lesson-55 record used truth arc here and is retained as an old protocol.
+    probes, est_arc = probes_from_odometry(est, len(ranges), config.probe_stride)
     sims = {k: cosine(descs[k], ref_desc) for k in probes}
     topk = sorted(probes, key=lambda k: -sims[k])[: config.top_k]
 
@@ -431,8 +438,8 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     pipeline_success = any(r["accepted"] and r["correct"] for r in rows["RGBD-TOPK"])
     hypothesis = {
         "claim": (
-            "RGB-D 外观检索（标记词袋）在不使用几何真值的前提下，把真回环帧从"
-            "全部探帧中检索出来（召回率 >= 80%），几何验证后的方向正确率 >= 80%"
+            "模拟标记外观检索在候选筛选和排序中不使用轨迹真值；top-k 精确率 >= 80%，"
+            "几何验证后的方向正确率 >= 80%"
             "（修正判据），且只审查 <= 1/3 的候选——外观是几何之外的第二信息源"
         ),
         "criteria": {
@@ -458,6 +465,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         "probe_sims": np.array([r["sim"] for r in rows["GEO-ALL"]], dtype=float),
         "probe_near_start": np.array([near_start[k] for k in probes], dtype=int),
         "probe_frames_all": np.asarray(probes, dtype=int),
+        "estimated_arc_m": est_arc,
     }
     output.mkdir(parents=True, exist_ok=False)
     np.savez_compressed(output / "trajectories.npz", **archives)
@@ -473,19 +481,23 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                 "palette": MARKER_PALETTE,
                 "confusion": MARKER_CONFUSION,
                 "dropout": MARKER_DROPOUT,
-                "note": "标记=纹理的外观抽象（非渲染图像）；深度通道 sigma 15 cm 同第 22 课",
-                "camera": f"omnidirectional: {CAM_RAYS} rays / 360 deg / {CAM_MAX_RANGE_M} m",
+                "note": "模拟标记直方图，不是 RGB-D 图像；深度值未用于描述子或检索",
+                "camera": f"omnidirectional marker rays: {CAM_RAYS} / 360 deg / {CAM_MAX_RANGE_M} m",
             },
             "retrieval": {
                 "descriptor": "marker histogram (bag of markers), cosine",
                 "reference": f"frames 0..{REF_FRAMES} pooled",
                 "top_k": config.top_k,
                 "probe_stride": config.probe_stride,
+                "probe_exclusion": "estimated odometry arc >= 15 m",
                 "oracle_free": True,
             },
             "verification": "lesson-49 K matcher + drift-envelope acceptance (lesson-54 corrected)",
             "correctness": "implied pose vs truth pose, 0.5 m / 5 deg (lesson-54 corrected)",
-            "truth_uses": ["evaluation only (recall + correctness + oracle group)"],
+            "truth_uses": [
+                "simulator observation generation at physical pose",
+                "evaluation labels and oracle reference group only",
+            ],
         },
         "aggregates": aggregates,
         "hypothesis": hypothesis,
@@ -500,7 +512,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="lesson-55 RGB-D loop record")
+    parser = argparse.ArgumentParser(description="lesson-55 marker loop record")
     parser.add_argument("--output", default=DEFAULT_RESULTS)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()

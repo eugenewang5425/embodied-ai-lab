@@ -630,6 +630,7 @@ def test_cli_subprocess_end_to_end(tmp_path):
         capture_output=True,
         text=True,
         encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
         timeout=600,
         check=False,
     )

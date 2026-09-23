@@ -467,6 +467,15 @@ def test_true_shortest_empty_scene():
     )
 
 
+def test_planner_keeps_two_waypoints_inside_one_grid_cell():
+    config = GridNavConfig()
+    grid = np.zeros((config.grid_cells, config.grid_cells))
+    plan = make_plan(grid, np.array([3.51, 3.51, 0.0]), np.array([3.58, 3.58]), config)
+    assert plan is not None
+    assert len(plan["waypoints"]) == 2
+    assert len(plan["profile"][0]) == 1
+
+
 @pytest.mark.slow
 def test_cli_subprocess_end_to_end(tmp_path):
     """CLI micro run: stdout JSON, files on disk, new directory never overwritten."""

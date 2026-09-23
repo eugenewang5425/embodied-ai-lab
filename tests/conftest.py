@@ -3,8 +3,10 @@
 Slow-test layering (issue #16): every `isolated_tk` test automatically
 carries `slow` (a real Tk window is minutes), and modules may mark further
 tests `@pytest.mark.slow` (full collect-replay records, CLI subprocess
-end-to-end).  Development runs `uv run pytest -q -m "not slow"` (target
-< 90 s); the full suite stays the pre-push gate.
+end-to-end). Development uses `uv run python scripts/test.py quick`;
+changed lessons get selected full tests before push, while shared-module
+changes and milestones get the whole suite. Wall time varies with
+concurrent simulation jobs, so the wrapper reports actual elapsed time.
 """
 
 import os

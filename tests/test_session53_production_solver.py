@@ -14,7 +14,6 @@ def mod():
 
 
 def test_config_guards():
-    mm = mod()
     from embodied_learning.experiments.production_solver import ProductionConfig
 
     with pytest.raises(ValueError):

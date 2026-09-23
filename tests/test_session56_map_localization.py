@@ -24,6 +24,39 @@ def test_config_guards():
         MapLocConfig(kidnap_fraction=1.0)
 
 
+def test_mapping_frame_selection_uses_estimated_arc():
+    mm = mod()
+    estimated = np.array(
+        [[0.0, 0.0, 0.0], [5.0, 0.0, 0.0], [10.0, 0.0, 0.0], [15.0, 0.0, 0.0], [20.0, 0.0, 0.0]]
+    )
+    assert mm.first_lap_frames(estimated, lap_len_m=10.0) == [0, 1, 2]
+    extended = np.array([[float(x), 0.0, 0.0] for x in range(0, 40, 5)])
+    assert mm.first_lap_frames(extended) == [0, 1, 2, 3]
+
+
+def test_marker_map_paints_physical_observation_at_estimated_pose():
+    mm = mod()
+    observed = np.zeros((3, 12))
+    observed[0, 2] = 1.0
+    observed[2, 5] = 1.0
+    estimated = np.array([[1.1, 2.1, 0.0], [1.1, 2.1, 0.0], [3.1, 4.1, 0.0], [3.1, 4.1, 0.0]])
+    marker_map = mm.marker_map_from_observations(observed, estimated, [0, 1, 2], world_size_m=10.0)
+    assert marker_map[4, 2, 2] == 1.0
+    assert marker_map[8, 6, 5] == 1.0
+
+
+def test_scan_alignment_tolerates_quantization_but_detects_drift():
+    mm = mod()
+    reference = np.zeros((20, 20))
+    reference[10, 10] = 1.0
+    near = np.zeros_like(reference)
+    near[10, 11] = 1.0
+    far = np.zeros_like(reference)
+    far[10, 14] = 1.0
+    assert mm.scan_map_alignment(near, reference, 0.15)["precision"] == 1.0
+    assert mm.scan_map_alignment(far, reference, 0.15)["precision"] == 0.0
+
+
 def test_particle_filter_likelihood_field_basics():
     mm = mod()
     grid = np.zeros((100, 100))
@@ -99,15 +132,17 @@ def test_kidnap_route_is_free_space_and_continuous():
 
 
 def mm_mod_collect(base, matcher, obstacles, walls):
+    from embodied_learning.experiments.aniso_env import PATROL_INSET
     from embodied_learning.experiments.matcher_engineering import collect_patrol_laps
 
-    return collect_patrol_laps(obstacles, (3.5, 3.5, 0.0), matcher, walls=walls)
+    return collect_patrol_laps(
+        obstacles, (3.5, 3.5, 0.0), matcher, walls=walls, patrol=PATROL_INSET
+    )
 
 
 # ------------------------------------------------------------- records
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
-    from embodied_learning.experiments.aniso_env import PATROL_INSET  # noqa: F401
     from embodied_learning.experiments.grid_nav import GridNavConfig
     from embodied_learning.experiments.map_localization import MapLocConfig, run_experiment
 
@@ -123,12 +158,30 @@ def light_stream(tmp_path_factory):
 def test_light_run_contract(light_stream):
     out, report = light_stream
     assert report["experiment"] == "map_localization_lesson56"
-    assert report["schema_version"] == 1
+    assert report["schema_version"] == 5
     r = report["hypothesis"]["results"]
-    for key in ("collector_met", "bounded_met", "kidnap_met", "smear_penalty", "map_hit_rate"):
+    for key in ("collector_met", "bounded_met", "kidnap_met", "smear_ratio", "map_hit_rate"):
         assert key in r
     assert (out / "trajectories.npz").exists()
     assert (out / "summary.json").exists()
+    with np.load(out / "trajectories.npz", allow_pickle=False) as npz:
+        curves = npz["kidnap_pf_err"]
+        xy = npz["truth_chain"][:, :2]
+    # The lesson-54 inset patrol stays around 3.5..7.5 m. A regression to
+    # collect_patrol_laps' outer-square default reaches 1..9 m instead.
+    assert np.min(xy) > 2.5
+    assert np.max(xy) < 8.5
+    for i, trial in enumerate(r["kidnap_trials"]):
+        assert trial["end_err_m"] == pytest.approx(curves[i, trial["recovery_end_frame"]])
+
+
+def test_demo_loads_current_record(light_stream):
+    from embodied_learning.map_localization_demo import load_replays
+
+    out, report = light_stream
+    replay = load_replays(out)
+    assert replay["report"]["schema_version"] == report["schema_version"]
+    assert len(replay["pf_self_err"]) == len(replay["est_err_curve"])
 
 
 def test_record_tamper_rejection(light_stream):

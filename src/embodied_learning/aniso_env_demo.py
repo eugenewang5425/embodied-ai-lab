@@ -121,7 +121,6 @@ class AnisoDemo:
     def draw_erratum(self):
         self.fig.clear()
         agg = self.report["aggregates"]
-        r = self.report["hypothesis"]["results"]
         ax = self.fig.add_subplot(1, 1, 1)
         arms = ("ISO", "ANISO")
         legacy = [agg[a]["K"]["legacy_direction_correctness"] for a in arms]

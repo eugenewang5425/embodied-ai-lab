@@ -1,4 +1,4 @@
-"""Lesson 55: RGB-D visual loop closure - contracts and record integrity."""
+"""Lesson 55: simulated marker retrieval - contracts and record integrity."""
 
 import hashlib
 import json
@@ -15,7 +15,6 @@ def mod():
 
 
 def test_config_guards():
-    mm = mod()
     from embodied_learning.experiments.rgbd_loops import RgbdConfig
 
     with pytest.raises(ValueError):
@@ -67,6 +66,16 @@ def test_cosine_similarity_basics():
     assert mm.cosine(np.zeros(3), np.array([1.0, 0.0, 0.0])) == 0.0
 
 
+def test_probe_exclusion_uses_estimated_arc():
+    mm = mod()
+    est = np.array(
+        [[0.0, 0.0, 0.0], [5.0, 0.0, 0.0], [10.0, 0.0, 0.0], [15.0, 0.0, 0.0], [20.0, 0.0, 0.0]]
+    )
+    probes, arc = mm.probes_from_odometry(est, n_frames=4, stride=1)
+    assert probes == [3]
+    np.testing.assert_array_equal(arc, [0.0, 5.0, 10.0, 15.0, 20.0])
+
+
 # ------------------------------------------------------------- records
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
@@ -85,7 +94,7 @@ def light_stream(tmp_path_factory):
 def test_light_run_contract(light_stream):
     out, report = light_stream
     assert report["experiment"] == "rgbd_loops_lesson55"
-    assert report["schema_version"] == 1
+    assert report["schema_version"] == 2
     r = report["hypothesis"]["results"]
     for key in (
         "precision_topk",
@@ -96,15 +105,25 @@ def test_light_run_contract(light_stream):
     ):
         assert key in r
     assert report["protocol"]["retrieval"]["oracle_free"] is True
+    assert report["protocol"]["retrieval"]["probe_exclusion"] == "estimated odometry arc >= 15 m"
     assert report["protocol"]["appearance"]["confusion"] == 0.08
     assert (out / "trajectories.npz").exists()
     assert (out / "summary.json").exists()
 
 
+def test_demo_loads_current_record(light_stream):
+    from embodied_learning.rgbd_loops_demo import load_replays
+
+    out, report = light_stream
+    replay = load_replays(out)
+    assert replay["report"]["schema_version"] == report["schema_version"]
+    assert len(replay["topk_frames"]) == report["aggregates"]["RGBD-TOPK"]["n_candidates"]
+
+
 def test_retrieval_beats_uniform_baseline(light_stream):
     """The treatment claim in its minimal form: the top-k accepted rows are
     at least as correct as the uniform-probe accepted rows."""
-    out, report = light_stream
+    _out, report = light_stream
     agg = report["aggregates"]
     assert agg["RGBD-TOPK"]["direction_correctness"] >= agg["GEO-ALL"]["direction_correctness"]
     assert agg["RGBD-TOPK"]["n_candidates"] < agg["GEO-ALL"]["n_candidates"]

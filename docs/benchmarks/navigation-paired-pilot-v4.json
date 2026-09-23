@@ -1,0 +1,309 @@
+{
+  "experiment": "navigation_map_localization_benchmark",
+  "schema_version": 2,
+  "python": "3.12.13",
+  "plan": {
+    "arms": [
+      "ISO",
+      "ANISO"
+    ],
+    "world_seeds": [
+      0,
+      1,
+      2
+    ],
+    "sensor_seeds": [
+      0,
+      1
+    ],
+    "particles": 100,
+    "mapping_control": "truth-controlled replay; not autonomous mapping or navigation",
+    "pairing": "same geometry and physical patrol per world; sensor seeds change noisy localization observations and PF randomness",
+    "map_arms": "ideal occupancy, same-scan truth-pose projection, same-scan odometry-pose projection",
+    "gate": "both arms >=5 valid worlds; >=4 worlds/arm with all sensor seeds improving selfbuilt mean and p95 vs odometry and same-scan map precision/recall >=0.70"
+  },
+  "rows": [
+    {
+      "arm": "ISO",
+      "world_seed": 0,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.984345415110972,
+      "pf_true_mean_m": 0.2938103847781602,
+      "pf_sensor_truth_mean_m": 0.33408208227893926,
+      "pf_self_mean_m": 2.221045133670969,
+      "est_p95_m": 3.9218973781735764,
+      "pf_self_p95_m": 4.161010693485593,
+      "map_alignment_precision": 0.35543278084714547,
+      "map_alignment_recall": 0.5174129353233831,
+      "map_median_offset_m": 0.4357388321059432,
+      "trajectory_sha256": "595df6f27f7dc9ca1285f29bf81d2b898de1552c415c8b55d12dfd007b1418f1",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w0_s0"
+    },
+    {
+      "arm": "ISO",
+      "world_seed": 0,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.984345415110972,
+      "pf_true_mean_m": 0.44335582236740007,
+      "pf_sensor_truth_mean_m": 0.34077074367185967,
+      "pf_self_mean_m": 2.59703219027813,
+      "est_p95_m": 3.9218973781735764,
+      "pf_self_p95_m": 4.8383129285975635,
+      "map_alignment_precision": 0.35543278084714547,
+      "map_alignment_recall": 0.5174129353233831,
+      "map_median_offset_m": 0.4357388321059432,
+      "trajectory_sha256": "b553a92aed6243208f2b2ffb6a26bc92316383232e4572a3eb58be291ea1950e",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w0_s1"
+    },
+    {
+      "arm": "ISO",
+      "world_seed": 1,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.9883090669163295,
+      "pf_true_mean_m": 0.2742256252288555,
+      "pf_sensor_truth_mean_m": 0.3133328090556602,
+      "pf_self_mean_m": 1.6714698062275972,
+      "est_p95_m": 3.9247090298054403,
+      "pf_self_p95_m": 2.7802548882479297,
+      "map_alignment_precision": 0.37280296022201664,
+      "map_alignment_recall": 0.5404040404040404,
+      "map_median_offset_m": 0.4,
+      "trajectory_sha256": "ed8df6fa0b910c41da3ff880361193cfdb3bbdefceada326e548afa3bdeb2975",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w1_s0"
+    },
+    {
+      "arm": "ISO",
+      "world_seed": 1,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.9883090669163295,
+      "pf_true_mean_m": 0.38172476321657794,
+      "pf_sensor_truth_mean_m": 0.3311179351062528,
+      "pf_self_mean_m": 2.384844715056024,
+      "est_p95_m": 3.9247090298054403,
+      "pf_self_p95_m": 4.381864539308535,
+      "map_alignment_precision": 0.37280296022201664,
+      "map_alignment_recall": 0.5404040404040404,
+      "map_median_offset_m": 0.4,
+      "trajectory_sha256": "0fb6472b16d10e1d1b386f798e5f2565f6cad50e448d2b37da66fc48028826a6",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w1_s1"
+    },
+    {
+      "arm": "ISO",
+      "world_seed": 2,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.980934504615289,
+      "pf_true_mean_m": 0.3150782901798432,
+      "pf_sensor_truth_mean_m": 0.3415693625898535,
+      "pf_self_mean_m": 1.5077127416826661,
+      "est_p95_m": 3.934386311755863,
+      "pf_self_p95_m": 2.70071035103062,
+      "map_alignment_precision": 0.3652822151224707,
+      "map_alignment_recall": 0.5027322404371585,
+      "map_median_offset_m": 0.5,
+      "trajectory_sha256": "16bbe4926cbcf2b6e077a7d40dc5ca45941a24bba6babeea0c6bea34b96eac13",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w2_s0"
+    },
+    {
+      "arm": "ISO",
+      "world_seed": 2,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.980934504615289,
+      "pf_true_mean_m": 0.3647647678007837,
+      "pf_sensor_truth_mean_m": 0.36225909460895944,
+      "pf_self_mean_m": 2.6688243725419096,
+      "est_p95_m": 3.934386311755863,
+      "pf_self_p95_m": 5.507896776073078,
+      "map_alignment_precision": 0.3652822151224707,
+      "map_alignment_recall": 0.5027322404371585,
+      "map_median_offset_m": 0.5,
+      "trajectory_sha256": "47c114e542d688f050c137d476f524578250d0f6b6168449b92656289e532e07",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\iso_w2_s1"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 0,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.984345415110972,
+      "pf_true_mean_m": 0.8616509160830048,
+      "pf_sensor_truth_mean_m": 0.4786163271572252,
+      "pf_self_mean_m": 2.173892807739905,
+      "est_p95_m": 3.9218973781735764,
+      "pf_self_p95_m": 5.2185521176946255,
+      "map_alignment_precision": 0.4124293785310734,
+      "map_alignment_recall": 0.6854663774403471,
+      "map_median_offset_m": 0.30000000000000004,
+      "trajectory_sha256": "213f7829b6672b5b8288bc26b6e865511a995ff7b8424a7dd66fcb9a40649138",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w0_s0"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 0,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.984345415110972,
+      "pf_true_mean_m": 0.6001554205565044,
+      "pf_sensor_truth_mean_m": 0.372713613682068,
+      "pf_self_mean_m": 1.5041028262416771,
+      "est_p95_m": 3.9218973781735764,
+      "pf_self_p95_m": 2.7003712739817596,
+      "map_alignment_precision": 0.4124293785310734,
+      "map_alignment_recall": 0.6854663774403471,
+      "map_median_offset_m": 0.30000000000000004,
+      "trajectory_sha256": "b9f064e8a51aae3e725d1bbcd50085a38be39344f63bdddc969bcde98254092c",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w0_s1"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 1,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.9883090669163295,
+      "pf_true_mean_m": 0.4905258680555,
+      "pf_sensor_truth_mean_m": 0.20833094204744285,
+      "pf_self_mean_m": 1.6675685946332044,
+      "est_p95_m": 3.9247090298054403,
+      "pf_self_p95_m": 3.0363510770405977,
+      "map_alignment_precision": 0.42536835361947467,
+      "map_alignment_recall": 0.6594360086767896,
+      "map_median_offset_m": 0.28284271247461906,
+      "trajectory_sha256": "e45b719b711cab7d8b1236fb38f2eb42ffd7d053bbccd5265e1e315031465a99",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w1_s0"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 1,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.9883090669163295,
+      "pf_true_mean_m": 1.5707653491120832,
+      "pf_sensor_truth_mean_m": 0.30904055069379655,
+      "pf_self_mean_m": 1.306677551446175,
+      "est_p95_m": 3.9247090298054403,
+      "pf_self_p95_m": 2.6001983236510546,
+      "map_alignment_precision": 0.42536835361947467,
+      "map_alignment_recall": 0.6594360086767896,
+      "map_median_offset_m": 0.28284271247461906,
+      "trajectory_sha256": "0d307751d3abd08bed5ec49fcfe81a90a62d0876d0b9dee1ccdd6ffcf9b89a07",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w1_s1"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 2,
+      "sensor_seed": 0,
+      "status": "ok",
+      "est_mean_m": 1.980934504615289,
+      "pf_true_mean_m": 0.21911226737558767,
+      "pf_sensor_truth_mean_m": 0.15236386526157156,
+      "pf_self_mean_m": 1.0692610094358737,
+      "est_p95_m": 3.934386311755863,
+      "pf_self_p95_m": 2.3799999949746544,
+      "map_alignment_precision": 0.4245416078984485,
+      "map_alignment_recall": 0.6564551422319475,
+      "map_median_offset_m": 0.28284271247461906,
+      "trajectory_sha256": "18f89ece267d886730761d91f37a924df750acd1e7d9bce4c5cea92e99b4d3d5",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w2_s0"
+    },
+    {
+      "arm": "ANISO",
+      "world_seed": 2,
+      "sensor_seed": 1,
+      "status": "ok",
+      "est_mean_m": 1.980934504615289,
+      "pf_true_mean_m": 0.18693577641188164,
+      "pf_sensor_truth_mean_m": 0.19802649972997202,
+      "pf_self_mean_m": 1.1335271123571615,
+      "est_p95_m": 3.934386311755863,
+      "pf_self_p95_m": 2.3826805518664584,
+      "map_alignment_precision": 0.4245416078984485,
+      "map_alignment_recall": 0.6564551422319475,
+      "map_median_offset_m": 0.28284271247461906,
+      "trajectory_sha256": "49b9c945544697ab378d1e1d56d3fd3fee3840a463e3457812e15fae9cc001c3",
+      "result_dir": "results\\navigation_benchmark_2026-09-24_pilot_v4\\aniso_w2_s1"
+    }
+  ],
+  "summary": {
+    "by_arm": {
+      "ISO": {
+        "valid_episodes": 6,
+        "invalid_episodes": 0,
+        "valid_worlds": 3,
+        "mean_errors_m": {
+          "est_mean_m": 1.9845296622141968,
+          "pf_true_mean_m": 0.34549327559527016,
+          "pf_sensor_truth_mean_m": 0.3371886712185875,
+          "pf_self_mean_m": 2.175154826576216,
+          "est_p95_m": 3.9269975732449596,
+          "pf_self_p95_m": 4.06167502945722
+        },
+        "world_scores": [
+          {
+            "world_seed": 0,
+            "complete": true,
+            "mean_better_all_sensor_seeds": false,
+            "p95_better_all_sensor_seeds": false,
+            "map_aligned_all_sensor_seeds": false
+          },
+          {
+            "world_seed": 1,
+            "complete": true,
+            "mean_better_all_sensor_seeds": false,
+            "p95_better_all_sensor_seeds": false,
+            "map_aligned_all_sensor_seeds": false
+          },
+          {
+            "world_seed": 2,
+            "complete": true,
+            "mean_better_all_sensor_seeds": false,
+            "p95_better_all_sensor_seeds": false,
+            "map_aligned_all_sensor_seeds": false
+          }
+        ]
+      },
+      "ANISO": {
+        "valid_episodes": 6,
+        "invalid_episodes": 0,
+        "valid_worlds": 3,
+        "mean_errors_m": {
+          "est_mean_m": 1.9845296622141968,
+          "pf_true_mean_m": 0.6548575995990936,
+          "pf_sensor_truth_mean_m": 0.2865152997620127,
+          "pf_self_mean_m": 1.475838316975666,
+          "est_p95_m": 3.9269975732449596,
+          "pf_self_p95_m": 3.0530255565348585
+        },
+        "world_scores": [
+          {
+            "world_seed": 0,
+            "complete": true,
+            "mean_better_all_sensor_seeds": false,
+            "p95_better_all_sensor_seeds": false,
+            "map_aligned_all_sensor_seeds": false
+          },
+          {
+            "world_seed": 1,
+            "complete": true,
+            "mean_better_all_sensor_seeds": true,
+            "p95_better_all_sensor_seeds": true,
+            "map_aligned_all_sensor_seeds": false
+          },
+          {
+            "world_seed": 2,
+            "complete": true,
+            "mean_better_all_sensor_seeds": true,
+            "p95_better_all_sensor_seeds": true,
+            "map_aligned_all_sensor_seeds": false
+          }
+        ]
+      }
+    },
+    "selfbuilt_localization_gate_met": false
+  },
+  "runner_sha256": "f29afedd893d01056415330a3d04f00f5ecd139f08bc781a5ffe5fea8ed68029"
+}

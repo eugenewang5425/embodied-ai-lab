@@ -1,4 +1,4 @@
-"""Generate readable README evidence figures for lessons 43-56.
+"""Generate readable evidence figures for lessons 43-56 and the navigation pilot.
 
 Each panel gets a full README-width row. All measurements come from the
 archived summary.json/trajectories.npz records under results/. Rerun with:
@@ -485,11 +485,11 @@ def lesson54():
 
 # ------------------------------------------------------------ lesson 55
 def lesson55():
-    report, data = load("rgbd_loops_2026-09-09")
+    report, data = load("rgbd_loops_2026-09-23_v2")
     agg = report["aggregates"]
     fig, axes = panels(2)
     groups = ("GEO-ALL", "GEO-ORACLE", "RGBD-TOPK")
-    names = ("无检索基线", "真值候选参考", "RGB-D top-12")
+    names = ("无检索基线", "真值候选参考", "标记检索 top-12")
     correct = [agg[g]["direction_correctness"] for g in groups]
     axes[0].bar(names, correct, color=[C_SELF, C_GOOD, C_PF])
     axes[0].axhline(0.80, color="k", ls="--", lw=1)
@@ -528,23 +528,24 @@ def lesson55():
 
 # ------------------------------------------------------------ lesson 56
 def lesson56():
-    report, data = load("map_localization_2026-09-09")
+    report, data = load("map_localization_2026-09-24_v5")
     fig, axes = panels(2)
     axes[0].plot(data["est_err_curve"], color=C_EST, lw=1.2, label="EST 无图")
-    axes[0].plot(data["pf_self_err"], color=C_SELF, lw=1.0, label="PF 自建图")
-    axes[0].plot(data["pf_true_err"], color=C_PF, lw=1.5, label="PF 真值图")
+    axes[0].plot(data["pf_self_err"], color="#7c3aed", lw=1.0, label="PF 自建图")
+    axes[0].plot(data["pf_sensor_truth_err"], color=C_GOOD, lw=1.0, label="PF 真值位姿投影图")
+    axes[0].plot(data["pf_true_err"], color=C_PF, lw=1.5, label="PF 理想占据图")
     axes[0].axhline(0.6, color=C_PF, ls="--", lw=1)
     style_axes(axes[0], "位置误差随帧变化（虚线 = 0.6 m 目标）")
     axes[0].set_xlabel("帧", fontsize=12)
     axes[0].set_ylabel("位置误差 (m)", fontsize=12)
-    axes[0].legend(fontsize=10, loc="upper left", ncol=3, framealpha=0.95)
+    axes[0].legend(fontsize=10, loc="upper left", ncol=2, framealpha=0.95)
     trials = report["hypothesis"]["results"]["kidnap_trials"]
     labels = [f"{t['fraction']:.2f}" for t in trials]
     ends = [t.get("end_err_m", float("nan")) for t in trials]
     bars = axes[1].bar(labels, ends, color=[C_GOOD if t.get("success") else C_BAD for t in trials])
     bar_values(axes[1], bars, [f"{v:.1f}" for v in ends], offset=0.15)
     axes[1].axhline(1.0, color="k", ls="--", lw=1)
-    style_axes(axes[1], "绑架重定位：5 次均未达到 1.0 m 恢复线")
+    style_axes(axes[1], "理想图绑架重定位：5 次中 4 次达到恢复线")
     axes[1].set_xlabel("绑架时点（巡游进度）", fontsize=12)
     axes[1].set_ylabel("恢复窗末误差 (m)", fontsize=12)
     save(fig, "lesson-56-charts.png")
@@ -552,11 +553,59 @@ def lesson56():
         [
             ("真实运动", data["truth_chain"], "k", 1.6),
             ("EST 无图", data["est_chain"], C_EST, 1.5),
-            ("PF 真值图", data["pf_true_chain"], C_PF, 1.7),
+            ("PF 理想占据图", data["pf_true_chain"], C_PF, 1.7),
         ],
         "同一巡游 · 真实轨迹与两条估计链",
         "lesson-56-trajectory.png",
     )
+
+
+def navigation_pilot():
+    """Small-sample pilot: show localization and same-scan map alignment separately."""
+    path = Path("docs/benchmarks/navigation-paired-pilot-v4.json")
+    report = json.loads(path.read_text(encoding="utf-8"))
+    fig, axes = panels(2)
+    arms = ("ISO", "ANISO")
+    x = np.arange(len(arms))
+    width = 0.23
+    for offset, key, label, color in (
+        (-width, "est_mean_m", "EST 无图", C_EST),
+        (0, "pf_true_mean_m", "PF 理想图", C_PF),
+        (width, "pf_self_mean_m", "PF 自建图", "#7c3aed"),
+    ):
+        values = [report["summary"]["by_arm"][arm]["mean_errors_m"][key] for arm in arms]
+        bars = axes[0].bar(x + offset, values, width, color=color, label=label)
+        bar_values(axes[0], bars, [f"{v:.2f}" for v in values], offset=0.05)
+    axes[0].set_xticks(x, arms)
+    axes[0].set_ylim(0, 3.7)
+    axes[0].set_ylabel("平均位置误差 (m)", fontsize=12)
+    axes[0].legend(fontsize=10, loc="upper right", ncol=3)
+    style_axes(axes[0], "跨场景试跑：每组 3 个有效场景 × 2 个传感器种子")
+
+    rows = [row for row in report["rows"] if row["status"] == "ok" and row["sensor_seed"] == 0]
+    labels = [f"{row['arm']} 场景{row['world_seed']}" for row in rows]
+    xx = np.arange(len(rows))
+    axes[1].bar(
+        xx - 0.18,
+        [row["map_alignment_precision"] for row in rows],
+        0.36,
+        label="精确率",
+        color=C_GOOD,
+    )
+    axes[1].bar(
+        xx + 0.18,
+        [row["map_alignment_recall"] for row in rows],
+        0.36,
+        label="召回率",
+        color=C_PF,
+    )
+    axes[1].axhline(0.7, color="black", ls="--", lw=1)
+    axes[1].set_xticks(xx, labels)
+    axes[1].set_ylim(0, 1.02)
+    axes[1].set_ylabel("同帧地图对齐", fontsize=12)
+    axes[1].legend(fontsize=10, loc="upper right", ncol=2)
+    style_axes(axes[1], "地图表面对齐：虚线为精确率与召回率的 0.70 门槛")
+    save(fig, "navigation-pilot-charts.png")
 
 
 def main():
@@ -575,6 +624,7 @@ def main():
     lesson54()
     lesson55()
     lesson56()
+    navigation_pilot()
 
 
 if __name__ == "__main__":

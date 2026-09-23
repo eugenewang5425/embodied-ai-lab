@@ -24,7 +24,7 @@ def test_segment_obstacle_distance_and_ray_support():
     ranges, hit = cast_rays(3.0, 3.0, np.array([-math.pi / 2]), (), (seg,), 20.0)
     assert hit[0] and ranges[0] == pytest.approx(2.0)
     # a parallel ray never hits
-    ranges2, hit2 = cast_rays(3.0, 3.0, np.array([0.0]), (), (seg,), 20.0)
+    _ranges2, hit2 = cast_rays(3.0, 3.0, np.array([0.0]), (), (seg,), 20.0)
     assert not hit2[0]
 
 
@@ -132,7 +132,7 @@ def test_record_tamper_rejection(light_stream):
 def recompute_iso(light_stream):
     out, _report = light_stream
     data = json.loads((out / "summary.json").read_text(encoding="utf-8"))
-    rows = data["episodes"] if "episodes" in data else []
+    rows = data.get("episodes", [])
     # the aggregate is recomputable from the npz arrays: sum of correct / accepted
     with np.load(out / "trajectories.npz", allow_pickle=False) as npz:
         acc = npz["ISO_K_accepted"]

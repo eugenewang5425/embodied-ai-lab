@@ -1,8 +1,8 @@
-"""Lesson 55 viewer: RGB-D visual loop closure - the positive result.
+"""Lesson 55 viewer: simulated marker retrieval and geometric verification.
 
 Two static modes share one lesson-55 recording:
 1. groups: the three-way comparison (no-retrieval baseline / oracle reference
-   / RGB-D top-k treatment) on candidates, acceptance and correctness;
+   / marker top-k treatment) on candidates, acceptance and correctness;
 2. retrieval: the probe-frame similarity trace with the retrieved top-k and
    the true-loop region marked.
 """
@@ -22,7 +22,7 @@ from embodied_learning.experiments.rgbd_loops import DEFAULT_RESULTS, EXPERIMENT
 def load_replays(directory):
     directory = Path(directory)
     report = json.loads((directory / "summary.json").read_text(encoding="utf-8"))
-    if report.get("experiment") != EXPERIMENT or report.get("schema_version") != 1:
+    if report.get("experiment") != EXPERIMENT or report.get("schema_version") not in (1, 2):
         raise ValueError("Incompatible lesson-55 recording")
     path = directory / "trajectories.npz"
     if hashlib.sha256(path.read_bytes()).hexdigest() != report.get("trajectories_sha256"):
@@ -58,18 +58,27 @@ class RgbdDemo:
         self.root = root
         self.data = data
         self.report = data["report"]
+        agg = self.report["aggregates"]
+        base, top = agg["GEO-ALL"], agg["RGBD-TOPK"]
+        old_record = self.report["schema_version"] == 1
         outer = ttk.Frame(root if parent is None else parent, padding=10)
         outer.pack(fill="both", expand=True)
         ttk.Label(
             outer,
-            text="第五十五课 · RGB-D 视觉回环——外观检索补判别（四判据全达成）",
+            text="第五十五课 · 模拟标记检索与几何验证",
             font=("Microsoft YaHei", 17, "bold"),
         ).pack(anchor="w")
         ttk.Label(
             outer,
             text=(
-                "检索层（标记词袋 top-12）供判别，验证层（K 匹配器）供精度："
-                "方向正确率 0.302 → 1.000，审查量 289 → 12（4%）"
+                f"方向正确率 {base['direction_correctness']:.3f} → "
+                f"{top['direction_correctness']:.3f}；审查量 "
+                f"{base['n_candidates']} → {top['n_candidates']}。"
+                + (
+                    "历史记录：候选排除环用了真值弧长。"
+                    if old_record
+                    else "候选排除环使用里程计弧长。"
+                )
             ),
         ).pack(anchor="w", pady=(2, 4))
         controls = ttk.Frame(outer)
@@ -111,16 +120,19 @@ class RgbdDemo:
         lines.append("")
         lines.append(f"精确率@top-12: {r['precision_topk']:.3f}")
         lines.append(f"管线成功（回环真闭合）: {r['pipeline_success']}")
-        lines.append(
-            f"效率: {agg['RGBD-TOPK']['n_candidates']}/{agg['GEO-ALL']['n_candidates']} = 4%"
-        )
+        n_top = agg["RGBD-TOPK"]["n_candidates"]
+        n_all = agg["GEO-ALL"]["n_candidates"]
+        lines.append(f"审查比例: {n_top}/{n_all} = {n_top / n_all:.1%}")
+        lines.append("传感器：模拟标记，不是真实 RGB-D 图像")
+        if self.report["schema_version"] == 1:
+            lines.append("历史记录：候选排除环使用真值弧长")
         return "\n".join(lines)
 
     def draw_groups(self):
         self.fig.clear()
         agg = self.report["aggregates"]
         groups = ("GEO-ALL", "GEO-ORACLE", "RGBD-TOPK")
-        names = ("无检索基线", "真值候选参考", "RGB-D top-12")
+        names = ("无检索基线", "真值候选参考", "标记 top-12")
         correct = [agg[g]["direction_correctness"] for g in groups]
         cands = [agg[g]["n_candidates"] for g in groups]
         axes = self.fig.subplots(1, 2).reshape(-1)
@@ -130,12 +142,12 @@ class RgbdDemo:
             axes[0].text(i, v + 0.02, f"{v:.3f}", ha="center", fontsize=9)
         axes[0].set_ylabel("方向正确率（修正判据）")
         axes[0].set_ylim(0, 1.05)
-        axes[0].set_title("方向正确率：0.302 → 1.000", fontsize=10)
+        axes[0].set_title("方向正确率：检索前后", fontsize=10)
         axes[1].bar(names, cands, color=["#9ca3af", "#2563eb", "#b91c1c"])
         for i, v in enumerate(cands):
             axes[1].text(i, v + max(cands) * 0.02, str(v), ha="center", fontsize=9)
         axes[1].set_ylabel("候选审查量")
-        axes[1].set_title("审查量：289 → 12（4%）", fontsize=10)
+        axes[1].set_title("候选审查量", fontsize=10)
 
     def draw_retrieval(self):
         self.fig.clear()
@@ -161,14 +173,14 @@ class RgbdDemo:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="lesson-55 RGB-D demo")
+    parser = argparse.ArgumentParser(description="lesson-55 simulated-marker demo")
     parser.add_argument("--results", default=DEFAULT_RESULTS)
     args = parser.parse_args()
     import tkinter as tk
 
     data = load_replays(args.results)
     root = tk.Tk()
-    root.title("第五十五课 · RGB-D 视觉回环")
+    root.title("第五十五课 · 模拟标记回环")
     root.geometry("1400x740+30+20")
     RgbdDemo(root, data)
     root.mainloop()
