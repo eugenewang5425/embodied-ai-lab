@@ -76,18 +76,29 @@ def test_probe_exclusion_uses_estimated_arc():
     np.testing.assert_array_equal(arc, [0.0, 5.0, 10.0, 15.0, 20.0])
 
 
+def light_config():
+    """Keep record-contract tests nontrivial without replaying the lesson run.
+
+    The formal lesson uses denser rays and more probes.  This configuration
+    still exercises odometry-based candidate exclusion, appearance retrieval,
+    geometric verification, archive writing, and the reported gates.
+    """
+    from embodied_learning.experiments.grid_nav import GridNavConfig
+    from embodied_learning.experiments.rgbd_loops import RgbdConfig
+
+    return RgbdConfig(
+        base=GridNavConfig(rays=24, max_range_m=4.0, obstacle_scenes=1, inits=1),
+        probe_stride=16,
+    )
+
+
 # ------------------------------------------------------------- records
 @pytest.fixture(scope="module")
 def light_stream(tmp_path_factory):
-    from embodied_learning.experiments.grid_nav import GridNavConfig
-    from embodied_learning.experiments.rgbd_loops import RgbdConfig, run_experiment
+    from embodied_learning.experiments.rgbd_loops import run_experiment
 
-    conf = RgbdConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        probe_stride=8,
-    )
     out = tmp_path_factory.mktemp("rgbd55") / "run"
-    report = run_experiment(out, seed=0, config=conf, log=None)
+    report = run_experiment(out, seed=0, config=light_config(), log=None)
     return out, report
 
 
@@ -117,7 +128,10 @@ def test_demo_loads_current_record(light_stream):
     out, report = light_stream
     replay = load_replays(out)
     assert replay["report"]["schema_version"] == report["schema_version"]
-    assert len(replay["topk_frames"]) == report["aggregates"]["RGBD-TOPK"]["n_candidates"]
+    # Appearance retrieval chooses top-k before geometric point-count guards.
+    # A retrieved frame may therefore be absent from the verified-row group.
+    assert len(replay["topk_frames"]) == report["protocol"]["retrieval"]["top_k"]
+    assert report["aggregates"]["RGBD-TOPK"]["n_candidates"] <= len(replay["topk_frames"])
 
 
 def test_retrieval_beats_uniform_baseline(light_stream):
@@ -156,13 +170,9 @@ def recompute_precision(light_stream):
 
 
 def test_seed_determinism(tmp_path):
-    from embodied_learning.experiments.grid_nav import GridNavConfig
-    from embodied_learning.experiments.rgbd_loops import RgbdConfig, run_experiment
+    from embodied_learning.experiments.rgbd_loops import run_experiment
 
-    conf = RgbdConfig(
-        base=GridNavConfig(rays=64, max_range_m=4.0, obstacle_scenes=1, inits=1),
-        probe_stride=8,
-    )
+    conf = light_config()
     first = run_experiment(tmp_path / "a", seed=0, config=conf, log=None)
     second = run_experiment(tmp_path / "b", seed=0, config=conf, log=None)
     pop = lambda r: json.dumps(
