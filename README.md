@@ -1031,7 +1031,7 @@ uv run python -m embodied_learning.act_torch_demo --results results/act_torch_re
 ## 第四十三课：占据栅格建图 + A\* 路径规划——回到感知-建图-规划主线
 
 ![第四十三课演示画面：三模式合览](docs/img/lesson-43-demo.png)
-![第四十三课数据图：左=到达率对比（15/15 vs 3/15）；右=碰撞事件 1005→0](docs/img/lesson-43-charts.png)
+![第四十三课数据图：左=到达率（15/15 vs 3/15）；中=碰撞 1005→0；右=俯瞰轨迹（B 沿规划路径，A 打转）](docs/img/lesson-43-charts.png)
 
 数据解读：B 组到达率 100%、零碰撞，路径比中位 0.974≈全知最短——分层栈各层安全常数必须全局一致。
 
@@ -1061,7 +1061,7 @@ uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_2026
 ## 第四十四课：定位误差穿栈——位姿不确定下建图-规划-追踪还成立吗？
 
 ![第四十四课演示画面：三模式合览](docs/img/lesson-44-demo.png)
-![第四十四课数据图：左=四组到达率（T/F 15/15，O1/O2 全灭）；右=融合后误差回到 2.5 cm](docs/img/lesson-44-charts.png)
+![第四十四课数据图：左=四组到达率；中=融合后误差 2.5 cm；右=O2 轨迹（估计链原地兜圈）](docs/img/lesson-44-charts.png)
 
 数据解读：1% 里程计偏差即 0/15——定位是导航栈的地基；地标融合后 15/15、误差 2.5 cm 与真值组等价。
 
@@ -1093,7 +1093,7 @@ uv run python -m embodied_learning.nav_pose_error_demo --results results/nav_pos
 ## 第四十五课：最小栅格 SLAM——扫描匹配是相对锚，不能给出绝对真值
 
 ![第四十五课演示画面：三模式合览](docs/img/lesson-45-demo.png)
-![第四十五课数据图：左=T/E/S 到达率（E 与 S 均 0/15）；右=平均误差同量级](docs/img/lesson-45-charts.png)
+![第四十五课数据图：左=到达率；中=平均误差同量级；右=S 轨迹（估计链漂出走廊）](docs/img/lesson-45-charts.png)
 
 数据解读：扫描匹配改善局部一致性，但相对锚不能给出绝对真值——S 组 0/15 与纯里程计同量级。
 
@@ -1118,7 +1118,7 @@ uv run python -m embodied_learning.scan_slam_demo --results results/scan_slam_20
 ## 第四十六课：回环闭合——绝对锚的第二形态
 
 ![第四十六课演示画面：三模式合览](docs/img/lesson-46-demo.png)
-![第四十六课数据图：左=四链末端误差（松弛前/后）；右=L 组回环检测成功率](docs/img/lesson-46-charts.png)
+![第四十六课数据图：左=末端误差松弛前/后；中=检测成功率；右=回环闭合三链（漂移链被拉回真值）](docs/img/lesson-46-charts.png)
 
 数据解读：回环闭合把末端误差从 9.18 m 压到 0.14 m（LT 黄金边 0.16 m）——回环是绝对锚的第二形态。
 
@@ -1232,7 +1232,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 左图：三条误差曲线——EST（红）随里程累积发散到 7 m+，PF-TRUEMAP（绿）被图钉住、有界振荡（末端 7.37→2.62 m，2.8×），PF-SELFBUILT（灰）居中（自建图被建图时的漂移涂抹）；右图：轨迹三链可见 PF 贴着真值而 EST 漂走。绑架重定位 0/5 如实阴性（稀疏标记图+4 重对称+粒子不足）。
 
-![第五十六课图：左=EST/PF-SELFBUILT/PF-TRUEMAP 误差曲线；右=绑架五时点恢复误差](docs/img/lesson-56-charts.png)
+![第五十六课图：左=误差曲线；中=轨迹三链（PF 贴真值、EST 漂走）；右=绑架五时点恢复误差](docs/img/lesson-56-charts.png)
 
 讲义：[docs/61](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
 

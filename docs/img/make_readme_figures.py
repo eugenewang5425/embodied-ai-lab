@@ -58,11 +58,22 @@ def save(fig, name):
     print("wrote", name)
 
 
+def traj_panel(ax, chains, title):
+    """Top-down trajectory panel: chains = [(label, xy, color, lw)]."""
+    for label, xy, color, lw in chains:
+        ax.plot(xy[:, 0], xy[:, 1], "-", color=color, lw=lw, label=label)
+    ax.set_aspect("equal")
+    style_axes(ax, title)
+    ax.set_xlabel("x (m)", fontsize=11)
+    ax.set_ylabel("y (m)", fontsize=11)
+    ax.legend(fontsize=9, loc="upper left")
+
+
 # ------------------------------------------------------------ lesson 43
 def lesson43():
-    report, _data = load("grid_nav_2026-09-06_v2")
+    report, data = load("grid_nav_2026-09-06_v2")
     agg = report["aggregates"]
-    fig, axes = two_panel()
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), dpi=DPI)
     names = ["A 盲飞（纯目标点）", "B 全栈（建图+A*+追踪）"]
     rates = [
         agg["A"]["obstacle"]["arrival_rate"],
@@ -83,16 +94,24 @@ def lesson43():
         axes[1].text(i, v + 20, str(v), ha="center", fontsize=12)
     style_axes(axes[1], "碰撞事件总数：1005 → 0")
     axes[1].set_ylabel("碰撞事件", fontsize=12)
+    traj_panel(
+        axes[2],
+        [
+            ("B 组执行轨迹（场景 1）", data["truth_B_1_0"], C_PF, 1.4),
+            ("A 组盲飞轨迹（场景 1）", data["truth_A_1_0"], C_BAD, 1.0),
+        ],
+        "俯瞰轨迹：B 沿规划路径，A 在起点打转",
+    )
     save(fig, "lesson-43-charts.png")
 
 
 # ------------------------------------------------------------ lesson 44
 def lesson44():
-    report, _data = load("nav_pose_error_2026-09-07")
+    report, data = load("nav_pose_error_2026-09-07")
     agg = report["aggregates"]
     names = ["T 真值", "O1 里程计1%", "O2 里程计2%", "F 融合观测"]
     rates = [agg[g]["obstacle"]["arrival_rate"] for g in ("T", "O1", "O2", "F")]
-    fig, axes = two_panel()
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), dpi=DPI)
     axes[0].bar(names, rates, color=[C_GOOD, C_BAD, C_BAD, C_PF])
     for i, v in enumerate(rates):
         axes[0].text(i, v + 0.03, f"{int(v * 15)}/15", ha="center", fontsize=11)
@@ -108,16 +127,24 @@ def lesson44():
     )
     style_axes(axes[1], "融合观测后定位误差回到真值量级（2.5 cm）")
     axes[1].set_ylabel("平均定位误差 (m)", fontsize=12)
+    traj_panel(
+        axes[2],
+        [
+            ("O2 真值", data["truth_O2_1_0"], "k", 1.3),
+            ("O2 估计链（2% 偏差）", data["estimates_O2_1_0"], C_BAD, 1.0),
+        ],
+        "O2 俯瞰轨迹：估计链原地兜圈（0/15）",
+    )
     save(fig, "lesson-44-charts.png")
 
 
 # ------------------------------------------------------------ lesson 45
 def lesson45():
-    report, _data = load("scan_slam_2026-09-07")
+    report, data = load("scan_slam_2026-09-07")
     agg = report["aggregates"]
     names = ["T 真值", "E 里程计", "S +扫描匹配"]
     rates = [agg[g]["obstacle"]["arrival_rate"] for g in ("T", "E", "S")]
-    fig, axes = two_panel()
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), dpi=DPI)
     axes[0].bar(names, rates, color=[C_GOOD, C_BAD, C_BAD])
     for i, v in enumerate(rates):
         axes[0].text(i, v + 0.03, f"{int(v * 15)}/15", ha="center", fontsize=11)
@@ -132,17 +159,25 @@ def lesson45():
     axes[1].bar(names, errs, color=[C_GOOD, C_BAD, C_BAD])
     style_axes(axes[1], "平均位置误差（m）：E 与 S 同量级——相对锚不纠漂移")
     axes[1].set_ylabel("平均误差 (m)", fontsize=12)
+    traj_panel(
+        axes[2],
+        [
+            ("S 真值", data["truth_S_1_0"], "k", 1.3),
+            ("S 估计链（扫描匹配）", data["estimates_S_1_0"], C_BAD, 1.0),
+        ],
+        "S 俯瞰轨迹：估计链漂移出走廊（0/15）",
+    )
     save(fig, "lesson-45-charts.png")
 
 
 # ------------------------------------------------------------ lesson 46
 def lesson46():
-    report, _data = load("loop_closure_2026-09-07")
+    report, data = load("loop_closure_2026-09-07")
     agg = report["aggregates"]
     names = ["N", "S", "L", "LT"]
     finals = [num(agg[g]["final_position_error_m"]) for g in names]
     relaxed = [num(agg[g].get("final_position_error_relaxed_m")) for g in names]
-    fig, axes = two_panel()
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), dpi=DPI)
     x = np.arange(4)
     axes[0].bar(x - 0.18, finals, 0.36, color=C_BAD, label="松弛前")
     axes[0].bar(x + 0.18, relaxed, 0.36, color=C_PF, label="松弛后")
@@ -158,6 +193,15 @@ def lesson46():
     axes[1].set_ylim(0, 1.05)
     style_axes(axes[1], "回环检测成功率（宽门匹配 + 残差门）")
     axes[1].set_ylabel("成功率", fontsize=12)
+    traj_panel(
+        axes[2],
+        [
+            ("真值巡逻", data["truth_0_0"], "k", 1.3),
+            ("L 估计链（漂移）", data["est_L_0_0"], C_BAD, 1.0),
+            ("弧长校正链（回环后）", data["relaxed_chain"], C_PF, 1.4),
+        ],
+        "回环闭合：漂移链被校正链拉回真值",
+    )
     save(fig, "lesson-46-charts.png")
 
 
@@ -393,7 +437,7 @@ def lesson55():
 # ------------------------------------------------------------ lesson 56
 def lesson56():
     report, data = load("map_localization_2026-09-09")
-    fig, axes = two_panel(figsize=(10.0, 4.4))
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 4.2), dpi=DPI)
     axes[0].plot(data["est_err_curve"], color=C_EST, lw=1.1, label="EST 无图漂移链")
     axes[0].plot(data["pf_self_err"], color=C_SELF, lw=0.9, label="PF-SELFBUILT 自建图")
     axes[0].plot(data["pf_true_err"], color=C_PF, lw=1.3, label="PF-TRUEMAP 优质图")
