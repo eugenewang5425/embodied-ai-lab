@@ -1031,6 +1031,9 @@ uv run python -m embodied_learning.act_torch_demo --results results/act_torch_re
 ## 第四十三课：占据栅格建图 + A\* 路径规划——回到感知-建图-规划主线
 
 ![第四十三课演示画面：三模式合览](docs/img/lesson-43-demo.png)
+![第四十三课数据图：左=到达率对比（15/15 vs 3/15）；右=碰撞事件 1005→0](docs/img/lesson-43-charts.png)
+
+数据解读：B 组到达率 100%、零碰撞，路径比中位 0.974≈全知最短——分层栈各层安全常数必须全局一致。
 
 阶段 5（28–42 课）以"信息-精度硬墙"收官后回到主线（决策日志 D-2026-09-07-01）。
 同一台第 14/21 课差速车升级为"知道世界长什么样"：理想 16 射线测距 → Bresenham 对数概率
@@ -1058,6 +1061,9 @@ uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_2026
 ## 第四十四课：定位误差穿栈——位姿不确定下建图-规划-追踪还成立吗？
 
 ![第四十四课演示画面：三模式合览](docs/img/lesson-44-demo.png)
+![第四十四课数据图：左=四组到达率（T/F 15/15，O1/O2 全灭）；右=融合后误差回到 2.5 cm](docs/img/lesson-44-charts.png)
+
+数据解读：1% 里程计偏差即 0/15——定位是导航栈的地基；地标融合后 15/15、误差 2.5 cm 与真值组等价。
 
 第 43 课把"知道世界长什么样"的栈建立在**位姿真值**上；本课把位姿换成估计（第 15 课里程计
 链 + 第 18/19 课地标观测融合），估计进入建图/规划/追踪每一层（射线物理发射于真值）、
@@ -1087,6 +1093,9 @@ uv run python -m embodied_learning.nav_pose_error_demo --results results/nav_pos
 ## 第四十五课：最小栅格 SLAM——扫描匹配是相对锚，不能给出绝对真值
 
 ![第四十五课演示画面：三模式合览](docs/img/lesson-45-demo.png)
+![第四十五课数据图：左=T/E/S 到达率（E 与 S 均 0/15）；右=平均误差同量级](docs/img/lesson-45-charts.png)
+
+数据解读：扫描匹配改善局部一致性，但相对锚不能给出绝对真值——S 组 0/15 与纯里程计同量级。
 
 第 44 课信标救了栈（15/15、2.5 cm），但那是人工预置、坐标已知的外挂。本课问：**只用
 激光-地图自身一致性（帧间扫描匹配，第 26 课 ICP 在线化）能不能闭环？** 配对三组共享
@@ -1109,6 +1118,9 @@ uv run python -m embodied_learning.scan_slam_demo --results results/scan_slam_20
 ## 第四十六课：回环闭合——绝对锚的第二形态
 
 ![第四十六课演示画面：三模式合览](docs/img/lesson-46-demo.png)
+![第四十六课数据图：左=四链末端误差（松弛前/后）；右=L 组回环检测成功率](docs/img/lesson-46-charts.png)
+
+数据解读：回环闭合把末端误差从 9.18 m 压到 0.14 m（LT 黄金边 0.16 m）——回环是绝对锚的第二形态。
 
 第 45 课证明相对锚不能闭环；本课检验**回环（回到起点）**这一绝对锚第二形态。协议改为
 **采集-重放组件级**：真值巡逻 32 m（4/4 腿）录制单帧流，四条估计链重放——N 纯里程计 /
@@ -1131,6 +1143,9 @@ uv run python -m embodied_learning.loop_closures_demo --results results/loop_clo
 ## 第四十七课：加权位姿图优化——修复漂移的形状
 
 ![第四十七课演示画面：三模式合览](docs/img/lesson-47-demo.png)
+![第四十七课数据图：左=四后端平均/末端误差对比；右=FGT 黄金锚末端 0.016 m](docs/img/lesson-47-charts.png)
+
+数据解读：FG 均值 5.03 < ARC 5.33（形状修复成立），末端 1.21 m 闭合保持；σ 权衡与黄金锚分离实验入册。
 
 本课补上真正的后端：**加权 SE(2) 位姿图**（世界帧因子 + 解析雅可比 + G-N 稠密 lstsq、
 首节点 gauge），回环作为**末节点绝对锚（unary 因子）**——46 课 pairwise 回环边被

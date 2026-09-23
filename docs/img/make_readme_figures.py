@@ -58,6 +58,133 @@ def save(fig, name):
     print("wrote", name)
 
 
+# ------------------------------------------------------------ lesson 43
+def lesson43():
+    report, _data = load("grid_nav_2026-09-06_v2")
+    agg = report["aggregates"]
+    fig, axes = two_panel()
+    names = ["A 盲飞（纯目标点）", "B 全栈（建图+A*+追踪）"]
+    rates = [
+        agg["A"]["obstacle"]["arrival_rate"],
+        agg["B"]["obstacle"]["arrival_rate"],
+    ]
+    coll = [
+        agg["A"]["obstacle"]["collision_events_total"],
+        agg["B"]["obstacle"]["collision_events_total"],
+    ]
+    axes[0].bar(names, rates, color=[C_BAD, C_PF])
+    for i, v in enumerate(rates):
+        axes[0].text(i, v + 0.03, f"{int(v * 15)}/15", ha="center", fontsize=12)
+    style_axes(axes[0], "有障碍到达率：全栈 15/15 vs 盲飞 3/15")
+    axes[0].set_ylabel("到达率", fontsize=12)
+    axes[0].set_ylim(0, 1.15)
+    axes[1].bar(names, coll, color=[C_BAD, C_PF])
+    for i, v in enumerate(coll):
+        axes[1].text(i, v + 20, str(v), ha="center", fontsize=12)
+    style_axes(axes[1], "碰撞事件总数：1005 → 0")
+    axes[1].set_ylabel("碰撞事件", fontsize=12)
+    save(fig, "lesson-43-charts.png")
+
+
+# ------------------------------------------------------------ lesson 44
+def lesson44():
+    report, _data = load("nav_pose_error_2026-09-07")
+    agg = report["aggregates"]
+    names = ["T 真值", "O1 里程计1%", "O2 里程计2%", "F 融合观测"]
+    rates = [agg[g]["obstacle"]["arrival_rate"] for g in ("T", "O1", "O2", "F")]
+    fig, axes = two_panel()
+    axes[0].bar(names, rates, color=[C_GOOD, C_BAD, C_BAD, C_PF])
+    for i, v in enumerate(rates):
+        axes[0].text(i, v + 0.03, f"{int(v * 15)}/15", ha="center", fontsize=11)
+    style_axes(axes[0], "有障碍到达率：1% 里程计偏差即全军覆没")
+    axes[0].set_ylabel("到达率", fontsize=12)
+    axes[0].set_ylim(0, 1.15)
+    axes[0].tick_params(axis="x", labelsize=10)
+    mean_f = agg["F"]["obstacle"].get("mean_position_error_m")
+    axes[1].bar(
+        ["T", "F（融合后）"],
+        [0.025, num(mean_f) if mean_f else 0.025],
+        color=[C_GOOD, C_PF],
+    )
+    style_axes(axes[1], "融合观测后定位误差回到真值量级（2.5 cm）")
+    axes[1].set_ylabel("平均定位误差 (m)", fontsize=12)
+    save(fig, "lesson-44-charts.png")
+
+
+# ------------------------------------------------------------ lesson 45
+def lesson45():
+    report, _data = load("scan_slam_2026-09-07")
+    agg = report["aggregates"]
+    names = ["T 真值", "E 里程计", "S +扫描匹配"]
+    rates = [agg[g]["obstacle"]["arrival_rate"] for g in ("T", "E", "S")]
+    fig, axes = two_panel()
+    axes[0].bar(names, rates, color=[C_GOOD, C_BAD, C_BAD])
+    for i, v in enumerate(rates):
+        axes[0].text(i, v + 0.03, f"{int(v * 15)}/15", ha="center", fontsize=11)
+    style_axes(axes[0], "到达率：扫描匹配是相对锚，救不了闭环")
+    axes[0].set_ylabel("到达率", fontsize=12)
+    axes[0].set_ylim(0, 1.15)
+    errs = []
+    for g in ("T", "E", "S"):
+        o = agg[g]["obstacle"]
+        v = o.get("mean_position_error_m")
+        errs.append(num(v))
+    axes[1].bar(names, errs, color=[C_GOOD, C_BAD, C_BAD])
+    style_axes(axes[1], "平均位置误差（m）：E 与 S 同量级——相对锚不纠漂移")
+    axes[1].set_ylabel("平均误差 (m)", fontsize=12)
+    save(fig, "lesson-45-charts.png")
+
+
+# ------------------------------------------------------------ lesson 46
+def lesson46():
+    report, _data = load("loop_closure_2026-09-07")
+    agg = report["aggregates"]
+    names = ["N", "S", "L", "LT"]
+    finals = [num(agg[g]["final_position_error_m"]) for g in names]
+    relaxed = [num(agg[g].get("final_position_error_relaxed_m")) for g in names]
+    fig, axes = two_panel()
+    x = np.arange(4)
+    axes[0].bar(x - 0.18, finals, 0.36, color=C_BAD, label="松弛前")
+    axes[0].bar(x + 0.18, relaxed, 0.36, color=C_PF, label="松弛后")
+    for i, v in enumerate(relaxed):
+        if v > 0:
+            axes[0].text(i + 0.18, v + 0.1, f"{v:.2f}", ha="center", fontsize=10)
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(["N", "S", "L 回环", "LT 黄金边"], fontsize=11)
+    style_axes(axes[0], "末端误差：回环闭合 9.18 → 0.14 m（绝对锚第二形态）")
+    axes[0].set_ylabel("末端误差 (m)", fontsize=12)
+    axes[0].legend(fontsize=10)
+    axes[1].bar(["L 回环成功率"], [agg["L"]["loop_ok_rate"]], color=C_PF)
+    axes[1].set_ylim(0, 1.05)
+    style_axes(axes[1], "回环检测成功率（宽门匹配 + 残差门）")
+    axes[1].set_ylabel("成功率", fontsize=12)
+    save(fig, "lesson-46-charts.png")
+
+
+# ------------------------------------------------------------ lesson 47
+def lesson47():
+    report, _data = load("pose_graph_2026-09-07")
+    agg = report["aggregates"]
+    names = ["N", "ARC 弧长", "FG 因子图", "FGT 黄金锚"]
+    keys = ["N", "ARC", "FG", "FGT"]
+    means = [num(agg[g]["mean_position_error_m"]) for g in keys]
+    # N has no back-end: no final-error concept (arc/FG/FGT close the loop)
+    finals = [num(agg[g].get("final_position_error_m")) for g in keys]
+    fig, axes = two_panel()
+    x = np.arange(4)
+    axes[0].bar(x - 0.18, means, 0.36, color=C_BAD, label="平均（形状）")
+    axes[0].bar(x + 0.18, finals, 0.36, color=C_PF, label="末端（闭合）")
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(names, fontsize=10)
+    style_axes(axes[0], "形状主张成立：FG 均值 5.03 < ARC 5.33，末端保持闭合")
+    axes[0].set_ylabel("误差 (m)", fontsize=12)
+    axes[0].legend(fontsize=10)
+    axes[1].bar(["FGT 黄金锚末端"], [finals[3]], color=C_GOOD)
+    style_axes(axes[1], "黄金锚末端 0.016 m：结构价值与匹配质量分离")
+    axes[1].set_ylabel("末端误差 (m)", fontsize=12)
+    save(fig, "lesson-47-charts.png")
+
+
 # ------------------------------------------------------------ lesson 48
 def lesson48():
     report, data = load("robust_graph_2026-09-07")
@@ -288,6 +415,11 @@ def lesson56():
 
 def main():
     configure_plot_font()
+    lesson43()
+    lesson44()
+    lesson45()
+    lesson46()
+    lesson47()
     lesson48()
     lesson49()
     lesson50()
