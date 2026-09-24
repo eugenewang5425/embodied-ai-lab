@@ -13,7 +13,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 | | |
 |---|---|
 | **Status** | 56 课教学实验已完成；第 55 课用里程计弧长重跑模拟标记检索（top-12 真回环 12/12、几何方向正确 11/12）；第 56 课修正采集路线后，理想图 PF 在本轮平均误差 0.322 m，自建图 PF 3.443 m；理想图绑架恢复 4/5。跨场景导航基准试跑未过门，见 [基准报告](docs/62-navigation-benchmark.md)。 |
-| **Verified** | 745 quick tests passed in 79 s; 37 selected record tests and 1 GUI test passed; Ruff clean. The full-repository slow suite has not passed as a whole. |
+| **Verified** | 745 quick tests passed in 79 s; 176 full-repository slow tests passed in 1:00:57 (2026-09-24, Windows); Ruff clean. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -56,6 +56,8 @@ uv run ruff check src tests scripts docs/img/make_readme_figures.py
 ```
 
 `quick` 通过只说明快测层通过；实验数值、图表和本机窗口仍按各课记录核对。慢速标记及自动分层规则见 [tests/conftest.py](tests/conftest.py)。
+
+2026-09-24 全仓 `slow` 实测 176 项通过、耗时 3657 秒。其中第 53 课 SciPy 生产求解器的记录准备阶段为 1785 秒，约占总耗时一半；该次运行另有 11 条警告，未造成失败。
 
 <!--
   DEMO GIF placeholder (Task C): add 3 short GIFs here — pendulum swing-up,
