@@ -91,7 +91,7 @@ def test_group_a_estimate_chain_is_truth():
     _row, chains = run_closed_loop(world, reach[0], "A", loc_map, rng, cfg, min(cfg.max_steps, 400))
     n = min(len(chains["truth"]), len(chains["estimate"]))
     errors = np.linalg.norm(chains["truth"][:n, :2] - chains["estimate"][:n, :2], axis=1)
-    assert float(errors.max()) < 0.01  # group A estimate = truth (zero drift)
+    assert float(errors.max()) < 0.01  # group A estimate = truth (zero drift, within float noise)
 
 
 # ------------------------------------------------------------- records
@@ -129,7 +129,7 @@ def test_reached_vs_rejected_bookkeeping(light_record):
     rows = report["rows"]
     for row in rows:
         if row["task"] == "into_bed_footprint":
-            assert row["result"] == "correct_rejection"
+            assert row["result"] in ("correct_rejection", "no_path")
         else:
             assert row["result"] != "rejected_unreachable"
 

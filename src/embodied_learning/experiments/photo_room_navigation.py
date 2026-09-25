@@ -97,11 +97,6 @@ class NavConfig:
     alpha_rot: float = 0.10
     alpha_rot_base_rad: float = 0.002
     announce_frames: int = 10
-    alpha_trans: float = 0.10  # motion-model noise: fraction of travelled dist
-    alpha_trans_base_m: float = 0.002
-    alpha_rot: float = 0.10  # motion-model noise: fraction of turned angle
-    alpha_rot_base_rad: float = 0.002
-    announce_frames: int = 10  # consecutive estimate-in-gate frames to announce
 
     def __post_init__(self):
         if type(self.particles) is not int or not (50 <= self.particles <= 2000):
@@ -429,24 +424,25 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
         inc, wp, v_cmd = control_step(pose_est, path, wp, scan, state)
         commands.append(inc)
         encoders.append(np.asarray(inc, dtype=float) + encoders[-1])
-        measured = np.asarray(inc, dtype=float) * (1.0 + config.wheel_bias)
-        ds_exec = GEOMETRY.radius_m * (measured[0] + measured[1]) / 2.0
-        dth_exec = GEOMETRY.radius_m * (measured[1] - measured[0]) / GEOMETRY.track_m
-        travelled += abs(ds_exec)
-        mid = truth[k][2] + dth_exec / 2.0
+        ds_true_exec = GEOMETRY.radius_m * (inc[0] + inc[1]) / 2.0
+        dth_true_exec = GEOMETRY.radius_m * (inc[1] - inc[0]) / GEOMETRY.track_m
+        ds_meas_exec = ds_true_exec * (1.0 + config.wheel_bias)
+        dth_meas_exec = dth_true_exec * (1.0 + config.wheel_bias)
+        travelled += abs(ds_true_exec)
+        mid_t = truth[k][2] + dth_true_exec / 2.0
         pose_next = np.array(
             [
-                truth[k][0] + ds_exec * math.cos(mid),
-                truth[k][1] + ds_exec * math.sin(mid),
-                wrap(truth[k][2] + dth_exec),
+                truth[k][0] + ds_true_exec * math.cos(mid_t),
+                truth[k][1] + ds_true_exec * math.sin(mid_t),
+                wrap(truth[k][2] + dth_true_exec),
             ]
         )
-        bias = 1.0 + config.wheel_bias
+        mid_o = odom[k][2] + dth_meas_exec / 2.0
         odom_next = np.array(
             [
-                odom[k][0] + ds_exec * bias * math.cos(mid),
-                odom[k][1] + ds_exec * bias * math.sin(mid),
-                wrap(odom[k][2] + dth_exec),
+                odom[k][0] + ds_meas_exec * math.cos(mid_o),
+                odom[k][1] + ds_meas_exec * math.sin(mid_o),
+                wrap(odom[k][2] + dth_meas_exec),
             ]
         )
         truth.append(pose_next)
