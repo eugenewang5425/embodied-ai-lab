@@ -365,8 +365,8 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
     path = None
     wp = 0
     state = {}
-    ds_exec = 0.0
-    dth_exec = 0.0
+    ds_prev = 0.0
+    dth_prev = 0.0
 
     for k in range(max_steps + 1):
         pose_true = truth[k]
@@ -377,9 +377,9 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
             prev_cmd = commands[k - 1]
             measured = np.asarray(prev_cmd, dtype=float) * (1.0 + config.wheel_bias)
             v_m, om_m = GEOMETRY.body_velocity(measured / DT)
-            sig_trans = config.alpha_trans * abs(ds_exec) + config.alpha_trans_base_m
-            sig_rot = config.alpha_rot * abs(dth_exec) + config.alpha_rot_base_rad
-            propagate_motion(pf, ds_exec, dth_exec, rng, sig_trans, sig_rot)
+            sig_trans = config.alpha_trans * abs(ds_prev) + config.alpha_trans_base_m
+            sig_rot = config.alpha_rot * abs(dth_prev) + config.alpha_rot_base_rad
+            propagate_motion(pf, ds_prev, dth_prev, rng, sig_trans, sig_rot)
 
         # (2) scan at time k, recursive measurement update at time k
         raw_scan, _hits = world.scan(pose_true)
@@ -393,11 +393,14 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
             if pf.ess() < config.particles / 2:
                 pf.resample()
                 resample_frames.append(k)
+            weights = pf.w.copy()
         else:
             ess_trace.append(float(config.particles))
 
         # (3) the pose the controller believes
-        pose_est = pf.estimate() if pf is not None else (truth[k] if group == "A" else odom[k])
+        pose_est = pf.estimate() if pf is not None else odom[k]
+        if group == "A":
+            pose_est = truth[k].copy()
         estimate.append(pose_est.copy())
 
         # (4) arrival announced ONLY by the estimate, held for announce_frames
@@ -460,6 +463,8 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
                 end_k = k
                 break
         contact_flags.append(1 if names else 0)
+        ds_prev = ds_true_exec
+        dth_prev = dth_true_exec
 
     # ---------------------------------------------------------- scoring
     if result == "announced":
