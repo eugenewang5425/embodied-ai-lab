@@ -17,3 +17,6 @@ Thumbs.db
 
 # WSL colcon build logs
 log/
+
+# Local room reference photographs
+/建模照片临时文件夹/
