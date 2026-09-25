@@ -245,12 +245,11 @@ def wheel_increments(v, omega, dt=DT):
     return [left, right]
 
 
-def control_step(pose_for_control, path, path_idx, scan, state=None):
+def control_step(pose_for_control, path, path_idx, scan, stop_distance):
     """Pure-pursuit style waypoint following with a lidar safety stop.
 
     Returns (wheel_increment, new_path_idx, v_commanded).
     """
-    state = state if state is not None else {}
     if path is None or path_idx >= len(path):
         return [0.0, 0.0], path_idx, 0.0
     target = path[path_idx]
@@ -265,11 +264,10 @@ def control_step(pose_for_control, path, path_idx, scan, state=None):
     omega = max(-OMEGA_MAX, min(OMEGA_MAX, 2.0 * d_th))
     if abs(d_th) > 0.5:
         v = 0.02  # rotate first when the waypoint is behind
-    # lidar safety stop: any forward-sector return closer than SAFE_STOP_M
+    # lidar safety stop: any forward-sector return closer than stop_distance
     forward = np.concatenate([scan[: len(scan) // 4], scan[3 * len(scan) // 4 :]])
-    if forward.size and float(np.min(forward)) < SAFE_STOP_M:
+    if forward.size and float(np.min(forward)) < stop_distance:
         v = 0.0
-    state.setdefault("v_history", []).append(v)
     return wheel_increments(v, omega), path_idx, v
 
 
@@ -365,6 +363,7 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
     path = None
     wp = 0
     state = {}
+    stop_dist = safe_stop_distance(layout)
     ds_prev = 0.0
     dth_prev = 0.0
 
@@ -424,7 +423,7 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
                 break
 
         # (6) control and execution
-        inc, wp, v_cmd = control_step(pose_est, path, wp, scan, state)
+        inc, wp, v_cmd = control_step(pose_est, path, wp, scan, stop_distance)
         commands.append(inc)
         encoders.append(np.asarray(inc, dtype=float) + encoders[-1])
         ds_true_exec = GEOMETRY.radius_m * (inc[0] + inc[1]) / 2.0
@@ -463,8 +462,8 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
                 end_k = k
                 break
         contact_flags.append(1 if names else 0)
-        ds_prev = ds_true_exec
-        dth_prev = dth_true_exec
+        ds_prev = ds_meas_exec
+        dth_prev = dth_meas_exec
 
     # ---------------------------------------------------------- scoring
     if result == "announced":
@@ -699,7 +698,9 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         },
     }
     archives = {
-        "task_table": np.array([[hash(t[0]) % 1000, 1 if t[3] else 0] for t in tasks], dtype=int)
+        "task_table": np.array(
+            [[zlib.crc32(t[0].encode("utf-8")) % 1000, 1 if t[3] else 0] for t in tasks], dtype=int
+        )
     }
     for key, arr in archive.items():
         archives[key] = arr

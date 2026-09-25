@@ -62,12 +62,12 @@ def test_classify_tasks_four_reachable_one_unreachable():
 def test_control_step_safety_stop():
     mm = mod()
     path = np.array([[0.0, 0.0], [2.0, 0.0]])
-    state = {"v_history": []}
+    stop_dist = 0.20  # body radius + margin + one control period
     scan_all_clear = [3.0] * 64
-    inc, idx, v = mm.control_step(np.array([0.0, 0.0, 0.0]), path, 0, scan_all_clear, state)
+    inc, idx, v = mm.control_step(np.array([0.0, 0.0, 0.0]), path, 0, scan_all_clear, stop_dist)
     assert v > 0  # clears the start waypoint, drives toward the second
     scan_blocked = [3.0] * 40 + [0.05] * 24  # forward sector blocked
-    _inc, _idx, v2 = mm.control_step(np.array([0.0, 0.0, 0.0]), path, 0, scan_blocked, state)
+    _inc, _idx, v2 = mm.control_step(np.array([0.0, 0.0, 0.0]), path, 0, scan_blocked, stop_dist)
     assert v2 == 0.0
 
 
