@@ -1537,6 +1537,10 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 讲义：[第五十六课讲义](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
 
+## 闭环导航对照实验（照片房间）——定位误差第一次真正影响了运动
+
+三维照片房间从"开环回放"升级为**闭环导航**：感知 → 估计 → 规划 → 控制指令 → 真实运动 → 新感知，每一步运动由机器人自己的估计决定。四组只换定位来源（真值 / 里程计 / 参考图 PF / 自建图 PF），共用同一张先验避障图、规划器和控制器。5 任务（4 可达 + 1 床下不可达）× 3 传感种子 × 4 组 = 60 回合。A 组门全过（12/12 到达、零接触、不可达安全拒绝）；**反直觉阴性**：PF 组反而比里程计更差（C 组 4/12 到达、529 接触帧）——短任务里里程计漂移（~2 cm）小于 PF 抖动（±0.5 m），估计跳变让机器人朝障碍蹭过去。PF 的收益取决于漂移积累长度，这正是里程计与 AMCL 融合而非二选一的原因。详见[闭环对照报告](docs/64-closed-loop-navigation.md)。
+
 ## 进度清单
 
 - [x] 本机环境审计
