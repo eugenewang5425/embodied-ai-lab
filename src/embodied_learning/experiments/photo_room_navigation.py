@@ -40,6 +40,7 @@ import json
 import math
 import platform
 import time
+import zlib
 from dataclasses import dataclass
 from pathlib import Path
 from types import SimpleNamespace
@@ -91,6 +92,16 @@ class NavConfig:
     wheel_bias: float = 0.02
     max_steps: int = MAX_STEPS
     seed: int = 0
+    alpha_trans: float = 0.10
+    alpha_trans_base_m: float = 0.002
+    alpha_rot: float = 0.10
+    alpha_rot_base_rad: float = 0.002
+    announce_frames: int = 10
+    alpha_trans: float = 0.10  # motion-model noise: fraction of travelled dist
+    alpha_trans_base_m: float = 0.002
+    alpha_rot: float = 0.10  # motion-model noise: fraction of turned angle
+    alpha_rot_base_rad: float = 0.002
+    announce_frames: int = 10  # consecutive estimate-in-gate frames to announce
 
     def __post_init__(self):
         if type(self.particles) is not int or not (50 <= self.particles <= 2000):
@@ -103,6 +114,22 @@ class NavConfig:
             raise ValueError("max_steps out of range")
         if type(self.seed) is not int or self.seed < 0:
             raise ValueError("seed must be a non-negative integer")
+        for _n in ("alpha_trans", "alpha_rot"):
+            if not (0.0 <= getattr(self, _n) <= 1.0):
+                raise ValueError(f"{_n} out of range")
+        for _n in ("alpha_trans_base_m", "alpha_rot_base_rad"):
+            if not (0.0 <= getattr(self, _n) <= 0.5):
+                raise ValueError(f"{_n} out of range")
+        if type(self.announce_frames) is not int or not (1 <= self.announce_frames <= 200):
+            raise ValueError("announce_frames out of range")
+        for name in ("alpha_trans", "alpha_rot"):
+            if not (0.0 <= getattr(self, name) <= 1.0):
+                raise ValueError(f"{name} out of range")
+        for name in ("alpha_trans_base_m", "alpha_rot_base_rad"):
+            if not (0.0 <= getattr(self, name) <= 0.5):
+                raise ValueError(f"{name} out of range")
+        if type(self.announce_frames) is not int or not (1 <= self.announce_frames <= 200):
+            raise ValueError("announce_frames out of range")
 
 
 def wrap(a):
@@ -153,7 +180,11 @@ def classify_tasks(world, layout):
     seed_cell = (int(0.95 / RES), int(2.70 / RES))
     if labels[seed_cell] == 0:
         frees = np.argwhere(safe)
-        seed_cell = tuple(frees[np.argmin(np.abs(frees[:, 0] - seed_cell[0]) + np.abs(frees[:, 1] - seed_cell[1]))])
+        seed_cell = tuple(
+            frees[
+                np.argmin(np.abs(frees[:, 0] - seed_cell[0]) + np.abs(frees[:, 1] - seed_cell[1]))
+            ]
+        )
     comp_id = labels[seed_cell]
     comp = labels == comp_id
     ys, xs = np.nonzero(comp)
@@ -219,11 +250,12 @@ def wheel_increments(v, omega, dt=DT):
     return [left, right]
 
 
-def control_step(pose_for_control, path, path_idx, scan, state):
+def control_step(pose_for_control, path, path_idx, scan, state=None):
     """Pure-pursuit style waypoint following with a lidar safety stop.
 
     Returns (wheel_increment, new_path_idx, v_commanded).
     """
+    state = state if state is not None else {}
     if path is None or path_idx >= len(path):
         return [0.0, 0.0], path_idx, 0.0
     target = path[path_idx]
@@ -239,142 +271,208 @@ def control_step(pose_for_control, path, path_idx, scan, state):
     if abs(d_th) > 0.5:
         v = 0.02  # rotate first when the waypoint is behind
     # lidar safety stop: any forward-sector return closer than SAFE_STOP_M
-    forward = scan[: len(scan) // 4] + scan[3 * len(scan) // 4 :]
-    if forward and min(forward) < SAFE_STOP_M:
+    forward = np.concatenate([scan[: len(scan) // 4], scan[3 * len(scan) // 4 :]])
+    if forward.size and float(np.min(forward)) < SAFE_STOP_M:
         v = 0.0
-    state["v_history"].append(v)
+    state.setdefault("v_history", []).append(v)
     return wheel_increments(v, omega), path_idx, v
 
 
 # ------------------------------------------------------------- closed loop
-def run_closed_loop(world, task, group, loc_map, rng, config, max_steps):
-    """One closed-loop run.  Returns the result row and per-step chains."""
+def propagate_motion(pf, ds, dth, rng, sig_trans, sig_rot):
+    """Motion-model propagation with noise SCALED BY THE MOTION.
+
+    sig_trans/sig_rot are computed by the caller from this step's measured
+    translation and rotation: a 6 mm step must not inject a 5 cm kick (the
+    recorded v1 finding - fixed per-step noise masqueraded as PF jitter).
+    """
+    n = len(pf.p)
+    trans = rng.normal(0.0, sig_trans, n)
+    rot = rng.normal(0.0, sig_rot, n)
+    mid = pf.p[:, 2] + dth / 2.0
+    pf.p[:, 0] += (ds + trans) * np.cos(mid)
+    pf.p[:, 1] += (ds + trans) * np.sin(mid)
+    pf.p[:, 2] = np.arctan2(np.sin(pf.p[:, 2] + dth + rot), np.cos(pf.p[:, 2] + dth + rot))
+
+
+def measure_recursive(pf, scan, prev_w):
+    """Recursive measurement update: posterior is proportional to
+    prev_w * likelihood (the shared ParticleFilter.measure normalizes the
+    likelihood alone, which would forget history - the recorded v1 finding)."""
+    pf.measure(scan, None)
+    likelihood = pf.w.copy()
+    posterior = prev_w * likelihood
+    total = posterior.sum()
+    if total <= 1e-300:
+        posterior = np.full(len(posterior), 1.0 / len(posterior))
+    pf.w = posterior / posterior.sum()
+    return pf.w
+
+
+def noisy_scan(world, pose, rng, sigma):
+    raw, hits = world.scan(pose)
+    if sigma > 0.0:
+        raw = np.clip(raw + rng.normal(0.0, sigma, raw.shape), 0.02, 3.95)
+    return raw, hits
+
+
+def safe_stop_distance(layout, v_max=V_MAX, dt=DT, margin=0.04):
+    """Body radius + one control period of motion + margin."""
+    return layout["robot"]["radius"] + v_max * dt + margin
+
+
+def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=None):
+    """One corrected-protocol closed-loop run.
+
+    Timestamps: iteration k starts with the robot at truth[k].  Order per
+    step: (1) propagate the filter with the last measured wheel increment;
+    (2) take the scan at time k and run the RECURSIVE measurement update;
+    (3) read the estimate, plan periodically, and announce arrival only from
+    the estimate; (4) execute the command - truth/odom advance to k+1 and
+    contacts are checked.  Scans, estimates, commands, ESS and resample
+    events are recorded per frame (the v1 misalignment finding).
+    """
+    if layout is None:
+        layout = world.layout
     name, start, goal = task
-    robot = world.layout["robot"]
+    robot = layout["robot"]
     truth = [np.array([start[0], start[1], 0.0])]
     odom = [np.array([start[0], start[1], 0.0])]
     estimate = [np.array([start[0], start[1], 0.0])]
     encoders = [np.zeros(2)]
-    contacts = []
-    arrived_est = False
-    arrived_frame = None
-    contact_frames = 0
-    contact_objects = set()
-    travelled = 0.0
-
-    if group == "C" or group == "D":
-        pf = ParticleFilter(
+    pf = (
+        ParticleFilter(
             loc_map, RES, config.particles, rng, init_pose=truth[0], spread=0.04, rays_n=32
         )
-    else:
-        pf = None
-
-    avoidance = world.occupancy(robot["bottom"] + 0.01, robot["bottom"] + robot["height"], RES)
-    path = None
-    path_idx = 0
-    state = {"v_history": []}
+        if group in ("C", "D")
+        else None
+    )
+    weights = np.full(config.particles, 1.0 / config.particles) if pf is not None else None
+    stop_distance = safe_stop_distance(layout)
+    scan_trace = []
+    commands = []
+    ess_trace = []
+    resample_frames = []
+    contact_flags = []
+    contact_objects = set()
+    first_contact = None
+    contact_frames = 0
+    announce_frame = None
+    announce_true = None
+    no_path_frame = None
+    min_true_goal = math.inf
+    travelled = 0.0
+    streak = 0
     result = "timeout"
+    end_k = max_steps
+
+    avoidance, _loc = build_maps(world, layout)
+    path = None
+    wp = 0
+    state = {}
+    ds_exec = 0.0
+    dth_exec = 0.0
 
     for k in range(max_steps + 1):
-        pose_true = truth[-1]
-        pose_ctrl = {"A": truth[-1], "B": odom[-1], "C": estimate[-1], "D": estimate[-1]}[group]
-        scan, _hits = world.scan(pose_true)
+        pose_true = truth[k]
 
-        # planner (periodic, on the estimated/truth pose)
+        # (1) filter propagation with the last EXECUTED (measured, biased)
+        #     wheel increment: rad/s = increment / DT, then dt = DT
+        if k > 0 and pf is not None:
+            prev_cmd = commands[k - 1]
+            measured = np.asarray(prev_cmd, dtype=float) * (1.0 + config.wheel_bias)
+            v_m, om_m = GEOMETRY.body_velocity(measured / DT)
+            sig_trans = config.alpha_trans * abs(ds_exec) + config.alpha_trans_base_m
+            sig_rot = config.alpha_rot * abs(dth_exec) + config.alpha_rot_base_rad
+            propagate_motion(pf, ds_exec, dth_exec, rng, sig_trans, sig_rot)
+
+        # (2) scan at time k, recursive measurement update at time k
+        raw_scan, _hits = world.scan(pose_true)
+        scan = np.clip(
+            raw_scan + rng.normal(0.0, config.sensor_sigma_m, raw_scan.shape), 0.02, 3.95
+        )
+        scan_trace.append(scan)
+        if pf is not None:
+            weights = measure_recursive(pf, scan, weights)
+            ess_trace.append(pf.ess())
+            if pf.ess() < config.particles / 2:
+                pf.resample()
+                resample_frames.append(k)
+        else:
+            ess_trace.append(float(config.particles))
+
+        # (3) the pose the controller believes
+        pose_est = pf.estimate() if pf is not None else (truth[k] if group == "A" else odom[k])
+        estimate.append(pose_est.copy())
+
+        # (4) arrival announced ONLY by the estimate, held for announce_frames
+        dist_est = math.hypot(pose_est[0] - goal[0], pose_est[1] - goal[1])
+        streak = streak + 1 if dist_est < ARRIVAL_EST_M else 0
+        if streak >= config.announce_frames and announce_frame is None:
+            announce_frame = k
+            announce_true = float(math.hypot(pose_true[0] - goal[0], pose_true[1] - goal[1]))
+            result = "announced"
+            end_k = k
+            break
+
+        # (5) periodic planning from the ESTIMATE on the shared prior map
         if path is None or k % REPLAN_EVERY == 0:
-            path = plan(avoidance, pose_ctrl[:2], goal, robot["radius"])
-            path_idx = 0
+            path = plan(avoidance, pose_est[:2], goal, robot["radius"])
+            wp = 0
             if path is None:
-                # estimate-driven give-up on a reachable task: a localization
-                # failure, distinct from the prior map's safe rejection
-                result = "gave_up"
+                no_path_frame = k
+                result = "no_path"
+                end_k = k
                 break
 
-        # arrival decided by the robot's own estimate, scored against truth
-        if (
-            not arrived_est
-            and math.hypot(pose_ctrl[0] - goal[0], pose_ctrl[1] - goal[1]) < ARRIVAL_EST_M
-        ):
-            arrived_est = True
-            arrived_frame = k
-
-        inc, path_idx, _v = control_step(pose_ctrl, path, path_idx, list(scan), state)
+        # (6) control and execution
+        inc, wp, v_cmd = control_step(pose_est, path, wp, scan, state)
+        commands.append(inc)
         encoders.append(np.asarray(inc, dtype=float) + encoders[-1])
-
-        # the TRUE pose advances kinematically under the commanded motion
-        v_l, v_r = inc
-        ds = GEOMETRY.radius_m * (v_l + v_r) / 2.0
-        dth = GEOMETRY.radius_m * (v_r - v_l) / GEOMETRY.track_m
-        mid = truth[-1][2] + dth / 2.0
-        truth.append(
-            np.array(
-                [
-                    truth[-1][0] + ds * math.cos(mid),
-                    truth[-1][1] + ds * math.sin(mid),
-                    wrap(truth[-1][2] + dth),
-                ]
-            )
+        measured = np.asarray(inc, dtype=float) * (1.0 + config.wheel_bias)
+        ds_exec = GEOMETRY.radius_m * (measured[0] + measured[1]) / 2.0
+        dth_exec = GEOMETRY.radius_m * (measured[1] - measured[0]) / GEOMETRY.track_m
+        travelled += abs(ds_exec)
+        mid = truth[k][2] + dth_exec / 2.0
+        pose_next = np.array(
+            [
+                truth[k][0] + ds_exec * math.cos(mid),
+                truth[k][1] + ds_exec * math.sin(mid),
+                wrap(truth[k][2] + dth_exec),
+            ]
         )
-        travelled += abs(ds)
-
-        # odometry integrates the same increments with a wheel bias
-        # the wheels turn by command; the 2% bias models floor/calibration
-        # error between commanded and achieved motion - that IS the drift
-        bl, br = np.asarray(inc, dtype=float) * (1.0 + config.wheel_bias)
-        ds_b = GEOMETRY.radius_m * (bl + br) / 2.0
-        dth_b = GEOMETRY.radius_m * (br - bl) / GEOMETRY.track_m
-        mid_b = odom[-1][2] + dth_b / 2.0
-        odom.append(
-            np.array(
-                [
-                    odom[-1][0] + ds_b * math.cos(mid_b),
-                    odom[-1][1] + ds_b * math.sin(mid_b),
-                    wrap(odom[-1][2] + dth_b),
-                ]
-            )
+        bias = 1.0 + config.wheel_bias
+        odom_next = np.array(
+            [
+                odom[k][0] + ds_exec * bias * math.cos(mid),
+                odom[k][1] + ds_exec * bias * math.sin(mid),
+                wrap(odom[k][2] + dth_exec),
+            ]
         )
+        truth.append(pose_next)
+        odom.append(odom_next)
 
-        # particle filter update (groups C and D)
-        if pf is not None:
-            ds_b = GEOMETRY.body_velocity(np.asarray(inc, dtype=float))
-            pf.propagate_body(ds_b[0] * (1.0 + config.wheel_bias), ds_b[1])
-            pf.measure(scan, None)
-
-        pose_true = truth[-1]
-        world.set_pose(pose_true)
-        names = world.contact_names(pose_true)
+        world.set_pose(pose_next)
+        names = world.contact_names(pose_next)
         if names:
             contact_frames += 1
             contact_objects.update(names)
+            if first_contact is None:
+                first_contact = k
             if contact_frames > CONTACT_ABORT_FRAMES:
                 result = "collision_abort"
+                end_k = k
                 break
+        contact_flags.append(1 if names else 0)
 
-        if pf is not None:
-            estimate.append(pf.estimate())
-        elif group == "A":
-            estimate.append(truth[-1])  # group A's estimate IS the truth
-        else:
-            estimate.append(odom[-1])
-        pose_ctrl_now = estimate[-1] if pf is not None else odom[-1]
-        if math.hypot(pose_ctrl_now[0] - goal[0], pose_ctrl_now[1] - goal[1]) < ARRIVAL_EST_M:
-            arrived_est = True
-            if arrived_frame is None:
-                arrived_frame = k
-
-        true_goal_dist = math.hypot(pose_true[0] - goal[0], pose_true[1] - goal[1])
-        if k >= 50 and true_goal_dist < ARRIVAL_TRUE_M:
-            result = "arrived"
-            break
-        if arrived_est and k - arrived_frame > 200:
-            # the robot believes it has arrived but keeps waiting: false arrival
-            true_dist = math.hypot(pose_true[0] - goal[0], pose_true[1] - goal[1])
-            result = "false_arrived" if true_dist >= ARRIVAL_TRUE_M else "arrived"
-            break
-
-    if result == "timeout":
-        result = "timeout"
-    true_end = float(np.linalg.norm(np.asarray(truth[-1][:2]) - np.asarray(goal, dtype=float)))
+    # ---------------------------------------------------------- scoring
+    if result == "announced":
+        result = "arrived" if announce_true <= ARRIVAL_TRUE_M else "false_arrived"
+    elif result == "no_path":
+        pass  # the scorer classifies correct rejection vs wrong give-up
+    elif result == "timeout" and min_true_goal < ARRIVAL_TRUE_M:
+        result = "timeout_truth_entered"
+    true_end = float(np.linalg.norm(np.asarray(truth[end_k][:2]) - np.asarray(goal, dtype=float)))
     est_chain = np.asarray(estimate)
     truth_chain = np.asarray(truth)
     odom_chain = np.asarray(odom)
@@ -384,18 +482,27 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps):
         "task": name,
         "group": group,
         "result": result,
+        "announce_frame": announce_frame,
+        "announce_true_m": announce_true,
         "true_end_m": true_end,
         "travelled_m": round(travelled, 3),
-        "steps": len(truth) - 1,
+        "steps": end_k,
+        "first_contact_frame": first_contact,
         "contact_frames": contact_frames,
         "contact_objects": sorted(contact_objects),
+        "no_path_frame": no_path_frame,
+        "min_true_goal_m": float(min_true_goal) if math.isfinite(min_true_goal) else None,
         "loc_mean_m": float(np.mean(errors)) if n else None,
         "loc_p95_m": float(np.percentile(errors, 95)) if n else None,
-        "arrived_frame": arrived_frame,
+        "resamples": len(resample_frames),
     }, {
         "truth": truth_chain,
         "odom": odom_chain,
         "estimate": est_chain,
+        "scan_trace": np.asarray(scan_trace),
+        "commands": np.asarray(commands),
+        "ess_trace": np.asarray(ess_trace),
+        "contact_flag": np.asarray(contact_flags, dtype=int),
     }
 
 
@@ -477,10 +584,13 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     if config is None:
         config = NavConfig()
     if log is None:
+
         def log(*_message):
             return None
+
     started = time.perf_counter()
     layout = default_layout()
+    robot = layout["robot"]
     world = RoomWorld(layout)
     avoidance, loc_map = build_maps(world, layout)
     reachable, unreachable = classify_tasks(world, layout)
@@ -502,23 +612,27 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     for s in SENSOR_SEEDS:
         rng = np.random.default_rng([seed, 56011, s])
         for name, start, goal, is_reachable in tasks:
+            # EVERY task enters the same navigation entry: the planner itself
+            # must return no_path for the unreachable goal - the rejection is
+            # not pre-written by the task label (the recorded v1 finding)
             for group in GROUPS:
                 if not is_reachable:
-                    # the shared prior avoidance map rejects the task; the
-                    # robot never moves (safe rejection), identical per group
-                    rows.append(
-                        {
-                            "task": name,
-                            "group": group,
-                            "seed": s,
-                            "result": "rejected_unreachable",
-                            "true_end_m": None,
-                            "contact_frames": 0,
-                        }
-                    )
-                    continue
+                    planning = plan(avoidance, start, goal, robot["radius"])
+                    if planning is None:
+                        rows.append(
+                            {
+                                "task": name,
+                                "group": group,
+                                "seed": s,
+                                "result": "correct_rejection",
+                                "true_end_m": None,
+                                "contact_frames": 0,
+                            }
+                        )
+                        log(f"  s{s} {name} {group}: correct_rejection (planner no_path)")
+                        continue
                 loc_map_for_group = loc_map if group == "C" else self_maps[s]
-                rng_run = np.random.default_rng([seed, 56012, s, hash(name) % 1000])
+                rng_run = np.random.default_rng([seed, 56012, s, zlib.crc32(name.encode("utf-8"))])
                 row, chains = run_closed_loop(
                     world,
                     (name, start, goal),
@@ -527,8 +641,17 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                     rng_run,
                     config,
                     config.max_steps,
+                    layout=layout,
                 )
                 row["seed"] = s
+                # scorer: classify no_path by the task label (correct rejection
+                # of the unreachable task vs wrong give-up on a reachable one)
+                if row["result"] == "no_path":
+                    row["scored_result"] = (
+                        "correct_rejection" if not is_reachable else "wrong_give_up"
+                    )
+                else:
+                    row["scored_result"] = row["result"]
                 rows.append(row)
                 key = f"{name}_{group}_s{s}"
                 for chain_name, chain in chains.items():
@@ -551,7 +674,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     a_reach = [r for r in rows if r["group"] == "A" and r["task"] != unreachable[0][0]]
     a_arrived = sum(1 for r in a_reach if r["result"] == "arrived")
     a_contacts = sum(r.get("contact_frames", 0) for r in rows if r["group"] == "A")
-    rejections = [r for r in rows if r["result"] == "rejected_unreachable"]
+    rejections = [r for r in rows if r["result"] == "correct_rejection"]
     hypothesis = {
         "claim": (
             "世界模型闭环：定位来源不同，机器人实际到达与安全表现不同。"
