@@ -415,3 +415,30 @@ top-12 的 12/12 与 12/289 仍是旧候选池的真实统计，但无真值管�
 变更：`make_plan` 在起终点位于同一格、A* 只返回单格时补起点→目标的两点短线段，并加回归测试。以相同 ISO/ANISO × 世界 0–2 × 传感器 0–1 计划整体重跑，不混用修复前后的片段。第 55/56 课演示窗口也改为加载新 schema 和动态读取结果，移除旧硬编码结论。
 结果：两组各 3/3 有效场景、6/6 有效运行；ISO EST / 理想图 PF / 自建图 PF 均值 1.985 / 0.345 / 2.175 m，ANISO 为 1.985 / 0.655 / 1.476 m。三场景的同帧地图对齐精确率 ISO 0.36–0.37、ANISO 0.41–0.43，均低于 0.70。ISO 三个场景都没通过联合门槛，即使剩余两个场景全通过，也无法满足正式门槛 5 中至少 4 个；因此暂不运行形式上不可能过门的 5×3 扩大版，也不接 Nav2。
 证据：[综合基准](62-navigation-benchmark.md)、`docs/benchmarks/navigation-paired-pilot-v4.json`、路径规划回归测试和本地 NPZ。
+
+
+**D-2026-09-26-01｜第 63/64 课补记：照片房间三维验证与闭环导航（2026-09-26）**
+变更：第 63 课（docs/63，照片房间三维验证）和第 64 课（docs/64，闭环导航对照）
+缺决策日志条目，现补记。
+第 63 课：照片房间三维验证——40 张本地照片人工解释搭建参数化房间（桌高 0.69 m
+实测），Blender + MuJoCo 134 几何体；低位激光（18 cm）可穿床底（22 cm）但
+32 cm 机身撞床架——2D 切片地图固有盲区首次三维实证；高度匹配地图使 PF
+18.7→5.1 cm（三噪声种子，限本模型内运动学回放）。
+第 64 课：闭环导航——感知→估计→规划→控制→真实运动的四组定位来源对照。
+v1 五处接线错误修正后 v3：A 组 loc_mean 精确 0.0（时间对齐证明）；B 组 3 次
+漂移超时；C/D 定位误差显著低于 B。v3 修正协议 + AMCL 桥接基础设施。
+证据：results/photo_room_v1/、results/map_localization_2026-09-24_v5/、
+results/photo_room_navigation_2026-09-25/；docs/63、docs/64。
+
+
+**D-2026-09-26-02｜AMCL 桥接基础设施与分辨率 bug（2026-09-26）**
+变更：安装 nav2_amcl/map_server/lifecycle_manager 1.3.13 到 WSL；构建冻结输入
+导出（amcl_bridge_export.py）+ ROS 2 回放器（amcl_ros2_bridge.py）+ launch 文件
+（scripts/amcl_bridge_launch.py）+ 统一评分（nav_scoring.py）。
+发现并修复分辨率 bug：ParticleFilter 用 RES=0.04 但 true_grid 是 0.1 m 格——
+似然场距离缩小 2.5×，PF 测量模型完全失准。修正后自写 PF mean 从 2.02 m 降到
+0.061 m。场景混用修正：导出改用 map_localization v5 的 10 m grid_nav world。
+结论：官方 AMCL 1.3.13 在 3221 帧上产生 148 次定位更新（4.6% 覆盖率），
+mean=0.126 m；自写 PF mean=0.061 m（修正分辨率后）；两者均优于里程计 0.216 m。
+证据：results/amcl_bridge_v2/、results/amcl_official_v1/；docs/64。
+下一步：AMCL-Py 调试暂缓；接 ROS 2 官方节点批量对照。
