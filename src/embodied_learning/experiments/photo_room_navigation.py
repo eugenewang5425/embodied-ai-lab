@@ -314,7 +314,9 @@ def safe_stop_distance(layout, v_max=V_MAX, dt=DT, margin=0.04):
     return layout["robot"]["radius"] + v_max * dt + margin
 
 
-def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=None):
+def run_closed_loop(
+    world, task, group, loc_map, rng_sensor, rng_pf, config, max_steps, layout=None
+):
     """One corrected-protocol closed-loop run.
 
     Timestamps: iteration k starts with the robot at truth[k].  Order per
@@ -335,7 +337,7 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
     encoders = [np.zeros(2)]
     pf = (
         ParticleFilter(
-            loc_map, RES, config.particles, rng, init_pose=truth[0], spread=0.04, rays_n=32
+            loc_map, RES, config.particles, rng_pf, init_pose=truth[0], spread=0.04, rays_n=32
         )
         if group in ("C", "D")
         else None
@@ -363,7 +365,6 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
     path = None
     wp = 0
     state = {}
-    stop_dist = safe_stop_distance(layout)
     ds_prev = 0.0
     dth_prev = 0.0
 
@@ -378,12 +379,12 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
             v_m, om_m = GEOMETRY.body_velocity(measured / DT)
             sig_trans = config.alpha_trans * abs(ds_prev) + config.alpha_trans_base_m
             sig_rot = config.alpha_rot * abs(dth_prev) + config.alpha_rot_base_rad
-            propagate_motion(pf, ds_prev, dth_prev, rng, sig_trans, sig_rot)
+            propagate_motion(pf, ds_prev, dth_prev, rng_pf, sig_trans, sig_rot)
 
         # (2) scan at time k, recursive measurement update at time k
         raw_scan, _hits = world.scan(pose_true)
         scan = np.clip(
-            raw_scan + rng.normal(0.0, config.sensor_sigma_m, raw_scan.shape), 0.02, 3.95
+            raw_scan + rng_sensor.normal(0.0, config.sensor_sigma_m, raw_scan.shape), 0.02, 3.95
         )
         scan_trace.append(scan)
         if pf is not None:
@@ -462,6 +463,8 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
                 end_k = k
                 break
         contact_flags.append(1 if names else 0)
+        true_goal_dist = math.hypot(truth[-1][0] - goal[0], truth[-1][1] - goal[1])
+        min_true_goal = min(min_true_goal, true_goal_dist)
         ds_prev = ds_meas_exec
         dth_prev = dth_meas_exec
 
@@ -620,13 +623,19 @@ def run_experiment(output, *, seed=0, config=None, log=print):
                 # ALL tasks (including unreachable) enter run_closed_loop;
                 # the planner itself returns no_path for the unreachable goal
                 loc_map_for_group = loc_map if group == "C" else self_maps[s]
-                rng_run = np.random.default_rng([seed, 56012, s, zlib.crc32(name.encode("utf-8"))])
+                task_rng_sensor = np.random.default_rng(
+                    [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 0]
+                )
+                task_rng_pf = np.random.default_rng(
+                    [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 1]
+                )
                 row, chains = run_closed_loop(
                     world,
                     (name, start, goal),
                     group,
                     loc_map_for_group,
-                    rng_run,
+                    task_rng_sensor,
+                    task_rng_pf,
                     config,
                     config.max_steps,
                     layout=layout,

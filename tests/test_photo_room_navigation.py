@@ -88,7 +88,7 @@ def test_group_a_estimate_chain_is_truth():
     avoid, loc_map = build_maps(world, layout)
     reach, _unreach = classify_tasks(world, layout)
     rng = np.random.default_rng(0)
-    _row, chains = run_closed_loop(world, reach[0], "A", loc_map, rng, cfg, min(cfg.max_steps, 400))
+    _row, chains = run_closed_loop(world, reach[0], "A", loc_map, rng, rng, cfg, min(cfg.max_steps, 400))
     n = min(len(chains["truth"]), len(chains["estimate"]))
     errors = np.linalg.norm(chains["truth"][:n, :2] - chains["estimate"][:n, :2], axis=1)
     assert float(errors.max()) < 0.01  # group A estimate = truth (zero drift, within float noise)
