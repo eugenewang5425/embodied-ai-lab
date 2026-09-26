@@ -21,7 +21,7 @@ from scipy.ndimage import distance_transform_edt
 
 from embodied_learning.experiments.map_localization import ParticleFilter
 
-RES = 0.04
+RES = 0.1  # true_grid resolution (grid_nav 0.1m cells)
 DT = 0.04
 N_PARTICLES = 300
 SENSOR_SIGMA = 0.01
@@ -252,7 +252,7 @@ def score(estimates, truth):
 def run(output, *, seed=0, log=print):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
-    data, manifest = load_frozen("results/amcl_bridge")
+    data, manifest = load_frozen("results/amcl_bridge_v2")
     truth = data["truth"]
     odom = data["odom"]
 
