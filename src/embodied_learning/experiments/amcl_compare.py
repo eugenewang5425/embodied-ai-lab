@@ -41,8 +41,13 @@ def wrap(a):
 
 
 # ------------------------------------------------------- self-written PF
-def run_self_pf(data, res, seed=0):
+def run_self_pf(data, res, seed=0, update_gate_d=None, update_gate_a=None):
+    """Run self-written PF on frozen data.
 
+    update_gate_d/gate_a: when set, measurement updates are gated by
+    accumulated measured motion (propagation still happens every frame).
+    None = P-full (every frame update).
+    """
     grid = data["map_grid"]
     odom = data["odom"]
     ranges = data["ranges"]
@@ -51,9 +56,11 @@ def run_self_pf(data, res, seed=0):
     n = len(odom)
     rng = np.random.default_rng(seed)
     pf = ParticleFilter(grid, res, N_PARTICLES, rng, init_pose=init, spread=0.04, rays_n=32)
-    lf = distance_transform_edt(grid <= 0) * res
     weights = np.full(N_PARTICLES, 1.0 / N_PARTICLES)
     estimates = []
+    update_frames = []
+    accum_ds = 0.0
+    accum_dth = 0.0
     for k in range(n):
         if k > 0:
             delta = odom[k] - odom[k - 1]
@@ -67,20 +74,31 @@ def run_self_pf(data, res, seed=0):
             pf.p[:, 0] += (ds + trans) * np.cos(mid)
             pf.p[:, 1] += (ds + trans) * np.sin(mid)
             pf.p[:, 2] = np.arctan2(np.sin(pf.p[:, 2] + dth + rot), np.cos(pf.p[:, 2] + dth + rot))
+            accum_ds += abs(ds)
+            accum_dth += abs(dth)
         scan = ranges[k]
-        pf.measure(scan, None)
-        likelihood = pf.w.copy()
-        posterior = weights * likelihood
-        total = posterior.sum()
-        if total <= 1e-300:
-            posterior = np.full(N_PARTICLES, 1.0 / N_PARTICLES)
-        pf.w = posterior / posterior.sum()
-        weights = pf.w.copy()
+        gate_triggered = (
+            update_gate_d is None
+            or accum_ds >= update_gate_d
+            or accum_dth >= update_gate_a
+        )
+        if k == 0 or gate_triggered:
+            pf.measure(scan, None)
+            likelihood = pf.w.copy()
+            posterior = weights * likelihood
+            total = posterior.sum()
+            if total <= 1e-300:
+                posterior = np.full(N_PARTICLES, 1.0 / N_PARTICLES)
+            pf.w = posterior / posterior.sum()
+            weights = pf.w.copy()
+            update_frames.append(k)
+            accum_ds = 0.0
+            accum_dth = 0.0
         estimates.append(pf.estimate().copy())
         if pf.ess() < N_PARTICLES / 2:
             pf.resample()
             weights = pf.w.copy()
-    return np.asarray(estimates)
+    return np.asarray(estimates), update_frames
 
 
 # ------------------------------------------------------- Python AMCL
@@ -219,6 +237,7 @@ def run_amcl_py(data, res, seed=0):
     angles = np.arange(64) * (2 * math.pi / 64)
     amcl = AmclPy(grid, res, N_PARTICLES, rng, init, init_spread=0.04)
     estimates = []
+    resample_frames = []
     for k in range(n):
         if k > 0:
             amcl.propagate(odom[k - 1], odom[k])
@@ -226,7 +245,8 @@ def run_amcl_py(data, res, seed=0):
         estimates.append(amcl.estimate())
         if amcl.w.max() > 0 and 1.0 / max(1e-12, float(np.sum(amcl.w**2))) < N_PARTICLES / 2:
             amcl.kld_resample()
-    return np.asarray(estimates)
+            resample_frames.append(k)
+    return np.asarray(estimates), resample_frames
 
 
 # ------------------------------------------------------------- comparison
