@@ -331,7 +331,7 @@ def run_closed_loop(world, task, group, loc_map, rng, config, max_steps, layout=
     robot = layout["robot"]
     truth = [np.array([start[0], start[1], 0.0])]
     odom = [np.array([start[0], start[1], 0.0])]
-    estimate = [np.array([start[0], start[1], 0.0])]
+    estimate = []  # appended in the loop at each timestamp k
     encoders = [np.zeros(2)]
     pf = (
         ParticleFilter(
@@ -610,27 +610,15 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     rows = []
     archive = {}
     for s in SENSOR_SEEDS:
-        rng = np.random.default_rng([seed, 56011, s])
+        rng_sensor = np.random.default_rng([seed, 56011, s])
+        rng_pf = np.random.default_rng([seed, 56013, s])
         for name, start, goal, is_reachable in tasks:
             # EVERY task enters the same navigation entry: the planner itself
             # must return no_path for the unreachable goal - the rejection is
             # not pre-written by the task label (the recorded v1 finding)
             for group in GROUPS:
-                if not is_reachable:
-                    planning = plan(avoidance, start, goal, robot["radius"])
-                    if planning is None:
-                        rows.append(
-                            {
-                                "task": name,
-                                "group": group,
-                                "seed": s,
-                                "result": "correct_rejection",
-                                "true_end_m": None,
-                                "contact_frames": 0,
-                            }
-                        )
-                        log(f"  s{s} {name} {group}: correct_rejection (planner no_path)")
-                        continue
+                # ALL tasks (including unreachable) enter run_closed_loop;
+                # the planner itself returns no_path for the unreachable goal
                 loc_map_for_group = loc_map if group == "C" else self_maps[s]
                 rng_run = np.random.default_rng([seed, 56012, s, zlib.crc32(name.encode("utf-8"))])
                 row, chains = run_closed_loop(
@@ -674,7 +662,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     a_reach = [r for r in rows if r["group"] == "A" and r["task"] != unreachable[0][0]]
     a_arrived = sum(1 for r in a_reach if r["result"] == "arrived")
     a_contacts = sum(r.get("contact_frames", 0) for r in rows if r["group"] == "A")
-    rejections = [r for r in rows if r["result"] == "correct_rejection"]
+    rejections = [r for r in rows if r.get("scored_result") == "correct_rejection"]
     hypothesis = {
         "claim": (
             "世界模型闭环：定位来源不同，机器人实际到达与安全表现不同。"
@@ -689,7 +677,9 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         "results": {
             "collector_met": bool(len(rows) == len(tasks) * len(SENSOR_SEEDS) * len(GROUPS)),
             "gate_A_met": bool(
-                a_arrived == len(a_reach) and a_contacts == 0 and len(rejections) == 12
+                a_arrived == len(a_reach)
+                and a_contacts == 0
+                and sum(1 for r in rejections if r["group"] == "A") == 3
             ),
             "a_arrived": a_arrived,
             "a_reachable_runs": len(a_reach),
@@ -697,10 +687,15 @@ def run_experiment(output, *, seed=0, config=None, log=print):
             "rejections": len(rejections),
         },
     }
+    task_names = [t[0] for t in tasks]
+    task_ids = [zlib.crc32(t[0].encode("utf-8")) % 10000 for t in tasks]
+    assert len(set(task_ids)) == len(task_ids), (
+        f"task ID collision: {list(zip(task_names, task_ids))}"
+    )
     archives = {
-        "task_table": np.array(
-            [[zlib.crc32(t[0].encode("utf-8")) % 1000, 1 if t[3] else 0] for t in tasks], dtype=int
-        )
+        "task_names": np.array(task_names, dtype="U64"),
+        "task_ids": np.array(task_ids, dtype=int),
+        "task_reachable": np.array([1 if t[3] else 0 for t in tasks], dtype=int),
     }
     for key, arr in archive.items():
         archives[key] = arr
