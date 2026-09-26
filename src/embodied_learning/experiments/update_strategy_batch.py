@@ -112,8 +112,7 @@ def run_batch(output, *, log=print):
         truth = data["truth"]
         res = 0.1  # true_grid resolution
 
-        for group in GROUP_CONFIGS:
-            cfg = GROUP_CONFIGS[group]
+        for group, cfg in GROUP_CONFIGS.items():
             if cfg["type"] != "self_pf":
                 continue  # AMCL groups handled separately
 
@@ -141,8 +140,7 @@ def run_batch(output, *, log=print):
                 )
 
         # AMCL groups: write configs for WSL execution
-        for group in GROUP_CONFIGS:
-            cfg = GROUP_CONFIGS[group]
+        for group, cfg in GROUP_CONFIGS.items():
             if cfg["type"] != "amcl":
                 continue
             amcl_cfg = {

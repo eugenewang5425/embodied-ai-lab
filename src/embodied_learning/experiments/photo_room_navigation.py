@@ -364,19 +364,16 @@ def run_closed_loop(
     avoidance, _loc = build_maps(world, layout)
     path = None
     wp = 0
-    state = {}
     ds_prev = 0.0
     dth_prev = 0.0
 
     for k in range(max_steps + 1):
         pose_true = truth[k]
 
-        # (1) filter propagation with the last EXECUTED (measured, biased)
-        #     wheel increment: rad/s = increment / DT, then dt = DT
+        # (1) filter propagation with the last EXECUTED measured wheel
+        #     increment (ds_prev/dth_prev hold ds_meas_exec/dth_meas_exec
+        #     from step 6) — the biased wheel reading, not the true motion
         if k > 0 and pf is not None:
-            prev_cmd = commands[k - 1]
-            measured = np.asarray(prev_cmd, dtype=float) * (1.0 + config.wheel_bias)
-            v_m, om_m = GEOMETRY.body_velocity(measured / DT)
             sig_trans = config.alpha_trans * abs(ds_prev) + config.alpha_trans_base_m
             sig_rot = config.alpha_rot * abs(dth_prev) + config.alpha_rot_base_rad
             propagate_motion(pf, ds_prev, dth_prev, rng_pf, sig_trans, sig_rot)
@@ -423,50 +420,53 @@ def run_closed_loop(
                 end_k = k
                 break
 
-        # (6) control and execution
-        inc, wp, v_cmd = control_step(pose_est, path, wp, scan, stop_distance)
-        commands.append(inc)
-        encoders.append(np.asarray(inc, dtype=float) + encoders[-1])
-        ds_true_exec = GEOMETRY.radius_m * (inc[0] + inc[1]) / 2.0
-        dth_true_exec = GEOMETRY.radius_m * (inc[1] - inc[0]) / GEOMETRY.track_m
-        ds_meas_exec = ds_true_exec * (1.0 + config.wheel_bias)
-        dth_meas_exec = dth_true_exec * (1.0 + config.wheel_bias)
-        travelled += abs(ds_true_exec)
-        mid_t = truth[k][2] + dth_true_exec / 2.0
-        pose_next = np.array(
-            [
-                truth[k][0] + ds_true_exec * math.cos(mid_t),
-                truth[k][1] + ds_true_exec * math.sin(mid_t),
-                wrap(truth[k][2] + dth_true_exec),
-            ]
-        )
-        mid_o = odom[k][2] + dth_meas_exec / 2.0
-        odom_next = np.array(
-            [
-                odom[k][0] + ds_meas_exec * math.cos(mid_o),
-                odom[k][1] + ds_meas_exec * math.sin(mid_o),
-                wrap(odom[k][2] + dth_meas_exec),
-            ]
-        )
-        truth.append(pose_next)
-        odom.append(odom_next)
+        # (6) control and execution - a command issued at the LAST observation
+        #     tick is never executed (nothing would ever observe it, and an
+        #     un-observed advance could hide a final-step collision)
+        if k < max_steps:
+            inc, wp, _v_cmd = control_step(pose_est, path, wp, scan, stop_distance)
+            commands.append(inc)
+            encoders.append(np.asarray(inc, dtype=float) + encoders[-1])
+            ds_true_exec = GEOMETRY.radius_m * (inc[0] + inc[1]) / 2.0
+            dth_true_exec = GEOMETRY.radius_m * (inc[1] - inc[0]) / GEOMETRY.track_m
+            ds_meas_exec = ds_true_exec * (1.0 + config.wheel_bias)
+            dth_meas_exec = dth_true_exec * (1.0 + config.wheel_bias)
+            travelled += abs(ds_true_exec)
+            mid_t = truth[k][2] + dth_true_exec / 2.0
+            pose_next = np.array(
+                [
+                    truth[k][0] + ds_true_exec * math.cos(mid_t),
+                    truth[k][1] + ds_true_exec * math.sin(mid_t),
+                    wrap(truth[k][2] + dth_true_exec),
+                ]
+            )
+            mid_o = odom[k][2] + dth_meas_exec / 2.0
+            odom_next = np.array(
+                [
+                    odom[k][0] + ds_meas_exec * math.cos(mid_o),
+                    odom[k][1] + ds_meas_exec * math.sin(mid_o),
+                    wrap(odom[k][2] + dth_meas_exec),
+                ]
+            )
+            truth.append(pose_next)
+            odom.append(odom_next)
 
-        world.set_pose(pose_next)
-        names = world.contact_names(pose_next)
-        if names:
-            contact_frames += 1
-            contact_objects.update(names)
-            if first_contact is None:
-                first_contact = k
-            if contact_frames > CONTACT_ABORT_FRAMES:
-                result = "collision_abort"
-                end_k = k
-                break
-        contact_flags.append(1 if names else 0)
-        true_goal_dist = math.hypot(truth[-1][0] - goal[0], truth[-1][1] - goal[1])
-        min_true_goal = min(min_true_goal, true_goal_dist)
-        ds_prev = ds_meas_exec
-        dth_prev = dth_meas_exec
+            world.set_pose(pose_next)
+            names = world.contact_names(pose_next)
+            if names:
+                contact_frames += 1
+                contact_objects.update(names)
+                if first_contact is None:
+                    first_contact = k
+                if contact_frames > CONTACT_ABORT_FRAMES:
+                    result = "collision_abort"
+                    end_k = k
+                    break
+            contact_flags.append(1 if names else 0)
+            true_goal_dist = math.hypot(truth[-1][0] - goal[0], truth[-1][1] - goal[1])
+            min_true_goal = min(min_true_goal, true_goal_dist)
+            ds_prev = ds_meas_exec
+            dth_prev = dth_meas_exec
 
     # ---------------------------------------------------------- scoring
     if result == "announced":
@@ -579,6 +579,89 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def code_rev():
+    """Best-effort git revision of the running code (provenance, P-plan)."""
+    try:
+        import subprocess
+
+        rev = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+        if rev.returncode == 0:
+            return (rev.stdout or "").strip() or "unknown"
+    except (OSError, ValueError):
+        pass
+    return "unknown"
+
+
+class ResourceTracker:
+    """Per-phase wall/CPU/RSS accounting for the record (P4 requirement).
+
+    cpu_s is the process CPU time (time.process_time), rss_mb is sampled
+    from psutil when available (dev dependency); without psutil the RSS
+    fields are None and wall/cpu still record.
+    """
+
+    def __init__(self):
+        self._t0 = time.perf_counter()
+        self._c0 = time.process_time()
+        try:
+            import psutil
+
+            self._proc = psutil.Process()
+            self._rss0 = self._proc.memory_info().rss
+        except ImportError:
+            self._proc = None
+            self._rss0 = None
+        self.phases = {}
+
+    def phase(self, name):
+        class _Phase:
+            def __init__(self, tracker, label):
+                self._tr, self._label = tracker, label
+
+            def __enter__(self):
+                t = self._tr
+                self._w = time.perf_counter()
+                self._c = time.process_time()
+                self._rss = t._proc.memory_info().rss if t._proc else None
+                return self
+
+            def __exit__(self, *_exc):
+                t = self._tr
+                wall = time.perf_counter() - self._w
+                cpu = time.process_time() - self._c
+                rss_peak = None
+                rss_delta = None
+                if t._proc:
+                    rss_now = t._proc.memory_info().rss
+                    rss_peak = max(rss_now, self._rss)
+                    rss_delta = rss_now - self._rss
+                t.phases[self._label] = {
+                    "wall_s": round(wall, 3),
+                    "cpu_s": round(cpu, 3),
+                    "rss_peak_mb": round(rss_peak / 1e6, 1) if rss_peak is not None else None,
+                    "rss_delta_mb": round(rss_delta / 1e6, 1) if rss_delta is not None else None,
+                }
+                return False
+
+        return _Phase(self, name)
+
+    def totals(self):
+        out = {
+            "wall_s": round(time.perf_counter() - self._t0, 3),
+            "cpu_s": round(time.process_time() - self._c0, 3),
+        }
+        if self._proc is not None:
+            out["rss_now_mb"] = round(self._proc.memory_info().rss / 1e6, 1)
+        out["phases"] = self.phases
+        return out
+
+
 def run_experiment(output, *, seed=0, config=None, log=print):
 
     output = Path(output)
@@ -592,11 +675,12 @@ def run_experiment(output, *, seed=0, config=None, log=print):
             return None
 
     started = time.perf_counter()
-    layout = default_layout()
-    robot = layout["robot"]
-    world = RoomWorld(layout)
-    avoidance, loc_map = build_maps(world, layout)
-    reachable, unreachable = classify_tasks(world, layout)
+    resources = ResourceTracker()
+    with resources.phase("world_setup"):
+        layout = default_layout()
+        world = RoomWorld(layout)
+        _avoidance, loc_map = build_maps(world, layout)
+        reachable, unreachable = classify_tasks(world, layout)
     tasks = [(n, s, g, True) for n, s, g in reachable] + [
         (n, s, g, False) for n, s, g in unreachable
     ]
@@ -605,58 +689,58 @@ def run_experiment(output, *, seed=0, config=None, log=print):
     # group D maps (one per sensor seed; odometry-executed mapping patrol)
     self_maps = {}
     route = [[2.70, 0.95]] + [list(g) for _n, _s, g in reachable] + [[2.70, 0.95]]
-    for s in SENSOR_SEEDS:
-        rng_map = np.random.default_rng([seed, 56010, s])
-        self_maps[s] = mapping_patrol(world, layout, route, rng_map, config)
-        log(f"mapping patrol for seed {s} done")
+    with resources.phase("mapping_patrol"):
+        for s in SENSOR_SEEDS:
+            rng_map = np.random.default_rng([seed, 56010, s])
+            self_maps[s] = mapping_patrol(world, layout, route, rng_map, config)
+            log(f"mapping patrol for seed {s} done")
 
     rows = []
     archive = {}
-    for s in SENSOR_SEEDS:
-        rng_sensor = np.random.default_rng([seed, 56011, s])
-        rng_pf = np.random.default_rng([seed, 56013, s])
-        for name, start, goal, is_reachable in tasks:
-            # EVERY task enters the same navigation entry: the planner itself
-            # must return no_path for the unreachable goal - the rejection is
-            # not pre-written by the task label (the recorded v1 finding)
-            for group in GROUPS:
-                # ALL tasks (including unreachable) enter run_closed_loop;
-                # the planner itself returns no_path for the unreachable goal
-                loc_map_for_group = loc_map if group == "C" else self_maps[s]
-                task_rng_sensor = np.random.default_rng(
-                    [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 0]
-                )
-                task_rng_pf = np.random.default_rng(
-                    [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 1]
-                )
-                row, chains = run_closed_loop(
-                    world,
-                    (name, start, goal),
-                    group,
-                    loc_map_for_group,
-                    task_rng_sensor,
-                    task_rng_pf,
-                    config,
-                    config.max_steps,
-                    layout=layout,
-                )
-                row["seed"] = s
-                # scorer: classify no_path by the task label (correct rejection
-                # of the unreachable task vs wrong give-up on a reachable one)
-                if row["result"] == "no_path":
-                    row["scored_result"] = (
-                        "correct_rejection" if not is_reachable else "wrong_give_up"
+    with resources.phase("navigation"):
+        for s in SENSOR_SEEDS:
+            for name, start, goal, is_reachable in tasks:
+                # EVERY task enters the same navigation entry: the planner itself
+                # must return no_path for the unreachable goal - the rejection is
+                # not pre-written by the task label (the recorded v1 finding)
+                for group in GROUPS:
+                    # ALL tasks (including unreachable) enter run_closed_loop;
+                    # the planner itself returns no_path for the unreachable goal
+                    loc_map_for_group = loc_map if group == "C" else self_maps[s]
+                    task_rng_sensor = np.random.default_rng(
+                        [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 0]
                     )
-                else:
-                    row["scored_result"] = row["result"]
-                rows.append(row)
-                key = f"{name}_{group}_s{s}"
-                for chain_name, chain in chains.items():
-                    archive[f"{key}_{chain_name}"] = chain
-                log(
-                    f"  s{s} {name} {group}: {row['result']} end {row['true_end_m']:.2f} m "
-                    f"contacts {row['contact_frames']}"
-                )
+                    task_rng_pf = np.random.default_rng(
+                        [seed, 56012, s, zlib.crc32(name.encode("utf-8")), 1]
+                    )
+                    row, chains = run_closed_loop(
+                        world,
+                        (name, start, goal),
+                        group,
+                        loc_map_for_group,
+                        task_rng_sensor,
+                        task_rng_pf,
+                        config,
+                        config.max_steps,
+                        layout=layout,
+                    )
+                    row["seed"] = s
+                    # scorer: classify no_path by the task label (correct
+                    # rejection of the unreachable task vs wrong give-up)
+                    if row["result"] == "no_path":
+                        row["scored_result"] = (
+                            "correct_rejection" if not is_reachable else "wrong_give_up"
+                        )
+                    else:
+                        row["scored_result"] = row["result"]
+                    rows.append(row)
+                    key = f"{name}_{group}_s{s}"
+                    for chain_name, chain in chains.items():
+                        archive[f"{key}_{chain_name}"] = chain
+                    log(
+                        f"  s{s} {name} {group}: {row['result']} end {row['true_end_m']:.2f} m "
+                        f"contacts {row['contact_frames']}"
+                    )
 
     def count(group, result, seed=None):
         n = 0
@@ -714,6 +798,22 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         "experiment": EXPERIMENT,
         "schema_version": SCHEMA_VERSION,
         "master_seed": seed,
+        "code_rev": code_rev(),
+        "import_path": str(Path(__file__).resolve()),
+        "config": {
+            "particles": config.particles,
+            "wheel_bias": config.wheel_bias,
+            "sensor_sigma_m": config.sensor_sigma_m,
+            "max_steps": config.max_steps,
+            "alpha_trans": config.alpha_trans,
+            "alpha_trans_base_m": config.alpha_trans_base_m,
+            "alpha_rot": config.alpha_rot,
+            "alpha_rot_base_rad": config.alpha_rot_base_rad,
+        },
+        "task_ids": {
+            t[0]: zlib.crc32(t[0].encode("utf-8"))
+            for t in tasks
+        },
         "python": platform.python_version(),
         "numpy": np.__version__,
         "protocol": {
@@ -747,6 +847,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         "rows": rows,
         "hypothesis": hypothesis,
         "wall_time_s": time.perf_counter() - started,
+        "resources": resources.totals(),
         "archive_keys": sorted(archives.keys()),
         "trajectories_sha256": digest(output / "trajectories.npz"),
     }

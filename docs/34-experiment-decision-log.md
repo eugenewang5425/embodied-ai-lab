@@ -442,3 +442,37 @@ results/photo_room_navigation_2026-09-25/；docs/63、docs/64。
 mean=0.126 m；自写 PF mean=0.061 m（修正分辨率后）；两者均优于里程计 0.216 m。
 证据：results/amcl_bridge_v2/、results/amcl_official_v1/；docs/64。
 下一步：AMCL-Py 调试暂缓；接 ROS 2 官方节点批量对照。
+
+
+**D-2026-09-27-01｜闭环导航协议加固与 AMCL 批量执行器勘误（2026-09-27）**
+触发：代码审查发现 AMCL 批量执行器生成的 launch 文件从未被使用——bridge
+硬编码单一 launch 路径，三组"不同配置"实际跑同一份默认参数（27 次结果
+逐位相同即此症状）；追查另发现 `laser_max_beams` 并非 nav2_amcl 参数
+（ROS1 名字，nav2 叫 `max_beams`，所有历史 launch 里被静默忽略）且
+`update_min_d/a` 从未设置——历史 AMCL 数字全部来自 nav2 默认门限
+（0.25 m / 0.26 rad）。
+变更：批量执行器参数化（每配置生成 launch 并经 `--launch` 传入 bridge，
+唯一启动路径）；新增参数硬门禁——`ros2 param get` 回读实际生效值并与
+配置断言，不匹配即判失败（调试中拦下参数名错误与 lifecycle 激活竞态
+两处真问题：竞态使初始位姿在激活前丢失→0 位姿输出，现轮询 active 态
+再发初始位姿，失败自动重试）；0 位姿的完成回放不再计为有效数据。
+闭环导航协议同步加固：PF 传播确认使用带偏差测量增量（死代码清除）、
+最后一拍只观测不执行（避免隐藏末步碰撞与链长错位）、停车阈值接线与
+不可达统一入口、传感/PF 随机数分流与权重同步各补"能抓住原 bug"的
+回归测试（6 项）；报告新增分段资源测量（world_setup/mapping_patrol/
+navigation 的 wall/CPU/RSS）与溯源字段（code_rev、导入路径、完整配置、
+crc32 任务编号）。
+结果：v4 60 回合自写 PF 记录与 v3 数字一致（A 0.0000 / B 0.0232（3 超时）/
+C 0.0064 / D 0.0121 m，12/12 拒绝，全组零接触）——本轮加固只改协议与
+测量，不改变结论。AMCL 门禁后 27/27 有效：A-base 0.1036±0.0047 m（348 次
+更新）、A-dense 0.0885±0.0134 m（1617 次）、A-budget 0.0778±0.0018 m
+（1617 次，1000 粒子/64 束）；更新频率 4.6× 只换来 0.104→0.089 m 且方差
+增大，粒子数/波束数才是主变量；aligned≈continuous（≤0.016 m）；全部优于
+里程计 0.216 m，自写 PF 0.061 m 仍最好。
+撤回：v3"AMCL 参数不敏感"结论（执行器缺陷所致，非 AMCL 性质）；旧
+148 次/0.126 m 重新定性为 nav2 默认参数单配置测量，不作配置对照证据；
+不从 P 门控实验外推"更新频率对精度无关"。
+证据：results/photo_room_navigation_v4/、results/p3_amcl_batch_v2/
+（amcl_results.json、unified_scoring.json、每次运行 params_effective.json）、
+docs/64；tests/test_photo_room_navigation.py 16 项。
+下一步：P5 巡检路线生成器；docs/62 §4.2 地图分离实验；综合过门。

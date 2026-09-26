@@ -51,7 +51,6 @@ def run_self_pf(data, res, seed=0, update_gate_d=None, update_gate_a=None):
     grid = data["map_grid"]
     odom = data["odom"]
     ranges = data["ranges"]
-    truth = data["truth"]
     init = data["init_pose"]
     n = len(odom)
     rng = np.random.default_rng(seed)
@@ -265,7 +264,7 @@ def score(estimates, truth):
 def run(output, *, seed=0, log=print):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
-    data, manifest, res = load_frozen("results/amcl_bridge_v2")
+    data, _manifest, res = load_frozen("results/amcl_bridge_v2")
     truth = data["truth"]
     odom = data["odom"]
 

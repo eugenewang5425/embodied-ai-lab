@@ -207,6 +207,31 @@ def stop_process(proc):
         proc.wait()
 
 
+def wait_for_active(timeout_s=60.0):
+    """Poll `ros2 lifecycle get /amcl` until the node reports active.
+
+    The initial pose must be published only after activation: AMCL with
+    set_initial_pose=False silently drops /initialpose received before its
+    subscription exists (the A-budget gate finding - a slow configure made
+    the fixed 10 s wait publish too early, and the run produced 0 poses).
+    """
+    import subprocess as sp
+
+    deadline = time.monotonic() + timeout_s
+    while time.monotonic() < deadline:
+        probe = sp.run(
+            ["ros2", "lifecycle", "get", "/amcl"],
+            capture_output=True,
+            text=True,
+            timeout=20,
+            check=False,
+        )
+        if probe.returncode == 0 and "active" in (probe.stdout or "").lower():
+            return True
+        time.sleep(0.5)
+    return False
+
+
 def main():
     parser = argparse.ArgumentParser(description="ROS 2 AMCL bridge replay")
     parser.add_argument("--input", default="results/amcl_bridge_v2")
@@ -214,6 +239,16 @@ def main():
     parser.add_argument("--max-frames", type=int, default=0)
     parser.add_argument("--replay-rate", type=float, default=50.0, help="frames per wall-second")
     parser.add_argument("--post-spin-s", type=float, default=3.0)
+    parser.add_argument(
+        "--launch",
+        default="/mnt/d/项目/具身人工智能/scripts/amcl_bridge_launch.py",
+        help="launch file to run (batch runner passes its generated per-config file)",
+    )
+    parser.add_argument(
+        "--expect-params",
+        default="",
+        help="JSON dict of AMCL params to read back and assert after activation",
+    )
     args = parser.parse_args()
 
     rclpy.init()
@@ -223,7 +258,7 @@ def main():
     log_file = output_dir / "launch_log.txt"
 
     map_file = str(Path(args.input).resolve() / "map.yaml")
-    launch_file = "/mnt/d/项目/具身人工智能/scripts/amcl_bridge_launch.py"
+    launch_file = args.launch
     procs = []
     exit_code = 0
     try:
@@ -241,6 +276,39 @@ def main():
             for _ in range(50):
                 time.sleep(0.2)
                 rclpy.spin_once(bridge, timeout_sec=0.001)
+            if not wait_for_active(timeout_s=60.0):
+                raise RuntimeError("amcl did not reach active state within 60 s")
+
+            # parameter gate: read AMCL params back from the live node and
+            # assert they equal the requested configuration before any data
+            # flows (the v2 finding: generated launch files were never used)
+            expected = json.loads(args.expect_params) if args.expect_params else None
+            if expected:
+                effective = {}
+                for pname in expected:
+                    probe = subprocess.run(
+                        ["ros2", "param", "get", "/amcl", pname],
+                        capture_output=True,
+                        text=True,
+                        timeout=30,
+                        check=False,
+                    )
+                    out = (probe.stdout or "").strip()
+                    # ros2 param get prints "amcl's parameter ... is <value>"
+                    if probe.returncode != 0 or not out:
+                        raise RuntimeError(f"param readback failed for {pname}: {out!r}")
+                    value = out.rsplit(" ", 1)[-1]
+                    effective[pname] = float(value)
+                    if abs(float(value) - float(expected[pname])) > 1e-9:
+                        raise RuntimeError(
+                            f"param gate mismatch: {pname} effective={value} "
+                            f"expected={expected[pname]} (launch={launch_file})"
+                        )
+                (output_dir / "params_effective.json").write_text(
+                    json.dumps(effective, indent=2) + "\n", encoding="utf-8"
+                )
+                (output_dir / "launch_used.txt").write_text(launch_file + "\n", encoding="utf-8")
+                print(f"  parameter gate OK: {effective}")
 
             # publish initial pose (the ONLY init source)
             for _ in range(5):

@@ -1,0 +1,134 @@
+{
+ "closed_loop_v4": {
+  "summary_sha256": "f8f7442050a904a2af9329f89dc0be207735550483400fe385e3d2b1ccf8c7aa",
+  "trajectories_sha256": "a65a0429623a9dc1f12f0f840da88e925b259861957fd76fc967b2923d131602",
+  "gate": {
+   "collector_met": true,
+   "gate_A_met": true,
+   "a_arrived": 12,
+   "a_reachable_runs": 12,
+   "a_contact_frames": 0,
+   "rejections": 12
+  },
+  "code_rev": "61fb97f",
+  "resources": {
+   "wall_s": 32.442,
+   "cpu_s": 31.203,
+   "rss_now_mb": 126.9,
+   "phases": {
+    "world_setup": {
+     "wall_s": 0.261,
+     "cpu_s": 0.172,
+     "rss_peak_mb": 110.8,
+     "rss_delta_mb": 23.9
+    },
+    "mapping_patrol": {
+     "wall_s": 0.14,
+     "cpu_s": 0.141,
+     "rss_peak_mb": 111.3,
+     "rss_delta_mb": 0.6
+    },
+    "navigation": {
+     "wall_s": 31.613,
+     "cpu_s": 30.562,
+     "rss_peak_mb": 126.3,
+     "rss_delta_mb": 14.9
+    }
+   }
+  }
+ },
+ "amcl_batch_v2": {
+  "protocol": "frozen 10m grid_nav input replay (3221 frames), nav2_amcl 1.3.13, params verified via ros2 param get gate",
+  "configs": {
+   "A-base": {
+    "update_min_d/a": [
+     0.1,
+     0.1
+    ],
+    "particles": 300,
+    "beams": 32
+   },
+   "A-dense": {
+    "update_min_d/a": [
+     0.01,
+     0.01
+    ],
+    "particles": 300,
+    "beams": 32
+   },
+   "A-budget": {
+    "update_min_d/a": [
+     0.01,
+     0.01
+    ],
+    "particles": 1000,
+    "beams": 64
+   }
+  },
+  "n_runs": 27,
+  "summary": {
+   "A-base": {
+    "n_valid": 9,
+    "aligned_mean_m": {
+     "mean": 0.10359563008475528,
+     "std": 0.004745080463210689
+    },
+    "continuous_mean_m": {
+     "mean": 0.10524617716530907,
+     "std": 0.004882904585047925
+    },
+    "n_poses": {
+     "mean": 348.0,
+     "std": 0.0
+    },
+    "coverage": {
+     "mean": 0.10804098106178206
+    }
+   },
+   "A-budget": {
+    "n_valid": 9,
+    "aligned_mean_m": {
+     "mean": 0.07776217415769086,
+     "std": 0.0018079076688700948
+    },
+    "continuous_mean_m": {
+     "mean": 0.077861799679221,
+     "std": 0.0017955931018308721
+    },
+    "n_poses": {
+     "mean": 1617.0,
+     "std": 0.0
+    },
+    "coverage": {
+     "mean": 0.5020180068301769
+    }
+   },
+   "A-dense": {
+    "n_valid": 9,
+    "aligned_mean_m": {
+     "mean": 0.08851364707781079,
+     "std": 0.013390006821415881
+    },
+    "continuous_mean_m": {
+     "mean": 0.08870168351527037,
+     "std": 0.013288095047848862
+    },
+    "n_poses": {
+     "mean": 1617.0,
+     "std": 0.0
+    },
+    "coverage": {
+     "mean": 0.5020180068301769
+    }
+   }
+  },
+  "reference": {
+   "self_pf_mean_m": 0.0606,
+   "odometry_mean_m": 0.216
+  },
+  "withdrawn": [
+   "v3 claim: AMCL 参数不敏感 (executor never used generated launch files)",
+   "148 updates / 0.126 m = nav2 default-config single measurement, not a config comparison"
+  ]
+ }
+}
