@@ -1,4 +1,4 @@
-"""Export photo-room v3 data as a frozen common input for dual-localizer comparison.
+"""Export 10m grid_nav world data as a frozen common input for dual-localizer comparison.
 
 Scene-consistent: truth, map, scans and odometry all come from the same
 photo-room layout (results/map_localization_2026-09-24_v5).
@@ -15,7 +15,6 @@ import numpy as np
 import yaml
 from PIL import Image
 
-RES = 0.04
 DT = 0.04
 SENSOR_SIGMA = 0.01
 WHEEL_BIAS = 0.02
@@ -32,6 +31,7 @@ def export(output, *, seed=0, log=print):
         truth = z["truth_chain"].copy()
         true_grid = z["true_grid"].copy()
     log(f"truth chain: {len(truth)} frames from {src}")
+    map_res = 0.1  # true_grid cell size (grid_nav)
 
     world_size = 10.0
     room_w = world_size
@@ -50,7 +50,7 @@ def export(output, *, seed=0, log=print):
     rng = np.random.default_rng([seed, 71000])
     n_rays = 64
     max_range = 4.0
-    grid_res = 0.1
+    grid_res = 0.1  # true_grid cell size
     n_grid = true_grid.shape[0]
     ranges = []
     hits_all = []
@@ -106,7 +106,7 @@ def export(output, *, seed=0, log=print):
     Image.fromarray(pgm_img).save(output / "map.pgm")
     map_yaml = {
         "image": "map.pgm",
-        "resolution": 0.1,
+        "resolution": map_res,
         "origin": [0.0, 0.0, 0.0],
         "negate": 0,
         "occupied_thresh": 0.65,
@@ -138,6 +138,7 @@ def export(output, *, seed=0, log=print):
         "export_seed": seed,
         "n_frames": len(truth),
         "dt_s": DT,
+        "map_resolution_m": map_res,
         "map": map_yaml,
         "init_pose": init_pose,
         "init_spread_m": 0.04,

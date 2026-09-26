@@ -21,7 +21,7 @@ from scipy.ndimage import distance_transform_edt
 
 from embodied_learning.experiments.map_localization import ParticleFilter
 
-RES = 0.1  # true_grid resolution (grid_nav 0.1m cells)
+RES = None  # read from manifest at runtime
 DT = 0.04
 N_PARTICLES = 300
 SENSOR_SIGMA = 0.01
@@ -32,7 +32,8 @@ def load_frozen(directory):
     d = Path(directory)
     data = dict(np.load(d / "frozen_input.npz", allow_pickle=False))
     manifest = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
-    return data, manifest
+    res = manifest["map_resolution_m"]
+    return data, manifest, res
 
 
 def wrap(a):
@@ -40,7 +41,7 @@ def wrap(a):
 
 
 # ------------------------------------------------------- self-written PF
-def run_self_pf(data, seed=0):
+def run_self_pf(data, res, seed=0):
 
     grid = data["map_grid"]
     odom = data["odom"]
@@ -49,8 +50,8 @@ def run_self_pf(data, seed=0):
     init = data["init_pose"]
     n = len(odom)
     rng = np.random.default_rng(seed)
-    pf = ParticleFilter(grid, RES, N_PARTICLES, rng, init_pose=init, spread=0.04, rays_n=32)
-    lf = distance_transform_edt(grid <= 0) * RES
+    pf = ParticleFilter(grid, res, N_PARTICLES, rng, init_pose=init, spread=0.04, rays_n=32)
+    lf = distance_transform_edt(grid <= 0) * res
     weights = np.full(N_PARTICLES, 1.0 / N_PARTICLES)
     estimates = []
     for k in range(n):
@@ -75,15 +76,7 @@ def run_self_pf(data, seed=0):
             posterior = np.full(N_PARTICLES, 1.0 / N_PARTICLES)
         pf.w = posterior / posterior.sum()
         weights = pf.w.copy()
-        th = pf.p[:, 2]
-        est = np.array(
-            [
-                pf.w @ pf.p[:, 0],
-                pf.w @ pf.p[:, 1],
-                math.atan2(float(np.mean(np.sin(th))), float(np.mean(np.cos(th)))),
-            ]
-        )
-        estimates.append(est)
+        estimates.append(pf.estimate().copy())
         if pf.ess() < N_PARTICLES / 2:
             pf.resample()
             weights = pf.w.copy()
@@ -216,7 +209,7 @@ class AmclPy:
         )
 
 
-def run_amcl_py(data, seed=0):
+def run_amcl_py(data, res, seed=0):
     grid = data["map_grid"]
     odom = data["odom"]
     ranges = data["ranges"]
@@ -224,7 +217,7 @@ def run_amcl_py(data, seed=0):
     n = len(odom)
     rng = np.random.default_rng(seed + 20000)
     angles = np.arange(64) * (2 * math.pi / 64)
-    amcl = AmclPy(grid, RES, N_PARTICLES, rng, init, init_spread=0.04)
+    amcl = AmclPy(grid, res, N_PARTICLES, rng, init, init_spread=0.04)
     estimates = []
     for k in range(n):
         if k > 0:
@@ -252,20 +245,20 @@ def score(estimates, truth):
 def run(output, *, seed=0, log=print):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
-    data, manifest = load_frozen("results/amcl_bridge_v2")
+    data, manifest, res = load_frozen("results/amcl_bridge_v2")
     truth = data["truth"]
     odom = data["odom"]
 
     log("running self-written PF on frozen input...")
     t0 = time.perf_counter()
-    pf_est = run_self_pf(data, seed)
+    pf_est = run_self_pf(data, res, seed)
     pf_time = time.perf_counter() - t0
     pf_score = score(pf_est, truth)
     log(f"  PF: mean {pf_score['mean_m']:.4f} p95 {pf_score['p95_m']:.4f} ({pf_time:.1f}s)")
 
     log("running Python AMCL on frozen input...")
     t0 = time.perf_counter()
-    amcl_est = run_amcl_py(data, seed)
+    amcl_est = run_amcl_py(data, res, seed)
     amcl_time = time.perf_counter() - t0
     amcl_score = score(amcl_est, truth)
     log(f"  AMCL: mean {amcl_score['mean_m']:.4f} p95 {amcl_score['p95_m']:.4f} ({amcl_time:.1f}s)")
