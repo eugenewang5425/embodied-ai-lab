@@ -1,0 +1,920 @@
+{
+  "protocol": {
+    "schema": 1,
+    "experiment": "campus_patrol",
+    "config": {
+      "particles": 300,
+      "wheel_bias": 0.02,
+      "sensor_sigma_m": 0.03,
+      "max_steps": 2600,
+      "speed_m_s": 0.8,
+      "estimate_arrival_m": 0.3,
+      "true_arrival_m": 0.45,
+      "dwell_frames": 5,
+      "replan_frames": 20
+    },
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "size_m": 24.0,
+    "resolution_m": 0.1,
+    "dt_s": 0.12,
+    "lidar_rays": 64,
+    "lidar_range_m": 8.0,
+    "task_points": [
+      [
+        "P1 南门岗亭",
+        [
+          12.0,
+          2.0
+        ]
+      ],
+      [
+        "P2 停车区",
+        [
+          22.0,
+          2.0
+        ]
+      ],
+      [
+        "P3 东侧设备间",
+        [
+          22.0,
+          12.0
+        ]
+      ],
+      [
+        "P4 中央路口",
+        [
+          12.0,
+          12.0
+        ]
+      ],
+      [
+        "P5 北侧消防点",
+        [
+          12.0,
+          22.0
+        ]
+      ],
+      [
+        "P6 西北仓库",
+        [
+          2.0,
+          22.0
+        ]
+      ],
+      [
+        "P7 西侧配电点",
+        [
+          2.0,
+          12.0
+        ]
+      ],
+      [
+        "P8 返回出发点",
+        [
+          2.0,
+          2.0
+        ]
+      ]
+    ],
+    "methods": {
+      "truth": [
+        "知道真实位置",
+        "仿真参考：直接知道位置，用来检查任务和控制器是否可行。"
+      ],
+      "odom": [
+        "只靠轮子推算",
+        "基线：累计轮子转动推算位置；轮子读数偏大后，误差会逐渐积累。"
+      ],
+      "prior": [
+        "雷达＋参考地图",
+        "把当前雷达点与事先准确的地图对齐，修正轮子推算的位置；需要已知地图。"
+      ],
+      "self": [
+        "雷达＋自建地图",
+        "同样用雷达定位，但地图来自另一次有里程计偏差的建图巡游；考察地图画歪后的影响。"
+      ]
+    },
+    "wheel_model": "common translation and rotation scale",
+    "avoidance_map": "shared prior geometry",
+    "mapping_protocol": "separate truth-driven diagnostic coverage, map painted using biased odometry",
+    "camera": "rerendered for display only; no RGB localization",
+    "styles": [
+      {
+        "name": "园区围墙",
+        "height": 1.1,
+        "color": ".60 .66 .68 1",
+        "kind": "wall"
+      },
+      {
+        "name": "园区围墙",
+        "height": 1.1,
+        "color": ".60 .66 .68 1",
+        "kind": "wall"
+      },
+      {
+        "name": "园区围墙",
+        "height": 1.1,
+        "color": ".60 .66 .68 1",
+        "kind": "wall"
+      },
+      {
+        "name": "园区围墙",
+        "height": 1.1,
+        "color": ".60 .66 .68 1",
+        "kind": "wall"
+      },
+      {
+        "name": "行政楼",
+        "height": 4.3,
+        "color": ".70 .78 .85 1",
+        "kind": "building"
+      },
+      {
+        "name": "研发楼",
+        "height": 5.0,
+        "color": ".75 .69 .57 1",
+        "kind": "building"
+      },
+      {
+        "name": "仓库",
+        "height": 3.2,
+        "color": ".60 .70 .76 1",
+        "kind": "building"
+      },
+      {
+        "name": "设备楼",
+        "height": 3.8,
+        "color": ".71 .75 .63 1",
+        "kind": "building"
+      },
+      {
+        "name": "停放车辆",
+        "height": 1.15,
+        "color": ".18 .36 .57 1",
+        "kind": "car"
+      },
+      {
+        "name": "停放车辆",
+        "height": 1.2,
+        "color": ".78 .35 .24 1",
+        "kind": "car"
+      },
+      {
+        "name": "配电柜",
+        "height": 1.3,
+        "color": ".22 .43 .44 1",
+        "kind": "cabinet"
+      },
+      {
+        "name": "支路围栏",
+        "height": 1.4,
+        "color": ".45 .52 .56 1",
+        "kind": "wall"
+      },
+      {
+        "name": "树干",
+        "height": 2.2,
+        "color": ".35 .26 .15 1",
+        "kind": "tree"
+      },
+      {
+        "name": "树干",
+        "height": 2.2,
+        "color": ".35 .26 .15 1",
+        "kind": "tree"
+      },
+      {
+        "name": "树干",
+        "height": 2.2,
+        "color": ".35 .26 .15 1",
+        "kind": "tree"
+      },
+      {
+        "name": "树干",
+        "height": 2.2,
+        "color": ".35 .26 .15 1",
+        "kind": "tree"
+      },
+      {
+        "name": "树干",
+        "height": 2.2,
+        "color": ".35 .26 .15 1",
+        "kind": "tree"
+      }
+    ],
+    "geometry": [
+      {
+        "kind": "rect",
+        "cx": 12,
+        "cy": 0.1,
+        "hx": 12,
+        "hy": 0.1,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 12,
+        "cy": 23.9,
+        "hx": 12,
+        "hy": 0.1,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 0.1,
+        "cy": 12,
+        "hx": 0.1,
+        "hy": 12,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 23.9,
+        "cy": 12,
+        "hx": 0.1,
+        "hy": 12,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 6.6,
+        "cy": 6.7,
+        "hx": 3.2,
+        "hy": 3.0,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 17.4,
+        "cy": 6.5,
+        "hx": 3.0,
+        "hy": 2.9,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 6.6,
+        "cy": 17.5,
+        "hx": 3.0,
+        "hy": 3.1,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 17.5,
+        "cy": 17.4,
+        "hx": 3.1,
+        "hy": 3.0,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 20.9,
+        "cy": 5.2,
+        "hx": 0.55,
+        "hy": 1.25,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 21.0,
+        "cy": 8.4,
+        "hx": 0.55,
+        "hy": 1.2,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 3.1,
+        "cy": 13.8,
+        "hx": 0.4,
+        "hy": 0.6,
+        "r": 0.0
+      },
+      {
+        "kind": "rect",
+        "cx": 8.6,
+        "cy": 21.0,
+        "hx": 1.2,
+        "hy": 0.12,
+        "r": 0.0
+      },
+      {
+        "kind": "circle",
+        "cx": 10.6,
+        "cy": 5.0,
+        "hx": 0.0,
+        "hy": 0.0,
+        "r": 0.22
+      },
+      {
+        "kind": "circle",
+        "cx": 10.7,
+        "cy": 8.0,
+        "hx": 0.0,
+        "hy": 0.0,
+        "r": 0.22
+      },
+      {
+        "kind": "circle",
+        "cx": 13.4,
+        "cy": 17.5,
+        "hx": 0.0,
+        "hy": 0.0,
+        "r": 0.22
+      },
+      {
+        "kind": "circle",
+        "cx": 4.4,
+        "cy": 21.0,
+        "hx": 0.0,
+        "hy": 0.0,
+        "r": 0.22
+      },
+      {
+        "kind": "circle",
+        "cx": 19.8,
+        "cy": 21.2,
+        "hx": 0.0,
+        "hy": 0.0,
+        "r": 0.22
+      }
+    ],
+    "source_sha256": "3fd78e65b1b4fb2e6566b8983f5536d8bbc27f386d31a1feaa5068e92138937e"
+  },
+  "protocol_sha256": "f2102ffa6b966ead76f5d4b4ffafcbc80b7c3654d418911a89ad708e8afd80bf",
+  "maps_sha256": "5faf7342da7b5c3da104daaba0b0978071ca3b9f1700e93b778bc4f02840d545",
+  "mapping_sha256": "9feed54e95264eefcc575ed4eb2166fc8540fa746547e9554c29dc227086b381",
+  "rows": [
+    {
+      "method": "truth",
+      "seed": 0,
+      "status": "completed",
+      "frames": 910,
+      "elapsed_sim_s": 109.08,
+      "reached": 8,
+      "announced": 8,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "events": [
+        {
+          "frame": 106,
+          "goal_index": 0,
+          "true_distance_m": 0.2079999999999913,
+          "success": true
+        },
+        {
+          "frame": 215,
+          "goal_index": 1,
+          "true_distance_m": 0.22399999999998244,
+          "success": true
+        },
+        {
+          "frame": 332,
+          "goal_index": 2,
+          "true_distance_m": 0.21790235930187798,
+          "success": true
+        },
+        {
+          "frame": 449,
+          "goal_index": 3,
+          "true_distance_m": 0.2156115166779095,
+          "success": true
+        },
+        {
+          "frame": 566,
+          "goal_index": 4,
+          "true_distance_m": 0.21973570296799144,
+          "success": true
+        },
+        {
+          "frame": 683,
+          "goal_index": 5,
+          "true_distance_m": 0.21990430942148204,
+          "success": true
+        },
+        {
+          "frame": 800,
+          "goal_index": 6,
+          "true_distance_m": 0.21566410587211646,
+          "success": true
+        },
+        {
+          "frame": 909,
+          "goal_index": 7,
+          "true_distance_m": 0.23166198862660137,
+          "success": true
+        }
+      ],
+      "travelled_m": 78.72000000000003,
+      "file": "seed0_truth.npz",
+      "sha256": "39a55612ab60c737bb004542281c93b7c7dd4f9bace4ca6888d63a902d4dd1db",
+      "wall_s": 0.133
+    },
+    {
+      "method": "odom",
+      "seed": 0,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 1,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.3328220116312976,
+      "p95_m": 0.34446586935885265,
+      "end_m": 0.34446586935885265,
+      "events": [
+        {
+          "frame": 104,
+          "goal_index": 0,
+          "true_distance_m": 0.3999999999999915,
+          "success": true
+        },
+        {
+          "frame": 211,
+          "goal_index": 1,
+          "true_distance_m": 0.6079999999999828,
+          "success": false
+        }
+      ],
+      "travelled_m": 21.02400000000002,
+      "file": "seed0_odom.npz",
+      "sha256": "9d934c6460c79d1ab1274afe6bfc2a1e32962f5742837a9947152fe3969855a3",
+      "wall_s": 0.367
+    },
+    {
+      "method": "prior",
+      "seed": 0,
+      "status": "no_path",
+      "frames": 281,
+      "elapsed_sim_s": 33.6,
+      "reached": 2,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.07026137898788337,
+      "p95_m": 0.13747525888506962,
+      "end_m": 0.054910493996693746,
+      "events": [
+        {
+          "frame": 105,
+          "goal_index": 0,
+          "true_distance_m": 0.30472778717091487,
+          "success": true
+        },
+        {
+          "frame": 213,
+          "goal_index": 1,
+          "true_distance_m": 0.41633085654783747,
+          "success": true
+        }
+      ],
+      "travelled_m": 24.960000000000015,
+      "file": "seed0_prior.npz",
+      "sha256": "6af7d6353740b1942fa97cf8b05e411f49fdd4061cd09150c5dc9696610cb59f",
+      "wall_s": 1.402
+    },
+    {
+      "method": "self",
+      "seed": 0,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 1,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.36008878992073073,
+      "p95_m": 0.4268369791403998,
+      "end_m": 0.3584187561344282,
+      "events": [
+        {
+          "frame": 104,
+          "goal_index": 0,
+          "true_distance_m": 0.40120690810631704,
+          "success": true
+        },
+        {
+          "frame": 210,
+          "goal_index": 1,
+          "true_distance_m": 0.705145917817684,
+          "success": false
+        }
+      ],
+      "travelled_m": 20.92799999999999,
+      "file": "seed0_self.npz",
+      "sha256": "56f6b857973d810d8b6614c9a2b950dac9fcfebcacea6d25dcd76ca3faec5243",
+      "wall_s": 1.273
+    },
+    {
+      "method": "truth",
+      "seed": 1,
+      "status": "completed",
+      "frames": 910,
+      "elapsed_sim_s": 109.08,
+      "reached": 8,
+      "announced": 8,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "events": [
+        {
+          "frame": 106,
+          "goal_index": 0,
+          "true_distance_m": 0.2079999999999913,
+          "success": true
+        },
+        {
+          "frame": 215,
+          "goal_index": 1,
+          "true_distance_m": 0.22399999999998244,
+          "success": true
+        },
+        {
+          "frame": 332,
+          "goal_index": 2,
+          "true_distance_m": 0.21790235930187798,
+          "success": true
+        },
+        {
+          "frame": 449,
+          "goal_index": 3,
+          "true_distance_m": 0.2156115166779095,
+          "success": true
+        },
+        {
+          "frame": 566,
+          "goal_index": 4,
+          "true_distance_m": 0.21973570296799144,
+          "success": true
+        },
+        {
+          "frame": 683,
+          "goal_index": 5,
+          "true_distance_m": 0.21990430942148204,
+          "success": true
+        },
+        {
+          "frame": 800,
+          "goal_index": 6,
+          "true_distance_m": 0.21566410587211646,
+          "success": true
+        },
+        {
+          "frame": 909,
+          "goal_index": 7,
+          "true_distance_m": 0.23166198862660137,
+          "success": true
+        }
+      ],
+      "travelled_m": 78.72000000000003,
+      "file": "seed1_truth.npz",
+      "sha256": "3b4c8b09613de5baf7869132f7854eac0606c24db624c8820e2aee1edb69c6b4",
+      "wall_s": 0.175
+    },
+    {
+      "method": "odom",
+      "seed": 1,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 1,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.33282019183135253,
+      "p95_m": 0.34446728353913475,
+      "end_m": 0.34446728353913475,
+      "events": [
+        {
+          "frame": 104,
+          "goal_index": 0,
+          "true_distance_m": 0.3999999999999915,
+          "success": true
+        },
+        {
+          "frame": 211,
+          "goal_index": 1,
+          "true_distance_m": 0.6079999999999828,
+          "success": false
+        }
+      ],
+      "travelled_m": 21.02400000000002,
+      "file": "seed1_odom.npz",
+      "sha256": "63b2df1e9d80bad002c0ad012b6f5ef373a97e66af9f85787a14fe000475c9fe",
+      "wall_s": 0.489
+    },
+    {
+      "method": "prior",
+      "seed": 1,
+      "status": "completed",
+      "frames": 902,
+      "elapsed_sim_s": 108.11999999999999,
+      "reached": 8,
+      "announced": 8,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.0742890823648242,
+      "p95_m": 0.13091474811118453,
+      "end_m": 0.12192363947941337,
+      "events": [
+        {
+          "frame": 105,
+          "goal_index": 0,
+          "true_distance_m": 0.3045728002177897,
+          "success": true
+        },
+        {
+          "frame": 213,
+          "goal_index": 1,
+          "true_distance_m": 0.41637540569379783,
+          "success": true
+        },
+        {
+          "frame": 328,
+          "goal_index": 2,
+          "true_distance_m": 0.3357140825466557,
+          "success": true
+        },
+        {
+          "frame": 443,
+          "goal_index": 3,
+          "true_distance_m": 0.3461383736436891,
+          "success": true
+        },
+        {
+          "frame": 559,
+          "goal_index": 4,
+          "true_distance_m": 0.32608325052028914,
+          "success": true
+        },
+        {
+          "frame": 675,
+          "goal_index": 5,
+          "true_distance_m": 0.32439362579416514,
+          "success": true
+        },
+        {
+          "frame": 791,
+          "goal_index": 6,
+          "true_distance_m": 0.31933361799725085,
+          "success": true
+        },
+        {
+          "frame": 901,
+          "goal_index": 7,
+          "true_distance_m": 0.33540797263183236,
+          "success": true
+        }
+      ],
+      "travelled_m": 78.04799999999999,
+      "file": "seed1_prior.npz",
+      "sha256": "c15e797c834f1a83f22baa8e91af6b5587e9fb203577e3910adc4fb945e33955",
+      "wall_s": 0.42
+    },
+    {
+      "method": "self",
+      "seed": 1,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 0,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.34487054114969534,
+      "p95_m": 0.4170915251323388,
+      "end_m": 0.343168261918809,
+      "events": [
+        {
+          "frame": 103,
+          "goal_index": 0,
+          "true_distance_m": 0.49811492177471245,
+          "success": false
+        },
+        {
+          "frame": 210,
+          "goal_index": 1,
+          "true_distance_m": 0.7052785654921981,
+          "success": false
+        }
+      ],
+      "travelled_m": 20.92799999999999,
+      "file": "seed1_self.npz",
+      "sha256": "9ad3f8b27dcde059e1df6c369561da5e025731a2a580499c048ce0de59e1ebdb",
+      "wall_s": 1.338
+    },
+    {
+      "method": "truth",
+      "seed": 2,
+      "status": "completed",
+      "frames": 910,
+      "elapsed_sim_s": 109.08,
+      "reached": 8,
+      "announced": 8,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "events": [
+        {
+          "frame": 106,
+          "goal_index": 0,
+          "true_distance_m": 0.2079999999999913,
+          "success": true
+        },
+        {
+          "frame": 215,
+          "goal_index": 1,
+          "true_distance_m": 0.22399999999998244,
+          "success": true
+        },
+        {
+          "frame": 332,
+          "goal_index": 2,
+          "true_distance_m": 0.21790235930187798,
+          "success": true
+        },
+        {
+          "frame": 449,
+          "goal_index": 3,
+          "true_distance_m": 0.2156115166779095,
+          "success": true
+        },
+        {
+          "frame": 566,
+          "goal_index": 4,
+          "true_distance_m": 0.21973570296799144,
+          "success": true
+        },
+        {
+          "frame": 683,
+          "goal_index": 5,
+          "true_distance_m": 0.21990430942148204,
+          "success": true
+        },
+        {
+          "frame": 800,
+          "goal_index": 6,
+          "true_distance_m": 0.21566410587211646,
+          "success": true
+        },
+        {
+          "frame": 909,
+          "goal_index": 7,
+          "true_distance_m": 0.23166198862660137,
+          "success": true
+        }
+      ],
+      "travelled_m": 78.72000000000003,
+      "file": "seed2_truth.npz",
+      "sha256": "9961268e04ca4443cc10015d99b8b08e5f2a9685a2546979f007c335ce960ae3",
+      "wall_s": 0.154
+    },
+    {
+      "method": "odom",
+      "seed": 2,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 1,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.33284586104302216,
+      "p95_m": 0.34446480085420755,
+      "end_m": 0.34446480085420755,
+      "events": [
+        {
+          "frame": 104,
+          "goal_index": 0,
+          "true_distance_m": 0.3999999999999915,
+          "success": true
+        },
+        {
+          "frame": 211,
+          "goal_index": 1,
+          "true_distance_m": 0.6079999999999828,
+          "success": false
+        }
+      ],
+      "travelled_m": 21.02400000000002,
+      "file": "seed2_odom.npz",
+      "sha256": "09a5a68ee2c01814eca2a210fe9959ff459250aaaf0f7201efaa79a46f1a23d9",
+      "wall_s": 0.397
+    },
+    {
+      "method": "prior",
+      "seed": 2,
+      "status": "completed",
+      "frames": 905,
+      "elapsed_sim_s": 108.47999999999999,
+      "reached": 8,
+      "announced": 8,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.06737671616992026,
+      "p95_m": 0.12664482711484112,
+      "end_m": 0.10141770942685314,
+      "events": [
+        {
+          "frame": 105,
+          "goal_index": 0,
+          "true_distance_m": 0.30424298714059356,
+          "success": true
+        },
+        {
+          "frame": 213,
+          "goal_index": 1,
+          "true_distance_m": 0.41635615462388054,
+          "success": true
+        },
+        {
+          "frame": 328,
+          "goal_index": 2,
+          "true_distance_m": 0.31803433981354295,
+          "success": true
+        },
+        {
+          "frame": 443,
+          "goal_index": 3,
+          "true_distance_m": 0.3450167772261278,
+          "success": true
+        },
+        {
+          "frame": 563,
+          "goal_index": 4,
+          "true_distance_m": 0.3068111375011085,
+          "success": true
+        },
+        {
+          "frame": 678,
+          "goal_index": 5,
+          "true_distance_m": 0.3273363019095478,
+          "success": true
+        },
+        {
+          "frame": 795,
+          "goal_index": 6,
+          "true_distance_m": 0.3054036003437604,
+          "success": true
+        },
+        {
+          "frame": 904,
+          "goal_index": 7,
+          "true_distance_m": 0.32159835520426766,
+          "success": true
+        }
+      ],
+      "travelled_m": 78.04800000000002,
+      "file": "seed2_prior.npz",
+      "sha256": "e5e4b30b26e67fca5c2f69e82ea11e8979b76539a10afa28451f44b74a4e980f",
+      "wall_s": 0.392
+    },
+    {
+      "method": "self",
+      "seed": 2,
+      "status": "timeout",
+      "frames": 2601,
+      "elapsed_sim_s": 312.0,
+      "reached": 1,
+      "announced": 2,
+      "target_count": 8,
+      "contacts": 0,
+      "mean_m": 0.35083172412202757,
+      "p95_m": 0.40628303021957857,
+      "end_m": 0.35425773945044325,
+      "events": [
+        {
+          "frame": 104,
+          "goal_index": 0,
+          "true_distance_m": 0.4015986579152652,
+          "success": true
+        },
+        {
+          "frame": 210,
+          "goal_index": 1,
+          "true_distance_m": 0.7055538682984529,
+          "success": false
+        }
+      ],
+      "travelled_m": 20.831999999999994,
+      "file": "seed2_self.npz",
+      "sha256": "4e984bad34051ee88b5a4acfe8842476e96b1cb2242a160fb3747b2b79c9a2d6",
+      "wall_s": 1.21
+    }
+  ],
+  "wall_s": 8.014068299999053
+}
