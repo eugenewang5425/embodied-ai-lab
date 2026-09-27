@@ -1,0 +1,3584 @@
+{
+  "records": {
+    "calibration": {
+      "protocol": {
+        "rig": {
+          "front_m": 0.3,
+          "rear_m": 0.25,
+          "half_width_m": 0.22,
+          "top_m": 0.58,
+          "lidar_x_m": 0.08,
+          "lidar_z_m": 0.32,
+          "camera_x_m": 0.2,
+          "camera_z_m": 0.55,
+          "vfov_deg": 65.0,
+          "width": 80,
+          "height": 60,
+          "lidar_rays": 180,
+          "max_range_m": 8.0,
+          "latency_s": 0.2,
+          "brake_m_s2": 0.8,
+          "angular_brake_rad_s2": 1.8,
+          "margin_m": 0.06
+        },
+        "fixtures": [
+          [
+            "front_wall",
+            [
+              0.7,
+              0.8,
+              -1,
+              1,
+              0,
+              1.4
+            ],
+            [
+              0.8,
+              0
+            ]
+          ],
+          [
+            "low_curb",
+            [
+              0.62,
+              0.8,
+              -0.65,
+              0.65,
+              0,
+              0.14
+            ],
+            [
+              0.6,
+              0
+            ]
+          ],
+          [
+            "mast_bar",
+            [
+              0.52,
+              0.68,
+              -0.6,
+              0.6,
+              0.42,
+              0.57
+            ],
+            [
+              0.6,
+              0
+            ]
+          ],
+          [
+            "turn_corner",
+            [
+              0.25,
+              0.35,
+              0.26,
+              0.36,
+              0,
+              1.0
+            ],
+            [
+              0,
+              1.2
+            ]
+          ],
+          [
+            "side_post",
+            [
+              0.05,
+              0.15,
+              0.25,
+              0.35,
+              0,
+              0.8
+            ],
+            [
+              0.6,
+              0.8
+            ]
+          ],
+          [
+            "rear_obstacle",
+            [
+              -0.65,
+              -0.5,
+              -0.5,
+              0.5,
+              0,
+              0.8
+            ],
+            [
+              -0.6,
+              0
+            ]
+          ],
+          [
+            "safe_overhead",
+            [
+              0.6,
+              0.8,
+              -0.6,
+              0.6,
+              0.72,
+              0.95
+            ],
+            [
+              0.6,
+              0
+            ]
+          ],
+          [
+            "safe_side",
+            [
+              0.4,
+              0.8,
+              0.7,
+              0.9,
+              0,
+              0.8
+            ],
+            [
+              0.6,
+              0
+            ]
+          ]
+        ],
+        "scope": "simulation geometry calibration; no real camera/robot calibration",
+        "oracle": "independent SAT box collision, stop poses sampled at 0.04 s",
+        "sensor": "analytic metric RGB-D depth and planar LiDAR; MuJoCo cross-check",
+        "source_sha256": "d992b8c6e08079395b3d9958fcb5ac26d88fcbdf558ff36722715b2be19a3f15",
+        "rig_source_sha256": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66"
+      },
+      "extrinsics": {
+        "training_targets": 60,
+        "heldout_targets": 40,
+        "point_sigma_m": 0.001,
+        "camera_translation_m": [
+          0.19986032139761578,
+          0.00019121787909337582,
+          0.5495945970554573
+        ],
+        "camera_rotation": [
+          [
+            -0.00012171495905896948,
+            0.00018527027668716636,
+            0.9999999754301964
+          ],
+          [
+            -0.9999999910583272,
+            -5.541943494775678e-05,
+            -0.00012170469338674032
+          ],
+          [
+            5.539688532420489e-05,
+            -0.9999999813018056,
+            0.00018527702040467794
+          ]
+        ],
+        "camera_translation_error_mm": 0.46949540646622856,
+        "camera_holdout_p95_mm": 2.5734626348293697,
+        "lidar_translation_xy_m": [
+          0.08008221557870931,
+          -3.1037300993689426e-06
+        ],
+        "lidar_translation_error_mm": 0.08227414249347724,
+        "lidar_yaw_deg": 0.004423335221090217,
+        "unestimated": "camera intrinsics and body dimensions are known fixture inputs; planar LiDAR height must be measured separately"
+      },
+      "rows": [
+        {
+          "case": "front_wall",
+          "command": [
+            0.8,
+            0
+          ],
+          "oracle_collision": true,
+          "oracle_clearance_m": -0.17600000000000005,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": true,
+          "fused_body_hazard": true,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 59,
+          "depth_obstacle_points": 3040,
+          "depth_p95_difference_m": 1.4901161194402768e-06,
+          "stop_center_distance_m": 0.576
+        },
+        {
+          "case": "low_curb",
+          "command": [
+            0.6,
+            0
+          ],
+          "oracle_collision": true,
+          "oracle_clearance_m": -0.037119999999999986,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": false,
+          "fused_body_hazard": false,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 0,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.3571199999999999
+        },
+        {
+          "case": "mast_bar",
+          "command": [
+            0.6,
+            0
+          ],
+          "oracle_collision": true,
+          "oracle_clearance_m": -0.03711999999999986,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": false,
+          "fused_body_hazard": true,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 0,
+          "depth_obstacle_points": 1760,
+          "depth_p95_difference_m": 2.6381753034931954e-05,
+          "stop_center_distance_m": 0.3571199999999999
+        },
+        {
+          "case": "turn_corner",
+          "command": [
+            0,
+            1.2
+          ],
+          "oracle_collision": true,
+          "oracle_clearance_m": -0.004980005258041209,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": true,
+          "fused_body_hazard": true,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 11,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.0
+        },
+        {
+          "case": "side_post",
+          "command": [
+            0.6,
+            0.8
+          ],
+          "oracle_collision": false,
+          "oracle_clearance_m": 0.008248350244350666,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": true,
+          "fused_body_hazard": true,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 11,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.3548299661015961
+        },
+        {
+          "case": "rear_obstacle",
+          "command": [
+            -0.6,
+            0
+          ],
+          "oracle_collision": true,
+          "oracle_clearance_m": -0.10711999999999994,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": true,
+          "fused_body_hazard": true,
+          "with_recent_depth_hazard": true,
+          "lidar_hits": 41,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.3571199999999999
+        },
+        {
+          "case": "safe_overhead",
+          "command": [
+            0.6,
+            0
+          ],
+          "oracle_collision": false,
+          "oracle_clearance_m": null,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": false,
+          "fused_body_hazard": false,
+          "with_recent_depth_hazard": false,
+          "lidar_hits": 0,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.3571199999999999
+        },
+        {
+          "case": "safe_side",
+          "command": [
+            0.6,
+            0
+          ],
+          "oracle_collision": false,
+          "oracle_clearance_m": 0.48000000000000004,
+          "point_robot_hazard": false,
+          "lidar_body_hazard": false,
+          "fused_body_hazard": false,
+          "with_recent_depth_hazard": false,
+          "lidar_hits": 13,
+          "depth_obstacle_points": 0,
+          "depth_p95_difference_m": 0.000626026463164564,
+          "stop_center_distance_m": 0.3571199999999999
+        }
+      ],
+      "low_obstacle_visibility": [
+        {
+          "front_x_m": 0.4,
+          "visible_points": 0,
+          "maximum_braking_speed_m_s": 0.1393325909419154
+        },
+        {
+          "front_x_m": 0.5,
+          "visible_points": 0,
+          "maximum_braking_speed_m_s": 0.33959983987187187
+        },
+        {
+          "front_x_m": 0.6,
+          "visible_points": 0,
+          "maximum_braking_speed_m_s": 0.48
+        },
+        {
+          "front_x_m": 0.7,
+          "visible_points": 160,
+          "maximum_braking_speed_m_s": 0.5947184905645282
+        },
+        {
+          "front_x_m": 0.7999999999999999,
+          "visible_points": 400,
+          "maximum_braking_speed_m_s": 0.6941662601625049
+        },
+        {
+          "front_x_m": 0.8999999999999999,
+          "visible_points": 624,
+          "maximum_braking_speed_m_s": 0.7831860898041275
+        },
+        {
+          "front_x_m": 0.9999999999999999,
+          "visible_points": 734,
+          "maximum_braking_speed_m_s": 0.8644998779892558
+        },
+        {
+          "front_x_m": 1.0999999999999999,
+          "visible_points": 592,
+          "maximum_braking_speed_m_s": 0.9398181667894016
+        },
+        {
+          "front_x_m": 1.1999999999999997,
+          "visible_points": 538,
+          "maximum_braking_speed_m_s": 1.0102991070662233
+        },
+        {
+          "front_x_m": 1.2999999999999998,
+          "visible_points": 382,
+          "maximum_braking_speed_m_s": 1.0767699866992242
+        },
+        {
+          "front_x_m": 1.4,
+          "visible_points": 356,
+          "maximum_braking_speed_m_s": 1.1398461447417536
+        },
+        {
+          "front_x_m": 1.4999999999999996,
+          "visible_points": 280,
+          "maximum_braking_speed_m_s": 1.1999999999999997
+        },
+        {
+          "front_x_m": 1.5999999999999996,
+          "visible_points": 258,
+          "maximum_braking_speed_m_s": 1.2576036117335478
+        }
+      ],
+      "interpretation": "No return is unknown, not free space. Memory requires earlier visibility and reliable short-term odometry."
+    },
+    "avoidance": {
+      "protocol": {
+        "experiment": "observed_navigation_lesson67",
+        "rig": {
+          "front_m": 0.3,
+          "rear_m": 0.25,
+          "half_width_m": 0.22,
+          "top_m": 0.58,
+          "lidar_x_m": 0.08,
+          "lidar_z_m": 0.32,
+          "camera_x_m": 0.2,
+          "camera_z_m": 0.55,
+          "vfov_deg": 65.0,
+          "width": 80,
+          "height": 60,
+          "lidar_rays": 180,
+          "max_range_m": 8.0,
+          "latency_s": 0.2,
+          "brake_m_s2": 0.8,
+          "angular_brake_rad_s2": 1.8,
+          "margin_m": 0.06
+        },
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "layouts": [
+          "plaza",
+          "street",
+          "narrow"
+        ],
+        "obstacles": [
+          "crate",
+          "low",
+          "beam"
+        ],
+        "methods": {
+          "stop": [
+            "只停车",
+            "前方雷达太近就刹车，沿用先验路线，不根据新障碍绕行。"
+          ],
+          "lidar": [
+            "雷达＋车身包络",
+            "雷达观测更新通行图，并检查整台车刹停时扫过的空间；平面雷达有高度盲区。"
+          ],
+          "depth": [
+            "雷达＋深度＋车身包络",
+            "再加入相机米制深度及近期观测，发现低矮和悬空障碍；不使用 RGB 外观定位。"
+          ]
+        },
+        "dt_s": 0.1,
+        "resolution_m": 0.1,
+        "size_m": 12.0,
+        "localization": "exact wheel odometry diagnostic; zero bias/slip",
+        "depth": "80x60 pinhole ray-depth, metric optical-axis; no RGB appearance localization",
+        "environment": "static introduced obstacles absent from prior; no dynamic clearing",
+        "collision": "box SAT, motion samples <=1cm corner travel; oracle only scores",
+        "source_sha256": "9e832f96d2f6449fa7e604b8c292a824eaa8500a813b48d41f07c29a49a0c69a",
+        "dependency_sha256": {
+          "navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+          "grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345"
+        }
+      },
+      "protocol_sha256": "e89fd20a85bfb66e6856954c7cd04d77c7be05853abe4e00ce0ac8eda329b3fc",
+      "rows": [
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.649800003884593,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "plaza_crate_s0_stop.npz",
+          "sha256": "f04f86b6bca6d51d89b101c3f6a3df78f4cb57542aa0698ce4aff21d83e0c157"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3349221412350805,
+          "controller_p95_ms": 2.9978449972986696,
+          "travelled_m": 9.231955777066872,
+          "stop_frames": 1,
+          "file": "plaza_crate_s0_lidar.npz",
+          "sha256": "977b95f7018a103d228b58da0725ee144227100d47fc285cbe629abe0873bf6f"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.38233818681043763,
+          "controller_p95_ms": 3.7729750005382807,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_crate_s0_depth.npz",
+          "sha256": "198d761a717e80e40b39f8300de772ef79e5aa1e84f1e8aa6ebb32a08bf6fc81"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5773499979113694,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "plaza_crate_s1_stop.npz",
+          "sha256": "99aaf98ebdeff05c2bfe497b23b6ec9e52cddfa277cab3526f79baf9b7644caf"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 163,
+          "elapsed_sim_s": 16.2,
+          "events": [
+            {
+              "frame": 162,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3541177722447405,
+          "controller_p95_ms": 2.946749998227461,
+          "travelled_m": 9.259953864383931,
+          "stop_frames": 1,
+          "file": "plaza_crate_s1_lidar.npz",
+          "sha256": "01c9f2de72a708ed962db07239c263c6f5d159fcec7965d21fd5cffb2da87f41"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.38233818681043763,
+          "controller_p95_ms": 3.7024200002633734,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_crate_s1_depth.npz",
+          "sha256": "8f3582c276b8d1fab5897d9368125df2ff4553d44b96c1a54c9824d618d65bc3"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5845499981660396,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "plaza_crate_s2_stop.npz",
+          "sha256": "c1063b8f1a00ea6333daa7bd6f927e877331fe7c5e3f63105246285f2a931608"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3486280484832577,
+          "controller_p95_ms": 2.8000099991913885,
+          "travelled_m": 9.207957379584759,
+          "stop_frames": 1,
+          "file": "plaza_crate_s2_lidar.npz",
+          "sha256": "4dbe7a70e160ca2b72d721b14c90a4363c94245df92ca98be6a3adbcf2927fe4"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.38233818681043763,
+          "controller_p95_ms": 3.74239499833493,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_crate_s2_depth.npz",
+          "sha256": "1599ebbabefb46f12be32636c69a8921233e97a99cd0589d08f55c2b8ee2fbb2"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6361149986332747,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s0_stop.npz",
+          "sha256": "8fc2b82d9181eff26a470228cf45a8a7c3f192c2e66dc0325fcb67dde701d7ec"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 1.8064100026094818,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s0_lidar.npz",
+          "sha256": "81ac0787048ae648b370a096e6919dab5c46cbf9dc09b7cd9abf26ed144858eb"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3542958569620986,
+          "controller_p95_ms": 3.393480002341675,
+          "travelled_m": 9.199956187151994,
+          "stop_frames": 1,
+          "file": "plaza_low_s0_depth.npz",
+          "sha256": "f6956f22bc002cc8c0b314d9d62dc098b694e8c8b0c59d5ca9ba5fc921567a3f"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6731899975420674,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s1_stop.npz",
+          "sha256": "d8c7eaaa5f468d96a9a1789bf4ab81dc8626286cc2c00fd77da6251fbc5d2095"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 1.7902900002809474,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s1_lidar.npz",
+          "sha256": "1fdc40e1d42352058d14b6ffb5819aec270b4f2118cc9b93dcd092e59ea55fcd"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.38216576582358497,
+          "controller_p95_ms": 3.4574900011648424,
+          "travelled_m": 9.223958490441433,
+          "stop_frames": 1,
+          "file": "plaza_low_s1_depth.npz",
+          "sha256": "14236ad0760d805db7cbda71db3bc199049e6bb2e4665c8cd8c258632c344a73"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6445999977586325,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s2_stop.npz",
+          "sha256": "5fc4b7650dacde24f49c76ea9ad8551d46c6ca2d7aa70a96365c801d1fd591f5"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 1.8426399976306127,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "plaza_low_s2_lidar.npz",
+          "sha256": "8e6d356c8d40a6cffe7514c33f8778b6b5374929d46960c9b3c81002b03fc549"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.38233818681043763,
+          "controller_p95_ms": 3.628344997196108,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_low_s2_depth.npz",
+          "sha256": "450a0462d3cca5398f531ec391699d50470069dd2ca2123d4343cdecbee7e329"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6376799996360204,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s0_stop.npz",
+          "sha256": "6027ff2bbe4b5bbee7a7aae975435d9f6b3f1b9a9dcd5ec00fcebcb62c58a789"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 1.8501350012229518,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s0_lidar.npz",
+          "sha256": "7a27df9bd3f301862b391bb10ad1a0dd895f58c417527dd9a3ca7c2adaa2c6d1"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.5400435725647119,
+          "controller_p95_ms": 3.6108850043092375,
+          "travelled_m": 9.199956187151994,
+          "stop_frames": 1,
+          "file": "plaza_beam_s0_depth.npz",
+          "sha256": "090c1ca7ae8446df8607a3917ed700e1cd1101539b8cd9f6798513cf450751e5"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6019699980242876,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s1_stop.npz",
+          "sha256": "da9adeead0f8313c12ea0fd14270f18d8a86668ee3ac2adf6206de335445712a"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 1.6897149980650281,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s1_lidar.npz",
+          "sha256": "1fece73c55bb48284eee5e5f74166c02efbb2f66630b0c787e24d18fc5411057"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.5720016364044377,
+          "controller_p95_ms": 3.2813450001413,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_beam_s1_depth.npz",
+          "sha256": "ba061cff4777af279db6de86fd9bbca1d473f7f2d38cb6a450310b6853b081df"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6191850014147349,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s2_stop.npz",
+          "sha256": "58d956e34cb5c3e5f547d6da1deb6b154645e64559ddc7e8d5ed5afcbabb476a"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 1.829415000975132,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "plaza_beam_s2_lidar.npz",
+          "sha256": "028e4af10f4b83ea0d621da97a97f1e78280361182fcb4b2cc31ba4defd30f09"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "plaza",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.5720016364044377,
+          "controller_p95_ms": 3.639535004549543,
+          "travelled_m": 9.223958407835735,
+          "stop_frames": 1,
+          "file": "plaza_beam_s2_depth.npz",
+          "sha256": "51722430c354111269b3a882549310330d590e3b9f1dd0b846ea000049d7baf4"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5572000009124167,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "street_crate_s0_stop.npz",
+          "sha256": "19817659cc3ab7ffa61c2c27a6816a8e5829b775c6b87a5fa4d8a5ca8d0375b9"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3031122858135049,
+          "controller_p95_ms": 3.2474049967277088,
+          "travelled_m": 9.231944008975386,
+          "stop_frames": 1,
+          "file": "street_crate_s0_lidar.npz",
+          "sha256": "06d4db66581685332b0f368753748293977f0fa5e108ef2a9c29f47299f2e086"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.827660002774789,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_crate_s0_depth.npz",
+          "sha256": "eb6eb5a496a2aa5a8cdaf653a33632e24e424e798b22da8ddc1ee7fcc9bf6f5f"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5726000017602928,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "street_crate_s1_stop.npz",
+          "sha256": "0c2c9797662799c792453942f2de372fe7dfa6f7632e9e18e84f88bcf513f2eb"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3037198756525532,
+          "controller_p95_ms": 3.2770499990874664,
+          "travelled_m": 9.23995255811582,
+          "stop_frames": 1,
+          "file": "street_crate_s1_lidar.npz",
+          "sha256": "87033e21ec736c42258894fa62b353a6039212db9eefb0a9215e17f9a758094e"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.515170000740908,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_crate_s1_depth.npz",
+          "sha256": "fcf2cb18f38ff5b9b150266818bfa02cd754764b3b85b959d41769b8417976e6"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5621500022243708,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "street_crate_s2_stop.npz",
+          "sha256": "7d9c549bc695de7e38ebc2f3d57934e484f4dea82ef6f57f7ac39809bc7d7d3e"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.30370970219446636,
+          "controller_p95_ms": 3.138075002061669,
+          "travelled_m": 9.231917622838704,
+          "stop_frames": 1,
+          "file": "street_crate_s2_lidar.npz",
+          "sha256": "a1638131d0bd43995296fae93bf5c06e749e0e8b2919341ae5aaa6c6344ec6b2"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "crate",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.72232499923848,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_crate_s2_depth.npz",
+          "sha256": "88c972b116c967cf36153eb802f3c1b936b7247298c88470ad514614d545b31b"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6430249977711354,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s0_stop.npz",
+          "sha256": "70b67bd70769bca6809d930de513a357904d40941a1fbafc5068b606f26093dd"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.422359996853629,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s0_lidar.npz",
+          "sha256": "e66479aa43d651a65520a33bd5638647401cd4d14fde7e2ed5142ec751f54af9"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.304691536859123,
+          "controller_p95_ms": 4.29854499961948,
+          "travelled_m": 9.23994169368211,
+          "stop_frames": 1,
+          "file": "street_low_s0_depth.npz",
+          "sha256": "c43b0b02cf546f5d1cb8e98f0ebf2429c0e28eda23d87cba38b95dd43bee86c7"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6248199970286805,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s1_stop.npz",
+          "sha256": "dc98f4a55f9f950b653b0d96653cf38705b883e401b0538773d1baf124b509b6"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.50242000183789,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s1_lidar.npz",
+          "sha256": "5ccafc6a4cb5b00398d83e217a9a1887f1807f1cfa0f9fa890a6e5239e84fc8a"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066726157858999,
+          "controller_p95_ms": 4.47371000154817,
+          "travelled_m": 9.23994652477195,
+          "stop_frames": 1,
+          "file": "street_low_s1_depth.npz",
+          "sha256": "0fac2cdd89468619253e5033fd0615e75cbb00aed0ff7ea025e67a2858f499da"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6294149992754683,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s2_stop.npz",
+          "sha256": "7812deb3bc4e8cc25719460a2d05a9f12142c7443c9706040a4a8653c038e286"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.498979997108108,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "street_low_s2_lidar.npz",
+          "sha256": "ceee4df671614aaf0bc535781069ed7beec0347c4d3046e5e06a966ee412d40f"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "low",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.230434995770337,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_low_s2_depth.npz",
+          "sha256": "0f67b2787d5f2087ff8291c54290ac2dd73edc519381f6544d286eede4cefe85"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6240099999558879,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s0_stop.npz",
+          "sha256": "268bd66f845cca2adb96b791e67eae83df928799327ae4aee0175239cceebe32"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.3257000018929825,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s0_lidar.npz",
+          "sha256": "61ced701b4376980f32d7ca3cf06c483299e2731be75c74130154d3e0ae4e26a"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.304691536859123,
+          "controller_p95_ms": 4.205040001033922,
+          "travelled_m": 9.23994169368211,
+          "stop_frames": 1,
+          "file": "street_beam_s0_depth.npz",
+          "sha256": "798a9935e6d5d8eea1ae9413f72f9bfa03e30e74782200749a3f0453641308e5"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6051250005839393,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s1_stop.npz",
+          "sha256": "3015dc935a4fe525c77b341dfa4e5ee5b7956fe893b08e9f44e0c008620ca47f"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.3747299972455944,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s1_lidar.npz",
+          "sha256": "19edf078ddb8df39c0472e94e709f4e5199d59e319287e3e84d8bc675fad2e27"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.166684996016556,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_beam_s1_depth.npz",
+          "sha256": "563315c3402ba433670c7accbe0cac5f3c58d16741f437d578b0a00fb8f69290"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6281749982008478,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s2_stop.npz",
+          "sha256": "a49dd0f9c22e1a0934f44d8e9a4707868981e1515641a7be7dc27a96fb5cd1af"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.258610002536443,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "street_beam_s2_lidar.npz",
+          "sha256": "65ee56edd919fb919fe007bd4fc4d81a97bb5b77bf7f437817dd3d001b09b080"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "street",
+          "obstacle": "beam",
+          "status": "completed",
+          "reached": 1,
+          "target_count": 1,
+          "announced": 1,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 162,
+          "elapsed_sim_s": 16.1,
+          "events": [
+            {
+              "frame": 161,
+              "success": true
+            }
+          ],
+          "min_clearance_m": 0.3066896243444748,
+          "controller_p95_ms": 4.145050002625793,
+          "travelled_m": 9.239946422531588,
+          "stop_frames": 1,
+          "file": "street_beam_s2_depth.npz",
+          "sha256": "e8ba872cdd0529d3d35ff02a6c1def066d11c89c6d0e2aabb25f9ebbd82667b2"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5676500004483387,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "narrow_crate_s0_stop.npz",
+          "sha256": "c53d4df2d63ca8ed2306c0148ddfe9499df7be72541dde33c1b634ee4e578ce8"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 1.6945999959716573,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s0_lidar.npz",
+          "sha256": "17fb46897b5f744e06bc26d9fce6d23e31862b0c0e4ca970b454065e5bd47bfb"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.3649000067962334,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s0_depth.npz",
+          "sha256": "237ae7c01e2e519b8a8c881c3c7ab5f28cc2de00d525d810dc031ff7b9a8d160"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5509500006155577,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "narrow_crate_s1_stop.npz",
+          "sha256": "e1ad8677bee97d98bdecd15e88f0ffa922b01af2c47aa649239137a5b0dc0dc3"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 1.746499998262152,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s1_lidar.npz",
+          "sha256": "fa663068087180af9561ef8d1096161ac6ecde66af7c89d64e4c7205ccf493b1"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.2008000014466234,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s1_depth.npz",
+          "sha256": "367b04a0ed986a946802702e7e686fc108cc6b81ee02986849abc8426a322786"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "stalled",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 191,
+          "elapsed_sim_s": 19.0,
+          "events": [],
+          "min_clearance_m": 0.020000000000007012,
+          "controller_p95_ms": 0.5567499938479159,
+          "travelled_m": 3.7799999999999923,
+          "stop_frames": 121,
+          "file": "narrow_crate_s2_stop.npz",
+          "sha256": "7908d05eea07dfca767276f4ec867e30f30d30a9b47ee0b4c8c627f7678c3197"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 1.7914999989443459,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s2_lidar.npz",
+          "sha256": "84942346c3be9261067244cc5057faaa55551450ddb48de0291472d0a08c0130"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "crate",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.139800002623815,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_crate_s2_depth.npz",
+          "sha256": "1e35ee489847029f0411413034fe8c5bc288e8b8c8e464ca2b9dac60d9e9905c"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6189199990330962,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s0_stop.npz",
+          "sha256": "7e42b30515ae360d4a842b2da54b1da923a7140058c03ce75cc446383e5921c1"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.79312500024389,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s0_lidar.npz",
+          "sha256": "93de717c05b4de1fe8dc67490e748eea8a488eb5ad1d366415e7e492d1ad97d0"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.142400000593625,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_low_s0_depth.npz",
+          "sha256": "a4744ff80c22fc794c47e20d63b7edd50d58e07684c96507e3b0fb42e7ec09f4"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6158099989988841,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s1_stop.npz",
+          "sha256": "738f57754fb2145be9683c54b8ddcc0f013281660c69d526658f432a246ceef6"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.7886850024515297,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s1_lidar.npz",
+          "sha256": "45c4cd6f419bc44af5a77567f7bb0f97329e4898ee9ef12b8c6fd6431c9b04c0"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.1844999937457033,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_low_s1_depth.npz",
+          "sha256": "d35444b3d696485161c1ca4227d8f8429f39e032d1da6d5182c163af590eee10"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 0.6212199969013454,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s2_stop.npz",
+          "sha256": "dba772439b4d9c6b389e6d54cd7072faa12027a7261e43f42fd3679ab1575735"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 68,
+          "elapsed_sim_s": 6.7,
+          "events": [],
+          "min_clearance_m": -0.02399999999999436,
+          "controller_p95_ms": 2.789915001267218,
+          "travelled_m": 3.8239999999999936,
+          "stop_frames": 1,
+          "file": "narrow_low_s2_lidar.npz",
+          "sha256": "2204e716b7acc9c92d084604a66d0cb8c5d1ca063ac52b1aeb7f62d1586dbc07"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "low",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.148999999917578,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_low_s2_depth.npz",
+          "sha256": "ed238636631ddd8abfab886727f937fd5a625e8b091662321d1d0570dcf96330"
+        },
+        {
+          "method": "stop",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6109699996159178,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s0_stop.npz",
+          "sha256": "2edcdcae69aafe24e90cb6828705eaad09c76e2c5d96ecd7c5cc8aa143393c50"
+        },
+        {
+          "method": "lidar",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.8438550001737894,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s0_lidar.npz",
+          "sha256": "68921ed7fe590dca8b377ef21e61a3f3ad1f8de0fd60ce8d0c3f3f038d4f0da1"
+        },
+        {
+          "method": "depth",
+          "seed": 0,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.1456999966176227,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_beam_s0_depth.npz",
+          "sha256": "beb4b66f63884c49e1787faffb4baab602e16a76671162bd48158facd8cc02b3"
+        },
+        {
+          "method": "stop",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6182900029671144,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s1_stop.npz",
+          "sha256": "7745e5e29a884f854c04b50746180dfc711e48409ea4a4e77fd6e4adfc915a1c"
+        },
+        {
+          "method": "lidar",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.8827049987739883,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s1_lidar.npz",
+          "sha256": "b47dd04f76a6996ae34544b13255e7b237314881ddd41c62d3149b0756db24c9"
+        },
+        {
+          "method": "depth",
+          "seed": 1,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.224500000011176,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_beam_s1_depth.npz",
+          "sha256": "2da6fc97071c679e2edffa66652f4bf32cb25586ddef5a73452b58833f698a46"
+        },
+        {
+          "method": "stop",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 0.6202499975188401,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s2_stop.npz",
+          "sha256": "a2477b35eabc84d936f66ee2943ff8400d9fe8924c3e1fa8d898d395d3486cd3"
+        },
+        {
+          "method": "lidar",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "collision_abort",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 1,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 70,
+          "elapsed_sim_s": 6.9,
+          "events": [],
+          "min_clearance_m": -0.043999999999993045,
+          "controller_p95_ms": 2.7688500002113865,
+          "travelled_m": 3.943999999999993,
+          "stop_frames": 1,
+          "file": "narrow_beam_s2_lidar.npz",
+          "sha256": "c54729ab5c128d6a47bdc3e5cbe635f3fe8612e17736fa968aab398294dfdfff"
+        },
+        {
+          "method": "depth",
+          "seed": 2,
+          "layout": "narrow",
+          "obstacle": "beam",
+          "status": "no_path",
+          "reached": 0,
+          "target_count": 1,
+          "announced": 0,
+          "contacts": 0,
+          "mean_m": 0.0,
+          "p95_m": 0.0,
+          "end_m": 0.0,
+          "frames": 1,
+          "elapsed_sim_s": 0.0,
+          "events": [],
+          "min_clearance_m": null,
+          "controller_p95_ms": 2.2320999996736646,
+          "travelled_m": 0.0,
+          "stop_frames": 1,
+          "file": "narrow_beam_s2_depth.npz",
+          "sha256": "74f3ec25d4d73037ae95f178028f418594247750a0d7a76b201c344bd2a8d573"
+        }
+      ],
+      "wall_s": 42.66750519999914
+    },
+    "repair": {
+      "protocol": {
+        "experiment": "map_repair_lesson68",
+        "input_sha256": "9feed54e95264eefcc575ed4eb2166fc8540fa746547e9554c29dc227086b381",
+        "input": "results\\campus_patrol_v1",
+        "source_sha256": "102ed54ba30ea06e71c66ab921861cb1bef7fd715f02269c89f05056ad510def",
+        "dependency_sha256": {
+          "campus_patrol.py": "6e3145de4dfc592200a92533a459fd7314c1c840310a63381494c1a764d7f189",
+          "map_localization.py": "24c9333c7001d44d5cb46d21a335d0dadc336018bdce2136a9e164746bd4929f",
+          "grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345"
+        },
+        "map_res_m": 0.1,
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "estimator_access": [
+          "odom",
+          "ranges",
+          "hits"
+        ],
+        "repair": "offline scan-derived constant translation/rotation scale correction",
+        "query": "independent closed-loop traversal; frozen map; each arm plans on its own map",
+        "controller": "lesson66 fixed planner/tracker/front stop; not lesson67 depth avoidance"
+      },
+      "protocol_sha256": "25741b9a42b184a1e31a52427e1fa3cdd9d11cb4d0760588558e8566456e9900",
+      "quality": {
+        "raw": {
+          "pose_mean_m": 0.5639239605658874,
+          "pose_p95_m": 1.4611423145054594,
+          "precision": 0.6111771700356718,
+          "recall": 0.6875337290879655,
+          "symmetric_mean_m": 0.22455695626400643
+        },
+        "rigid": {
+          "pose_mean_m": 0.284686926917836,
+          "pose_p95_m": 0.8040716366916205,
+          "precision": 0.803759230252853,
+          "recall": 0.8559093362115489,
+          "symmetric_mean_m": 0.1075078513769729
+        },
+        "repaired": {
+          "pose_mean_m": 0.09099552855700045,
+          "pose_p95_m": 0.13597387881387357,
+          "precision": 0.9968051118210862,
+          "recall": 0.999190501888829,
+          "symmetric_mean_m": 0.030961412860606004
+        }
+      },
+      "observability_probe": [
+        {
+          "environment": "long_corridor",
+          "noise_sigma_m": 0.0,
+          "translation_error_m": 0.038923274440496036,
+          "yaw_error_deg": 8.910125155452451e-11,
+          "accepted": false,
+          "reason": "ambiguous_or_mismatch",
+          "inlier_fraction": 1.0,
+          "rms_m": 4.279283339358936e-12,
+          "minimum_singular_value": 3.3884256051177684e-15
+        },
+        {
+          "environment": "long_corridor",
+          "noise_sigma_m": 0.03,
+          "translation_error_m": 0.034347400400846315,
+          "yaw_error_deg": 0.0884690724559504,
+          "accepted": true,
+          "reason": "ok",
+          "inlier_fraction": 1.0,
+          "rms_m": 0.02594526955458927,
+          "minimum_singular_value": 0.6541918175392876
+        },
+        {
+          "environment": "closed_room",
+          "noise_sigma_m": 0.0,
+          "translation_error_m": 4.252726876253798e-15,
+          "yaw_error_deg": 5.446699892006272e-14,
+          "accepted": true,
+          "reason": "ok",
+          "inlier_fraction": 1.0,
+          "rms_m": 3.2716247561898378e-15,
+          "minimum_singular_value": 5.561903250785204
+        },
+        {
+          "environment": "closed_room",
+          "noise_sigma_m": 0.03,
+          "translation_error_m": 0.006341286675472758,
+          "yaw_error_deg": 0.02048298029410001,
+          "accepted": true,
+          "reason": "ok",
+          "inlier_fraction": 1.0,
+          "rms_m": 0.02942420993183552,
+          "minimum_singular_value": 4.267244318725113
+        },
+        {
+          "environment": "street_corner",
+          "noise_sigma_m": 0.0,
+          "translation_error_m": 0.0013633502093261677,
+          "yaw_error_deg": 0.010414575081484526,
+          "accepted": true,
+          "reason": "ok",
+          "inlier_fraction": 1.0,
+          "rms_m": 0.009912908432578573,
+          "minimum_singular_value": 3.1421345916888357
+        },
+        {
+          "environment": "street_corner",
+          "noise_sigma_m": 0.03,
+          "translation_error_m": 0.013091038803833369,
+          "yaw_error_deg": 0.21540035340380959,
+          "accepted": true,
+          "reason": "ok",
+          "inlier_fraction": 0.9411764705882353,
+          "rms_m": 0.037023028408422205,
+          "minimum_singular_value": 2.0734813871765727
+        }
+      ],
+      "calibration": {
+        "translation_scale": 0.9740514779820203,
+        "rotation_scale": 0.980177695879847,
+        "accepted": 142,
+        "tested": 305,
+        "translation_constraints": 124,
+        "rotation_constraints": 19
+      },
+      "rows": [
+        {
+          "method": "raw",
+          "seed": 0,
+          "status": "false_completion",
+          "frames": 892,
+          "elapsed_sim_s": 106.92,
+          "reached": 3,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.569725846771835,
+          "p95_m": 1.4405528229864513,
+          "end_m": 1.7499501121002954,
+          "events": [
+            {
+              "frame": 104,
+              "goal_index": 0,
+              "true_distance_m": 0.40120690810631704,
+              "success": true
+            },
+            {
+              "frame": 210,
+              "goal_index": 1,
+              "true_distance_m": 0.705145917817684,
+              "success": false
+            },
+            {
+              "frame": 324,
+              "goal_index": 2,
+              "true_distance_m": 0.4232903886098521,
+              "success": true
+            },
+            {
+              "frame": 439,
+              "goal_index": 3,
+              "true_distance_m": 0.49439527707669406,
+              "success": false
+            },
+            {
+              "frame": 554,
+              "goal_index": 4,
+              "true_distance_m": 0.44057300846223474,
+              "success": true
+            },
+            {
+              "frame": 669,
+              "goal_index": 5,
+              "true_distance_m": 1.208669095316294,
+              "success": false
+            },
+            {
+              "frame": 784,
+              "goal_index": 6,
+              "true_distance_m": 1.3100251089687256,
+              "success": false
+            },
+            {
+              "frame": 891,
+              "goal_index": 7,
+              "true_distance_m": 1.9462137051876165,
+              "success": false
+            }
+          ],
+          "travelled_m": 77.27999999999999,
+          "file": "seed0_raw.npz",
+          "sha256": "e7c2dc9bce4bc1b307c16723980bbfe27b5b4c0de2a6eaf7138f9578cbec8abb"
+        },
+        {
+          "method": "rigid",
+          "seed": 0,
+          "status": "no_path",
+          "frames": 281,
+          "elapsed_sim_s": 33.6,
+          "reached": 0,
+          "announced": 2,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.4252484248186642,
+          "p95_m": 0.5727093369807443,
+          "end_m": 0.24224817674512142,
+          "events": [
+            {
+              "frame": 104,
+              "goal_index": 0,
+              "true_distance_m": 0.6587391115689274,
+              "success": false
+            },
+            {
+              "frame": 210,
+              "goal_index": 1,
+              "true_distance_m": 0.752243150365608,
+              "success": false
+            }
+          ],
+          "travelled_m": 21.024,
+          "file": "seed0_rigid.npz",
+          "sha256": "e7087aa8e882e29365c0edbebfd7cf27410bacbe8d1db9c33736e0172fe56feb"
+        },
+        {
+          "method": "repaired",
+          "seed": 0,
+          "status": "completed",
+          "frames": 907,
+          "elapsed_sim_s": 108.72,
+          "reached": 8,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.11799502513311955,
+          "p95_m": 0.19690374740666627,
+          "end_m": 0.16601578301747602,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.30454321618916896,
+              "success": true
+            },
+            {
+              "frame": 215,
+              "goal_index": 1,
+              "true_distance_m": 0.22434761052340796,
+              "success": true
+            },
+            {
+              "frame": 332,
+              "goal_index": 2,
+              "true_distance_m": 0.2544587914207219,
+              "success": true
+            },
+            {
+              "frame": 450,
+              "goal_index": 3,
+              "true_distance_m": 0.36846844099631926,
+              "success": true
+            },
+            {
+              "frame": 566,
+              "goal_index": 4,
+              "true_distance_m": 0.23757469042518062,
+              "success": true
+            },
+            {
+              "frame": 681,
+              "goal_index": 5,
+              "true_distance_m": 0.38268568967698113,
+              "success": true
+            },
+            {
+              "frame": 797,
+              "goal_index": 6,
+              "true_distance_m": 0.42579700251807445,
+              "success": true
+            },
+            {
+              "frame": 906,
+              "goal_index": 7,
+              "true_distance_m": 0.4424038894929635,
+              "success": true
+            }
+          ],
+          "travelled_m": 78.43199999999999,
+          "file": "seed0_repaired.npz",
+          "sha256": "8fb4f59e6f2723064dbae029b1d4a95f455568f69637e8bd1dd9b869090dbfbc"
+        },
+        {
+          "method": "reference",
+          "seed": 0,
+          "status": "no_path",
+          "frames": 281,
+          "elapsed_sim_s": 33.6,
+          "reached": 2,
+          "announced": 2,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.07026137898788337,
+          "p95_m": 0.13747525888506962,
+          "end_m": 0.054910493996693746,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.30472778717091487,
+              "success": true
+            },
+            {
+              "frame": 213,
+              "goal_index": 1,
+              "true_distance_m": 0.41633085654783747,
+              "success": true
+            }
+          ],
+          "travelled_m": 24.960000000000015,
+          "file": "seed0_reference.npz",
+          "sha256": "6af7d6353740b1942fa97cf8b05e411f49fdd4061cd09150c5dc9696610cb59f"
+        },
+        {
+          "method": "raw",
+          "seed": 1,
+          "status": "no_path",
+          "frames": 241,
+          "elapsed_sim_s": 28.799999999999997,
+          "reached": 0,
+          "announced": 2,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.24711476751558004,
+          "p95_m": 0.45277047952545124,
+          "end_m": 0.4169406749027393,
+          "events": [
+            {
+              "frame": 103,
+              "goal_index": 0,
+              "true_distance_m": 0.49811492177471245,
+              "success": false
+            },
+            {
+              "frame": 210,
+              "goal_index": 1,
+              "true_distance_m": 0.7052785654921981,
+              "success": false
+            }
+          ],
+          "travelled_m": 21.31199999999999,
+          "file": "seed1_raw.npz",
+          "sha256": "3bd62aee6efd9af8d83cc37bc34c684de06c34685c5263f02c57aa86e10964b4"
+        },
+        {
+          "method": "rigid",
+          "seed": 1,
+          "status": "no_path",
+          "frames": 241,
+          "elapsed_sim_s": 28.799999999999997,
+          "reached": 0,
+          "announced": 2,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.3586882355135682,
+          "p95_m": 0.5620047555381098,
+          "end_m": 0.2384890406615338,
+          "events": [
+            {
+              "frame": 104,
+              "goal_index": 0,
+              "true_distance_m": 0.6409676425773891,
+              "success": false
+            },
+            {
+              "frame": 212,
+              "goal_index": 1,
+              "true_distance_m": 0.5612387607833574,
+              "success": false
+            }
+          ],
+          "travelled_m": 21.216,
+          "file": "seed1_rigid.npz",
+          "sha256": "efdf057afc8c87d5c93a60bc286a53dc3ba5f8157f665af87e26ac1a5fd4348b"
+        },
+        {
+          "method": "repaired",
+          "seed": 1,
+          "status": "false_completion",
+          "frames": 904,
+          "elapsed_sim_s": 108.36,
+          "reached": 7,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.1274049640705996,
+          "p95_m": 0.2024659353150087,
+          "end_m": 0.15550803727442247,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.3046295411033126,
+              "success": true
+            },
+            {
+              "frame": 215,
+              "goal_index": 1,
+              "true_distance_m": 0.2266653464202015,
+              "success": true
+            },
+            {
+              "frame": 331,
+              "goal_index": 2,
+              "true_distance_m": 0.2941801066302866,
+              "success": true
+            },
+            {
+              "frame": 447,
+              "goal_index": 3,
+              "true_distance_m": 0.46091211506438573,
+              "success": false
+            },
+            {
+              "frame": 563,
+              "goal_index": 4,
+              "true_distance_m": 0.251306945775593,
+              "success": true
+            },
+            {
+              "frame": 678,
+              "goal_index": 5,
+              "true_distance_m": 0.3996994573564836,
+              "success": true
+            },
+            {
+              "frame": 794,
+              "goal_index": 6,
+              "true_distance_m": 0.4269193050550073,
+              "success": true
+            },
+            {
+              "frame": 903,
+              "goal_index": 7,
+              "true_distance_m": 0.44317431829348386,
+              "success": true
+            }
+          ],
+          "travelled_m": 78.33600000000001,
+          "file": "seed1_repaired.npz",
+          "sha256": "3b685503b4075e331a8a17d0eaec2c5fa32aacf1ca48dc7f70d6909fb7d4e8e7"
+        },
+        {
+          "method": "reference",
+          "seed": 1,
+          "status": "completed",
+          "frames": 902,
+          "elapsed_sim_s": 108.11999999999999,
+          "reached": 8,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.0742890823648242,
+          "p95_m": 0.13091474811118453,
+          "end_m": 0.12192363947941337,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.3045728002177897,
+              "success": true
+            },
+            {
+              "frame": 213,
+              "goal_index": 1,
+              "true_distance_m": 0.41637540569379783,
+              "success": true
+            },
+            {
+              "frame": 328,
+              "goal_index": 2,
+              "true_distance_m": 0.3357140825466557,
+              "success": true
+            },
+            {
+              "frame": 443,
+              "goal_index": 3,
+              "true_distance_m": 0.3461383736436891,
+              "success": true
+            },
+            {
+              "frame": 559,
+              "goal_index": 4,
+              "true_distance_m": 0.32608325052028914,
+              "success": true
+            },
+            {
+              "frame": 675,
+              "goal_index": 5,
+              "true_distance_m": 0.32439362579416514,
+              "success": true
+            },
+            {
+              "frame": 791,
+              "goal_index": 6,
+              "true_distance_m": 0.31933361799725085,
+              "success": true
+            },
+            {
+              "frame": 901,
+              "goal_index": 7,
+              "true_distance_m": 0.33540797263183236,
+              "success": true
+            }
+          ],
+          "travelled_m": 78.04799999999999,
+          "file": "seed1_reference.npz",
+          "sha256": "c15e797c834f1a83f22baa8e91af6b5587e9fb203577e3910adc4fb945e33955"
+        },
+        {
+          "method": "raw",
+          "seed": 2,
+          "status": "false_completion",
+          "frames": 895,
+          "elapsed_sim_s": 107.28,
+          "reached": 2,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.567615599502861,
+          "p95_m": 1.4457027246803653,
+          "end_m": 1.747463349510415,
+          "events": [
+            {
+              "frame": 104,
+              "goal_index": 0,
+              "true_distance_m": 0.4015986579152652,
+              "success": true
+            },
+            {
+              "frame": 210,
+              "goal_index": 1,
+              "true_distance_m": 0.7055538682984529,
+              "success": false
+            },
+            {
+              "frame": 324,
+              "goal_index": 2,
+              "true_distance_m": 0.415904799471185,
+              "success": true
+            },
+            {
+              "frame": 439,
+              "goal_index": 3,
+              "true_distance_m": 0.4903862879309322,
+              "success": false
+            },
+            {
+              "frame": 554,
+              "goal_index": 4,
+              "true_distance_m": 0.4551545809671788,
+              "success": false
+            },
+            {
+              "frame": 672,
+              "goal_index": 5,
+              "true_distance_m": 1.209358951320467,
+              "success": false
+            },
+            {
+              "frame": 787,
+              "goal_index": 6,
+              "true_distance_m": 1.2995942281285748,
+              "success": false
+            },
+            {
+              "frame": 894,
+              "goal_index": 7,
+              "true_distance_m": 1.9413959584667662,
+              "success": false
+            }
+          ],
+          "travelled_m": 77.28,
+          "file": "seed2_raw.npz",
+          "sha256": "254a20613921b25878f07727ccf705f0c55244c5cfd1a839da46014ca3300453"
+        },
+        {
+          "method": "rigid",
+          "seed": 2,
+          "status": "collision_abort",
+          "frames": 244,
+          "elapsed_sim_s": 29.16,
+          "reached": 0,
+          "announced": 2,
+          "target_count": 8,
+          "contacts": 1,
+          "mean_m": 0.48513211373856274,
+          "p95_m": 0.6899166019124228,
+          "end_m": 0.2725740634753086,
+          "events": [
+            {
+              "frame": 102,
+              "goal_index": 0,
+              "true_distance_m": 0.8612622767939507,
+              "success": false
+            },
+            {
+              "frame": 214,
+              "goal_index": 1,
+              "true_distance_m": 0.6172126368780559,
+              "success": false
+            }
+          ],
+          "travelled_m": 21.408,
+          "file": "seed2_rigid.npz",
+          "sha256": "7090c0dfcfba2710fe4d500ddeeaa6bd0400b0de97c6d136aef82e29ca7378c1"
+        },
+        {
+          "method": "repaired",
+          "seed": 2,
+          "status": "completed",
+          "frames": 913,
+          "elapsed_sim_s": 109.44,
+          "reached": 8,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.11886322933535898,
+          "p95_m": 0.2003296705268026,
+          "end_m": 0.15587532121289718,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.3044902209169423,
+              "success": true
+            },
+            {
+              "frame": 215,
+              "goal_index": 1,
+              "true_distance_m": 0.22435547227801717,
+              "success": true
+            },
+            {
+              "frame": 334,
+              "goal_index": 2,
+              "true_distance_m": 0.2777236869722966,
+              "success": true
+            },
+            {
+              "frame": 451,
+              "goal_index": 3,
+              "true_distance_m": 0.37657372802609634,
+              "success": true
+            },
+            {
+              "frame": 572,
+              "goal_index": 4,
+              "true_distance_m": 0.16035597222569706,
+              "success": true
+            },
+            {
+              "frame": 687,
+              "goal_index": 5,
+              "true_distance_m": 0.39578248909373503,
+              "success": true
+            },
+            {
+              "frame": 803,
+              "goal_index": 6,
+              "true_distance_m": 0.41626414820578755,
+              "success": true
+            },
+            {
+              "frame": 912,
+              "goal_index": 7,
+              "true_distance_m": 0.4324016771002814,
+              "success": true
+            }
+          ],
+          "travelled_m": 78.528,
+          "file": "seed2_repaired.npz",
+          "sha256": "4df41cfd663fd4eaa5c5de0c3841d42626f39f9cfa9d698fb293d51ea6bb0568"
+        },
+        {
+          "method": "reference",
+          "seed": 2,
+          "status": "completed",
+          "frames": 905,
+          "elapsed_sim_s": 108.47999999999999,
+          "reached": 8,
+          "announced": 8,
+          "target_count": 8,
+          "contacts": 0,
+          "mean_m": 0.06737671616992026,
+          "p95_m": 0.12664482711484112,
+          "end_m": 0.10141770942685314,
+          "events": [
+            {
+              "frame": 105,
+              "goal_index": 0,
+              "true_distance_m": 0.30424298714059356,
+              "success": true
+            },
+            {
+              "frame": 213,
+              "goal_index": 1,
+              "true_distance_m": 0.41635615462388054,
+              "success": true
+            },
+            {
+              "frame": 328,
+              "goal_index": 2,
+              "true_distance_m": 0.31803433981354295,
+              "success": true
+            },
+            {
+              "frame": 443,
+              "goal_index": 3,
+              "true_distance_m": 0.3450167772261278,
+              "success": true
+            },
+            {
+              "frame": 563,
+              "goal_index": 4,
+              "true_distance_m": 0.3068111375011085,
+              "success": true
+            },
+            {
+              "frame": 678,
+              "goal_index": 5,
+              "true_distance_m": 0.3273363019095478,
+              "success": true
+            },
+            {
+              "frame": 795,
+              "goal_index": 6,
+              "true_distance_m": 0.3054036003437604,
+              "success": true
+            },
+            {
+              "frame": 904,
+              "goal_index": 7,
+              "true_distance_m": 0.32159835520426766,
+              "success": true
+            }
+          ],
+          "travelled_m": 78.04800000000002,
+          "file": "seed2_reference.npz",
+          "sha256": "e5e4b30b26e67fca5c2f69e82ea11e8979b76539a10afa28451f44b74a4e980f"
+        }
+      ],
+      "wall_s": 5.290712200003327,
+      "maps_sha256": "18b6523813ef0f4b44ee3d383f7eb9e19ac062b8e4c9ba48ef1791180c5c7b96",
+      "repair_sha256": "8c0e17cc22c0410c6be0fd22fcc831e406dea64dcb5bf9f7378392d474dedc03",
+      "geometry": [
+        {
+          "kind": "rect",
+          "cx": 12,
+          "cy": 0.1,
+          "hx": 12,
+          "hy": 0.1,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 12,
+          "cy": 23.9,
+          "hx": 12,
+          "hy": 0.1,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 0.1,
+          "cy": 12,
+          "hx": 0.1,
+          "hy": 12,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 23.9,
+          "cy": 12,
+          "hx": 0.1,
+          "hy": 12,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 6.6,
+          "cy": 6.7,
+          "hx": 3.2,
+          "hy": 3.0,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 17.4,
+          "cy": 6.5,
+          "hx": 3.0,
+          "hy": 2.9,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 6.6,
+          "cy": 17.5,
+          "hx": 3.0,
+          "hy": 3.1,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 17.5,
+          "cy": 17.4,
+          "hx": 3.1,
+          "hy": 3.0,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 20.9,
+          "cy": 5.2,
+          "hx": 0.55,
+          "hy": 1.25,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 21.0,
+          "cy": 8.4,
+          "hx": 0.55,
+          "hy": 1.2,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 3.1,
+          "cy": 13.8,
+          "hx": 0.4,
+          "hy": 0.6,
+          "r": 0.0
+        },
+        {
+          "kind": "rect",
+          "cx": 8.6,
+          "cy": 21.0,
+          "hx": 1.2,
+          "hy": 0.12,
+          "r": 0.0
+        },
+        {
+          "kind": "circle",
+          "cx": 10.6,
+          "cy": 5.0,
+          "hx": 0.0,
+          "hy": 0.0,
+          "r": 0.22
+        },
+        {
+          "kind": "circle",
+          "cx": 10.7,
+          "cy": 8.0,
+          "hx": 0.0,
+          "hy": 0.0,
+          "r": 0.22
+        },
+        {
+          "kind": "circle",
+          "cx": 13.4,
+          "cy": 17.5,
+          "hx": 0.0,
+          "hy": 0.0,
+          "r": 0.22
+        },
+        {
+          "kind": "circle",
+          "cx": 4.4,
+          "cy": 21.0,
+          "hx": 0.0,
+          "hy": 0.0,
+          "r": 0.22
+        },
+        {
+          "kind": "circle",
+          "cx": 19.8,
+          "cy": 21.2,
+          "hx": 0.0,
+          "hy": 0.0,
+          "r": 0.22
+        }
+      ],
+      "styles": [
+        {
+          "name": "园区围墙",
+          "height": 1.1,
+          "color": ".60 .66 .68 1",
+          "kind": "wall"
+        },
+        {
+          "name": "园区围墙",
+          "height": 1.1,
+          "color": ".60 .66 .68 1",
+          "kind": "wall"
+        },
+        {
+          "name": "园区围墙",
+          "height": 1.1,
+          "color": ".60 .66 .68 1",
+          "kind": "wall"
+        },
+        {
+          "name": "园区围墙",
+          "height": 1.1,
+          "color": ".60 .66 .68 1",
+          "kind": "wall"
+        },
+        {
+          "name": "行政楼",
+          "height": 4.3,
+          "color": ".70 .78 .85 1",
+          "kind": "building"
+        },
+        {
+          "name": "研发楼",
+          "height": 5.0,
+          "color": ".75 .69 .57 1",
+          "kind": "building"
+        },
+        {
+          "name": "仓库",
+          "height": 3.2,
+          "color": ".60 .70 .76 1",
+          "kind": "building"
+        },
+        {
+          "name": "设备楼",
+          "height": 3.8,
+          "color": ".71 .75 .63 1",
+          "kind": "building"
+        },
+        {
+          "name": "停放车辆",
+          "height": 1.15,
+          "color": ".18 .36 .57 1",
+          "kind": "car"
+        },
+        {
+          "name": "停放车辆",
+          "height": 1.2,
+          "color": ".78 .35 .24 1",
+          "kind": "car"
+        },
+        {
+          "name": "配电柜",
+          "height": 1.3,
+          "color": ".22 .43 .44 1",
+          "kind": "cabinet"
+        },
+        {
+          "name": "支路围栏",
+          "height": 1.4,
+          "color": ".45 .52 .56 1",
+          "kind": "wall"
+        },
+        {
+          "name": "树干",
+          "height": 2.2,
+          "color": ".35 .26 .15 1",
+          "kind": "tree"
+        },
+        {
+          "name": "树干",
+          "height": 2.2,
+          "color": ".35 .26 .15 1",
+          "kind": "tree"
+        },
+        {
+          "name": "树干",
+          "height": 2.2,
+          "color": ".35 .26 .15 1",
+          "kind": "tree"
+        },
+        {
+          "name": "树干",
+          "height": 2.2,
+          "color": ".35 .26 .15 1",
+          "kind": "tree"
+        },
+        {
+          "name": "树干",
+          "height": 2.2,
+          "color": ".35 .26 .15 1",
+          "kind": "tree"
+        }
+      ]
+    }
+  },
+  "narrow_probe": {
+    "kind": "posthoc_oracle_geometry_diagnostic_not_controller_success",
+    "samples": 1801,
+    "min_separating_clearance_m": 0.06640965124123577,
+    "gap_m": 0.6,
+    "body_width_m": 0.44,
+    "planner_inflation_m": 0.5,
+    "formula": "x=1.5..10.5, t=clip((x-1.5)/3.4,0,1), y=6-.7*(3*t^2-2*t^3), yaw=atan(dy/dx)"
+  },
+  "input_sha256": {
+    "calibration": {
+      "front_wall-rgb.png": "a5fcca6df7fa5bb9c4b7165ecce0ea4ecb3c4d9df6c57c203ad31f25024181f0",
+      "front_wall.npz": "096fca918be04654f70fb4d79281c89adb4266f6f9bac4c35f2fb025dbdfafd8",
+      "low_curb-rgb.png": "975a24e7e40b1c29b8f434d6f525e783ca92488be1b5a0960c10f6b7f3f7d211",
+      "low_curb.npz": "83c83f1430bde1fdb60e2abaf6be3a310a9cd9a7c805b4a0b922f85f08cfb1a8",
+      "mast_bar-rgb.png": "c98fd25e5e4801eb041c4ac121f1a23364827d08318dbb95eb5aab4a9565459a",
+      "mast_bar.npz": "0331bd9fba41a0f7119f8dd59ea27facb19bb3db3b2f41092ff10984353766c7",
+      "protocol.json": "bc347c05631da49b1bbeccea4257d3c681e8cbc13798062d3564af1a6f8a86fe",
+      "rear_obstacle-rgb.png": "975a24e7e40b1c29b8f434d6f525e783ca92488be1b5a0960c10f6b7f3f7d211",
+      "rear_obstacle.npz": "83413a146fcb567d5e67dd4e109c059d2f48de533ac2158eaf4dad566643a2b5",
+      "runner_source.py": "d992b8c6e08079395b3d9958fcb5ac26d88fcbdf558ff36722715b2be19a3f15",
+      "safe_overhead-rgb.png": "f412d8cecdf50e8e34947100206c89397b1a562f4301cf0cc4cd5b6a24d01558",
+      "safe_overhead.npz": "f23dd49d7eae35b337d47834b054ec53eb6f015617e66321caf596e9b7bdbd23",
+      "safe_side-rgb.png": "975a24e7e40b1c29b8f434d6f525e783ca92488be1b5a0960c10f6b7f3f7d211",
+      "safe_side.npz": "87903f33daa618ccd0f959e38b0e465c8d57ac78b377401c59c5726531f8da3f",
+      "side_post-rgb.png": "975a24e7e40b1c29b8f434d6f525e783ca92488be1b5a0960c10f6b7f3f7d211",
+      "side_post.npz": "4b467c9f6da02d39beee49a7171a127e1494debd63c7086bb4402889df126ee5",
+      "summary.json": "49f1a2716eb71e7171c066afab6543db97a0982d2544de5c4dcb15e5a32a0e91",
+      "turn_corner-rgb.png": "975a24e7e40b1c29b8f434d6f525e783ca92488be1b5a0960c10f6b7f3f7d211",
+      "turn_corner.npz": "399622db7152075671442b8a9c7c3cdbfe5860111f422a555d59f6fba0bc4373"
+    },
+    "avoidance": {
+      "narrow_beam_s0_depth.npz": "beb4b66f63884c49e1787faffb4baab602e16a76671162bd48158facd8cc02b3",
+      "narrow_beam_s0_lidar.npz": "68921ed7fe590dca8b377ef21e61a3f3ad1f8de0fd60ce8d0c3f3f038d4f0da1",
+      "narrow_beam_s0_stop.npz": "2edcdcae69aafe24e90cb6828705eaad09c76e2c5d96ecd7c5cc8aa143393c50",
+      "narrow_beam_s1_depth.npz": "2da6fc97071c679e2edffa66652f4bf32cb25586ddef5a73452b58833f698a46",
+      "narrow_beam_s1_lidar.npz": "b47dd04f76a6996ae34544b13255e7b237314881ddd41c62d3149b0756db24c9",
+      "narrow_beam_s1_stop.npz": "7745e5e29a884f854c04b50746180dfc711e48409ea4a4e77fd6e4adfc915a1c",
+      "narrow_beam_s2_depth.npz": "74f3ec25d4d73037ae95f178028f418594247750a0d7a76b201c344bd2a8d573",
+      "narrow_beam_s2_lidar.npz": "c54729ab5c128d6a47bdc3e5cbe635f3fe8612e17736fa968aab398294dfdfff",
+      "narrow_beam_s2_stop.npz": "a2477b35eabc84d936f66ee2943ff8400d9fe8924c3e1fa8d898d395d3486cd3",
+      "narrow_crate_s0_depth.npz": "237ae7c01e2e519b8a8c881c3c7ab5f28cc2de00d525d810dc031ff7b9a8d160",
+      "narrow_crate_s0_lidar.npz": "17fb46897b5f744e06bc26d9fce6d23e31862b0c0e4ca970b454065e5bd47bfb",
+      "narrow_crate_s0_stop.npz": "c53d4df2d63ca8ed2306c0148ddfe9499df7be72541dde33c1b634ee4e578ce8",
+      "narrow_crate_s1_depth.npz": "367b04a0ed986a946802702e7e686fc108cc6b81ee02986849abc8426a322786",
+      "narrow_crate_s1_lidar.npz": "fa663068087180af9561ef8d1096161ac6ecde66af7c89d64e4c7205ccf493b1",
+      "narrow_crate_s1_stop.npz": "e1ad8677bee97d98bdecd15e88f0ffa922b01af2c47aa649239137a5b0dc0dc3",
+      "narrow_crate_s2_depth.npz": "1e35ee489847029f0411413034fe8c5bc288e8b8c8e464ca2b9dac60d9e9905c",
+      "narrow_crate_s2_lidar.npz": "84942346c3be9261067244cc5057faaa55551450ddb48de0291472d0a08c0130",
+      "narrow_crate_s2_stop.npz": "7908d05eea07dfca767276f4ec867e30f30d30a9b47ee0b4c8c627f7678c3197",
+      "narrow_low_s0_depth.npz": "a4744ff80c22fc794c47e20d63b7edd50d58e07684c96507e3b0fb42e7ec09f4",
+      "narrow_low_s0_lidar.npz": "93de717c05b4de1fe8dc67490e748eea8a488eb5ad1d366415e7e492d1ad97d0",
+      "narrow_low_s0_stop.npz": "7e42b30515ae360d4a842b2da54b1da923a7140058c03ce75cc446383e5921c1",
+      "narrow_low_s1_depth.npz": "d35444b3d696485161c1ca4227d8f8429f39e032d1da6d5182c163af590eee10",
+      "narrow_low_s1_lidar.npz": "45c4cd6f419bc44af5a77567f7bb0f97329e4898ee9ef12b8c6fd6431c9b04c0",
+      "narrow_low_s1_stop.npz": "738f57754fb2145be9683c54b8ddcc0f013281660c69d526658f432a246ceef6",
+      "narrow_low_s2_depth.npz": "ed238636631ddd8abfab886727f937fd5a625e8b091662321d1d0570dcf96330",
+      "narrow_low_s2_lidar.npz": "2204e716b7acc9c92d084604a66d0cb8c5d1ca063ac52b1aeb7f62d1586dbc07",
+      "narrow_low_s2_stop.npz": "dba772439b4d9c6b389e6d54cd7072faa12027a7261e43f42fd3679ab1575735",
+      "plaza_beam_s0_depth.npz": "090c1ca7ae8446df8607a3917ed700e1cd1101539b8cd9f6798513cf450751e5",
+      "plaza_beam_s0_lidar.npz": "7a27df9bd3f301862b391bb10ad1a0dd895f58c417527dd9a3ca7c2adaa2c6d1",
+      "plaza_beam_s0_stop.npz": "6027ff2bbe4b5bbee7a7aae975435d9f6b3f1b9a9dcd5ec00fcebcb62c58a789",
+      "plaza_beam_s1_depth.npz": "ba061cff4777af279db6de86fd9bbca1d473f7f2d38cb6a450310b6853b081df",
+      "plaza_beam_s1_lidar.npz": "1fece73c55bb48284eee5e5f74166c02efbb2f66630b0c787e24d18fc5411057",
+      "plaza_beam_s1_stop.npz": "da9adeead0f8313c12ea0fd14270f18d8a86668ee3ac2adf6206de335445712a",
+      "plaza_beam_s2_depth.npz": "51722430c354111269b3a882549310330d590e3b9f1dd0b846ea000049d7baf4",
+      "plaza_beam_s2_lidar.npz": "028e4af10f4b83ea0d621da97a97f1e78280361182fcb4b2cc31ba4defd30f09",
+      "plaza_beam_s2_stop.npz": "58d956e34cb5c3e5f547d6da1deb6b154645e64559ddc7e8d5ed5afcbabb476a",
+      "plaza_crate_s0_depth.npz": "198d761a717e80e40b39f8300de772ef79e5aa1e84f1e8aa6ebb32a08bf6fc81",
+      "plaza_crate_s0_lidar.npz": "977b95f7018a103d228b58da0725ee144227100d47fc285cbe629abe0873bf6f",
+      "plaza_crate_s0_stop.npz": "f04f86b6bca6d51d89b101c3f6a3df78f4cb57542aa0698ce4aff21d83e0c157",
+      "plaza_crate_s1_depth.npz": "8f3582c276b8d1fab5897d9368125df2ff4553d44b96c1a54c9824d618d65bc3",
+      "plaza_crate_s1_lidar.npz": "01c9f2de72a708ed962db07239c263c6f5d159fcec7965d21fd5cffb2da87f41",
+      "plaza_crate_s1_stop.npz": "99aaf98ebdeff05c2bfe497b23b6ec9e52cddfa277cab3526f79baf9b7644caf",
+      "plaza_crate_s2_depth.npz": "1599ebbabefb46f12be32636c69a8921233e97a99cd0589d08f55c2b8ee2fbb2",
+      "plaza_crate_s2_lidar.npz": "4dbe7a70e160ca2b72d721b14c90a4363c94245df92ca98be6a3adbcf2927fe4",
+      "plaza_crate_s2_stop.npz": "c1063b8f1a00ea6333daa7bd6f927e877331fe7c5e3f63105246285f2a931608",
+      "plaza_low_s0_depth.npz": "f6956f22bc002cc8c0b314d9d62dc098b694e8c8b0c59d5ca9ba5fc921567a3f",
+      "plaza_low_s0_lidar.npz": "81ac0787048ae648b370a096e6919dab5c46cbf9dc09b7cd9abf26ed144858eb",
+      "plaza_low_s0_stop.npz": "8fc2b82d9181eff26a470228cf45a8a7c3f192c2e66dc0325fcb67dde701d7ec",
+      "plaza_low_s1_depth.npz": "14236ad0760d805db7cbda71db3bc199049e6bb2e4665c8cd8c258632c344a73",
+      "plaza_low_s1_lidar.npz": "1fdc40e1d42352058d14b6ffb5819aec270b4f2118cc9b93dcd092e59ea55fcd",
+      "plaza_low_s1_stop.npz": "d8c7eaaa5f468d96a9a1789bf4ab81dc8626286cc2c00fd77da6251fbc5d2095",
+      "plaza_low_s2_depth.npz": "450a0462d3cca5398f531ec391699d50470069dd2ca2123d4343cdecbee7e329",
+      "plaza_low_s2_lidar.npz": "8e6d356c8d40a6cffe7514c33f8778b6b5374929d46960c9b3c81002b03fc549",
+      "plaza_low_s2_stop.npz": "5fc4b7650dacde24f49c76ea9ad8551d46c6ca2d7aa70a96365c801d1fd591f5",
+      "protocol.json": "e89fd20a85bfb66e6856954c7cd04d77c7be05853abe4e00ce0ac8eda329b3fc",
+      "runner_source.py": "9e832f96d2f6449fa7e604b8c292a824eaa8500a813b48d41f07c29a49a0c69a",
+      "street_beam_s0_depth.npz": "798a9935e6d5d8eea1ae9413f72f9bfa03e30e74782200749a3f0453641308e5",
+      "street_beam_s0_lidar.npz": "61ced701b4376980f32d7ca3cf06c483299e2731be75c74130154d3e0ae4e26a",
+      "street_beam_s0_stop.npz": "268bd66f845cca2adb96b791e67eae83df928799327ae4aee0175239cceebe32",
+      "street_beam_s1_depth.npz": "563315c3402ba433670c7accbe0cac5f3c58d16741f437d578b0a00fb8f69290",
+      "street_beam_s1_lidar.npz": "19edf078ddb8df39c0472e94e709f4e5199d59e319287e3e84d8bc675fad2e27",
+      "street_beam_s1_stop.npz": "3015dc935a4fe525c77b341dfa4e5ee5b7956fe893b08e9f44e0c008620ca47f",
+      "street_beam_s2_depth.npz": "e8ba872cdd0529d3d35ff02a6c1def066d11c89c6d0e2aabb25f9ebbd82667b2",
+      "street_beam_s2_lidar.npz": "65ee56edd919fb919fe007bd4fc4d81a97bb5b77bf7f437817dd3d001b09b080",
+      "street_beam_s2_stop.npz": "a49dd0f9c22e1a0934f44d8e9a4707868981e1515641a7be7dc27a96fb5cd1af",
+      "street_crate_s0_depth.npz": "eb6eb5a496a2aa5a8cdaf653a33632e24e424e798b22da8ddc1ee7fcc9bf6f5f",
+      "street_crate_s0_lidar.npz": "06d4db66581685332b0f368753748293977f0fa5e108ef2a9c29f47299f2e086",
+      "street_crate_s0_stop.npz": "19817659cc3ab7ffa61c2c27a6816a8e5829b775c6b87a5fa4d8a5ca8d0375b9",
+      "street_crate_s1_depth.npz": "fcf2cb18f38ff5b9b150266818bfa02cd754764b3b85b959d41769b8417976e6",
+      "street_crate_s1_lidar.npz": "87033e21ec736c42258894fa62b353a6039212db9eefb0a9215e17f9a758094e",
+      "street_crate_s1_stop.npz": "0c2c9797662799c792453942f2de372fe7dfa6f7632e9e18e84f88bcf513f2eb",
+      "street_crate_s2_depth.npz": "88c972b116c967cf36153eb802f3c1b936b7247298c88470ad514614d545b31b",
+      "street_crate_s2_lidar.npz": "a1638131d0bd43995296fae93bf5c06e749e0e8b2919341ae5aaa6c6344ec6b2",
+      "street_crate_s2_stop.npz": "7d9c549bc695de7e38ebc2f3d57934e484f4dea82ef6f57f7ac39809bc7d7d3e",
+      "street_low_s0_depth.npz": "c43b0b02cf546f5d1cb8e98f0ebf2429c0e28eda23d87cba38b95dd43bee86c7",
+      "street_low_s0_lidar.npz": "e66479aa43d651a65520a33bd5638647401cd4d14fde7e2ed5142ec751f54af9",
+      "street_low_s0_stop.npz": "70b67bd70769bca6809d930de513a357904d40941a1fbafc5068b606f26093dd",
+      "street_low_s1_depth.npz": "0fac2cdd89468619253e5033fd0615e75cbb00aed0ff7ea025e67a2858f499da",
+      "street_low_s1_lidar.npz": "5ccafc6a4cb5b00398d83e217a9a1887f1807f1cfa0f9fa890a6e5239e84fc8a",
+      "street_low_s1_stop.npz": "dc98f4a55f9f950b653b0d96653cf38705b883e401b0538773d1baf124b509b6",
+      "street_low_s2_depth.npz": "0f67b2787d5f2087ff8291c54290ac2dd73edc519381f6544d286eede4cefe85",
+      "street_low_s2_lidar.npz": "ceee4df671614aaf0bc535781069ed7beec0347c4d3046e5e06a966ee412d40f",
+      "street_low_s2_stop.npz": "7812deb3bc4e8cc25719460a2d05a9f12142c7443c9706040a4a8653c038e286",
+      "summary.json": "74457c7cc43d99ee3922ca2abb5b87640e2d8c467507da4dd4c61774c171058f"
+    },
+    "repair": {
+      "constraints.json": "7c0c40f6fa80508e4d705de79db3f5c80bdc8399d25606c1c9078e1bfb3d9f63",
+      "maps.npz": "18b6523813ef0f4b44ee3d383f7eb9e19ac062b8e4c9ba48ef1791180c5c7b96",
+      "protocol.json": "25741b9a42b184a1e31a52427e1fa3cdd9d11cb4d0760588558e8566456e9900",
+      "repair.npz": "8c0e17cc22c0410c6be0fd22fcc831e406dea64dcb5bf9f7378392d474dedc03",
+      "runner_source.py": "102ed54ba30ea06e71c66ab921861cb1bef7fd715f02269c89f05056ad510def",
+      "seed0_raw.npz": "e7c2dc9bce4bc1b307c16723980bbfe27b5b4c0de2a6eaf7138f9578cbec8abb",
+      "seed0_reference.npz": "6af7d6353740b1942fa97cf8b05e411f49fdd4061cd09150c5dc9696610cb59f",
+      "seed0_repaired.npz": "8fb4f59e6f2723064dbae029b1d4a95f455568f69637e8bd1dd9b869090dbfbc",
+      "seed0_rigid.npz": "e7087aa8e882e29365c0edbebfd7cf27410bacbe8d1db9c33736e0172fe56feb",
+      "seed1_raw.npz": "3bd62aee6efd9af8d83cc37bc34c684de06c34685c5263f02c57aa86e10964b4",
+      "seed1_reference.npz": "c15e797c834f1a83f22baa8e91af6b5587e9fb203577e3910adc4fb945e33955",
+      "seed1_repaired.npz": "3b685503b4075e331a8a17d0eaec2c5fa32aacf1ca48dc7f70d6909fb7d4e8e7",
+      "seed1_rigid.npz": "efdf057afc8c87d5c93a60bc286a53dc3ba5f8157f665af87e26ac1a5fd4348b",
+      "seed2_raw.npz": "254a20613921b25878f07727ccf705f0c55244c5cfd1a839da46014ca3300453",
+      "seed2_reference.npz": "e5e4b30b26e67fca5c2f69e82ea11e8979b76539a10afa28451f44b74a4e980f",
+      "seed2_repaired.npz": "4df41cfd663fd4eaa5c5de0c3841d42626f39f9cfa9d698fb293d51ea6bb0568",
+      "seed2_rigid.npz": "7090c0dfcfba2710fe4d500ddeeaa6bd0400b0de97c6d136aef82e29ca7378c1",
+      "summary.json": "3337a29d9baab971db29171e07ae3aca244e6b16eb427d9063acd0bf793b212b"
+    }
+  }
+}

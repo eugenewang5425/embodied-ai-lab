@@ -61,6 +61,8 @@ class ReplayRecord:
     missions: dict = field(default_factory=dict)
     plans: dict = field(default_factory=dict)
     lengths: dict = field(default_factory=dict)
+    depth: dict = field(default_factory=dict)
+    telemetry: dict = field(default_factory=dict)
 
     def __post_init__(self):
         self.timestamps = np.array(self.timestamps, dtype=float, copy=True)
@@ -135,6 +137,26 @@ class ReplayRecord:
             ranges.setflags(write=False)
             hits.setflags(write=False)
             self.lidar[key] = {**scan, "ranges": ranges, "hits": hits}
+        for key, bundle in self.depth.items():
+            if key not in self.track_by_key:
+                raise ValueError("depth must belong to a track")
+            for name, values in bundle.items():
+                array = np.array(values, copy=True)
+                if array.ndim != 3 or len(array) != len(self.timestamps):
+                    raise ValueError("depth must align with timestamps")
+                array.setflags(write=False)
+                bundle[name] = array
+            if bundle["values"].shape != bundle["valid"].shape:
+                raise ValueError("depth values and masks must have matching shapes")
+        for key, bundle in self.telemetry.items():
+            if key not in self.track_by_key:
+                raise ValueError("telemetry must belong to a track")
+            for name, values in bundle.items():
+                array = np.array(values, copy=True)
+                if len(array) != len(self.timestamps):
+                    raise ValueError("telemetry must align with timestamps")
+                array.setflags(write=False)
+                bundle[name] = array
         for collection, shape in (
             (self.goals, (len(self.timestamps), 2)),
             (self.missions, (len(self.timestamps),)),
@@ -214,8 +236,16 @@ class ReplayRecord:
         else:
             return np.empty((0, 2))
         angles = pose[2] + np.arange(len(ranges)) * (2 * np.pi / len(ranges))
+        dx, dy = self.metadata.get("lidar_offset_xy", (0.0, 0.0))
+        offset = np.array(
+            [
+                dx * np.cos(pose[2]) - dy * np.sin(pose[2]),
+                dx * np.sin(pose[2]) + dy * np.cos(pose[2]),
+            ]
+        )
         return (
             pose[:2]
+            + offset
             + np.column_stack((np.cos(angles[hits]), np.sin(angles[hits]))) * ranges[hits, None]
         )
 

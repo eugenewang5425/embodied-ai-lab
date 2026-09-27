@@ -1,0 +1,40 @@
+{
+  "quick": {
+    "passed": 819,
+    "deselected": 183,
+    "pytest_s": 83.97,
+    "wrapper_s": 85.2
+  },
+  "related_full_selection": {
+    "passed": 37,
+    "pytest_s": 13.86,
+    "wrapper_s": 14.4,
+    "files": [
+      "test_navigation_study_viewer.py",
+      "test_replay_viewer.py",
+      "test_campus_patrol.py",
+      "test_navigation_geometry.py",
+      "test_map_repair.py"
+    ]
+  },
+  "new_test_count": 17,
+  "new_replay_comparisons_verified": 30,
+  "old_map_separation_archives_verified": 24,
+  "lint": "ruff check passed",
+  "format": "ruff format --check passed",
+  "ui": {
+    "method_switch_preserves_time": true,
+    "camera_lidar_goal_stats_synchronized": true,
+    "depth_and_body_panel_checked": true,
+    "failure_7_of_8_visible": true,
+    "camera_footer_height": [
+      38,
+      38
+    ],
+    "stats_footer_height": [
+      21,
+      21
+    ]
+  },
+  "scope": "quick and affected full selection; not entire historical training/slow suite; test counts overlap"
+}

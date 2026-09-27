@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from .panels import ErrorPanel
+from .safety_panel import SafetyPanel
 
 RESULTS = {
     "completed": "全部巡检完成",
@@ -16,6 +17,7 @@ RESULTS = {
     "timeout": "超时/停滞",
     "no_path": "估计位置无法继续规划",
     "collision_abort": "发生接触，已停止",
+    "stalled": "停车后无法继续前进",
 }
 
 
@@ -40,6 +42,9 @@ class AnalysisPanel(ttk.Frame):
         self.help.configure(yscrollcommand=scroll.set)
         scroll.pack(side="right", fill="y")
         self.help.pack(fill="both", expand=True)
+        self.safety = SafetyPanel(self.tabs)
+        self.tabs.add(self.safety, text="车身与刹停标定")
+        self.focus_key = None
         self.frame = 0
         self.visible = set()
         self.trails = True
@@ -49,6 +54,7 @@ class AnalysisPanel(ttk.Frame):
 
     def set_record(self, record):
         self.record = record
+        self.focus_key = record.method_keys[0]
         self.error.set_record(record)
         self.figure.clear()
         keys = record.method_keys
@@ -60,7 +66,7 @@ class AnalysisPanel(ttk.Frame):
         x1, y1 = np.maximum([extent[1], extent[3]], all_xy.max(axis=0))
         for ax, key in zip(axes, keys):
             ax.imshow(
-                next(iter(record.maps.values())),
+                record.maps[record.method_info(key).get("display_map", next(iter(record.maps)))],
                 origin="lower",
                 extent=extent,
                 cmap="Greys",
@@ -123,7 +129,7 @@ class AnalysisPanel(ttk.Frame):
             r.metadata.get("protocol", ""),
             r.metadata.get("lidar_note", ""),
             r.metadata.get("sensor_note", ""),
-            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。实际位置只用于仿真生成观测/评分，只有“知道真实位置”组能用于控制。",
+            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。第67课使用无偏无滑移里程计来隔离避障问题，零定位误差是实验设定。",
         ]
         self.help.configure(state="normal")
         self.help.delete("1.0", "end")
@@ -132,12 +138,15 @@ class AnalysisPanel(ttk.Frame):
 
     def set_view(self, key, lidar=True):
         self.show_lidar = lidar
+        self.focus_key = key
 
     def set_frame(self, frame, visible, trails=True):
         self.frame, self.visible, self.trails = frame, visible, trails
         self.error.set_frame(frame, visible, trails)
         if self.tabs.index(self.tabs.select()) == 1:
             self._draw_separate()
+        elif self.tabs.index(self.tabs.select()) == 3:
+            self.safety.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -159,3 +168,5 @@ class AnalysisPanel(ttk.Frame):
     def _tab_changed(self, _event):
         if self.record is not None and self.tabs.index(self.tabs.select()) == 1:
             self._draw_separate()
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 3:
+            self.safety.draw(self.record, self.focus_key, self.frame)

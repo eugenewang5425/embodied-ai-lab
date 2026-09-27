@@ -373,7 +373,8 @@ class ReplayWindow:
         )
         self.map.layer.set(layer)
         self.map._draw_map()
-        self.analysis.tabs.select(1 if choice == "split" else 0)
+        if not (solo and self.analysis.tabs.index(self.analysis.tabs.select()) == 3):
+            self.analysis.tabs.select(1 if choice == "split" else 0)
         self.refresh()
 
     def set_focus(self, key, mode=None):

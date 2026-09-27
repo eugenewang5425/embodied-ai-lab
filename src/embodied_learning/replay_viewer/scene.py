@@ -122,7 +122,7 @@ def build_model(record):
         style = styles[i] if i < len(styles) else {}
         height = style.get("height", 0.7 if i < record.wall_count else 0.5)
         common = {
-            "pos": f"{p.cx} {p.cy} {height / 2}",
+            "pos": f"{p.cx} {p.cy} {style.get('bottom_m', 0) + height / 2}",
             "rgba": style.get(
                 "color", ".85 .88 .91 1" if i < record.wall_count else ".77 .57 .34 1"
             ),
@@ -209,6 +209,18 @@ def build_model(record):
                 fovy=str(record.camera.vertical_fov_deg),
             )
             radius = record.metadata.get("robot_radius_m", 0.15)
+            if "body_parts" in record.metadata:
+                for part in record.metadata["body_parts"]:
+                    lo, hi = np.array(part)[[0, 2, 4]], np.array(part)[[1, 3, 5]]
+                    SubElement(
+                        body,
+                        "geom",
+                        type="box",
+                        size=" ".join(map(str, (hi - lo) / 2)),
+                        pos=" ".join(map(str, (hi + lo) / 2 - [0, 0, 0.18])),
+                        rgba=rgba,
+                    )
+                continue
             SubElement(body, "geom", type="cylinder", size=f"{radius} .11", rgba=rgba)
             SubElement(
                 body,
@@ -376,12 +388,20 @@ class SceneRenderer:
         key = self.focus_key
         if self.show_lidar:
             for point in self.record.scan_world(frame, key):
-                self._point([*point, 0.35], 0.045, [0, 0.95, 0.92, 1])
+                self._point(
+                    [*point, self.record.metadata.get("rig", {}).get("lidar_z_m", 0.35)],
+                    0.045,
+                    [0, 0.95, 0.92, 1],
+                )
         info = self.record.goal_info(frame, key)
         if info is not None:
-            name, goal = info
+            _name, goal = info
             self._line([*goal, 0.05], [*goal, 2.0], [1, 0.78, 0.12, 1], 5)
-            self._point([*goal, 2.0], 0.23, [1, 0.78, 0.12, 1], name.split()[0])
+            # MuJoCo's small annotation font is ASCII-only. Chinese text belongs
+            # in the Tk caption; never pass it to the OpenGL glyph renderer.
+            mission = self.record.missions.get(key)
+            tag = f"P{int(mission[frame]) + 1}" if mission is not None else "Goal"
+            self._point([*goal, 2.0], 0.23, [1, 0.78, 0.12, 1], tag)
         if key in self.record.plans:
             path = self.record.plans[key][frame]
             path = path[np.isfinite(path).all(axis=1)]

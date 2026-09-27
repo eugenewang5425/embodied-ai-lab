@@ -5,6 +5,7 @@ from tkinter import ttk
 
 from PIL import ImageOps, ImageTk
 
+from .body_overlay import draw_body_guides
 from .goal_overlay import draw_goal
 from .scene import SceneRenderer
 
@@ -48,6 +49,7 @@ class CameraPanel(ttk.Frame):
             frame,
             self.focus_key,
         )
+        self.image = draw_body_guides(self.image, self.record, frame, self.focus_key)
         camera = self.record.camera
         last = self.record.lengths.get(self.focus_key, len(self.record.timestamps)) - 1
         timing = f"t = {self.record.timestamps[min(frame, last)]:.2f} s"
