@@ -92,6 +92,10 @@ app = ReplayWindow(root, MySource())
 
 ## 验证
 
+第69–71课继续使用同一个模块化窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69`（也可70/71）。入口自动列出本地已有的课程档案，无需为了查看69课额外生成67/68全部记录。每个方法按钮一次同步相机、3D、目标、雷达点、地图、统计及“车身与决策诊断”，并保留时间。
+
+69课诊断页显示身体、刹停与存档深度；70课显示距离和内部位置预算；71课显示近场整盘恢复预测、执行速度和粒子分散程度。预测图形、按真值重渲染的RGB与真实存档传感器都有明确区分。运行 `uv run python scripts/check_navigation_followup_windows.py` 可生成固定回合的三张本机窗口验收图（需要三课及67/68记录）。
+
 ```powershell
 uv run python -m pytest tests/test_replay_viewer.py -q
 uv run python -m embodied_learning.map_separation_demo --verify

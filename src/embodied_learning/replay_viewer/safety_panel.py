@@ -5,7 +5,7 @@ from tkinter import ttk
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from matplotlib.patches import Polygon
+from matplotlib.patches import Circle, Polygon
 
 from embodied_learning.navigation_geometry import (
     NavigationRig,
@@ -40,6 +40,9 @@ class SafetyPanel(ttk.Frame):
         self.record, self.key, self.frame = record, key, frame
         self.figure.clear()
         if "rig" not in record.metadata:
+            if record.metadata.get("variant") in ("70", "71"):
+                self._draw_decisions(record, key, frame)
+                return
             ax = self.figure.subplots()
             ax.axis("off")
             ax.text(
@@ -113,7 +116,13 @@ class SafetyPanel(ttk.Frame):
         )
         b.set_facecolor("#c6ccd4")
         b.set_title(
-            "存档深度 (m)" + (" · 本组未使用" if key != "depth" else " · 控制输入"), fontsize=10
+            "存档深度 (m)"
+            + (
+                " · 控制输入"
+                if key in record.metadata.get("depth_used_by", ["depth"])
+                else " · 本组未使用"
+            ),
+            fontsize=10,
         )
         b.set_xlabel("像素列；灰色=无有效深度", fontsize=8)
         b.set_ylabel("像素行", fontsize=8)
@@ -123,5 +132,104 @@ class SafetyPanel(ttk.Frame):
         self.note.configure(
             text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
             f"速度 {command[0]:.2f} m/s，角速度 {command[1]:.2f} rad/s；中心刹停位移 {distance:.2f} m。黄框不含6cm余量；灰点仅是历史抽样。无回波≠安全。"
+        )
+        self.canvas.draw_idle()
+
+    def _draw_decisions(self, record, key, frame):
+        """Display recorded decision evidence; no rendered RGB used as a sensor."""
+        from embodied_learning.experiments.campus_patrol import advance
+
+        f = min(frame, record.lengths[key] - 1)
+        data = record.telemetry[key]
+        left, right = self.figure.subplots(1, 2)
+        scan = record.lidar[key]
+        angles = np.arange(scan["ranges"].shape[1]) * 2 * np.pi / scan["ranges"].shape[1]
+        hit = scan["hits"][f]
+        ranges = scan["ranges"][f, hit]
+        left.scatter(
+            ranges * np.sin(angles[hit]),
+            ranges * np.cos(angles[hit]),
+            s=9,
+            color="#00aaa6",
+            label="当前雷达回波",
+        )
+        left.add_patch(
+            Circle((0, 0), 0.25, fill=False, color="#152b43", lw=2, label="半径25cm车身")
+        )
+        command = data["commands"][f]
+        if data["recovery_active"][f]:
+            poses = np.array(
+                [
+                    advance(np.zeros(3), command[0] * t, command[1] * t)
+                    for t in np.linspace(0, 3, 30)
+                ]
+            )
+            for p in poses[::5]:
+                left.add_patch(Circle((p[1], p[0]), 0.27, color="#eebb44", alpha=0.18))
+            left.plot(poses[:, 1], poses[:, 0], color="#bd7d00", label="当前恢复动作的3秒预测")
+        left.set(
+            xlim=(1.2, -1.2),
+            ylim=(-1.1, 1.5),
+            aspect="equal",
+            xlabel="左 ← 横向 (m) → 右",
+            ylabel="车头前方 (m)",
+        )
+        left.set_title("雷达只观察一个高度", fontsize=10)
+        left.legend(loc="upper left", fontsize=7)
+        start = max(0, f - 100)
+        times = record.timestamps[start : f + 1]
+        distance = data["arrival_distance"][start : f + 1].copy()
+        budget = data["arrival_budget"][start : f + 1]
+        # Goals switch after a declaration; break the line between decisions.
+        jumps = np.r_[False, np.abs(np.diff(distance)) > 1.0]
+        distance[jumps] = np.nan
+        if record.metadata["variant"] == "71":
+            right.plot(
+                times,
+                data["commands"][start : f + 1, 0],
+                color="#119c74",
+                drawstyle="steps-post",
+                label="执行速度 m/s",
+            )
+            right.plot(
+                times, data["arrival_r95"][start : f + 1], color="#8b5cf6", label="粒子半径 m"
+            )
+            right.axhline(0.25, color="#d97706", ls="--", label="半径拒绝线 .25m")
+            active = data["recovery_active"][start : f + 1]
+            right.fill_between(
+                times,
+                0,
+                1,
+                where=active,
+                color="#eebb44",
+                alpha=0.18,
+                transform=right.get_xaxis_transform(),
+            )
+            right.set(xlabel="时间 (s)", ylabel="数值（单位见图例）", ylim=(-0.2, 1.05))
+            right.set_title("恢复状态 · 黄底=正在恢复", fontsize=10)
+        else:
+            right.plot(times, distance, color="#64748b", label="估计距目标")
+            right.plot(times, distance + budget, color="#119c74", label="距离＋内部预算")
+            right.axhline(0.45, color="#d97706", ls="--", label="45cm参考线")
+            right.set(xlabel="时间 (s)", ylabel="距离 (m)", ylim=(0, 1.2))
+            right.set_title("判定前目标 · 最近12秒", fontsize=10)
+        right.legend(loc="upper right", fontsize=7)
+        right.grid(alpha=0.15)
+        reason = str(data["reason"][f])
+        reasons = {
+            "following": "沿规划路径/检查到点",
+            "observed_low_speed_escape": "观测支持，正在低速脱困",
+            "global_route_blocked": "远处路线被阻断，拒绝局部恢复",
+            "no_observed_safe_escape": "扫描不支持完整车身通过",
+            "localization_ambiguous": "位置分散过大，停止恢复",
+            "outside_map": "估计越界，停止",
+            "recovery_budget_exhausted": "恢复时限用尽",
+            "recovery_attempts_exhausted": "恢复次数用尽",
+        }
+        self.note.configure(
+            text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.2f}s · {reasons.get(reason, reason)}\n"
+            f"距目标 {data['arrival_distance'][f]:.3f}m；粒子半径 {data['arrival_r95'][f]:.3f}m＋固定0.10m预算；"
+            f"执行速度 {command[0]:.2f}m/s；上一帧{'已停稳' if data['observed_stopped'][f] else '未停稳'}。\n"
+            "预算不是误差保证；45cm真值线不变。近场雷达图只显示约2.4m范围；距离图限1.2m。金盘为预测。"
         )
         self.canvas.draw_idle()

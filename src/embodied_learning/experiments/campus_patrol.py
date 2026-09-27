@@ -197,7 +197,7 @@ def mapping_record(geometry, safe, config):
     return built, projected, {"truth": truth, "odom": odom, "ranges": ranges, "hits": hits}
 
 
-def run_episode(method, seed, geometry, safe, loc_map, config):
+def run_episode(method, seed, geometry, safe, loc_map, config, policy=None):
     noise = np.random.default_rng([7301, seed]).normal(
         0, config.sensor_sigma_m, (config.max_steps + 1, RAYS)
     )
@@ -210,6 +210,7 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
     )
     mission, dwell, path, wp = 0, 0, None, 0
     ds_prev = dth_prev = 0.0
+    previous_command = np.zeros(2)
     records = {
         k: []
         for k in (
@@ -244,7 +245,11 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
         )
         goal = np.asarray(TASKS[mission][1])
         dist_est = float(np.linalg.norm(estimated[:2] - goal))
-        dwell = dwell + 1 if dist_est < config.estimate_arrival_m else 0
+        arrival_limit = config.estimate_arrival_m
+        ready = dist_est < arrival_limit
+        if policy is not None:
+            ready, arrival_limit = policy.arrival(estimated, pf, goal, previous_command, config)
+        dwell = dwell + 1 if ready else 0
         if dwell >= config.dwell_frames:
             distance = float(np.linalg.norm(truth[:2] - goal))
             events.append(
@@ -264,8 +269,14 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
         if path is None or k % config.replan_frames == 0:
             path = plan(safe, estimated[:2], goal)
             wp = 0
+        recovery_command = None
         if path is None and status == "timeout":
-            status = "no_path"
+            if policy is not None:
+                recovery_command = policy.recover(estimated, goal, ranges, hits, safe, k)
+            if recovery_command is None:
+                status = "no_path"
+        elif path is not None and policy is not None:
+            policy.path_available(k)
         target = goal.copy()
         v = omega = 0.0
         if path is not None:
@@ -276,11 +287,13 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
             bearing = math.atan2(math.sin(bearing), math.cos(bearing))
             omega = float(np.clip(2.0 * bearing, -1.1, 1.1))
             v = config.speed_m_s if abs(bearing) < 0.35 else 0.0
-            if dist_est < config.estimate_arrival_m:
+            if dist_est < arrival_limit:
                 v = omega = 0.0
             forward = (OFFSETS <= 0.40) | (OFFSETS >= 2 * np.pi - 0.40)
             if ranges[forward].min() < RADIUS + config.speed_m_s * DT + 0.12:
                 v = 0.0
+        if recovery_command is not None:
+            v, omega = recovery_command
         # Contact scoring observes current state; it never corrects the estimate.
         if min(o.distance(*truth[:2]) for o in geometry) < RADIUS:
             contacts += 1
@@ -306,13 +319,20 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
         )
         for key, value in zip(records, values, strict=True):
             records[key].append(value)
+        if policy is not None:
+            policy.record()
         if k == config.max_steps or status != "timeout":
             break
         ds, dth = v * DT, omega * DT
         truth = advance(truth, ds, dth)
         ds_prev, dth_prev = ds * (1 + config.wheel_bias), dth * (1 + config.wheel_bias)
         odom = advance(odom, ds_prev, dth_prev)
+        previous_command = np.array([v, omega])
     data = {key: np.asarray(value) for key, value in records.items()}
+    if policy is not None:
+        data.update(
+            {key: np.asarray([r[key] for r in policy.telemetry]) for key in policy.telemetry[0]}
+        )
     error = np.linalg.norm(data["truth"][:, :2] - data["estimate"][:, :2], axis=1)
     report = {
         "method": method,
@@ -330,6 +350,13 @@ def run_episode(method, seed, geometry, safe, loc_map, config):
         "events": events,
         "travelled_m": float(np.linalg.norm(np.diff(data["truth"][:, :2], axis=0), axis=1).sum()),
     }
+    if policy is not None:
+        report.update(
+            false_arrivals=sum(not e["success"] for e in events),
+            internal_budget_coverage=float(np.mean(error <= data["arrival_budget"])),
+            recoveries=policy.recovery_events,
+            recovery_active_frames=int(data["recovery_active"].sum()),
+        )
     return report, data
 
 

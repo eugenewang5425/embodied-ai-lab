@@ -4,6 +4,8 @@
 
 ## 1. 先回答当前现象
 
+2026-09-28追加：局部起点失效已有[第71课](71-bounded-recovery.md)的受控恢复证据；[第69课](69-footprint-planning.md)窄路闭环尚未通过，[第70课](70-arrival-decisions.md)完成到点判据消融。此处“未实现恢复”保留为66/68基线的历史描述，不能据此否定新批次，也不能把新批次升级为通用重定位。后续排序见[69–71复盘](navigation-stage-review-69-71.md)。
+
 用户观察到：自建地图组面对障碍停着不动，地图与真实建筑不一致时，系统似乎仍照着错误判断走。这个观察对应两个实际缺口：**新扫描没有进入绕行规划；地图也不会在线修正。**
 
 检查 `experiments/campus_patrol.py` 的 `run_episode` 与 `run`，并复核 `results/campus_patrol_v1`：

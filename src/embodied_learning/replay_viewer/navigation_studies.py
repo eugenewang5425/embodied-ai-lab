@@ -14,6 +14,41 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "circle_grid": (
+        "旧圆形栅格规划",
+        "把整个车身包成圆，再按10厘米格子膨胀；沿用第67课融合观测。",
+        "#dc7840",
+    ),
+    "circle_metric": (
+        "连续观测＋圆形车身",
+        "保留观测的米制坐标；仍按圆形车身检查，用来分离取整和形状的影响。",
+        "#8b5cf6",
+    ),
+    "rectangle": (
+        "连续观测＋朝向足印",
+        "同一观测下，检查矩形车身的位置和朝向；实际运动仍由原控制器执行。",
+        "#119c74",
+    ),
+    "baseline": (
+        "原判据／无路即停",
+        "估计距离小于30厘米并连续5帧就宣布到达；规划无路时直接终止。",
+        "#dc7840",
+    ),
+    "uncertainty": (
+        "加入位置误差预算",
+        "估计距离加粒子95%半径及10厘米系统预算，不超过45厘米才计入连续停留。内部预算不是误差保证。",
+        "#8b5cf6",
+    ),
+    "joint": (
+        "预算＋停稳联合判断",
+        "在位置预算条件上，额外要求上一帧执行线速度和角速度接近零。",
+        "#119c74",
+    ),
+    "recovery": (
+        "观测约束低速恢复",
+        "仅修复附近的规划起点失效，雷达检查完整圆盘后实际低速移动；不移动估计坐标冒充恢复。",
+        "#119c74",
+    ),
     "stop": ("只会停车", "前方雷达太近就停车；不会绕路，低障碍和悬空杆可能漏检。", "#df852c"),
     "lidar": (
         "雷达＋车身",
@@ -46,8 +81,18 @@ class NavigationStudySource:
     title = "67–68 课 · 车身标定、避障与错图修复"
     variant_label = "课程"
 
-    def __init__(self, avoidance="results/observed_navigation_v1", repair="results/map_repair_v1"):
-        self.directories = {"67": Path(avoidance), "68": Path(repair)}
+    def __init__(
+        self,
+        avoidance="results/observed_navigation_v1",
+        repair="results/map_repair_v1",
+        followups=None,
+    ):
+        self.directories = {
+            k: Path(v) for k, v in {"67": avoidance, "68": repair}.items() if v is not None
+        }
+        self.directories.update({k: Path(v) for k, v in (followups or {}).items()})
+        if followups:
+            self.title = "67–71课 · 身体、规划、到点与恢复"
         self.summaries, self.entries = {}, []
         self.cache = {}
         for lesson, directory in self.directories.items():
@@ -65,9 +110,13 @@ class NavigationStudySource:
                     continue
                 seen.add(case)
                 label = (
-                    f"67 · {LAYOUTS[row['layout']]} / {OBSTACLES[row['obstacle']]}"
-                    if lesson == "67"
-                    else "68 · 园区错图独立巡检"
+                    f"{lesson} · {LAYOUTS[row['layout']]} / {OBSTACLES[row['obstacle']]}"
+                    if lesson in ("67", "69")
+                    else (
+                        "68 · 园区错图独立巡检"
+                        if lesson == "68"
+                        else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
+                    )
                 )
                 self.entries.append(ReplayEntry(case, lesson, f"{label} / 种子 {row['seed']}"))
         self.entries = tuple(self.entries)
@@ -75,9 +124,13 @@ class NavigationStudySource:
     @staticmethod
     def case_id(lesson, row):
         return (
-            f"67_{row['layout']}_{row['obstacle']}_{row['seed']}"
-            if lesson == "67"
-            else f"68_{row['seed']}"
+            f"{lesson}_{row['layout']}_{row['obstacle']}_{row['seed']}"
+            if lesson in ("67", "69")
+            else (
+                f"68_{row['seed']}"
+                if lesson == "68"
+                else f"{lesson}_{row['map_kind']}_{row['seed']}"
+            )
         )
 
     def load(self, case, variant):
@@ -85,11 +138,13 @@ class NavigationStudySource:
             return self.cache[case, variant]
         summary, directory = self.summaries[variant], self.directories[variant]
         rows = {r["method"]: r for r in summary["rows"] if self.case_id(variant, r) == case}
-        keys = (
-            ("stop", "lidar", "depth")
-            if variant == "67"
-            else ("raw", "rigid", "repaired", "reference")
-        )
+        keys = {
+            "67": ("stop", "lidar", "depth"),
+            "68": ("raw", "rigid", "repaired", "reference"),
+            "69": ("circle_grid", "circle_metric", "rectangle"),
+            "70": ("baseline", "uncertainty", "joint"),
+            "71": ("baseline", "recovery"),
+        }[variant]
         if set(rows) != set(keys):
             raise ValueError("incomplete study comparison")
         arrays = {k: read_checked(directory / rows[k]["file"], rows[k]["sha256"]) for k in keys}
@@ -126,14 +181,31 @@ class NavigationStudySource:
                 pad(a["plan"]),
             )
             methods[key] = {"label": label, "description": description, "result": rows[key]}
-            if variant == "67":
+            if variant in ("67", "69"):
                 depth[key] = {"values": pad(a["depth"]), "valid": pad(a["depth_valid"])}
                 telemetry[key] = {k: pad(a[k]) for k in ("commands", "reason", "safety_clearance")}
                 # Never show the final accumulated obstacle map as a live-time map.
                 # The shared prior is fixed; live returns and plans remain time-aligned.
                 methods[key]["display_map"] = "实验开始时的先验地图"
             else:
-                methods[key]["display_map"] = label
+                methods[key]["display_map"] = (
+                    label if variant == "68" else LABELS[rows[key]["map_kind"]][0]
+                )
+                if variant in ("70", "71"):
+                    telemetry[key] = {
+                        k: pad(a[k])
+                        for k in (
+                            "commands",
+                            "reason",
+                            "arrival_distance",
+                            "arrival_r95",
+                            "arrival_budget",
+                            "arrival_limit",
+                            "arrival_ready",
+                            "observed_stopped",
+                            "recovery_active",
+                        )
+                    }
         metadata = {
             "case": case,
             "variant": variant,
@@ -148,7 +220,7 @@ class NavigationStudySource:
                 for k in keys
             ),
         }
-        if variant == "67":
+        if variant in ("67", "69"):
             rig = NavigationRig(**summary["protocol"]["rig"])
             boxes = arrays[keys[0]]["actual_boxes"]
             primitives = tuple(
@@ -181,12 +253,17 @@ class NavigationStudySource:
                 settings="55×44 cm车身，高58 cm；6 cm余量，预留0.2 s延迟；零定位误差是受控条件",
                 scene_note="12×12 m；新障碍未画入先验地图；悬空杆只占其实际高度",
                 lidar_note="青点来自高32 cm雷达；没有点不等于全车高度内没有障碍。",
+                depth_used_by=list(keys) if variant == "69" else ["depth"],
             )
             camera = CameraSpec(rig.camera_z_m, rig.camera_x_m, rig.vfov_deg)
             dt = summary["protocol"]["dt_s"]
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])
-            maps = {LABELS[k][0]: grids[k] for k in keys}
+            maps = (
+                {LABELS[k][0]: grids[k] for k in keys}
+                if variant == "68"
+                else {LABELS[rows[keys[0]]["map_kind"]][0]: grids[rows[keys[0]]["map_kind"]]}
+            )
             primitives = tuple(Obstacle(**o) for o in summary["geometry"])
             metadata.update(
                 scene_kind="campus",
@@ -200,6 +277,17 @@ class NavigationStudySource:
                 lidar_note="雷达点按当前估计投到地图上；落错墙可能来自错图或定位偏差。",
             )
             camera, dt = CameraSpec(0.55, 0.18, 65), 0.12
+            if variant in ("70", "71"):
+                kind = rows[keys[0]]["map_kind"]
+                metadata.update(
+                    sensor_note="64束雷达与PF参与控制；RGB按实际位姿重渲染，未接入深度避障。",
+                    scene_note="冻结同一张地图、同一粒子滤波；独立比较到点或恢复策略。",
+                    settings="25cm半径；300粒子；真实45cm到点线不变；粒子集中不等于真实误差小。",
+                    cohort="；".join(
+                        f"{LABELS[k][0]} {sum(r['status'] == 'completed' for r in summary['rows'] if r['method'] == k and r['map_kind'] == kind)}/{sum(r['method'] == k and r['map_kind'] == kind for r in summary['rows'])} 轮完成"
+                        for k in keys
+                    ),
+                )
         record = ReplayRecord(
             next(e.label for e in self.entries if e.case == case),
             np.arange(n) * dt,

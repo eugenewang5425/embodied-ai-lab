@@ -82,6 +82,9 @@ def route(occupied, start, goal, rig):
 class ObservedController:
     """Only prior, sensors and supplied estimate are available here; no world oracle."""
 
+    waypoint_radius_m = 0.35
+    path_capacity = 48
+
     def __init__(self, prior, rig, method):
         self.prior, self.rig, self.method = prior.copy(), rig, method
         self.grid = prior.copy()
@@ -89,6 +92,9 @@ class ObservedController:
         self.path = None
         self.wp = 0
         self.last_plan = -100
+
+    def make_plan(self, estimate, goal):
+        return route(self.grid, estimate[:2], goal, self.rig)
 
     def step(self, estimate, goal, ranges, hits, depth, valid, frame, velocity):
         rig = self.rig
@@ -110,13 +116,13 @@ class ObservedController:
                 points = body_points(memory, estimate)
                 points = points[np.linalg.norm(points[:, :2], axis=1) < 2.5]
         if self.path is None or frame - self.last_plan >= 10:
-            self.path = route(self.grid, estimate[:2], goal, rig)
+            self.path = self.make_plan(estimate, goal)
             self.wp, self.last_plan = 0, frame
         if self.path is None:
             return (0.0, 0.0), "no_observed_route", float("inf")
         while (
             self.wp < len(self.path) - 1
-            and np.linalg.norm(estimate[:2] - self.path[self.wp]) < 0.35
+            and np.linalg.norm(estimate[:2] - self.path[self.wp]) < self.waypoint_radius_m
         ):
             self.wp += 1
         delta = self.path[self.wp] - estimate[:2]
@@ -141,10 +147,10 @@ class ObservedController:
         return desired, reason, clearance
 
 
-def episode(layout, obstacle, method, seed, max_steps=600):
+def episode(layout, obstacle, method, seed, max_steps=600, controller_factory=ObservedController):
     rig = NavigationRig()
     prior_boxes, actual_boxes = scene(layout, obstacle)
-    controller = ObservedController(occupancy(prior_boxes), rig, method)
+    controller = controller_factory(occupancy(prior_boxes), rig, method)
     rng = np.random.default_rng([6700, seed])
     actual, estimate = np.array([1.5, 6.0, 0.0]), np.array([1.5, 6.0, 0.0])
     goal, velocity = np.array([10.5, 6.0]), np.zeros(2)
@@ -198,7 +204,7 @@ def episode(layout, obstacle, method, seed, max_steps=600):
         # Terminal sample has no outgoing executed command.
         if status != "timeout" or k == max_steps:
             commanded = np.zeros(2)
-        path = np.full((48, 2), np.nan)
+        path = np.full((controller.path_capacity, 2), np.nan)
         if controller.path is not None:
             if len(controller.path) > len(path):
                 raise ValueError("path exceeds archive capacity")

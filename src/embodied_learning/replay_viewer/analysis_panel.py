@@ -43,7 +43,7 @@ class AnalysisPanel(ttk.Frame):
         scroll.pack(side="right", fill="y")
         self.help.pack(fill="both", expand=True)
         self.safety = SafetyPanel(self.tabs)
-        self.tabs.add(self.safety, text="车身与刹停标定")
+        self.tabs.add(self.safety, text="车身与决策诊断")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -121,6 +121,16 @@ class AnalysisPanel(ttk.Frame):
                 text += [
                     f"任务结果：{RESULTS[result['status']]}；真正到达 {result['reached']}/{result['target_count']} 点，自报到达 {result['announced']} 点，接触障碍 {result['contacts']} 帧。"
                 ]
+                if result.get("min_clearance_m") is not None:
+                    text += [f"实际运动中车身离障碍最近 {result['min_clearance_m']:.3f} m。"]
+                if "false_arrivals" in result:
+                    text += [
+                        f"误报到点 {result['false_arrivals']} 次；恢复动作 {result['recovery_active_frames']} 帧。"
+                    ]
+                if "planning_over_200ms" in result and result["planning_calls"]:
+                    text += [
+                        f"规划调用 {result['planning_calls']} 次，其中 {result['planning_over_200ms']} 次超过200毫秒。仿真会等待计算，不能把播放速度当实时性能。"
+                    ]
             text += [""]
         text += [
             "园区各方法各自开车，运行时长和路径不同。均值仅统计各自有效时段，不能当成同一路径上的配对提升；很早失败的方法也可能均值很小。",
@@ -129,7 +139,7 @@ class AnalysisPanel(ttk.Frame):
             r.metadata.get("protocol", ""),
             r.metadata.get("lidar_note", ""),
             r.metadata.get("sensor_note", ""),
-            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。第67课使用无偏无滑移里程计来隔离避障问题，零定位误差是实验设定。",
+            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。第67/69课使用无偏无滑移里程计来隔离规划避障问题，零定位误差是实验设定。",
         ]
         self.help.configure(state="normal")
         self.help.delete("1.0", "end")

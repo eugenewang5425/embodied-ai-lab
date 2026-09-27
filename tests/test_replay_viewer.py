@@ -102,7 +102,14 @@ class OtherExperimentSource:
     )
 
     def load(self, case, variant):
-        return small_record(0.5 if variant == "A" else 1.0)
+        # Leave time to click Pause after a real OpenGL/Tk render. With a 0.4 s
+        # recording, slow renders can finish playback before the second click;
+        # that click then correctly restarts it. End-of-stream clock behavior
+        # is checked separately by test_clock_boundaries_and_speed_guard.
+        return replace(
+            small_record(0.5 if variant == "A" else 1.0),
+            timestamps=np.array([0.0, 0.04, 0.10, 0.22, 20.0]),
+        )
 
 
 def test_robot_camera_extrinsics_and_clean_view_follow_truth():

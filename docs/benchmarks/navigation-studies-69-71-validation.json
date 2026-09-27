@@ -1,0 +1,143 @@
+{
+  "date": "2026-09-28",
+  "baseline_commit": "6d48859",
+  "episodes": 111,
+  "continuous_executed_steps": 35320,
+  "arrival_events_rechecked": 282,
+  "legacy_baseline_arrays_equal": 39,
+  "source_snapshot_files_checked": 17,
+  "images": {
+    "docs\\img\\lesson69-results.png": {
+      "pixels": [
+        2066,
+        770
+      ],
+      "sha256": "98f87adbf501006a25e135e147d1829e36c0e4f1b1c8e31fcff5001b7c627174"
+    },
+    "docs\\img\\lesson69-trajectories.png": {
+      "pixels": [
+        1938,
+        850
+      ],
+      "sha256": "ce628acf814630bb41714f32d1e891defe2eb607374bd589b3c99b9d8f1045f7"
+    },
+    "docs\\img\\lesson69-window.png": {
+      "pixels": [
+        1600,
+        1000
+      ],
+      "sha256": "afafc4eafa88b785883082dad12bc46c9110acfc1e8964d0c58fee0c1cdb3a28"
+    },
+    "docs\\img\\lesson70-results.png": {
+      "pixels": [
+        2066,
+        802
+      ],
+      "sha256": "b4fd02885b33e66fd996655d785ae43fdfdbca1533a9c6e83b1a5750eccb2251"
+    },
+    "docs\\img\\lesson70-trajectories.png": {
+      "pixels": [
+        2049,
+        866
+      ],
+      "sha256": "55bac62548c096a4bc86be2741258bb0c710c00ce6131b96a2f1969f5d3a729f"
+    },
+    "docs\\img\\lesson70-window.png": {
+      "pixels": [
+        1600,
+        1000
+      ],
+      "sha256": "9f41e686599aa8c95d4fe5233a6193aca2c2caa7b0ca5f977c43bbdbb6fa4e28"
+    },
+    "docs\\img\\lesson71-results.png": {
+      "pixels": [
+        1944,
+        866
+      ],
+      "sha256": "925ca0800b22de43f4f0dc8b83f63bc2bf6f0760948fd0bda8f984001cf49f14"
+    },
+    "docs\\img\\lesson71-trajectories.png": {
+      "pixels": [
+        2017,
+        910
+      ],
+      "sha256": "eabe5d42d8bb07b533e86dd81a9df10439d5140d28a9276da6408916fb7df5fb"
+    },
+    "docs\\img\\lesson71-window.png": {
+      "pixels": [
+        1600,
+        1000
+      ],
+      "sha256": "d297c589073a2b357982598d8a86c2e469547b989a502a96a9f0952afd8af356"
+    }
+  },
+  "visual_review": "Six analytical figures and three real Tk window captures inspected; no truncated labels or legend/data overlaps in selected views. 71 trajectory legend moved above plots.",
+  "standalone_69_adapter": "Checked with avoidance=None and repair=None; 27 cases load without legacy directories.",
+  "tests": {
+    "quick": {
+      "complete": true,
+      "log": "results\\navigation_followups_quick.log",
+      "sha256": "a577d1ad51d10ed27bcc29cb6c763e3aebcfe9225b3cafc628dd1e718f0ae8fd",
+      "result_lines": [
+        "827 passed, 184 deselected in 108.16s (0:01:48)",
+        "[tests] exit=0, elapsed=109.8s"
+      ]
+    },
+    "affected": {
+      "complete": true,
+      "log": "results\\navigation_followups_affected.log",
+      "sha256": "77c1084b063998d850d6f3e37026a03a277baf2ed594eeac1b74cdea2f7f5e32",
+      "result_lines": [
+        "46 passed in 31.51s",
+        "[tests] exit=0, elapsed=32.4s"
+      ]
+    },
+    "full": {
+      "complete": true,
+      "log": "results\\navigation_followups_full.log",
+      "sha256": "d628441a44b0d5187b3e0b1e3890a7dd162b696f3119ce935bbf1b83162e98c7",
+      "result_lines": [
+        "1 failed, 1010 passed, 11 warnings in 5941.09s (1:39:01)",
+        "[tests] exit=1, elapsed=5943.2s"
+      ]
+    }
+  },
+  "test_failure_resolution": "Full first run includes the old 0.4-second replay UI timing failure. Fixture tail extended to 20 seconds; all 46 affected tests subsequently pass, including that GUI and four real Tk tests. Playback product code unchanged.",
+  "unresolved_test_failures": [],
+  "full_test_thread_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "lint": "ruff check src tests scripts and figure generator passed",
+  "format": {
+    "changed_python_files": "passed separately",
+    "preexisting_unmodified_failures": [
+      "src\\embodied_learning\\_replay2d.py",
+      "src\\embodied_learning\\dapg_demo.py",
+      "src\\embodied_learning\\experiments\\amcl_compare.py",
+      "src\\embodied_learning\\experiments\\map_separation.py",
+      "src\\embodied_learning\\experiments\\matcher_engineering.py",
+      "src\\embodied_learning\\experiments\\nav_scoring.py",
+      "src\\embodied_learning\\experiments\\patrol_routes.py",
+      "src\\embodied_learning\\experiments\\photo_room_navigation.py",
+      "src\\embodied_learning\\experiments\\run_amcl_batch.py",
+      "src\\embodied_learning\\experiments\\score_amcl_batch.py",
+      "src\\embodied_learning\\goexplore_demo.py",
+      "src\\embodied_learning\\pbrs_demo.py",
+      "src\\embodied_learning\\ppo_demo.py",
+      "src\\embodied_learning\\residual_demo.py",
+      "tests\\test_map_separation.py",
+      "tests\\test_patrol_routes.py",
+      "tests\\test_photo_room_navigation.py"
+    ]
+  },
+  "scope_limits": [
+    "69 narrow navigation failed 0/9; no real-time claim",
+    "70 and 71 kept separate; bodies differ from 69",
+    "Healthy simulated sensors, fixed known layouts, no hardware validation",
+    "No additional course videos or unrelated formatting changes"
+  ],
+  "local_links_checked": 387,
+  "audit_script_sha256": "d275c35b023ea379cd317542f3b5242a873099937190ba1d0d27e98509e835f4"
+}

@@ -1,4 +1,4 @@
-"""Open the reusable lesson 67/68 sensor/body/map comparison window."""
+"""Open the reusable lesson 67–71 navigation comparison window."""
 
 import argparse
 import tkinter as tk
@@ -10,7 +10,17 @@ from embodied_learning.replay_viewer.window import ReplayWindow
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--lesson", choices=("67", "68"), default="67")
+    parser.add_argument("--lesson", choices=("67", "68", "69", "70", "71"), default="67")
+    for flag, directory in (
+        ("footprint", "footprint_navigation_v1"),
+        ("arrival", "arrival_decisions_v2"),
+        ("recovery", "bounded_recovery_v2"),
+    ):
+        parser.add_argument(
+            "--" + flag,
+            type=Path,
+            default=Path(__file__).resolve().parents[2] / "results" / directory,
+        )
     parser.add_argument("--case")
     parser.add_argument("--play", action="store_true")
     parser.add_argument(
@@ -22,15 +32,40 @@ def main():
         "--repair", type=Path, default=Path(__file__).resolve().parents[2] / "results/map_repair_v1"
     )
     args = parser.parse_args()
+    newer = {"69": args.footprint, "70": args.arrival, "71": args.recovery}
+    followups = {k: v for k, v in newer.items() if (v / "summary.json").exists()}
+    available = {
+        **followups,
+        **{
+            k: v
+            for k, v in {"67": args.avoidance, "68": args.repair}.items()
+            if (v / "summary.json").exists()
+        },
+    }
+    if args.lesson not in available:
+        parser.error(
+            f"先生成第{args.lesson}课记录；运行 experiments.navigation_followups --lesson {args.lesson}（67/68见各课复现步骤）。"
+        )
     root = tk.Tk()
     app = ReplayWindow(
         root,
-        NavigationStudySource(args.avoidance, args.repair),
-        args.case or ("67_plaza_low_0" if args.lesson == "67" else "68_1"),
+        NavigationStudySource(available.get("67"), available.get("68"), followups),
+        args.case
+        or {
+            "67": "67_plaza_low_0",
+            "68": "68_1",
+            "69": "69_narrow_crate_0",
+            "70": "70_repaired_1",
+            "71": "71_reference_0",
+        }[args.lesson],
         args.lesson,
     )
-    app.choose_view("depth" if args.lesson == "67" else "repaired")
-    if args.lesson == "67":
+    app.choose_view(
+        {"67": "depth", "68": "repaired", "69": "rectangle", "70": "joint", "71": "recovery"}[
+            args.lesson
+        ]
+    )
+    if args.lesson != "68":
         app.analysis.tabs.select(3)
     if args.play:
         root.after(500, app.toggle)
