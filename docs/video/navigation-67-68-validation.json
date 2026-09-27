@@ -1,0 +1,56 @@
+{
+  "artifact": "results/navigation_video_v1/navigation-67-68-narrated.mp4",
+  "duration_s": 254.04000000000005,
+  "frames_decoded": 6351,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "fps": 25,
+  "full_audio_video_decode": "passed; no decoder errors",
+  "embedded_chapters": 13,
+  "subtitle_cues": 25,
+  "decoded_audio_duration_s": 253.97333333333333,
+  "decoded_audio_peak_dbfs": -1.86,
+  "cue_rms_dbfs": [
+    -20.85,
+    -20.55,
+    -20.48,
+    -18.79,
+    -21.3,
+    -19.9,
+    -19.26,
+    -19.47,
+    -19.65,
+    -20.14,
+    -19.44,
+    -21.46,
+    -19.85,
+    -20.42,
+    -20.67,
+    -20.59,
+    -20.37,
+    -20.12,
+    -20.89,
+    -19.83,
+    -21.19,
+    -21.34,
+    -18.92,
+    -20.97,
+    -20.4
+  ],
+  "encoded_representative_frames": 13,
+  "video_sha256": "7113de98f7b1b19da11879bd4d66d3a82eac2ab67183344c006b1996cb3d7e9d",
+  "video_bytes": 11520406,
+  "renderer_wall_s": 87.7262372000041,
+  "input_sha256": {
+    "docs\\video\\navigation-67-68-story.json": "11161126a58c64ea84cec385e26038d67b9cb48386c1cc072a92cbbea70a3b36",
+    "docs\\benchmarks\\navigation-studies-67-68-v1.json": "7cf1634da5c59e06550fd28fef0ada9b40f6097d021decd4134d4e371b6b15bc",
+    "results\\navigation_video_v1\\narration\\manifest.json": "74a7220d65424b85f6aad4b917cfd23d7cda34a99e61c8110da206a6e40322ae"
+  },
+  "script_sha256": {
+    "scripts\\render_navigation_video.py": "2a7cd9adb2eece353ac78bec6271ecb2935e8b2c9b752dab78745993d48ad462",
+    "scripts\\narrate_navigation_video.ps1": "061dd500d88be175be57ed0d64d25deb3d89c2af241897c1935b4b2b66901bc5"
+  },
+  "scope": "Artifact validation only; no changed experiment algorithms or rerun scientific outcomes."
+}

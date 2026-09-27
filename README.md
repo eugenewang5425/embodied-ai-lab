@@ -1627,6 +1627,8 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 **阶段复盘**：[为什么同一类算法在房间、走廊和街区表现不同](docs/navigation-stage-review-66-68.md)；[全部数据摘要与输入哈希](docs/benchmarks/navigation-studies-67-68-v1.json)。原始大数组保存在本地 `results/`，新克隆按两课复现步骤生成后再开窗口。
 
+**67—68课讲解视频**：[4分14秒中文配音与字幕版：剧本、预览和复现入口](docs/video/README.md)。包含相机视角、雷达点、实际轨迹、81回合统计、修图收益及失败案例；本机成片位于 `results/navigation_video_v1/navigation-67-68-narrated.mp4`。
+
 
 ## 进度清单
 
