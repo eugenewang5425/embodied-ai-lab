@@ -1,11 +1,13 @@
-"""Figures for the map-separation trial (roadmap Phase 1) and lesson-64 supplements.
+"""Figures for the map-separation trial (integration topic 65).
 
 Panel 1: per-episode mean error for the three map arms at 100 vs 400
-         particles on the FIXED scan set (paired dots per episode).
+         particles on the FIXED scan set (six paired bars per episode).
 Panel 2: per-episode localization-error curves for the six ideal-map
          divergences at 400 particles, with onset markers.
-Panel 3: lesson-64 closed-loop v4 - per-group localization error chains
-         (first seed, first task) plus per-group loc_mean bars.
+
+The topic-64 closed-loop loc-mean bars live in make_lesson64_figures.py
+(lesson64-loc-error.png); a shared PNG made both docs cite a figure that
+was half another experiment.
 
     uv run python docs/img/make_map_separation_figures.py
 """
@@ -26,7 +28,6 @@ RESULTS = Path("results")
 OUT = Path("docs/img")
 DPI = 140
 
-C_EST = "#b91c1c"
 C_IDEAL = "#0f766e"
 C_TRUTH = "#2563eb"
 C_SELF = "#9ca3af"
@@ -77,11 +78,13 @@ def panel_map_arms(ax):
         ax.bar(left + w, hi_vals[field], w * 0.9, color=col,
                label=f"{lab} · 400 粒子")
     ax.set_xticks(x)
-    ax.set_xticklabels(order, fontsize=9)
-    ax.set_ylabel("定位平均误差 (m)", fontsize=12)
-    ax.legend(fontsize=8.5, ncol=3)
+    ax.set_xticklabels(order, fontsize=9.5)
+    ax.set_ylabel("定位平均误差 (m)", fontsize=13)
+    ax.legend(fontsize=9.5, ncol=3)
     style_axes(ax, "同一批扫描：三种地图 × 两种粒子预算（逐回合配对）")
     ax.axhline(1.0, color="#6b7280", lw=0.8, ls="--")
+    ax.text(0.995, 1.03, "虚线 = 发散判据 1 m", transform=ax.transAxes,
+            ha="right", fontsize=10, color="#6b7280")
 
 
 def panel_divergences(ax):
@@ -100,49 +103,21 @@ def panel_divergences(ax):
             if big[k] and np.median(err[k:]) > 1.0:
                 onset = k
                 break
-        ax.plot(idx, err, lw=1.0, alpha=0.85, label=key)
+        ax.plot(idx, err, lw=1.1, alpha=0.85, label=key)
         if onset is not None:
-            ax.axvline(idx[onset], color=C_DIV, lw=0.8, ls=":", alpha=0.6)
+            ax.axvline(idx[onset], color=C_DIV, lw=0.9, ls=":", alpha=0.6)
         n_curves += 1
-    ax.set_xlabel("仿真时间 (s)", fontsize=12)
-    ax.set_ylabel("理想图 PF 位置误差 (m)", fontsize=12)
+    ax.set_xlabel("仿真时间 (s)", fontsize=13)
+    ax.set_ylabel("理想图 PF 位置误差 (m)", fontsize=13)
     ax.set_ylim(0, 11)
-    ax.legend(fontsize=8.5)
+    ax.legend(fontsize=9.5)
     style_axes(ax, f"400 粒子下理想图臂的 {n_curves} 次发散（竖线=发散起点，之后未恢复）")
 
 
-def panel_lesson64(ax):
-    report = json.loads(
-        (RESULTS / "photo_room_navigation_v4" / "summary.json").read_text(encoding="utf-8")
-    )
-    rows = report["rows"]
-    groups = ["A", "B", "C", "D"]
-    names = {"A": "真值", "B": "里程计", "C": "参考图 PF", "D": "自建图 PF"}
-    means = []
-    for g in groups:
-        vals = [r["loc_mean_m"] for r in rows if r["group"] == g and r["task"] != "into_bed_footprint"]
-        means.append(float(np.mean(vals)))
-    bars = ax.bar(names.values(), means, color=["#2563eb", "#b91c1c", "#0f766e", "#9ca3af"])
-    for b, v in zip(bars, means, strict=True):
-        ax.text(b.get_x() + b.get_width() / 2, v + 0.0004, f"{v:.4f}", ha="center", fontsize=11)
-    ax.set_ylabel("定位误差 loc_mean (m)", fontsize=12)
-    style_axes(ax, "第 64 课闭环 v4（60 回合）：四组定位来源的平均误差")
-    ax.text(
-        0.99,
-        0.95,
-        "B 组 3/12 漂移超时；全组零接触；不可达 12/12 拒绝",
-        transform=ax.transAxes,
-        ha="right",
-        fontsize=10,
-        color="#374151",
-    )
-
-
 def main():
-    fig, axes = plt.subplots(3, 1, figsize=(9.5, 11.5), dpi=DPI, layout="constrained")
+    fig, axes = plt.subplots(2, 1, figsize=(10.5, 9.4), dpi=DPI, layout="constrained")
     panel_map_arms(axes[0])
     panel_divergences(axes[1])
-    panel_lesson64(axes[2])
     out = OUT / "map-separation-charts.png"
     fig.savefig(out, dpi=DPI, facecolor="white")
     print(f"saved {out}")

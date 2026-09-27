@@ -589,3 +589,25 @@ OpenGL只标P1等ASCII，完整中文名在Tk说明中。当前/过去观测不�
 记录目录 results/body_calibration_v1、observed_navigation_v1、map_repair_v1；
 摘要 docs/benchmarks/navigation-studies-67-68-v1.json。下一步先足印规划、到点判据与无路恢复，
 再统一车身后组合局部避障和修图，完整RGB流、时变错图与留出布局仍需独立验收。
+
+
+**D-2026-09-28-01｜专题命名规范与 README 全页统一（2026-09-28）**
+触发：README 与 docs/64–68 混用“第 N 课/第六十N课”与专题编号；用户 2026-09-26 标准
+明确“第 56 课后转入综合验证，不机械加课号”。本条只统一命名与展示，不改任何实验
+数字、口径与结论。
+变更：docs/62–68 及配套窗口/路线图/阶段评审文档统一改称“专题 N”（编号沿用 docs
+文件号；“本课”→“本专题”）；README 全页同步——英文状态栏、回放窗口、当前状态
+（补专题 66 基线条目）、综合验证专题索引表（注明与课号分属两套序列）、项目树
+（补 57–68 与配套文档/子目录）、专题 64/65/66/67/68 小节标题与图注、进度清单
+（补专题 62–68 条目）。决策日志既有条目按 append-only 不改写。
+图：map-separation-charts.png 拆分——专题 64 四组 loc_mean 柱状图独立为
+lesson64-loc-error.png（make_lesson64_figures.py），专题 65 图只含同批扫描
+地图对照与理想图臂发散定位两个面板（make_map_separation_figures.py）；
+lesson64-trajectory.png 修正等比例尺下轨迹压成细条、图例悬空的问题（最小 y
+跨度 0.55 m + 图例入面板 + 两行标题防截断），数据与选例规则不变。
+docs/64 §3.2 改引新图并注明轨迹轴等比。
+证据：README.md、docs/64–68 及配套文档；docs/img/map-separation-charts.png、
+lesson64-loc-error.png、lesson64-trajectory.png；819 项 quick 测试 96.9 s 通过、
+Ruff clean（2026-09-28，Windows）。
+下一步：按路线图推进阶段 1 余项（专题 65 似然场参数扫描已登记未执行）；
+跨场景正式 5×3 过门仍为主线。

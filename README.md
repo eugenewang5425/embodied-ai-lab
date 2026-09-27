@@ -12,8 +12,8 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 56 课教学实验已完成；第 55 课用里程计弧长重跑模拟标记检索（top-12 真回环 12/12、几何方向正确 11/12）；第 56 课修正采集路线后，理想图 PF 在本轮平均误差 0.322 m，自建图 PF 3.443 m；理想图绑架恢复 4/5。跨场景导航基准试跑未过门，见 [基准报告](docs/62-navigation-benchmark.md)。 |
-| **Verified** | 752 quick tests passed in 84 s, including 7 new 3D room checks; 176 full-repository slow tests passed before the room addition in 1:00:57 (2026-09-24, Windows); Ruff clean. |
+| **Status** | 第 1–56 课完成；56 课后转入综合验证专题（编号沿用文档号，不再编课号）：专题 62 跨场景基准试跑未过门、专题 63 照片房间三维验证、专题 64 闭环导航 v4（全组零接触；官方 nav2 AMCL 参数硬门禁后 27/27 有效）、专题 65 地图分离归因、专题 66–68 园区巡检／观测避障／扫描修图。见[综合基准](docs/62-navigation-benchmark.md)与[阶段复盘](docs/navigation-stage-review-66-68.md)。 |
+| **Verified** | 819 quick tests passed in 97 s (2026-09-28, Windows); 176 full-repository slow tests passed in 1:00:57 (2026-09-24, Windows); Ruff clean. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -61,7 +61,7 @@ uv run ruff check src tests scripts docs/img/make_readme_figures.py
 
 ### 交互实验回放窗口
 
-**第 66 课：街区式园区巡检**：24×24 m 场景含建筑、道路、车辆、树木和 8 个巡检点。支持真实存档雷达点、一键汇总/单独跟随、各方法分图；相机和 3D 同时标出当前巡检目标，窗口内提供通俗的方法说明和任务结果。先看“完成多少巡检点”，再看定位误差。[第六十六课讲义](docs/66-campus-patrol.md)。
+**专题 66：街区式园区巡检**：24×24 m 场景含建筑、道路、车辆、树木和 8 个巡检点。支持真实存档雷达点、一键汇总/单独跟随、各方法分图；相机和 3D 同时标出当前巡检目标，窗口内提供通俗的方法说明和任务结果。先看“完成多少巡检点”，再看定位误差。[专题 66 讲义](docs/66-campus-patrol.md)。
 
 ```powershell
 uv run python -m embodied_learning.campus_patrol_demo --play
@@ -75,7 +75,7 @@ uv run python -m embodied_learning.campus_patrol_demo --play
 
 当前雷达参与定位与近障停车，尚未实现扫描驱动绕行或在线修图；自建图组规划仍使用共享先验避障图。相关研究、地图修复实验顺序与综合项目/课程安排见[后续规划](docs/campus-map-repair-plan.md)。
 
-第 65 课的 24 份配对记录可在同一个窗口切换：机器人相机第一视角、3D 全景、占据地图、轨迹、误差曲线和偏差统计共用时间轴，支持暂停、单步、拖动进度、100/400 粒子对照、视角旋转/缩放和统计导出。窗口按数据适配器与独立面板组织，后续实验可复用。[操作与模块接口](docs/replay-window.md)。
+专题 65 的 24 份配对记录可在同一个窗口切换：机器人相机第一视角、3D 全景、占据地图、轨迹、误差曲线和偏差统计共用时间轴，支持暂停、单步、拖动进度、100/400 粒子对照、视角旋转/缩放和统计导出。窗口按数据适配器与独立面板组织，后续实验可复用。[操作与模块接口](docs/replay-window.md)。
 
 ```powershell
 uv run python -m embodied_learning.map_separation_demo --play
@@ -113,16 +113,17 @@ uv run python scripts/render_photo_room_replay.py
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-09-27 · 长期路线图启动）
+## 当前状态（2026-09-28 · 综合验证专题 62–68）
 
 - **主线课程 1–56 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞 → 第 44 课：定位误差穿栈——真值位姿 15/15 而复用第 15 课里程计后 0/15（1% 偏差即崩），融合观测后 15/15、误差 2.5 cm 与真值组几乎等价 → 第 45 课：最小栅格 SLAM（帧间扫描匹配，无信标）0/15 与纯里程计同量级——相对锚不能闭环 → 第 46 课：回环闭合（绝对锚第二形态，末端 9.2 m→0.14 m）→ 第 47 课：加权位姿图优化——形状修复成立（FG 均值 5.03 < 弧长 5.33 m）、黄金锚末端 0.016 m、末端精度 vs 全程形状的 σ 权衡入册 → 第 48 课：鲁棒位姿图——毒化回环注入实验（LS 7.63 m 比无回环更糟；Huber 压回 5.22 m；单核两难：好回环在同核下无法闭合，SC/MM 是解法 → 第 49 课：回环匹配器工程化——接受率阶梯 0.32→0.43→0.52→0.76（K）；当时方向正确率 ≤5.4% 使用了第 54 课勘误的旧判据 → 第 50 课：特征化回环检测——三项特征评分分布重叠；2.6% vs oracle 4.9% 为后来勘误的旧判据 → 第 51 课：SC/MM 可切换约束——第 48 课同款绝对锚注入下 λ 可行域为空、MM 硬组件选择死锁，正解需要相对回环边 → 第 52 课：相对回环边下毒化同样毒、开关折中 s=0.61 → 第 53 课：同题交 scipy 生产求解器仍不拒绝——失败是问题属性 → 第 54 课：度量勘误（旧方向正确率是评估目标伪影，修正后匹配器 58-72% 正确）→ 第 55 课：里程计候选筛选后的模拟标记检索 12/12、几何方向正确 11/12（不是真实 RGB-D）→ 第 56 课：修正内圈巡游后的理想图定位显著改善，自建图未过有界跟踪门、理想图绑架恢复 4/5；后续跨场景基准见 docs/62。
 - **自动验收**：以本次全量 `uv run pytest -q` 和 Ruff 结果为准；实验 NPZ 位于受 Git 忽略的 `results/`，可核对的摘要及 SHA-256 在 `docs/benchmarks/`。
 - **记录体系**：审查报告与 issue/PR 文稿见[实验审查报告](docs/26-experiment-review-2026-09-05.md)、[问题与 PR 草稿](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（只追加）；演示真机验收标准见实验审查报告第六节。
-- **闭环导航与官方 AMCL 对照已过参数门禁（第 64 课 v4）**：照片房间四组定位来源对照（真值/里程计/参考图 PF/自建图 PF）60 回合——全组零接触、不可达 12/12 安全拒绝、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 nav2 AMCL 批量执行器修复后（launch 参数化 + `ros2 param get` 硬门禁）27/27 有效：A-budget 0.078 m 最好，更新频率 4.6× 只换来 0.104→0.089 m——粒子数/波束数才是主变量。此前"AMCL 参数不敏感"结论已撤回（三组配置当时从未真正生效）。
+- **闭环导航与官方 AMCL 对照已过参数门禁（专题 64 v4）**：照片房间四组定位来源对照（真值/里程计/参考图 PF/自建图 PF）60 回合——全组零接触、不可达 12/12 安全拒绝、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 nav2 AMCL 批量执行器修复后（launch 参数化 + `ros2 param get` 硬门禁）27/27 有效：A-budget 0.078 m 最好，更新频率 4.6× 只换来 0.104→0.089 m——粒子数/波束数才是主变量。此前"AMCL 参数不敏感"结论已撤回（三组配置当时从未真正生效）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
 - **多传感器长期路线图已启动**：目标是在三维房间完成 LiDAR＋RGB-D 定位、建图、巡检与失效恢复，并用对照实验解释每个模块的贡献（[路线图](docs/multisensor-navigation-roadmap.md)，约 10–14 周 8 阶段，第一轮 RGB-D）。阶段 0 已完成：统一评分器修复三个因果边界（首个修正前不再借用未来结果、无输出不再伪有效、时间匹配加容差）且 9 项已知答案测试通过，已有 AMCL 结论复核不受影响。
-- **地图分离试跑（第 65 课）**：固定同一批扫描做理想图/真值投影图/里程计投影图三方对照 + 100/400 粒子单变量扫描——表示间隙 −0.03 m（端点图≈理想图）、落点间隙 +1.34 m（自建图失败主因是落点误差）；粒子数不是杠杆（400 粒子自建图基本不变、理想图发散反而 1/12→6/12）。P5 巡检路线生成器 [patrol_routes.py](src/embodied_learning/experiments/patrol_routes.py) 就绪并通过第 64 课可达性交叉验证。
-- **新进展（67–68课）**：完成车身/相机/雷达标定、81回合避障与冻结修图后的12回合独立导航；统一窗口可一键同步查看。连续原始 RGB 采集、视觉定位及两套控制器的完整融合仍待做。[阶段小结与下一步](docs/navigation-stage-review-66-68.md)。第65课似然场扫描尚未执行，保留为独立诊断。
+- **地图分离试跑（专题 65）**：固定同一批扫描做理想图/真值投影图/里程计投影图三方对照 + 100/400 粒子单变量扫描——表示间隙 −0.03 m（端点图≈理想图）、落点间隙 +1.34 m（自建图失败主因是落点误差）；粒子数不是杠杆（400 粒子自建图基本不变、理想图发散反而 1/12→6/12）。P5 巡检路线生成器 [patrol_routes.py](src/embodied_learning/experiments/patrol_routes.py) 就绪并通过专题 64 可达性交叉验证。
+- **园区巡检基线（专题 66）**：24×24 m 园区四种定位来源各 3 轮共 12 回合——真值 3/3 完成、雷达＋参考图 2/3、纯里程计与雷达＋自建图均 0/3，全组零接触；自建图组失败于雷达近障停车后超时，在线绕行与修图分别由专题 67/68 以受控实验补上。
+- **新进展（专题 67–68）**：完成车身/相机/雷达标定、81回合避障与冻结修图后的12回合独立导航；统一窗口可一键同步查看。连续原始 RGB 采集、视觉定位及两套控制器的完整融合仍待做。[阶段小结与下一步](docs/navigation-stage-review-66-68.md)。专题 65 似然场扫描尚未执行，保留为独立诊断。
 
 ## 课程索引
 
@@ -185,17 +186,19 @@ uv run python scripts/render_photo_room_replay.py
 | 第 55 课 | 模拟标记外观检索 | 里程计弧长筛选 292 个探帧；top-12 检索精确率 12/12，几何方向正确 11/12、审查量 4.1%；不是真实 RGB-D 图像 | Algorithm 篇·Robot Navigation（场所识别） | [讲义](docs/60-session-55-rgbd-loops.md) |
 | 第 56 课 | 建图与定位分离 | 修正 16 m 内圈巡游后：EST / 理想图 PF / 自建图 PF 平均误差 1.984 / 0.322 / 3.443 m；自建图未过门，理想图绑架恢复 4/5 | Algorithm 篇·Robot Navigation（地图质量与定位） | [讲义](docs/61-session-56-map-localization.md) |
 
-### 导航集成专题索引（沿用已有专题编号）
+### 综合验证专题索引（第 56 课后；编号沿用 docs/ 文件号，不是课号）
+
+第 56 课之后不再编课号：下列专题是综合验证与集成实验，编号即文档号，与第 1–56 课的课号分属两套序列。
 
 | 编号 | 主题 | 状态 | 讲义 |
 | --- | --- | --- | --- |
-| 62 | 跨场景导航集成基准 | 自建图未过原门槛 | [讲义](docs/62-navigation-benchmark.md) |
-| 63 | 照片参考三维房间 | 模型内验证；尺寸仍有假设 | [讲义](docs/63-photo-room-3d-validation.md) |
-| 64 | 照片房间闭环与 AMCL | v4 记录与参数审计 | [讲义](docs/64-closed-loop-navigation.md) |
-| 65 | 地图分离 | 固定扫描归因与粒子数对照 | [讲义](docs/65-map-separation.md) |
-| **66** | **街区式园区巡检** | **已完成基线；雷达停车，尚无在线绕行/修图** | [讲义](docs/66-campus-patrol.md) |
-| **67** | **车身标定与观测驱动避障** | **已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝** | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
-| **68** | **扫描校准与错误地图修复** | **已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成** | [讲义](docs/68-scan-based-map-repair.md) |
+| 专题 62 | 跨场景导航集成基准 | 自建图未过原门槛（试跑） | [讲义](docs/62-navigation-benchmark.md) |
+| 专题 63 | 照片参考三维房间 | 模型内验证；尺寸仍有假设 | [讲义](docs/63-photo-room-3d-validation.md) |
+| 专题 64 | 照片房间闭环与 AMCL | v4 记录与参数审计 | [讲义](docs/64-closed-loop-navigation.md) |
+| 专题 65 | 地图分离 | 固定扫描归因与粒子数对照 | [讲义](docs/65-map-separation.md) |
+| 专题 66 | 街区式园区巡检 | 已完成基线；雷达停车，尚无在线绕行/修图 | [讲义](docs/66-campus-patrol.md) |
+| 专题 67 | 车身标定与观测驱动避障 | 已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝 | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
+| 专题 68 | 扫描校准与错误地图修复 | 已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成 | [讲义](docs/68-scan-based-map-repair.md) |
 
 ## 当前技术路线
 
@@ -287,7 +290,26 @@ uv run python scripts/render_photo_room_replay.py
 │   ├── 53-session-48-robust-graph.md
 │   ├── 54-session-49-matcher-engineering.md
 │   ├── 55-session-50-feature-loops.md
-│   └── 56-session-51-switchable-graph.md
+│   ├── 56-session-51-switchable-graph.md
+│   ├── 57-session-52-relative-loops.md
+│   ├── 58-session-53-production-solver.md
+│   ├── 59-session-54-aniso-env.md
+│   ├── 60-session-55-rgbd-loops.md
+│   ├── 61-session-56-map-localization.md
+│   ├── 62-navigation-benchmark.md          # ── 以下为综合验证专题（编号=文档号，不是课号）
+│   ├── 63-photo-room-3d-validation.md
+│   ├── 64-closed-loop-navigation.md
+│   ├── 65-map-separation.md
+│   ├── 66-campus-patrol.md
+│   ├── 67-body-aware-obstacle-avoidance.md
+│   ├── 68-scan-based-map-repair.md
+│   ├── campus-map-repair-plan.md、campus-patrol-window.md、replay-window.md
+│   ├── multisensor-navigation-roadmap.md、navigation-stage-review-66-68.md
+│   ├── benchmarks/                         # 精简 JSON 摘要与 SHA-256
+│   ├── img/                                # 讲义与 README 图表及生成脚本
+│   ├── reviews/                            # 审查报告
+│   └── video/                              # 讲解视频说明与剧本
+├── scripts/                                # 分层测试入口、launch 与演示启动器
 ├── src/embodied_learning/
 ├── tests/
 ├── results/
@@ -1576,58 +1598,66 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 讲义：[第五十六课讲义](docs/61-session-56-map-localization.md)；演示窗口：`uv run python -m embodied_learning.map_localization_demo`。
 
-## 闭环导航对照实验（照片房间）——修正协议下的四组定位来源对照
+## 闭环导航对照实验（照片房间，专题 64）——修正协议下的四组定位来源对照
 
 三维照片房间从开环回放升级为**闭环导航**。v1 的六处接线错误已全部修正（含时间对齐：A 组 loc_mean 精确为 0.0）。v4 正式记录（60 回合）：**全组零接触帧**、不可达 **12/12 安全拒绝**；A **12/12** 到达，B **9/12**（3 次漂移超时），C **12/12**，D **12/12**；C/D 定位误差 0.0064/0.0121 m 显著优于 B 的 0.0232 m。官方 nav2 AMCL 在参数硬门禁后 27/27 有效（A-budget 0.078 m 最好）。详见[闭环对照报告](docs/64-closed-loop-navigation.md)。
 
-![第 64 课四组误差与地图分离对照](docs/img/map-separation-charts.png)
+![专题 64 闭环 v4：四组定位来源的平均误差](docs/img/lesson64-loc-error.png)
 
-![第 64 课代表性轨迹：B 组漂移超时 vs C 组到达](docs/img/lesson64-trajectory.png)
+读图：四条柱为各组 60 回合（可达任务）的平均定位误差，A 组 0.0000 是时间对齐验证；B 组含 3 次漂移超时，全组零接触帧，不可达任务由先验图 12/12 安全拒绝。
 
-## 地图分离试跑——自建图失败发生在哪一层？
+![专题 64 代表性轨迹：B 组漂移超时 vs C 组到达](docs/img/lesson64-trajectory.png)
 
-固定同一批扫描，把自建图失败拆成三层归因：**表示间隙 −0.03 m**（同落点时端点图≈理想占据图，地图表示不是瓶颈）；**落点间隙 +1.34 m**（同样的扫描按里程计位姿涂图即损失 1.3 m，落点误差是主因）；**粒子数不是杠杆**（100→400 粒子自建图 1.67→1.43 m 基本不变，理想图发散反而 1/12→6/12，发散起点分散且跳变后不恢复——滤波器失稳是独立问题）。P5 巡检路线生成器同步交付。详见[第 65 课讲义](docs/65-map-separation.md)与[导航集成基准](docs/62-navigation-benchmark.md)。
+读图：同一任务 `to_quadrant_1`（A 组旅程最长 1.80 m）、两轴等比例尺。橙虚线为估计轨迹、蓝实线为真实轨迹、黑点为起点；B 组估计链整体漂在真实链上方，机器人冲过目标区仍不自知直至超时；C 组估计链贴住真实链正常到达。选例规则固定（A 组旅程最长的可达任务），非择优。
 
-## 第六十六课：园区巡检——定位误差怎样影响真实到点
+## 地图分离试跑（专题 65）——自建图失败发生在哪一层？
+
+固定同一批扫描，把自建图失败拆成三层归因：**表示间隙 −0.03 m**（同落点时端点图≈理想占据图，地图表示不是瓶颈）；**落点间隙 +1.34 m**（同样的扫描按里程计位姿涂图即损失 1.3 m，落点误差是主因）；**粒子数不是杠杆**（100→400 粒子自建图 1.67→1.43 m 基本不变，理想图发散反而 1/12→6/12，发散起点分散且跳变后不恢复——滤波器失稳是独立问题）。P5 巡检路线生成器同步交付。详见[专题 65 讲义](docs/65-map-separation.md)与[导航集成基准](docs/62-navigation-benchmark.md)。
+
+![专题 65 同一批扫描：三种地图 × 两种粒子预算（上）与 400 粒子理想图臂 6 次发散（下）](docs/img/map-separation-charts.png)
+
+读图：上面板是 12 个回合上理想图/真值投影图/自建图在 100 与 400 粒子下的逐回合平均误差（同色浅=100 粒子、深=400 粒子；虚线为发散判据 1 m）；下面板是 400 粒子理想图臂 6 次发散的误差曲线，红色竖线为发散起点，跳变后全程未恢复。
+
+## 专题 66：园区巡检——定位误差怎样影响真实到点
 
 四种定位来源各自驱动机器人执行同一套 8 点任务，3 个种子共 12 回合：真值参考 3/3 轮完成、参考图 PF 2/3、轮子推算与自建图 PF 均为 0/3。全组零接触，但自建图组在雷达近障停车后超时；参考图组也有定位落入规划边界而停止的失败。雷达目前参与定位与停车，自建图尚未用于在线修图或独立避障规划。
 
 统一窗口可一键切换相机、3D/地图轨迹、底图、雷达、目标和误差统计。近裁剪距离已从场景默认约 47.8 cm 修正为固定 1 cm，示意相机前偏 18 cm，处于 25 cm 碰撞半径内；这不等于完整三维机身避障已经通过。
 
-讲义：[第六十六课讲义](docs/66-campus-patrol.md)；演示窗口：`uv run python -m embodied_learning.campus_patrol_demo --play`。自动避障与修图的独立对照现已完成，分别见第67、68课；第66课原始基线保持不变。
+讲义：[专题 66 讲义](docs/66-campus-patrol.md)；演示窗口：`uv run python -m embodied_learning.campus_patrol_demo --play`。自动避障与修图的独立对照现已完成，分别见专题 67、68；专题 66 原始基线保持不变。
 
 
-## 第六十七课：车身标定与观测驱动避障
+## 专题 67：车身标定与观测驱动避障
 
 先把雷达/深度测量换算到整台车的包络，再计算延迟和制动期间扫过的空间。55×44 cm车身、58 cm总高；8类标定夹具覆盖前侧后、转角、低障碍与横杆。相机外参留出点P95为2.57 mm（仿真靶点），解析深度与MuJoCo对拍的最大P95差为0.626 mm。
 
-![第67课分环境避障结果](docs/img/observed-navigation-results.png)
+![专题 67 分环境避障结果](docs/img/observed-navigation-results.png)
 
 读图：每方法每环境9回合，绿=到达，红=碰撞，黄=停滞，灰紫=规划拒绝。全部27回合中，只停车0到达/18碰撞，雷达＋车身6到达/18碰撞，雷达＋深度＋车身18到达/0碰撞/9拒绝。低障碍与悬空杆避开雷达扫描平面；深度补了高度，但仍需记住近场盲区中的旧障碍。
 
-![第67课真实运动与窄路拒绝](docs/img/observed-navigation-trajectories.png)
+![专题 67 真实运动与窄路拒绝](docs/img/observed-navigation-trajectories.png)
 
-读图：种子0低障碍例，绿色绕行到达，橙/紫在障碍前相撞；右侧蓝色是事后几何诊断路径，不算控制成功。窄通道因圆形膨胀过于保守被拒绝，独立矩形路径检查最小间隙6.64 cm。零定位误差是本课受控条件，非视觉定位成果。
+读图：种子0低障碍例，绿色绕行到达，橙/紫在障碍前相撞；右侧蓝色是事后几何诊断路径，不算控制成功。窄通道因圆形膨胀过于保守被拒绝，独立矩形路径检查最小间隙6.64 cm。零定位误差是本专题受控条件，非视觉定位成果。
 
-讲义：[第六十七课讲义](docs/67-body-aware-obstacle-avoidance.md)；同步窗口：双击 `open_navigation_study.cmd`，或 `uv run python -m embodied_learning.navigation_study_demo --lesson 67 --play`。标定页显示车身、当前扫描、过去深度和刹停扫掠。
+讲义：[专题 67 讲义](docs/67-body-aware-obstacle-avoidance.md)；同步窗口：双击 `open_navigation_study.cmd`，或 `uv run python -m embodied_learning.navigation_study_demo --lesson 67 --play`。标定页显示车身、当前扫描、过去深度和刹停扫掠。
 
-## 第六十八课：旧扫描修图，再独立巡检
+## 专题 68：旧扫描修图，再独立巡检
 
-用已有雷达与轮子读数估计平移/转角尺度，修正历史轨迹后重投影；不向修图器提供真值。原图、整图平移旋转、重建图、准确参照四组分别在自己的图上定位规划，保持300粒子和同一第66课控制器。
+用已有雷达与轮子读数估计平移/转角尺度，修正历史轨迹后重投影；不向修图器提供真值。原图、整图平移旋转、重建图、准确参照四组分别在自己的图上定位规划，保持300粒子和同一专题 66 控制器。
 
-![第68课地图修复](docs/img/map-repair-maps.png)
+![专题 68 地图修复](docs/img/map-repair-maps.png)
 
 读图：深灰为真值落点诊断参照，橙/紫/绿为原图/刚体图/重建图。双向墙面距离0.225→0.108→0.031 m；整体挪图不能消除内部形变。固定20 cm容差下重建图P/R为0.997/0.999。
 
-![第68课种子1的独立导航](docs/img/map-repair-navigation.png)
+![专题 68 种子1的独立导航](docs/img/map-repair-navigation.png)
 
 读图：深色实线是真实运动，彩色虚线为估计，红叉是误报到点。原图三轮共5/24点，重建图23/24、整轮2/3完成；种子1有一点实际距离0.4609 m，超过0.45 m门限，仍记失败。准确图18/24因一轮无路提前结束，不能由此断言重建图更好。
 
-讲义：[第六十八课讲义](docs/68-scan-based-map-repair.md)；窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 68 --play`。这是恒定尺度偏差下的离线修复，尚非通用在线SLAM；与67课深度控制器尚未合并。
+讲义：[专题 68 讲义](docs/68-scan-based-map-repair.md)；窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 68 --play`。这是恒定尺度偏差下的离线修复，尚非通用在线SLAM；与专题 67 深度控制器尚未合并。
 
 **阶段复盘**：[为什么同一类算法在房间、走廊和街区表现不同](docs/navigation-stage-review-66-68.md)；[全部数据摘要与输入哈希](docs/benchmarks/navigation-studies-67-68-v1.json)。原始大数组保存在本地 `results/`，新克隆按两课复现步骤生成后再开窗口。
 
-**67—68课讲解视频**：[4分14秒中文配音与字幕版：剧本、预览和复现入口](docs/video/README.md)。包含相机视角、雷达点、实际轨迹、81回合统计、修图收益及失败案例；本机成片位于 `results/navigation_video_v1/navigation-67-68-narrated.mp4`。
+**专题 67—68 讲解视频**：[4分14秒中文配音与字幕版：剧本、预览和复现入口](docs/video/README.md)。包含相机视角、雷达点、实际轨迹、81回合统计、修图收益及失败案例；本机成片位于 `results/navigation_video_v1/navigation-67-68-narrated.mp4`。
 
 
 ## 进度清单
@@ -1696,6 +1726,13 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 - [x] 第五十四课：度量勘误（旧方向正确率为评估伪影，修正判据 ISO 0.722/ANISO 0.583）+ 各向异性环境假设证伪
 - [x] 第五十五课：模拟标记检索用里程计弧长筛选，top-12 真回环 12/12、几何方向正确 11/12；真实图像待独立验证
 - [x] 第五十六课：内圈巡游修正；理想图 PF 均值 0.322 m，自建图 PF 3.443 m 未过门；理想图绑架恢复 4/5
+- [x] 专题 62：跨场景配对试跑过门失败——自建图对齐精确率 ≤0.44（门槛 0.70），失败基线保留
+- [x] 专题 63：照片房间三维验证——低位激光漏检床架/椅脚；匹配激光高度后平均定位误差约 18.7→5.1 cm
+- [x] 专题 64：闭环导航 v4——全组零接触、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 AMCL 参数硬门禁后 27/27 有效，A-budget 0.078 m
+- [x] 专题 65：地图分离试跑——表示间隙 ≈0、落点间隙 +1.34 m、粒子数非杠杆；巡检路线生成器就绪
+- [x] 专题 66：园区巡检基线——真值 3/3、雷达＋参考图 2/3、纯里程计与自建图 0/3，全组零接触
+- [x] 专题 67：车身标定与观测避障——融合组 18/27 到达、零碰撞、9 次窄路拒绝
+- [x] 专题 68：扫描修图——真实到点 5/24→23/24、整轮 2/3；仍有 1 轮误报完成
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
