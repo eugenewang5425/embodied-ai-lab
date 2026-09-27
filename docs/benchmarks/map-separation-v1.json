@@ -1,0 +1,31 @@
+{
+ "experiment": "map_separation_trial",
+ "schema_version": 1,
+ "question": "自建图定位失败发生在哪一层：地图表示、落点误差，还是滤波器失稳？",
+ "protocol": {
+  "fixed": "same patrol scans, collection route, init and seeds (ISO/ANISO x worlds 0-2 x sensors 0-1); only PF particle budget differs between the two input benchmarks",
+  "decomposition": "representation gap = truth-projection minus ideal (same landing); landing gap = self-built minus truth-projection (same scans); computed on episodes whose ideal-map arm did not diverge (mean<=1 m)",
+  "divergence_rule": "episode mean > 1.0 m, pre-registered"
+ },
+ "headline": {
+  "representation_gap_median_m_p100": -0.030682685521844444,
+  "landing_gap_median_m_p100": 1.337387723948658,
+  "self_median_m": {
+   "p100": 1.67,
+   "p400": 1.434
+  },
+  "ideal_diverged": {
+   "p100": "1/12",
+   "p400": "6/12"
+  },
+  "conclusion": "landing error dominates; map representation is not the bottleneck; particle count is not the lever; filter instability is a separate failure mode"
+ },
+ "next_single_variable": "likelihood field sigma / measurement update gating with particles and map fixed; if still no improvement, switch to divergence detection + reseeding instead of further tuning",
+ "inputs_sha256": {
+  "pilot_v4_summary": "74672b32e697f283407e2b644e68ec131b71bc459edf7c31575fb25fe2a22a98",
+  "particles400_summary": "a9f6d09c3d2ac49e3b7420bcea5cd2f7a8540106cc39590c44b8f6380fa07dc0",
+  "analysis_json": "60970092a9fd0a9ca72189f437ac47005a497664d215a6ebf15b2c1cb43ad3f7"
+ },
+ "lecture": "docs/65-map-separation.md",
+ "decision_log": "docs/34 D-2026-09-27-02"
+}

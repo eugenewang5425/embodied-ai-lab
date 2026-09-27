@@ -15,7 +15,11 @@ from pathlib import Path
 
 import numpy as np
 
-from embodied_learning.experiments.nav_scoring import continuous_pose, score_aligned
+from embodied_learning.experiments.nav_scoring import (
+    continuous_pose,
+    nan_aware_metrics,
+    score_aligned,
+)
 
 BASE = Path(__file__).resolve().parents[3]
 BATCH = BASE / "results" / "p3_amcl_batch_v2"
@@ -33,17 +37,9 @@ def score_run(run_dir):
         if len(z["x"]) == 0:
             return {"n_poses": 0, "aligned": None, "continuous": None}
         est = np.column_stack([z["x"], z["y"], z["yaw"]])
-        aligned, _ = score_aligned(est, truth, z["stamp"], timestamps)
+        aligned, _ = score_aligned(est, truth, z["stamp"], timestamps, max_gap_s=0.5)
         cont = continuous_pose(est, odom, z["stamp"], timestamps)
-        n = min(len(cont), len(truth))
-        cont_err = np.linalg.norm(cont[:n, :2] - truth[:n, :2], axis=1)
-        continuous = {
-            "n_matched": n,
-            "mean_m": float(cont_err.mean()),
-            "p95_m": float(np.percentile(cont_err, 95)),
-            "end_m": float(cont_err[-1]),
-            "coverage": n / len(truth),
-        }
+        continuous = nan_aware_metrics(cont, truth, timestamps)
         return {"n_poses": len(z["x"]), "aligned": aligned, "continuous": continuous}
 
 

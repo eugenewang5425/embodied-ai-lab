@@ -85,7 +85,16 @@ CONTACT_ABORT_FRAMES = 100
 
 @dataclass(frozen=True)
 class NavConfig:
-    """Defaults ARE the pre-registered first closed-loop round."""
+    """Defaults ARE the pre-registered first closed-loop round.
+
+    wheel_bias model (Phase-0 audit): the MEASURED translation and rotation
+    increments are both scaled by (1 + wheel_bias) - i.e. both wheels'
+    encoders read b% high (common scale error).  Effects: +b% odometry
+    distance scale, +b% odometry turn-angle scale (heading error grows with
+    TOTAL rotation), and NO curvature drift on straight driving.  This is a
+    different failure mode from lesson 15's right-wheel-only +2%, which
+    curves straights; the two must not be conflated when citing "2% 轮偏差".
+    """
 
     particles: int = 300
     sensor_sigma_m: float = 0.01
@@ -644,8 +653,12 @@ class ResourceTracker:
                 t.phases[self._label] = {
                     "wall_s": round(wall, 3),
                     "cpu_s": round(cpu, 3),
+                    # sampling method: RSS read twice per phase (entry and
+                    # exit); "peak" is max(entry, exit), NOT a true peak - a
+                    # transient spike between the two samples goes unrecorded
                     "rss_peak_mb": round(rss_peak / 1e6, 1) if rss_peak is not None else None,
                     "rss_delta_mb": round(rss_delta / 1e6, 1) if rss_delta is not None else None,
+                    "rss_sampling": "entry/exit samples; peak = max of the two",
                 }
                 return False
 
@@ -803,6 +816,7 @@ def run_experiment(output, *, seed=0, config=None, log=print):
         "config": {
             "particles": config.particles,
             "wheel_bias": config.wheel_bias,
+            "wheel_bias_model": "common scale (1+b) on measured ds and dth; both wheels +2%; no differential/curvature term (unlike lesson-15 right-wheel model)",
             "sensor_sigma_m": config.sensor_sigma_m,
             "max_steps": config.max_steps,
             "alpha_trans": config.alpha_trans,
