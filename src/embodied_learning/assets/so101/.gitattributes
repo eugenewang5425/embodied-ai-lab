@@ -1,3 +1,5 @@
 # Exact upstream bytes must survive Windows checkout for provenance SHA-256.
 * -text
 assets/* -text
+# The generated Windows manifest uses CRLF; preserve its recorded byte hash.
+provenance.json whitespace=cr-at-eol
