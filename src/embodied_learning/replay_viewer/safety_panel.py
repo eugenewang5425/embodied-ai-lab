@@ -1,5 +1,6 @@
 """Body-frame diagnostic view; all observations come from current/past frames."""
 
+from dataclasses import replace
 from tkinter import ttk
 
 import numpy as np
@@ -62,13 +63,13 @@ class SafetyPanel(ttk.Frame):
             return
         rig = NavigationRig(**record.metadata["rig"])
         if record.metadata.get("tracking_round") == 6:
-            from dataclasses import replace
-
             rig = replace(rig, margin_m=record.method_info(key)["result"]["controller_margin_m"])
         f = min(frame, record.lengths[key] - 1)
         a, b = self.figure.subplots(1, 2)
         pose = record.track_by_key[key].poses[f]
         scan, dep = record.lidar[key], record.depth[key]
+        height, width = dep["values"].shape[1:]
+        rig = replace(rig, height=height, width=width)
         points = lidar_points(scan["ranges"][f], scan["hits"][f], rig)
         current = depth_points(dep["values"][f], dep["valid"][f], rig)
         history = []

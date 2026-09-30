@@ -1,0 +1,4 @@
+# Preserve the exact executed bytes of new experiment/protocol hash anchors.
+src/embodied_learning/navigation_progress.py -text
+src/embodied_learning/experiments/navigation_progress_study.py -text
+docs/navigation-reinforcement-9-10-plan.md -text

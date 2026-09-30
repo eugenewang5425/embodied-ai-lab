@@ -1,0 +1,53 @@
+{
+  "episodes": 72,
+  "physics_steps": 790300,
+  "map_frames": 15878,
+  "independently_checked_clearing_events": 34528,
+  "max_state_error": 0,
+  "max_contact_error": 0,
+  "quick": {
+    "passed": 894,
+    "skipped_while_batch_running": 2,
+    "deselected": 196,
+    "elapsed_s": 129.4,
+    "deferred_archive_checks_subsequently_passed": 2
+  },
+  "affected_selected": {
+    "unique_tests_verified": 47,
+    "initial_run_passed": 46,
+    "initial_run_skipped": 1,
+    "initial_elapsed_s": 67.6,
+    "post_collection_archive_and_actual_tk_checks_passed": 3,
+    "post_collection_elapsed_s": 8.9,
+    "note": "GUI child can report success on skipped archive prerequisite; reran actual Tk after complete collection. Unique count excludes repeated checks."
+  },
+  "visual_qa": {
+    "science_figures": 5,
+    "own_window_captures": 3,
+    "actual_pixel_review": true,
+    "checks": [
+      "legends outside data",
+      "captions match fixed examples",
+      "request vs actual speed and stop flag explained",
+      "one-click camera/scene/lidar/goal/current-map/statistics",
+      "separate method depth pixel dimensions",
+      "fresh Tk process per capture",
+      "no future map in early frames"
+    ]
+  },
+  "scope": "registered rounds 9/10 completed; no historical full training layer rerun; no RGB localisation or real asynchronous execution",
+  "figures_sha256": {
+    "docs/img/lesson69-round9-motion.png": "7740bdf6dca8ea3b223f39144dcd70f8a51d7467001177b23b591f5074a9f2b6",
+    "docs/img/lesson69-round9-outcomes.png": "10e06c6175923d8933223b940bf028462f95d3427281385875977a8a4a5f6d57",
+    "docs/img/lesson69-round9-window-progress.png": "9fa896ba3bb0119a40d1f68a555456290f189f0179f59e38475c6a6e84740874",
+    "docs/img/lesson69-round10-motion.png": "11492e578a703f1507c3e26119c79a807631283159d69382ed4ddf3c1229ada6",
+    "docs/img/lesson69-round10-outcomes.png": "a0493cf8eb293b6304a0e89de67eddb08c170a95c0bad62bfcad8bf8b4c0dc55",
+    "docs/img/lesson69-round10-warmup-map.png": "75a713e543eb0401e0fbf0fa0164a9cd50fe86c4d9a2b05e92726c42b81bf6ea",
+    "docs/img/lesson69-round10-window-cleared.png": "70daa9ad19019eacc0b8f86c25cc5f4fad2cd37d69e14898b89ad8a01da7a4fc",
+    "docs/img/lesson69-round10-window-real-low-wall.png": "4956d61daa0822d9eb211a4deadb541b6cb6c0c90ffb2a551d53e20a76f857a8"
+  },
+  "inputs_sha256": {
+    "docs/benchmarks/navigation-reinforcement-v9.json": "10af5b3cc46d33a257fa507af2bd872e2a8f971de210aac6f06f65f493597324",
+    "docs/benchmarks/navigation-reinforcement-v10.json": "956e047e266ed17ab3d1ed03b073db8108fafdede4125019b49fbcc19737de01"
+  }
+}

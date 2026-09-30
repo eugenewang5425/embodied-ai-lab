@@ -1,0 +1,21 @@
+{
+  "episodes": 36,
+  "round": 9,
+  "map_rebuilt_frames": 9164,
+  "independently_checked_cleared_voxels": 15701,
+  "frames": 9164,
+  "physics_steps": 456400,
+  "max_state_replay_error": 0.0,
+  "max_contact_replay_error": 0.0,
+  "summary_sha256": "10af5b3cc46d33a257fa507af2bd872e2a8f971de210aac6f06f65f493597324",
+  "checks": [
+    "direct 2ms mj_step from stored applied force",
+    "contacts independently extracted in contact frame",
+    "force budgets",
+    "physical stop including lateral velocity",
+    "true arrival and contact policy",
+    "frame/substep anchors",
+    "approach cap",
+    "all archive and frozen source hashes"
+  ]
+}

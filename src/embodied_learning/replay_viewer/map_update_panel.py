@@ -26,7 +26,7 @@ class MapUpdatePanel(ttk.Frame):
             ax.text(
                 0.05,
                 0.6,
-                "请选择第69课第八轮。\n第七轮仍使用冻结的原观测更新。",
+                "请选择第69课第八至十轮。\n第七轮仍使用冻结的原观测更新。",
                 transform=ax.transAxes,
             )
             self.note.configure(text="地图修改不代表定位得到改善。")
@@ -50,4 +50,10 @@ class MapUpdatePanel(ttk.Frame):
             self.note.configure(
                 text=f"{record.method_info(key)['label']} · t={t[-1]:.1f}s；当前视图只用截至本帧的地图。\n三帧深度穿过才清除；遮挡/无效不清除。8m未命中可信只适用于当前解析仿真。\n右图真值核对只用于评分，不参与控制；改地图没有改变机器人估计位置。"
             )
+            if "waypoint_progress" in d:
+                wp, passed, _ = d["waypoint_progress"][f]
+                h, w = record.depth[key]["values"].shape[1:]
+                self.note.configure(
+                    text=f"{record.method_info(key)['label']} · t={t[-1]:.1f}s · 深度{w}×{h} · 当前路点索引{int(wp)}\n本帧跳过已走首点：{'是' if passed else '否'}；索引是当前路径内的编号，重规划会重置。\n三帧、3×3邻域、12cm预算均不变；右图只评分，未修改自身定位。"
+                )
         self.canvas.draw_idle()
