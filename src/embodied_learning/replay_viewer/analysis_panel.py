@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from .braking_panel import BrakingPanel
+from .execution_panel import ExecutionPanel
 from .panels import ErrorPanel
 from .robustness_panel import RobustnessPanel
 from .safety_panel import SafetyPanel
@@ -22,6 +23,7 @@ RESULTS = {
     "collision_abort": "发生接触，仿真终止",
     "goal_overshoot": "刹停后仍在目标圈外",
     "stalled": "停车后无法继续前进",
+    "control_expired": "控制信息过期，本地停住",
 }
 
 
@@ -54,6 +56,8 @@ class AnalysisPanel(ttk.Frame):
         self.tabs.add(self.braking, text="制动过程")
         self.robustness = RobustnessPanel(self.tabs)
         self.tabs.add(self.robustness, text="误差与延迟")
+        self.execution = ExecutionPanel(self.tabs)
+        self.tabs.add(self.execution, text="执行端保护")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -111,6 +115,10 @@ class AnalysisPanel(ttk.Frame):
         if r.metadata.get("tracking_round") == 4:
             text[-1] = (
                 "本轮固定同一个同比例制动控制器，人工注入一种恒定位置/朝向偏差或执行延迟；没有运行PF或视觉定位。角度偏差不能用位置误差均值表示。\n"
+            )
+        if r.metadata.get("tracking_round") == 5:
+            text[-1] = (
+                "本轮保持精确定位，比较排队动作预测和本地保护；没有运行PF或视觉定位。规划无输出期间车继续走，本地保护停车也不算到达。\n"
             )
         for key in r.method_keys:
             info = r.method_info(key)
@@ -190,6 +198,8 @@ class AnalysisPanel(ttk.Frame):
             self.braking.draw(self.record, self.focus_key, frame)
         elif self.tabs.index(self.tabs.select()) == 6:
             self.robustness.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 7:
+            self.execution.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -219,3 +229,5 @@ class AnalysisPanel(ttk.Frame):
             self.braking.draw(self.record, self.focus_key, self.frame)
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 6:
             self.robustness.draw(self.record, self.focus_key, self.frame)
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 7:
+            self.execution.draw(self.record, self.focus_key, self.frame)

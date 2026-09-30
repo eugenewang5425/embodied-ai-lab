@@ -22,6 +22,10 @@ REASONS = {
     "swept_body_brake": "刹停包络触及已知障碍，制动",
     "frontal_brake": "前方雷达触发停车",
     "no_observed_route": "膨胀后找不到路，停止",
+    "queue_body_brake": "把排队动作算进去后不安全，请求制动",
+    "planner_no_output": "没有新控制结果，车仍在执行",
+    "abort_braking": "任务失败后实际减速",
+    "contact_abort": "实体接触，仿真终止",
 }
 
 
@@ -140,6 +144,11 @@ class SafetyPanel(ttk.Frame):
             + (
                 " 第四轮仍画控制器的0.2秒预留，不是实际队列延迟；实际响应见误差与延迟页。"
                 if record.metadata.get("tracking_round") == 4
+                else ""
+            )
+            + (
+                " 第五轮此页仅示意旧0.2秒分支，未画完整队列；实际接管见执行端保护页。"
+                if record.metadata.get("tracking_round") == 5
                 else ""
             )
         )

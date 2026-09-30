@@ -1,0 +1,70 @@
+{
+  "episodes": 135,
+  "frames": 15648,
+  "steps": 15513,
+  "sweep_samples": 103799,
+  "bridges": 3,
+  "forecast_checks": 6196,
+  "local_overrides": 265,
+  "expiry_checks": 54,
+  "max_motion_error": 1.3500311979441904e-12,
+  "max_physical_gap_error": 9.43689570931383e-16,
+  "max_margin_error": 2.4424906541753444e-15,
+  "max_prediction_gap_error": 3.3626157414090585e-12,
+  "images": {
+    "lesson69-round5-blackout.png": {
+      "sha256": "cfe52425d4fbd913d64aa6b284c341e79af1f37d22117d76285551ff3fb82990",
+      "size": [
+        2098,
+        1055
+      ]
+    },
+    "lesson69-round5-results.png": {
+      "sha256": "9e3edc9f4634e3841c833b2241047d8b42d9020f5350e6abf6745a891e4eb846",
+      "size": [
+        2578,
+        1214
+      ]
+    },
+    "lesson69-round5-trajectories.png": {
+      "sha256": "debcd1930699a4e0a6cd9759fa4f0055ec3bf6bc6f3d46d9d7e89a5224e88fb2",
+      "size": [
+        2258,
+        1214
+      ]
+    },
+    "lesson69-round5-window.png": {
+      "sha256": "88de9124e7e31f11937dd0ea0b4395d2b754bf134f0cce42d4bd04a2d9fe89e8",
+      "size": [
+        1680,
+        1060
+      ]
+    }
+  },
+  "tests": {
+    "quick": {
+      "sha256": "58b55d9526fda4561443ff42dd959a912211f3a3be861d9c8adc6876bfdf8484",
+      "summary": "851 passed, 188 deselected in 150.19s (0:02:30)"
+    },
+    "affected": {
+      "sha256": "92265932c43e3c984a658dfcd3b4daffddf6168529de5a88c1f61f4fd9414cc3",
+      "summary": "74 passed in 69.86s (0:01:09)"
+    }
+  },
+  "summary_sha256": "98854a0f390b66f5d7dc86bceb61f4093c2ef932f3d0315bca383858dc6f9d2e",
+  "benchmark_sha256": "aae1814711cb3bb3b875ecd4d7449197abda88a2c3de730323ce76389751c528",
+  "audit_sha256": "02fb3354cfa735d9d9b1207c9f8d9fb5faa5d547dc98acf85e1e31366b08f83d",
+  "doc_sha256": {
+    "README.md": "01935f2e820aad3c4dbc8ac4a1e54c2549e83d36479aac8d365a725ba55ffec5",
+    "docs\\69-execution-round5.md": "b2673f8518491f867cb9bd78c444b5a21c879abcf6816d2bcdb125cc44d49310",
+    "docs\\69-execution-round5-plan.md": "44334c3c250ffd7f15df0794c7ed22203c8d3ac8a78e9e3e1dd2355355e74fb4",
+    "docs\\69-robustness-round4.md": "cdf80f0d443939d4d07b97585a7a0a960fc4ddfdfac677eb84e8a8afcaa6453a",
+    "docs\\navigation-stage-review-69-71.md": "9a82c117e8f01575cf3025e2753c16c28fd920d81d6fa0ff632aad40eb13691c",
+    "docs\\01-learning-roadmap.md": "f0c6baf77772f0ca4c738f05437dc77eee06c826c2ea41f85467eb18f150416f",
+    "docs\\multisensor-navigation-roadmap.md": "1295e388148b2e90e61e6b7ccc447462c2a9da4ea9b953bc394ba49a5df0e7e9",
+    "docs\\34-experiment-decision-log.md": "28234ce70c52fe2d9626e83c43ca17e6365637b297a81ba4e17611d6a24f976c"
+  },
+  "local_links_checked": 392,
+  "audit_wall_s": 158.54820199999085,
+  "boundary": "independent queue/override and motion/geometry checks; shared sensor transforms; fixed blackout schedule; finite physical-corner sampling <=1cm; no hard real-time deployment proof"
+}

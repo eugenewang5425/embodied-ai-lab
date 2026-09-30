@@ -73,11 +73,18 @@ class RobustnessPanel(ttk.Frame):
         c = result["perturbation"]
         origin = int(data["executed_request_frame"][f])
         origin_text = f"{origin * 0.1:.1f}秒发出" if origin >= 0 else "初始保持/终止标记"
+        if origin == -2:
+            origin_text = "无新结果，沿用实际速度"
         self.note.configure(
             text=(
                 f"{record.method_info(key)['label']} · 当前/本组末帧 {record.timestamps[f]:.1f}s；执行来源：{origin_text}。\n"
                 f"注入世界y偏差 {c['dy_m'] * 100:+g}cm、朝向偏差 {c['yaw_deg']:+g}°、执行延迟 {c['delay_steps'] * 0.1:.1f}s；待执行运动请求 {int(data['pending_motion'][f])} 条。\n"
-                "同一个算法的不同条件；虚线请求≠实线执行。加减速也耗时；末帧零命令不证明已停稳。"
+                + (
+                    "本轮有本地保护消融；执行器可能接管，详见执行端保护页。"
+                    if record.metadata.get("tracking_round") == 5
+                    else "同一个算法的不同条件；"
+                )
+                + "虚线请求≠实线执行。加减速也耗时；末帧零命令不证明已停稳。"
             )
         )
         self.canvas.draw_idle()

@@ -14,6 +14,26 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "baseline_exec": (
+        "原执行参照",
+        "仍用原停车预测；制动也排队。控制无输出时继续旧动作，没有本地保护。",
+        "#c53e51",
+    ),
+    "queue_forecast": (
+        "只提前算排队动作",
+        "把正在排队的运动和之后的减速一起预测；保护请求仍排队，没有本地接管。",
+        "#d68026",
+    ),
+    "local_guard": (
+        "只加本地保护",
+        "执行端用当前观测检查整车停车空间；危险或控制信息过期时本地减速、清旧动作。过期后本回合不重启。",
+        "#247cc1",
+    ),
+    "queue_guard": (
+        "排队预测＋本地保护",
+        "同时提前考虑排队运动和执行端保护；保持身体、余量和原路线算法。停住不等于完成任务。",
+        "#119c74",
+    ),
     "legacy_brake": (
         "旧版制动参照",
         "第二轮组合控制器，保留旧预测；补录失败后实际减速尾段。",
@@ -230,11 +250,17 @@ class NavigationStudySource:
                         else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
                     )
                 )
+                if summary["protocol"].get("round") == 5:
+                    label += f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s / " + (
+                        "规划无输出1s" if row["profile"] == "blackout" else "正常输出"
+                    )
                 self.entries.append(ReplayEntry(case, lesson, f"{label} / 种子 {row['seed']}"))
         self.entries = tuple(self.entries)
 
     @staticmethod
     def case_id(lesson, row):
+        if "condition_key" in row:
+            return f"{lesson}_{row['layout']}_{row['obstacle']}_{row['seed']}__{row['condition_key']}__{row['profile']}"
         return (
             f"{lesson}_{row['layout']}_{row['obstacle']}_{row['seed']}"
             if lesson in ("67", "69")
@@ -266,6 +292,8 @@ class NavigationStudySource:
             "71": ("baseline", "recovery"),
         }[variant]
         keys = tuple(selected) if selected is not None else keys
+        if summary["protocol"].get("round") == 5:
+            keys = tuple(k for k in keys if k in rows)
         labels = (
             {k: condition_label(summary["protocol"]["conditions"][k]) for k in keys}
             if selected is not None
@@ -351,6 +379,21 @@ class NavigationStudySource:
                                 "executed_braking",
                                 "executed_request_frame",
                                 "pending_motion",
+                            )
+                        }
+                    )
+                if "local_override" in a:
+                    telemetry[key].update(
+                        {
+                            k: pad(a[k])
+                            for k in (
+                                "control_fresh",
+                                "local_override",
+                                "expiry_active",
+                                "control_age_ticks",
+                                "local_candidate_gap",
+                                "queue_candidate_gap",
+                                "queue_stop_gap",
                             )
                         }
                     )
@@ -443,6 +486,7 @@ class NavigationStudySource:
                         "bridge": "旧批次桥接",
                         "scan": "新种子单变量扫描",
                         "environment": "同条件环境参照",
+                        "blackout": "规划无输出故障",
                     }[cohort]
                     + "："
                     + "；".join(
@@ -483,6 +527,24 @@ class NavigationStudySource:
                         lidar_note="青点按有偏估计投影；点与墙错开可能是注入的位姿误差。无回波≠无障碍。",
                         braking_models={k: "coupled" for k in keys},
                         robustness_group=group,
+                        cohort="本回合到达且余量合格："
+                        + "；".join(
+                            f"{labels[k][0]} {int(rows[k]['safe_completed'])}/1" for k in keys
+                        ),
+                    )
+                if round_number == 5:
+                    r = rows[keys[0]]
+                    metadata.update(
+                        protocol="四组独立驾驶：排队预测×执行端保护。真值仅生成观测/评分；精确定位为受控条件。结束后保持帧不计分。",
+                        settings=f"69课第五轮；55×44cm身体、6cm余量；实际排队{r['perturbation']['delay_steps'] * 0.1:g}s；控制过期0.2s；位姿精确为设定",
+                        sensor_note="雷达/深度存档；RGB按实际位姿重渲染。没有视觉定位。",
+                        braking_models={k: "coupled" for k in keys},
+                        scene_note="12×12m；新障碍未画入先验；"
+                        + (
+                            "5–6秒规划无输出，车继续运动"
+                            if r["profile"] == "blackout"
+                            else "正常控制输出；计算墙钟单独记录"
+                        ),
                         cohort="本回合到达且余量合格："
                         + "；".join(
                             f"{labels[k][0]} {int(rows[k]['safe_completed'])}/1" for k in keys
