@@ -94,7 +94,7 @@
 
 ```powershell
 uv run python -m embodied_learning.experiments.navigation_followups --lesson 69
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/footprint_navigation_v1 --play
 uv run python docs/img/make_navigation_followup_figures.py
 ```
 

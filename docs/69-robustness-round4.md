@@ -201,7 +201,7 @@ T = max(|v|/0.8, |ω|/1.8)
 uv run python -m embodied_learning.experiments.navigation_robustness
 uv run python scripts/analyze_navigation_robustness.py
 uv run python docs/img/make_robustness_figures.py
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_robustness_v4 --play
 uv run python scripts/check_robustness_window.py
 ```
 

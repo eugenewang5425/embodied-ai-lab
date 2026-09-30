@@ -137,9 +137,10 @@ class MapPanel(PlotPanel):
         ttk.Checkbutton(
             self.bar, text="含越界轨迹", variable=self.all_poses, command=self.reset_limits
         ).pack(side="right")
-        ttk.Label(
+        self.map_hint = ttk.Label(
             self, text="滚轮缩放 · 拖动平移 · 双击复位；地图为固定存档结果", style="Hint.TLabel"
-        ).pack(side="bottom", anchor="w", before=self.canvas.get_tk_widget())
+        )
+        self.map_hint.pack(side="bottom", anchor="w", before=self.canvas.get_tk_widget())
         self.canvas.mpl_connect("scroll_event", self._zoom)
         self.canvas.mpl_connect("button_press_event", self._press)
         self.canvas.mpl_connect("motion_notify_event", self._drag)
@@ -150,6 +151,12 @@ class MapPanel(PlotPanel):
 
     def set_record(self, record):
         self.record = record
+        self.frame = 0
+        self.map_hint.configure(
+            text="滚轮缩放 · 拖动平移 · 双击复位；当前地图随时间和方法同步"
+            if record.metadata.get("live_map")
+            else "滚轮缩放 · 拖动平移 · 双击复位；地图为固定存档结果"
+        )
         self.ax.clear()
         options = list(record.maps)
         if len(options) > 1:
@@ -202,9 +209,13 @@ class MapPanel(PlotPanel):
         if self.record is None:
             return
         key = self.layer.get()
+        live = self.record.telemetry.get(self.focus_key, {}).get("map_frames")
+        current = live[self.frame] if live is not None else None
         if key == "叠加对照":
             maps = list(self.record.maps.values())
             ref, comparison = maps[0], maps[-1]
+            if self.record.metadata.get("live_map") and current is not None:
+                comparison = current
             rgb = np.full((*ref.shape, 3), 0.95)
             rgb[ref & ~comparison] = [0.19, 0.23, 0.29]
             rgb[comparison & ~ref] = [0.92, 0.58, 0.24]
@@ -213,7 +224,11 @@ class MapPanel(PlotPanel):
             names = list(self.record.maps)
             title = f"灰：{names[0]} / 橙：{names[-1]}多标 / 青：重合"
         else:
-            self.raster.set_data(self.record.maps[key])
+            self.raster.set_data(
+                current
+                if key == "当前观测通行图" and current is not None
+                else self.record.maps[key]
+            )
             title = key
         self.ax.set_title(title, fontsize=9)
         self.canvas.draw_idle()
@@ -232,6 +247,8 @@ class MapPanel(PlotPanel):
 
     def set_frame(self, frame, visible, trails=True):
         self.frame, self.visible = frame, visible
+        if self.record.metadata.get("live_map"):
+            self._draw_map()
         for track in self.record.tracks:
             # Only rendering is thinned; current point and metrics use the exact frame.
             ids = np.unique(np.r_[np.arange(0, frame + 1, 4), frame])

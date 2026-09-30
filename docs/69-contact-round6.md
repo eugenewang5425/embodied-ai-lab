@@ -155,11 +155,13 @@ uv run python -m embodied_learning.experiments.contact_navigation --output resul
 uv run python scripts/validate_contact_navigation.py
 uv run python docs/img/make_contact_figures.py
 uv run python scripts/check_contact_window.py
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/contact_navigation_v6 --play
 ```
 
-前置：已有第五轮 `results/execution_safety_v5/summary.json` 用于源码冻结校验；本轮不读取第五轮轨迹。全新克隆先按第五轮及其上游讲义生成记录，本机已有这些资料。输出目录必须不存在，避免覆盖旧正式数据。最后一条默认选择本地最新第六轮；要看第五轮，显式加 `--footprint results/execution_safety_v5`。若已有正式目录，直接运行后三条，不重新覆盖。开发预试：`--smoke --output results/contact_navigation_dev_new`。
+前置：已有第五轮 `results/execution_safety_v5/summary.json` 用于源码冻结校验；本轮不读取第五轮轨迹。全新克隆先按第五轮及其上游讲义生成记录，本机已有这些资料。输出目录必须不存在，避免覆盖旧正式数据。最后一条明确选择第六轮；不带--footprint的默认69课窗口优先本地第八/七轮。要看第五轮，显式加 `--footprint results/execution_safety_v5`。若已有正式目录，直接运行后三条，不重新覆盖。开发预试：`--smoke --output results/contact_navigation_dev_new`。
 
 测试：`uv run python scripts/test.py full tests/test_contact_motion.py tests/test_contact_viewer.py tests/test_execution_safety.py tests/test_braking_control.py tests/test_navigation_robustness.py tests/test_navigation_study_viewer.py tests/test_replay_viewer.py`；再运行quick层。物理层已知答案覆盖自由加速、正撞受阻、轻擦继续/释放、持续接触拒绝、侧向速度停稳与口外负例；真实Tk验证三个按钮与接触页同步。
 
 本轮停止调参，不改40N上限来把失败变成功。下一项优先以同一接触模型、零余量允许组比较正常速度与固定低速，分离冲击强度和排队影响；再诊断横杆无路。统一70/71前先对齐身体、运动、接触和到点口径。旧6cm保守包络保留作诊断，今后不再作为当前用户任务必须通过的门槛；真实身体放不下、明显冲撞和持续推墙仍不能称为轻擦到达。
+
+后续更新（2026-10-01）：[第七轮固定低速](69-speed-round7.md)与[第八轮观测地图更新](69-online-map-round8.md)已按登记执行；分别保留时间代价和地图/路点失败。本节“下一项”是第六轮结束时的安排，最新顺序见[阶段复盘](navigation-stage-review-69-71.md)。

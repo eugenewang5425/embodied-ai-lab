@@ -11,6 +11,7 @@ from matplotlib.figure import Figure
 from .braking_panel import BrakingPanel
 from .contact_panel import ContactPanel
 from .execution_panel import ExecutionPanel
+from .map_update_panel import MapUpdatePanel
 from .panels import ErrorPanel
 from .robustness_panel import RobustnessPanel
 from .safety_panel import SafetyPanel
@@ -62,6 +63,8 @@ class AnalysisPanel(ttk.Frame):
         self.tabs.add(self.execution, text="执行端保护")
         self.contact = ContactPanel(self.tabs)
         self.tabs.add(self.contact, text="接触与实际速度")
+        self.map_update = MapUpdatePanel(self.tabs)
+        self.tabs.add(self.map_update, text="地图怎样修正")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -75,6 +78,7 @@ class AnalysisPanel(ttk.Frame):
         self.focus_key = record.method_keys[0]
         self.error.set_record(record)
         self.figure.clear()
+        self.map_rasters = {}
         keys = record.method_keys
         axes = self.figure.subplots(math.ceil(len(keys) / 2), 2, squeeze=False).ravel()
         self.plots = {}
@@ -83,7 +87,7 @@ class AnalysisPanel(ttk.Frame):
         x0, y0 = np.minimum([extent[0], extent[2]], all_xy.min(axis=0))
         x1, y1 = np.maximum([extent[1], extent[3]], all_xy.max(axis=0))
         for ax, key in zip(axes, keys):
-            ax.imshow(
+            self.map_rasters[key] = ax.imshow(
                 record.maps[record.method_info(key).get("display_map", next(iter(record.maps)))],
                 origin="lower",
                 extent=extent,
@@ -214,10 +218,14 @@ class AnalysisPanel(ttk.Frame):
             self.execution.draw(self.record, self.focus_key, frame)
         elif self.tabs.index(self.tabs.select()) == 8:
             self.contact.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 9:
+            self.map_update.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
         for key, (actual, estimated, point, goal, scan) in self.plots.items():
+            if r.metadata.get("live_map"):
+                self.map_rasters[key].set_data(r.telemetry[key]["map_frames"][f])
             n = min(f + 1, r.lengths.get(key, len(r.timestamps)))
             idx = np.unique(np.r_[np.arange(0, n, 4), n - 1])
             truth = r.track_by_key[r.true_key(key)].poses[idx]
@@ -233,6 +241,8 @@ class AnalysisPanel(ttk.Frame):
         self.canvas.draw_idle()
 
     def _tab_changed(self, _event):
+        if self.record is not None and self.tabs.index(self.tabs.select()) == 9:
+            self.map_update.draw(self.record, self.focus_key, self.frame)
         if self.record is not None and self.tabs.index(self.tabs.select()) == 1:
             self._draw_separate()
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 3:

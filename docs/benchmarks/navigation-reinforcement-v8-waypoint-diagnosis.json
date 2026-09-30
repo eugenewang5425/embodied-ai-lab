@@ -1,0 +1,170 @@
+[
+  {
+    "file": "street_crate_s22_delay_2_map_evidence_added.npz",
+    "input_sha256": "f6632ace32510f9e79404230f80e75c28680fd8b68c3a0d14ca71491dccc262f",
+    "profile": "added",
+    "method": "map_evidence",
+    "seed": 22,
+    "stored_request": [
+      0.0,
+      9.658940314238862e-15
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      9.658940314238862e-15
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.028332651316673903
+    ],
+    "first_path_point_distance_m": 0.47961324480305056,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s22_delay_2_map_evidence_unchanged.npz",
+    "input_sha256": "f2d51e01b1b55bd993e513204a6ca8269cbda45e74a702f93b1d6860b59f483e",
+    "profile": "unchanged",
+    "method": "map_evidence",
+    "seed": 22,
+    "stored_request": [
+      0.0,
+      9.658940314238862e-15
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      9.658940314238862e-15
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.028332651316673903
+    ],
+    "first_path_point_distance_m": 0.47961324480305056,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s20_delay_2_map_additive_occluded.npz",
+    "input_sha256": "5f186b1fb55d395b54b43db3c55024ad0c4bdc5916d4be3bc2e6bbbefdec7b32",
+    "profile": "occluded",
+    "method": "map_additive",
+    "seed": 20,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s20_delay_2_map_evidence_occluded.npz",
+    "input_sha256": "cb23d4749bb3b4a7bf2a0f7c2f72b5b709a56125b5a6f22dad2fd525d9685b1a",
+    "profile": "occluded",
+    "method": "map_evidence",
+    "seed": 20,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s21_delay_2_map_additive_occluded.npz",
+    "input_sha256": "1e2bb092423dfc9a0221069817c7b0575c1f570ac08251ea1b4c1f74c798f7ea",
+    "profile": "occluded",
+    "method": "map_additive",
+    "seed": 21,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s21_delay_2_map_evidence_occluded.npz",
+    "input_sha256": "7399b32ff4485d8362500f1da5253ec523af28071200a167d64c8c296ff38c57",
+    "profile": "occluded",
+    "method": "map_evidence",
+    "seed": 21,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s22_delay_2_map_additive_occluded.npz",
+    "input_sha256": "0c99b613d08ae39fe7eb41ce7b754f1e83752b6bbb14fca9dc750db827d48a88",
+    "profile": "occluded",
+    "method": "map_additive",
+    "seed": 22,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  },
+  {
+    "file": "street_crate_s22_delay_2_map_evidence_occluded.npz",
+    "input_sha256": "0d3555f84a5aa028911ae6610518246471bf4c9616cc63943f589e21d8cfc491",
+    "profile": "occluded",
+    "method": "map_evidence",
+    "seed": 22,
+    "stored_request": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "reconstructed_wp0": [
+      0.0,
+      4.374278717023117e-14
+    ],
+    "counterfactual_wp1": [
+      0.2,
+      -0.030753162790569832
+    ],
+    "first_path_point_distance_m": 0.4407414872903898,
+    "scope": "fixed-input command only; no physical rerun or improved success claim"
+  }
+]

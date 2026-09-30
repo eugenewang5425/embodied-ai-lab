@@ -1,0 +1,126 @@
+{
+  "baseline_commit": "ecb9fe3",
+  "date": "2026-10-01",
+  "rounds": {
+    "7": {
+      "episodes": 30,
+      "wall_s": 302.43535990000237,
+      "physics_steps": 430650
+    },
+    "8": {
+      "episodes": 36,
+      "wall_s": 477.87456339999335,
+      "physics_steps": 459200,
+      "rebuilt_map_frames": 9220,
+      "checked_clear_events": 7763
+    }
+  },
+  "tests": {
+    "quick_passed": 879,
+    "quick_deselected": 194,
+    "quick_wall_s": 118.0,
+    "affected_passed": 28,
+    "affected_wall_s": 40.0,
+    "unrelated_historical_slow_rerun": false
+  },
+  "visual_qa": {
+    "own_window_only": true,
+    "screenshots": 3,
+    "scientific_figures": 6,
+    "trajectory_legend_overlap_fixed": true,
+    "one_click_keeps_time_and_page": true,
+    "early_map_never_replaced_by_final_map": true
+  },
+  "files": {
+    "docs/69-speed-round7.md": {
+      "sha256": "5680fd0df9a168aa4dd1c718c2a46849edb6cd0dd9871a77007d64c0b914bfe3"
+    },
+    "docs/69-online-map-round8.md": {
+      "sha256": "d6583474c3991527cb9736413dde65c4494cb02fae41b1731d5cf0f73cc790a9"
+    },
+    "docs/navigation-reinforcement-7-8-plan.md": {
+      "sha256": "8acd6c7b1222668e1031ff04ae01ce6934434410de3af3ece09a0a9511f02f4d"
+    },
+    "src/embodied_learning/navigation_map_update.py": {
+      "sha256": "66666ca105da1ff848a3952338f047a693de58e6df282e8a41b91ef89a58078c"
+    },
+    "src/embodied_learning/experiments/navigation_reinforcement.py": {
+      "sha256": "a1e89872d2598004c37bcbf1f2860cf7660dc8baed9884edc5101c6ff7124186"
+    },
+    "scripts/validate_navigation_reinforcement.py": {
+      "sha256": "b740441c040f5a2c94b2032c975eae75964277b8554ed5922bb9f91e167bb16d"
+    },
+    "docs/img/lesson69-round7-outcomes.png": {
+      "sha256": "7702ebc4c49036ffd421563cd4d0a526fcc2fbb4344bdce20fb333f8bc2cab01",
+      "pixels": [
+        2018,
+        706
+      ]
+    },
+    "docs/img/lesson69-round7-speed-contact.png": {
+      "sha256": "9d47e82941d4bd4c39f7beef66243cae71e5d50b8e336963ff52c99f2a5ecc5f",
+      "pixels": [
+        2018,
+        687
+      ]
+    },
+    "docs/img/lesson69-round7-trajectories.png": {
+      "sha256": "a21d3022820ff2a379d4e7f5e48b7ef36ae9e0fc29c131929ef2e90f75f53769",
+      "pixels": [
+        2018,
+        622
+      ]
+    },
+    "docs/img/lesson69-round7-window-speed-contact.png": {
+      "sha256": "7f131630a623b3a7e30b547745a4100308c390e232af77c10c8f9affec914c82",
+      "pixels": [
+        1680,
+        1000
+      ]
+    },
+    "docs/img/lesson69-round8-map-evidence.png": {
+      "sha256": "a96106bc8358e9267b7cd62d774a511dd859b3c85373b39eee5e32f01607008a",
+      "pixels": [
+        1778,
+        1298
+      ]
+    },
+    "docs/img/lesson69-round8-outcomes.png": {
+      "sha256": "fd4ee18b65aac04a640f4319de369d3c32b049ff9084442425a68a0e19fc69ac",
+      "pixels": [
+        2098,
+        1186
+      ]
+    },
+    "docs/img/lesson69-round8-trajectories.png": {
+      "sha256": "8dd0f40a2cdce703eeedf1c418f012cb4c2e3caad7b5d85006d0e6712c8d2347",
+      "pixels": [
+        2018,
+        622
+      ]
+    },
+    "docs/img/lesson69-round8-window-map-failure.png": {
+      "sha256": "43c6be88339122beac016363301c202c735f5e45fb97eb0484950875861232a4",
+      "pixels": [
+        1680,
+        1000
+      ]
+    },
+    "docs/img/lesson69-round8-window-map-shifted.png": {
+      "sha256": "cf26ddc7c7d71f412722ae97fb8ce22ddce2ba1fa07e3d1727677825d959bff0",
+      "pixels": [
+        1680,
+        1000
+      ]
+    },
+    "docs/benchmarks/navigation-reinforcement-v7-validation.json": {
+      "sha256": "fe3f71168178c8668a3133b235dd442c201501db33ce1b2e690f3acff6dfec68"
+    },
+    "docs/benchmarks/navigation-reinforcement-v8-validation.json": {
+      "sha256": "a2a62af7ff75a224f9e0e6388468543e032eb4eb68e943c181320d7c303c6e3f"
+    },
+    "docs/benchmarks/navigation-reinforcement-v8-waypoint-diagnosis.json": {
+      "sha256": "5153c7b5e253cc93f14f7fc6faeb0396ea3d5a6b9ca380a0985a5264ec195ae6"
+    }
+  }
+}

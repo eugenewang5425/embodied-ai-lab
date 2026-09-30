@@ -14,6 +14,26 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "normal_speed": (
+        "正常速度·最高0.6m/s",
+        "真实接触车身、零额外预留、允许轻擦；原速度规则，接近目标共同降速。",
+        "#c53e51",
+    ),
+    "low_speed": (
+        "固定低速·最高0.2m/s",
+        "只降低正常前向速度上限；转弯前馈随速度更新，反馈、地图与接触阈值相同。",
+        "#119c74",
+    ),
+    "map_additive": (
+        "地图只加不删",
+        "观测到新障碍会加入地图并找路；先验中已经移走或错位的旧障碍一直保留。",
+        "#c53e51",
+    ),
+    "map_evidence": (
+        "观测证据修正地图",
+        "看见新障碍就加入；深度射线连续三帧穿过旧格子才清除。遮挡、数据无效不能清除；没有修改自身定位。",
+        "#119c74",
+    ),
     "margin_strict": (
         "6cm预留·碰到即停",
         "新接触物理模型；仍多留6cm，第一次接触即中止任务并减速。",
@@ -265,10 +285,23 @@ class NavigationStudySource:
                         else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
                     )
                 )
-                if summary["protocol"].get("round") in (5, 6):
+                if summary["protocol"].get("round") in (5, 6, 7, 8):
                     label += f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s / " + (
                         "规划无输出1s" if row["profile"] == "blackout" else "正常输出"
                     )
+                    if summary["protocol"].get("round") == 8:
+                        label = (
+                            "69第八轮 · "
+                            + {
+                                "added": "新增箱体",
+                                "removed": "移走箱体墙",
+                                "shifted": "箱体侧移90cm",
+                                "unchanged": "箱体未变化",
+                                "removed_low": "移走低路障墙",
+                                "occluded": "旧箱体被遮挡",
+                            }[row["profile"]]
+                            + f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s"
+                        )
                 self.entries.append(ReplayEntry(case, lesson, f"{label} / 种子 {row['seed']}"))
         self.entries = tuple(self.entries)
 
@@ -307,7 +340,7 @@ class NavigationStudySource:
             "71": ("baseline", "recovery"),
         }[variant]
         keys = tuple(selected) if selected is not None else keys
-        if summary["protocol"].get("round") in (5, 6):
+        if summary["protocol"].get("round") in (5, 6, 7, 8):
             keys = tuple(k for k in keys if k in rows)
         labels = (
             {k: condition_label(summary["protocol"]["conditions"][k]) for k in keys}
@@ -419,6 +452,12 @@ class NavigationStudySource:
                 # Never show the final accumulated obstacle map as a live-time map.
                 # The shared prior is fixed; live returns and plans remain time-aligned.
                 methods[key]["display_map"] = "实验开始时的先验地图"
+                if "map_frames" in a:
+                    telemetry[key].update(
+                        {k: pad(a[k]) for k in ("map_frames", "map_counts", "map_error")}
+                    )
+                    if summary["protocol"].get("round") == 8:
+                        methods[key]["display_map"] = "当前观测通行图"
             else:
                 methods[key]["display_map"] = (
                     label if variant == "68" else LABELS[rows[key]["map_kind"]][0]
@@ -474,6 +513,8 @@ class NavigationStudySource:
                 for j, b in enumerate(boxes)
             ]
             maps["实验开始时的先验地图"] = arrays[keys[0]]["prior_map"]
+            if summary["protocol"].get("round") == 8:
+                maps["当前观测通行图"] = arrays[keys[0]]["prior_map"]
             metadata.update(
                 rig=rig.to_dict(),
                 body_parts=rig.parts.tolist(),
@@ -507,6 +548,7 @@ class NavigationStudySource:
                         "environment": "同条件环境参照",
                         "blackout": "规划无输出故障",
                         "delay": "延迟参照",
+                        "map_update": "错误地图对照",
                     }[cohort]
                     + "："
                     + "；".join(
@@ -578,6 +620,18 @@ class NavigationStudySource:
                         sensor_note="雷达/深度为存档；RGB重渲染，无视觉定位。速度请求≠身体实际速度。",
                         scene_note="12×12m；新障碍未画入先验；接触会受阻、滑动与旋转，不穿墙。",
                         cohort="本回合真实到点并满足接触口径："
+                        + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
+                        braking_models={k: "coupled" for k in keys},
+                    )
+                if round_number in (7, 8):
+                    r = rows[keys[0]]
+                    metadata.update(
+                        protocol="同一真实接触平台与轻擦阈值；第七轮只换速度，第八轮只换地图清除规则。地图修正不是位姿修正；末帧保持不计分。",
+                        settings=f"第69课第{round_number}轮 · 55×44cm车身 · 零额外预留 · 物理500Hz · 排队{r['perturbation']['delay_steps'] * 0.1:g}s · 精确位姿为设定",
+                        sensor_note="雷达/深度为同步记录；RGB重渲染，无视觉定位。真实速度与接触力另见诊断。",
+                        scene_note="12×12m街区/通道；真实障碍与可能错误的先验地图分别提供。未模拟行驶中移动物体。",
+                        live_map=round_number == 8,
+                        cohort="本回合真实到点并满足轻擦口径："
                         + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
                         braking_models={k: "coupled" for k in keys},
                     )

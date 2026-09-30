@@ -380,7 +380,7 @@ class ReplayWindow:
         self.map.layer.set(layer)
         self.map._draw_map()
         if not (
-            solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5, 6, 7, 8)
+            solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5, 6, 7, 8, 9)
         ):
             self.analysis.tabs.select(1 if choice == "split" else 0)
         self.refresh()

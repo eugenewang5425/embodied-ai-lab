@@ -184,7 +184,7 @@ uv run python -m embodied_learning.experiments.execution_navigation
 uv run python scripts/check_execution_counterfactual.py
 uv run python scripts/analyze_execution_safety.py
 uv run python docs/img/make_execution_figures.py
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/execution_safety_v5 --play
 uv run python scripts/check_execution_window.py
 ```
 
