@@ -92,6 +92,8 @@ app = ReplayWindow(root, MySource())
 
 ## 验证
 
+69课第二轮：本地有`results/footprint_tracking_v2/summary.json`时默认选该记录，新增四个中文方法按钮和第五页“跟踪与余量”。按钮一次同步相机、3D、目标、雷达、统计和诊断，并保持当前帧及诊断页；短回合只画到其真实末帧。左图比较相对首次规划的横向偏差，右图局部放大外扩足印分离量，负数表示预留空间重叠而非实体碰撞。定位误差零为实验受控假设。看第一轮请明确传`--footprint results/footprint_navigation_v1`；第二轮独立窗口截图由`uv run python scripts/check_footprint_tracking_window.py`生成。详见[第二轮讲义](69-footprint-tracking-round2.md)。
+
 第69–71课继续使用同一个模块化窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69`（也可70/71）。入口自动列出本地已有的课程档案，无需为了查看69课额外生成67/68全部记录。每个方法按钮一次同步相机、3D、目标、雷达点、地图、统计及“车身与决策诊断”，并保留时间。
 
 69课诊断页显示身体、刹停与存档深度；70课显示距离和内部位置预算；71课显示近场整盘恢复预测、执行速度和粒子分散程度。预测图形、按真值重渲染的RGB与真实存档传感器都有明确区分。运行 `uv run python scripts/check_navigation_followup_windows.py` 可生成固定回合的三张本机窗口验收图（需要三课及67/68记录）。

@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 
 from .panels import ErrorPanel
 from .safety_panel import SafetyPanel
+from .tracking_panel import TrackingPanel
 
 RESULTS = {
     "completed": "全部巡检完成",
@@ -44,6 +45,8 @@ class AnalysisPanel(ttk.Frame):
         self.help.pack(fill="both", expand=True)
         self.safety = SafetyPanel(self.tabs)
         self.tabs.add(self.safety, text="车身与决策诊断")
+        self.tracking = TrackingPanel(self.tabs)
+        self.tabs.add(self.tracking, text="跟踪与余量")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -127,6 +130,10 @@ class AnalysisPanel(ttk.Frame):
                     text += [
                         f"误报到点 {result['false_arrivals']} 次；恢复动作 {result['recovery_active_frames']} 帧。"
                     ]
+                if "expanded_swept_min_m" in result:
+                    text += [
+                        f"6厘米外扩足印的最小投影分离量 {result['expanded_swept_min_m'] * 100:.2f}cm；负值表示预留空间发生重叠。近场保护制动 {result['braking_events']} 次、{result['braking_frames']} 帧。"
+                    ]
                 if "planning_over_200ms" in result and result["planning_calls"]:
                     text += [
                         f"规划调用 {result['planning_calls']} 次，其中 {result['planning_over_200ms']} 次超过200毫秒。仿真会等待计算，不能把播放速度当实时性能。"
@@ -157,6 +164,8 @@ class AnalysisPanel(ttk.Frame):
             self._draw_separate()
         elif self.tabs.index(self.tabs.select()) == 3:
             self.safety.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 4:
+            self.tracking.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -180,3 +189,5 @@ class AnalysisPanel(ttk.Frame):
             self._draw_separate()
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 3:
             self.safety.draw(self.record, self.focus_key, self.frame)
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 4:
+            self.tracking.draw(self.record, self.focus_key, self.frame)

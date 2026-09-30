@@ -12,7 +12,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--lesson", choices=("67", "68", "69", "70", "71"), default="67")
     for flag, directory in (
-        ("footprint", "footprint_navigation_v1"),
+        (
+            "footprint",
+            "footprint_tracking_v2"
+            if (
+                Path(__file__).resolve().parents[2] / "results/footprint_tracking_v2/summary.json"
+            ).exists()
+            else "footprint_navigation_v1",
+        ),
         ("arrival", "arrival_decisions_v2"),
         ("recovery", "bounded_recovery_v2"),
     ):
@@ -61,12 +68,16 @@ def main():
         args.lesson,
     )
     app.choose_view(
-        {"67": "depth", "68": "repaired", "69": "rectangle", "70": "joint", "71": "recovery"}[
-            args.lesson
-        ]
+        {
+            "67": "depth",
+            "68": "repaired",
+            "69": "combined" if "combined" in app.record.method_keys else "rectangle",
+            "70": "joint",
+            "71": "recovery",
+        }[args.lesson]
     )
     if args.lesson != "68":
-        app.analysis.tabs.select(3)
+        app.analysis.tabs.select(4 if app.record.metadata.get("tracking_round") == 2 else 3)
     if args.play:
         root.after(500, app.toggle)
     root.lift()

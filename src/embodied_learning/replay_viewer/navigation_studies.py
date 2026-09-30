@@ -14,6 +14,26 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "original": (
+        "旧跟踪＋旧裁剪",
+        "追35厘米外的路径点；保留路线时直接连到前视点。第一轮矩形组的相同基线。",
+        "#dc7840",
+    ),
+    "tangent": (
+        "仅换切线跟踪",
+        "根据路线朝向、弯曲程度和横向偏差调整转向；仍使用旧裁剪。",
+        "#8b5cf6",
+    ),
+    "retained": (
+        "仅保留原曲线",
+        "从最近线段开始保留原折线，避免把弯路切成直线；仍用旧跟踪。",
+        "#247cc1",
+    ),
+    "combined": (
+        "切线跟踪＋原曲线",
+        "同时保留原曲线并纠正跟踪偏差；仍检查相同6厘米余量与整车刹停空间。",
+        "#119c74",
+    ),
     "circle_grid": (
         "旧圆形栅格规划",
         "把整个车身包成圆，再按10厘米格子膨胀；沿用第67课融合观测。",
@@ -141,7 +161,9 @@ class NavigationStudySource:
         keys = {
             "67": ("stop", "lidar", "depth"),
             "68": ("raw", "rigid", "repaired", "reference"),
-            "69": ("circle_grid", "circle_metric", "rectangle"),
+            "69": ("original", "tangent", "retained", "combined")
+            if summary["protocol"].get("round") == 2
+            else ("circle_grid", "circle_metric", "rectangle"),
             "70": ("baseline", "uncertainty", "joint"),
             "71": ("baseline", "recovery"),
         }[variant]
@@ -184,6 +206,22 @@ class NavigationStudySource:
             if variant in ("67", "69"):
                 depth[key] = {"values": pad(a["depth"]), "valid": pad(a["depth_valid"])}
                 telemetry[key] = {k: pad(a[k]) for k in ("commands", "reason", "safety_clearance")}
+                if "tracking_cross_m" in a:
+                    telemetry[key].update(
+                        {
+                            k: pad(a[k])
+                            for k in (
+                                "tracking_cross_m",
+                                "tracking_heading_rad",
+                                "initial_cross_m",
+                                "initial_heading_rad",
+                                "expanded_gap_m",
+                                "prior_expanded_gap_m",
+                                "path_curvature_m_inv",
+                                "tracking_angular_raw",
+                            )
+                        }
+                    )
                 # Never show the final accumulated obstacle map as a live-time map.
                 # The shared prior is fixed; live returns and plans remain time-aligned.
                 methods[key]["display_map"] = "实验开始时的先验地图"
@@ -257,6 +295,18 @@ class NavigationStudySource:
             )
             camera = CameraSpec(rig.camera_z_m, rig.camera_x_m, rig.vfov_deg)
             dt = summary["protocol"]["dt_s"]
+            if summary["protocol"].get("round") == 2:
+                cohort = rows[keys[0]]["cohort"]
+                metadata.update(
+                    tracking_round=2,
+                    settings="69课第二轮；55×44cm车身、6cm余量不变；零定位误差是设定，跟踪偏差另见诊断页",
+                    cohort=("固定批次" if cohort == "fixed" else "留出噪声种子")
+                    + "："
+                    + "；".join(
+                        f"{LABELS[k][0]} {sum(r['reached'] for r in summary['rows'] if r['method'] == k and r['cohort'] == cohort)}/{sum(r['method'] == k and r['cohort'] == cohort for r in summary['rows'])} 回合到达"
+                        for k in keys
+                    ),
+                )
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])
             maps = (

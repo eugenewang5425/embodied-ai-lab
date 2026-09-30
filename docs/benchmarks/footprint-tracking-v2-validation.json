@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-30",
+  "records": 132,
+  "frames": 15971,
+  "executed_steps": 15839,
+  "true_arrivals": 75,
+  "bitwise_legacy_baselines": 27,
+  "identical_four_arm_initial_plan_cases": 33,
+  "max_independent_motion_error": 2.913225216616411e-13,
+  "max_independent_corner_projection_gap_error_m": 2.6645352591003757e-15,
+  "source_live_and_snapshot_hashes_verified": {
+    "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+    "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+    "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+    "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+    "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+    "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345"
+  },
+  "summary_sha256": "a7a545ac77cf32229e8143cd076548f0ccc760179490b13bea64f6f88e7247bc",
+  "benchmark_sha256": "2e47f4d37e2448aa85b0a325f1e6fb8d97f1c4578acb14d6fe40e68cee5381b3",
+  "images": {
+    "lesson69-round2-braking.png": {
+      "sha256": "df2417b566d62404bd63d4edfd8b24a9a00082690dd9f70d547ad10d3623efb5",
+      "size": [
+        2018,
+        1214
+      ]
+    },
+    "lesson69-round2-results.png": {
+      "sha256": "726ee8da8a0596e3f32cc5c10bff0fc8839cd63333c52daa79325ddb6d4218b7",
+      "size": [
+        2018,
+        734
+      ]
+    },
+    "lesson69-round2-trajectories.png": {
+      "sha256": "74846292ed446c67eefa55c0f6af93b2bd412699b4c18b13e9167d2461edf4d9",
+      "size": [
+        2018,
+        987
+      ]
+    },
+    "lesson69-round2-window.png": {
+      "sha256": "cc85f4807d2dee4976697991af7db1bfe0370bf6251d3138ac5e30fc8ff07b7f",
+      "size": [
+        1600,
+        1000
+      ]
+    }
+  },
+  "visual_review": "Three charts and actual own-window capture reviewed; labels, margins, frame, target and source synchronization checked.",
+  "logs": {
+    "quick": {
+      "sha256": "231bd4e8e8a85c5ee10376b641477286677cbd91a698d6591b4ad3f8fa9d9313",
+      "result": "832 passed, 185 deselected",
+      "exit": 0,
+      "wrapper": "[tests] exit=0, elapsed=113.5s"
+    },
+    "affected_initial": {
+      "sha256": "bb0161928bee1baa7c3878472a575132212a71b11e5c8f113911a9a1f5ba2c5a",
+      "result": "1 failed, 51 passed",
+      "exit": 1,
+      "wrapper": "[tests] exit=1, elapsed=33.7s"
+    },
+    "affected": {
+      "sha256": "fbb85869262da868087d293d45729a87c5d9197875b40485b639974a40ed5979",
+      "result": "52 passed",
+      "exit": 0,
+      "wrapper": "[tests] exit=0, elapsed=29.1s"
+    }
+  },
+  "retry_reason": "New fifth diagnostic tab was reset by source selection; product choose_view now preserves tabs 3 and 4. Initial failure retained.",
+  "regression_scope": "832 quick and 52 affected complete selection. No new whole-repository slow run; unchanged lesson53 dense solver excluded. Historical whole run evidence remains separate.",
+  "terminal_boundary": "Last zero command is a non-executed archive marker. No-path termination does not establish a safe physical stop after abort.",
+  "geometry_boundary": "Corner SAT verified at saved frames; saved swept minimum uses <=1cm corner-travel sampling, not continuous safety proof. No runtime controllers used by this audit.",
+  "local_links_checked": 360,
+  "documents_sha256": {
+    "README.md": "1ea3a911024a71d3047627a34ce1c74d7f92667cb5930772c57f8a4e4ee27a85",
+    "docs\\69-footprint-planning.md": "f702d9b4a18f4b513aeafb39874f74df75a53f764ec043fe074185b78b3c8550",
+    "docs\\69-footprint-tracking-round2.md": "46faba52250c17fe04eebe6217b3fa54b50ce47fd72634c5edfda8c270f2afe5",
+    "docs\\69-tracking-round2-plan.md": "34a8118bcb38d544c6dac0aac3721e5d4a9bc53a21903c6a7dfba7f3960b8c91",
+    "docs\\navigation-stage-review-69-71.md": "63e57cecdaceaaf85b79a5b97247b6121512d1e19e1e067a5675b47b39622caa",
+    "docs\\01-learning-roadmap.md": "4c959f81fa9d4d261054224628af651300de8910ae16d6c0a64ad90c5d25e3df",
+    "docs\\multisensor-navigation-roadmap.md": "19a2a3acbd70617e34b74cf926c6d163060ae1c9319fd0ab30030231e33d14e3",
+    "docs\\replay-window.md": "51c038a4f701e69f248d41ace0ab92e94e74296b0963a718de1589e16c8db0ea"
+  },
+  "audit_sha256": "ab76015d586516af3ea131be53833ce719efb4aa4d83ae09d25f8c99f9f6acf1",
+  "audit_wall_s": 3.4314012999966508
+}

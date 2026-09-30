@@ -178,7 +178,8 @@ def test_formal_records_preserve_baselines_and_source_hashes():
     for lesson in ("69", "70", "71"):
         summary = source.summaries[lesson]
         for name, value in summary["protocol"]["source_sha256"].items():
-            assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == value
+            archived = source.directories[lesson] / "source" / name
+            assert hashlib.sha256(archived.read_bytes()).hexdigest() == value
         for entry in (e for e in source.entries if e.variant == lesson):
             record = source.load(entry.case, lesson)
             assert record.telemetry

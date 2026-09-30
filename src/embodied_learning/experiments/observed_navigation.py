@@ -96,6 +96,18 @@ class ObservedController:
     def make_plan(self, estimate, goal):
         return route(self.grid, estimate[:2], goal, self.rig)
 
+    def tracking_command(self, estimate, velocity):
+        """Nominal steering hook; observation, planning and braking stay shared."""
+        while (
+            self.wp < len(self.path) - 1
+            and np.linalg.norm(estimate[:2] - self.path[self.wp]) < self.waypoint_radius_m
+        ):
+            self.wp += 1
+        delta = self.path[self.wp] - estimate[:2]
+        bearing = np.arctan2(delta[1], delta[0]) - estimate[2]
+        bearing = np.arctan2(np.sin(bearing), np.cos(bearing))
+        return np.array([0.6 if abs(bearing) < 0.3 else 0.0, np.clip(2 * bearing, -1.0, 1.0)])
+
     def step(self, estimate, goal, ranges, hits, depth, valid, frame, velocity):
         rig = self.rig
         points = lidar_obstacle_points(ranges, hits, rig)
@@ -120,15 +132,7 @@ class ObservedController:
             self.wp, self.last_plan = 0, frame
         if self.path is None:
             return (0.0, 0.0), "no_observed_route", float("inf")
-        while (
-            self.wp < len(self.path) - 1
-            and np.linalg.norm(estimate[:2] - self.path[self.wp]) < self.waypoint_radius_m
-        ):
-            self.wp += 1
-        delta = self.path[self.wp] - estimate[:2]
-        bearing = np.arctan2(delta[1], delta[0]) - estimate[2]
-        bearing = np.arctan2(np.sin(bearing), np.cos(bearing))
-        desired = np.array([0.6 if abs(bearing) < 0.3 else 0.0, np.clip(2 * bearing, -1.0, 1.0)])
+        desired = self.tracking_command(estimate, velocity)
         reason, clearance = "following", float("inf")
         if self.method == "stop":
             angles = np.arange(len(ranges)) * (2 * np.pi / len(ranges))

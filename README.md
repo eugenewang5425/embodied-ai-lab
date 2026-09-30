@@ -12,8 +12,8 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 第 1–56 课完成；基准62仍未过跨场景门槛；第63–71课已开展房间/园区闭环、地图分离、车身避障、扫描修图及导航决策。最新三课111回合：窄路仍0/9；新到点判据各48/48真实到点；局部恢复使准确图18/24→24/24。见[综合基准](docs/62-navigation-benchmark.md)与[最新阶段复盘](docs/navigation-stage-review-69-71.md)。 |
-| **Verified** | 827 quick tests passed (109.8 s); full first run: 1010 passed, 1 old GUI timing failure (5943.2 s). Fixture repaired; 46 affected tests passed (32.4 s), including 4 real Tk tests (2026-09-28, Windows). [Validation and retry evidence](docs/benchmarks/navigation-studies-69-71-validation.json). Ruff check passed; changed Python files formatted; 17 untouched legacy files still fail the global format check. |
+| **Status** | 第1–56课完成；基准62未过跨场景门槛；第63–71课开展房间/园区闭环、车身避障、修图及导航决策。09-30新增69课第二轮132回合：固定到达18/27→21/27、窄路3/9，但留出0/6，外扩安全余量仍有违规。此前70课新判据各48/48真实到点、71课准确图18/24→24/24，尚未组合。见[综合基准](docs/62-navigation-benchmark.md)与[最新阶段复盘](docs/navigation-stage-review-69-71.md)。 |
+| **Verified** | 832 quick tests passed (113.5 s); 52 affected tests passed (29.1 s), including real Tk checks (2026-09-30, Windows). A new diagnostic-tab switching bug was caught and fixed. [Current audit and retry evidence](docs/benchmarks/footprint-tracking-v2-validation.json). Ruff check and changed-file format passed. No new full slow run; [09-28 full-run failure and retry evidence](docs/benchmarks/navigation-studies-69-71-validation.json) remains separate. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -200,7 +200,7 @@ uv run python scripts/render_photo_room_replay.py
 | 第 66 课 | 街区式园区巡检 | 已完成基线；雷达停车，尚无在线绕行/修图 | [讲义](docs/66-campus-patrol.md) |
 | 第 67 课 | 车身标定与观测驱动避障 | 已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝 | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
 | 第 68 课 | 扫描校准与错误地图修复 | 已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成 | [讲义](docs/68-scan-based-map-repair.md) |
-| 第 69 课 | 朝向足印与窄路规划 | 81回合；几何路线成立，窄路执行仍0/9，保留失败 | [讲义](docs/69-footprint-planning.md) |
+| 第 69 课 | 朝向足印、窄路规划与跟踪 | 首轮81回合窄路0/9；第二轮132回合窄路3/9、留出0/6，余量未过门 | [第六十九课讲义](docs/69-footprint-planning.md) / [第二轮讲义](docs/69-footprint-tracking-round2.md) |
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
 
@@ -308,6 +308,8 @@ uv run python scripts/render_photo_room_replay.py
 │   ├── 67-body-aware-obstacle-avoidance.md
 │   ├── 68-scan-based-map-repair.md
 │   ├── 69-footprint-planning.md
+│   ├── 69-footprint-tracking-round2.md
+│   ├── 69-tracking-round2-plan.md
 │   ├── 70-arrival-decisions.md
 │   ├── 71-bounded-recovery.md
 │   ├── navigation-stage-review-69-71.md
@@ -1680,7 +1682,25 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 读图：灰虚线为首次规划，绿实线为实际运动，红叉为停止位置，金星为目标。右侧绿框为身体，橙虚框为6cm外扩；代表回合真实间隙6.31cm，但倾斜后的外扩足印已触墙。规划与跟踪之间仍有缺口。
 
-讲义：[第六十九课讲义](docs/69-footprint-planning.md)；窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play`。讲义包含变量、公式、全部结果、失败机制、思考题与复现；另报告规划耗时，存档播放不代表实时达标。
+第一轮讲义：[第六十九课讲义](docs/69-footprint-planning.md)；第一轮窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/footprint_navigation_v1 --play`。
+
+### 第二轮：跟踪与路线保留分别起了什么作用？
+
+固定相同身体、6cm外扩、速度与观测，对照旧组、仅换切线跟踪、仅保留原曲线、两项组合。**两个单项仍18/27，组合21/27；固定窄路3/9，但留出种子3/4仍0/6。** 三个窄路成功全部来自开发种子0的三种障碍高度，不能当作三个独立种子成功。132回合零实体接触；成功例外扩足印仍短暂重叠约1.08mm，安全余量门槛没有通过。
+
+![第69课第二轮全部结果与留出失败](docs/img/lesson69-round2-results.png)
+
+读图：左图每种环境每组9回合；右图为额外留出窄路种子，每组6回合。橙/紫/蓝/绿对应旧组、只换跟踪、只保留曲线、组合组，与窗口一致。
+
+![第69课第二轮四组规划与实际轨迹](docs/img/lesson69-round2-trajectories.png)
+
+读图：固定种子0普通箱体；灰虚线为相同首次规划，彩色实线为各组实际运动，金星为目标，叉号为未完成终点。只有组合组在16.4秒到达。旧裁剪把原曲线接成触墙弦线；保留曲线和改善跟踪同时使用才在这一例有效。
+
+![第69课第二轮剩余失败的制动证据](docs/img/lesson69-round2-braking.png)
+
+读图：绿色为成功种子0，橙色为失败种子2。上排横向/朝向偏差相对固定首次规划；左下零线表示外扩空间开始重叠，右下叉号为刹车请求。失败例提前一帧刹车，角速度已到0时线速度仍有0.52m/s，改变转弯形状。下一轮独立检验制动与速度预算，另保留种子1的观测/搜索失败边界。
+
+讲义：[第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md)；[132回合摘要](docs/benchmarks/footprint-tracking-v2.json)；[独立审计](docs/benchmarks/footprint-tracking-v2-validation.json)。默认窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play`（本地需第二轮记录）。新增“跟踪与余量”页，四组一键同步相机、3D、雷达、目标和统计。定位零误差来自受控假设；实体间隙、跟踪偏差和外扩重叠分别说明。讲义含变量因果、失败、耗时、思考题与复现。
 
 ## 第七十课：估计到了，身体真的到了吗？
 
@@ -1714,7 +1734,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 窗口固定为准确图种子0、34.20s；方法按钮一次同步各面板，保留时间。金色圆盘是动作预测，RGB为真实位姿重渲染，扫描和动作来自存档。69–71均接入相同模块，无需分别打开多个窗口调来源。
 
-**阶段复盘**：[为什么相同算法换环境或决策后表现不同](docs/navigation-stage-review-69-71.md)；[111回合全部摘要与哈希](docs/benchmarks/navigation-studies-69-71-v1.json)；[验证记录](docs/benchmarks/navigation-studies-69-71-validation.json)。三项尚未组合，下一批先补窄路跟踪和实时预算，再统一身体做组合消融。原数组本地保存，新克隆按讲义命令生成；后续课程视频待个人音色准备后制作。
+**阶段复盘**：[为什么相同算法换环境或决策后表现不同](docs/navigation-stage-review-69-71.md)；[第一轮111回合摘要](docs/benchmarks/navigation-studies-69-71-v1.json)；[第一轮验证](docs/benchmarks/navigation-studies-69-71-validation.json)。69第二轮另有132回合，三项尚未组合；下一批先检验转弯制动、曲率速度与实时预算，再扩大70/71反例、统一身体做组合消融。原数组本地保存，新克隆按讲义命令生成；后续课程视频待个人音色准备后制作。
 
 ## 进度清单
 
@@ -1790,6 +1810,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 - [x] 第六十七课：车身标定与观测避障——融合组 18/27 到达、零碰撞、9 次窄路拒绝
 - [x] 第六十八课：扫描修图——真实到点 5/24→23/24、整轮 2/3；仍有 1 轮误报完成
 - [x] 第六十九课：三种规划表示81回合；普通场景18/18保持，窄路0/9未过门
+- [x] 第六十九课第二轮：跟踪×路线保留132回合；固定到达21/27、窄路3/9、留出0/6；保留余量违规和制动失败证据
 - [x] 第七十课：三种到点规则18回合；预算与停稳组各48/48、零误报
 - [x] 第七十一课：有限恢复12回合；准确图18/24→24/24，修后图原误报保留
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差

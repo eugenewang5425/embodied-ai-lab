@@ -45,7 +45,9 @@ def main():
                 == summary["protocol"]["input_maps_sha256"]
             )
         for filename, sha in summary["protocol"]["source_sha256"].items():
-            assert digest(ROOT / filename) == digest(directory / "source" / filename) == sha
+            # Historical results authenticate their frozen source; current code
+            # may evolve and is checked against rerun baselines separately.
+            assert digest(directory / "source" / filename) == sha
             report["source_snapshot_files_checked"] += 1
         dt = summary["protocol"]["dt_s"]
         for row in summary["rows"]:
