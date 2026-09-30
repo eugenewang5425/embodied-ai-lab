@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-01",
+  "archive_sha256": "7f3c2b08998ccb2eac3cc80966227a8201ead3c9bfe7d46ca8b4fe30943f9dfe",
+  "model_commit": "4d038b3feae26ec82b46a4d586379114012a8ac7",
+  "tests": {
+    "quick": {
+      "passed": 870,
+      "wall_s": 99.2
+    },
+    "selected_full": {
+      "passed": 11,
+      "wall_s": 13.0
+    }
+  },
+  "links_checked": 341,
+  "files_sha256": {
+    "docs/img/lesson72-geometry-audit.png": "9fb79d1ef48fd364bd8a54ab990ef49bcb7c9c16791e470db469d60e282a3396",
+    "docs/img/lesson73-failure-window.png": "c23406a234309e0c20e41401b9c3dc277918d1c142c119dc6cd4e70ab7620a8d",
+    "docs/img/lesson73-grasp-results.png": "edc01f5fee85f9030a43d051c5d42474fba43383b6a144b706347a71b5b04f3b",
+    "docs/img/lesson73-grasp-traces.png": "ad83e50479ed8dc84e38fda844daf35630745827512163e28e7a78d31b263557",
+    "docs/img/lesson73-window.png": "2b9f4cf5e3c241fb9996dc6920d3aa944726732eb2b6eead84e0bed61594c55d",
+    "scripts/check_so101_window.py": "c6de82d13a23d7da01608139aa8a63b8236264a58e47a7b139ceb49b60b6eb8c",
+    "scripts/validate_so101_grasping.py": "1120a0913cd09867aec5fabb381362ee8f9a1df86c954496e1423489a1fe7aa7",
+    "src/embodied_learning/manipulation_record.py": "11d56ac3b2e6202e4ce9fd59bf9d550bc4beda4039a6dc2581aae7392adfa3e4",
+    "src/embodied_learning/manipulation_demo.py": "a775e471c0a38605d1911b097523c80bcfdd0f074c8a5cc698fa2bbfce3a86e4",
+    "src/embodied_learning/manipulation_viewer/panels.py": "765479ed17e08568d1403ee950dc4d8c60ba927ff66fef05909747bfedeeb919",
+    "src/embodied_learning/manipulation_viewer/renderer.py": "d488aed6f90257c0c1d29798bb524c042000debe8eac14c45a3ece9aa032eca6",
+    "src/embodied_learning/manipulation_viewer/window.py": "d75a559576206a9378ad41acd6f29be0e30e34caba7607896ad3c54163ffe73a",
+    "src/embodied_learning/manipulation_viewer/__init__.py": "52976eddac3aff85f48daf871020e684e66ff31c2025c73c0fe6cdff7448b48d"
+  },
+  "visual_checks": [
+    "success lift",
+    "open/offset controls",
+    "failed clamp",
+    "release",
+    "1100x800 compact layout"
+  ],
+  "note": "Owned Tk-window captures, not desktop crops; state replay has no real camera perception."
+}

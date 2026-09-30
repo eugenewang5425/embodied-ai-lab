@@ -13,7 +13,7 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 | | |
 |---|---|
 | **Status** | 第1–56课完成；基准62仍未过跨场景门槛。第63–71课已开展房间/园区闭环与分离导航实验。10-01按用户“允许轻擦、以到达为主”新增69课第六轮39回合：同接触物理模型下，窄路0.2秒延迟主批6cm组0/9，零余量两组均6/9真实到点并停稳；允许轻擦未带来额外收益，重接触和无路仍保留。见[第六十九课第六轮讲义](docs/69-contact-round6.md)与[阶段复盘](docs/navigation-stage-review-69-71.md)。 |
-| **Verified** | 862 quick tests passed (160.6 s); 49 affected tests passed (56.1 s), including real Tk checks (2026-10-01, Windows). [Round-six direct physics replay](docs/benchmarks/contact-navigation-v6-validation.json) checks all 214850 physical steps, contact metrics, body velocity and actual arrival. Ruff and changed-file format checked. No new full slow run; historical full-run limitations remain separate. |
+| **Verified** | 870 quick tests passed (99.2 s); 11 SO101 tests passed in the complete selected run (13.0 s), including a real Tk window. [Grasping physics replay](docs/benchmarks/so101-grasping-v2-validation.json) checks 27 episodes and 286200 physical steps, contact forces, geometry and scoring (2026-10-01, Windows). Earlier [navigation replay](docs/benchmarks/contact-navigation-v6-validation.json) remains available. Ruff and changed-file format checked; historical full slow-run limitations remain separate. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -113,10 +113,12 @@ uv run python scripts/render_photo_room_replay.py
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-09-28 · 基准 62 + 第 63–71 课）
+## 当前状态（2026-10-01 · 基准 62 + 第 63–73 课）
+
+- **新增三维操作主线（72—73课）**：SO-101固定开源模型与可复用窗口，真实物理抓取27回合中正常6/9、两负对照各0/9；已知物体位置，相机尚未参与控制。坐标/关节审计与全部物理输入重放通过，三个正常失败继续保留。见[第七十二课讲义](docs/72-so101-geometry.md)、[第七十三课讲义](docs/73-so101-physical-grasping.md)与[操作路线](docs/manipulation-roadmap.md)。
 
 - **主线课程 1–56 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞 → 第 44 课：定位误差穿栈——真值位姿 15/15 而复用第 15 课里程计后 0/15（1% 偏差即崩），融合观测后 15/15、误差 2.5 cm 与真值组几乎等价 → 第 45 课：最小栅格 SLAM（帧间扫描匹配，无信标）0/15 与纯里程计同量级——相对锚不能闭环 → 第 46 课：回环闭合（绝对锚第二形态，末端 9.2 m→0.14 m）→ 第 47 课：加权位姿图优化——形状修复成立（FG 均值 5.03 < 弧长 5.33 m）、黄金锚末端 0.016 m、末端精度 vs 全程形状的 σ 权衡入册 → 第 48 课：鲁棒位姿图——毒化回环注入实验（LS 7.63 m 比无回环更糟；Huber 压回 5.22 m；单核两难：好回环在同核下无法闭合，SC/MM 是解法 → 第 49 课：回环匹配器工程化——接受率阶梯 0.32→0.43→0.52→0.76（K）；当时方向正确率 ≤5.4% 使用了第 54 课勘误的旧判据 → 第 50 课：特征化回环检测——三项特征评分分布重叠；2.6% vs oracle 4.9% 为后来勘误的旧判据 → 第 51 课：SC/MM 可切换约束——第 48 课同款绝对锚注入下 λ 可行域为空、MM 硬组件选择死锁，正解需要相对回环边 → 第 52 课：相对回环边下毒化同样毒、开关折中 s=0.61 → 第 53 课：同题交 scipy 生产求解器仍不拒绝——失败是问题属性 → 第 54 课：度量勘误（旧方向正确率是评估目标伪影，修正后匹配器 58-72% 正确）→ 第 55 课：里程计候选筛选后的模拟标记检索 12/12、几何方向正确 11/12（不是真实 RGB-D）→ 第 56 课：修正内圈巡游后的理想图定位显著改善，自建图未过有界跟踪门、理想图绑架恢复 4/5；后续跨场景基准见 docs/62。
-- **自动验收**：以本次全量 `uv run pytest -q` 和 Ruff 结果为准；实验 NPZ 位于受 Git 忽略的 `results/`，可核对的摘要及 SHA-256 在 `docs/benchmarks/`。
+- **自动验收**：本轮全仓快速测试870项、机械臂完整选择集11项与Ruff通过；未重跑历史全仓慢层。实验NPZ位于受Git忽略的`results/`，可核对的摘要、独立重放及SHA-256在`docs/benchmarks/`。
 - **记录体系**：审查报告与 issue/PR 文稿见[实验审查报告](docs/26-experiment-review-2026-09-05.md)、[问题与 PR 草稿](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（只追加）；演示真机验收标准见实验审查报告第六节。
 - **闭环导航与官方 AMCL 对照已过参数门禁（第 64 课 v4）**：照片房间四组定位来源对照（真值/里程计/参考图 PF/自建图 PF）60 回合——全组零接触、不可达 12/12 安全拒绝、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 nav2 AMCL 批量执行器修复后（launch 参数化 + `ros2 param get` 硬门禁）27/27 有效：A-budget 0.078 m 最好，更新频率 4.6× 只换来 0.104→0.089 m——粒子数/波束数才是主变量。此前"AMCL 参数不敏感"结论已撤回（三组配置当时从未真正生效）。
 - **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
@@ -187,7 +189,7 @@ uv run python scripts/render_photo_room_replay.py
 | 第 55 课 | 模拟标记外观检索 | 里程计弧长筛选 292 个探帧；top-12 检索精确率 12/12，几何方向正确 11/12、审查量 4.1%；不是真实 RGB-D 图像 | Algorithm 篇·Robot Navigation（场所识别） | [讲义](docs/60-session-55-rgbd-loops.md) |
 | 第 56 课 | 建图与定位分离 | 修正 16 m 内圈巡游后：EST / 理想图 PF / 自建图 PF 平均误差 1.984 / 0.322 / 3.443 m；自建图未过门，理想图绑架恢复 4/5 | Algorithm 篇·Robot Navigation（地图质量与定位） | [讲义](docs/61-session-56-map-localization.md) |
 
-### 第 56 课之后：跨场景基准与第 63–71 课
+### 第 56 课之后：跨场景基准与第 63–73 课
 
 文档号历史上一直领先于课号（审查报告、基准等非课文档穿插编号）：文档号 57–61 就是第 52–56 课的讲义，62 号留给跨场景集成基准。照片房间与园区属于新场景，闭环、避障、修图属于新课题，已构成真正的课程内容，因此自**第 63 课**起课号与文档号对齐，后续新课顺延编号。
 
@@ -203,6 +205,25 @@ uv run python scripts/render_photo_room_replay.py
 | 第 69 课 | 足印、跟踪、制动与接触执行 | 六轮81/132/230/233/135/39回合；新接触平台取消额外余量后主批6/9真实到点，重接触与无路保留 | [第六十九课讲义](docs/69-footprint-planning.md) / [第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md) / [第六十九课第三轮讲义](docs/69-braking-round3.md) / [第六十九课第四轮讲义](docs/69-robustness-round4.md) / [第六十九课第五轮讲义](docs/69-execution-round5.md) / [第六十九课第六轮讲义](docs/69-contact-round6.md) |
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
+| 第 72 课 | SO-101三维机械臂、工具与相机坐标 | 固定开源模型；32姿态雅可比与64相机往返审计；姿态限制负例保留 | [讲义](docs/72-so101-geometry.md) |
+| 第 73 课 | 真实接触抓取与稳定放置 | 27回合；正常夹取6/9、张开/位置偏差各0/9；已知位置，尚无视觉抓取 | [讲义](docs/73-so101-physical-grasping.md) |
+
+### SO-101机械臂：相机、三维场景与接触统计
+
+从此前2R平面臂进入三维桌面抓取。使用固定版本的SO-101开源模型，实际物理接触夹起4cm、50g方块并放到目标区域；没有将物体焊接到手臂。正常组6/9完成，另外两组各0/9，三个正常失败回合保留。[机械臂推进路线](docs/manipulation-roadmap.md)说明标定、抓取、视觉、恢复与学习的顺序。
+
+![机械臂可复用窗口：相机、三维场景与物理统计](docs/img/lesson73-window.png)
+
+窗口包括外部俯视相机、腕部相机、可旋转三维视图和诊断图。一次选择方法或物体位置，所有面板共同切换并保留时间；青线是夹爪实际运动，橙线是物体实际运动，金点/金圈是目标提示，粉点是受力接触。当前控制使用已知物体位置，相机只作模型投影检查与存档渲染，视觉抓取安排在后续阶段。
+
+```powershell
+uv run python -m embodied_learning.experiments.so101_grasping --output results/so101_my_run
+uv run python -m embodied_learning.manipulation_demo --results results/so101_my_run --play
+uv run python scripts/validate_so101_grasping.py results/so101_my_run
+uv run python scripts/test.py full tests/test_so101_manipulation.py
+```
+
+已有本机正式记录时可直接运行`uv run python -m embodied_learning.manipulation_demo`。新实验必须使用新目录；上游Apache-2.0许可、固定提交与模型哈希保留在`src/embodied_learning/assets/so101`。
 
 ## 当前技术路线
 
@@ -222,7 +243,7 @@ uv run python scripts/render_photo_room_replay.py
 
 每个主题都按以下顺序推进：
 
-每份逐课讲义先把**本课新出现的量是什么、它怎样影响下一步动作、实验固定与改变了什么、结果数字究竟支持什么**连成一条推理链，再给出原理、实验表格、失败条件和复现命令。第 1–56 课与第 63–71 课均包含理论对应和思考题：先用图表回答每课的问题，再尝试用思考题解释数字、设计下一次单变量对照。
+每份逐课讲义先把**本课新出现的量是什么、它怎样影响下一步动作、实验固定与改变了什么、结果数字究竟支持什么**连成一条推理链，再给出原理、实验表格、失败条件和复现命令。第 1–56 课与第 63–73 课均包含理论对应和思考题：先用图表回答每课的问题，再尝试用思考题解释数字、设计下一次单变量对照。
 
 1. 物理直觉与任务定义；
 2. 坐标系、状态、动作与数学模型；

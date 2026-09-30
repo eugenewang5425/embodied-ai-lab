@@ -1,0 +1,10 @@
+{
+  "episodes": 27,
+  "physical_steps": 286200,
+  "max_state_error": 0.0,
+  "max_force_error_n": 0.0,
+  "max_geometry_error_m": 0.0,
+  "archive_sha256": "7f3c2b08998ccb2eac3cc80966227a8201ead3c9bfe7d46ca8b4fe30943f9dfe",
+  "validator_sha256": "1120a0913cd09867aec5fabb381362ee8f9a1df86c954496e1423489a1fe7aa7",
+  "replay_note": "输入重放验证状态/接触和评分；不证明真实机器人参数或视觉估计有效"
+}

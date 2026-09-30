@@ -1,0 +1,3 @@
+# Exact upstream bytes must survive Windows checkout for provenance SHA-256.
+* -text
+assets/* -text
