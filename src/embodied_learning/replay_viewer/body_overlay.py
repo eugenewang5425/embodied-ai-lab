@@ -1,5 +1,7 @@
 """Calibrated ground-width guides are HUD annotations, never camera evidence."""
 
+from dataclasses import replace
+
 import numpy as np
 from PIL import ImageDraw
 
@@ -13,6 +15,8 @@ def draw_body_guides(image, record, frame, key):
         return image
     image = image.copy()
     rig = NavigationRig(**record.metadata["rig"])
+    if record.metadata.get("tracking_round") == 6:
+        rig = replace(rig, margin_m=record.method_info(key)["result"]["controller_margin_m"])
     draw = ImageDraw.Draw(image)
     sx, sy = image.width / rig.width, image.height / rig.height
     for side in (-1, 1):
@@ -30,7 +34,7 @@ def draw_body_guides(image, record, frame, key):
     draw.rectangle((0, 83, image.width, 136), fill="#172333")
     draw.text(
         (10, 86),
-        "黄线：直行车宽44cm＋两侧各6cm余量（地面投影）",
+        f"黄线：车宽44cm＋两侧各{rig.margin_m * 100:g}cm余量（地面投影）",
         font=label_font,
         fill="#ffd46b",
     )

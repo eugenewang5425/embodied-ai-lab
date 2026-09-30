@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from .braking_panel import BrakingPanel
+from .contact_panel import ContactPanel
 from .execution_panel import ExecutionPanel
 from .panels import ErrorPanel
 from .robustness_panel import RobustnessPanel
@@ -21,6 +22,7 @@ RESULTS = {
     "timeout": "超时/停滞",
     "no_path": "估计位置无法继续规划",
     "collision_abort": "发生接触，仿真终止",
+    "heavy_contact_abort": "接触超出轻擦范围，中止并减速",
     "goal_overshoot": "刹停后仍在目标圈外",
     "stalled": "停车后无法继续前进",
     "control_expired": "控制信息过期，本地停住",
@@ -58,6 +60,8 @@ class AnalysisPanel(ttk.Frame):
         self.tabs.add(self.robustness, text="误差与延迟")
         self.execution = ExecutionPanel(self.tabs)
         self.tabs.add(self.execution, text="执行端保护")
+        self.contact = ContactPanel(self.tabs)
+        self.tabs.add(self.contact, text="接触与实际速度")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -120,6 +124,10 @@ class AnalysisPanel(ttk.Frame):
             text[-1] = (
                 "本轮保持精确定位，比较排队动作预测和本地保护；没有运行PF或视觉定位。规划无输出期间车继续走，本地保护停车也不算到达。\n"
             )
+        if r.metadata.get("tracking_round") == 6:
+            text[-1] = (
+                "第六轮使用接触物理模型；精确定位为设定，没有运行PF或视觉定位。碰到墙会受阻，允许轻擦不等于允许穿墙。\n"
+            )
         for key in r.method_keys:
             info = r.method_info(key)
             text += [info["label"], info["description"]]
@@ -141,7 +149,7 @@ class AnalysisPanel(ttk.Frame):
             result = info.get("result")
             if result:
                 text += [
-                    f"任务结果：{RESULTS[result['status']]}；真正到达 {result['reached']}/{result['target_count']} 点，自报到达 {result['announced']} 点，接触障碍 {result['contacts']} 帧。"
+                    f"任务结果：{RESULTS[result['status']]}；真正到达 {result['reached']}/{result['target_count']} 点，自报到达 {result['announced']} 点，接触记录 {result['contacts']}（第六轮为事件数，旧轮为帧/终止标记）。"
                 ]
                 if "perturbation" in result:
                     c = result["perturbation"]
@@ -154,11 +162,15 @@ class AnalysisPanel(ttk.Frame):
                     text += [
                         f"误报到点 {result['false_arrivals']} 次；恢复动作 {result['recovery_active_frames']} 帧。"
                     ]
-                if "expanded_swept_min_m" in result:
+                if "passed" in result:
+                    text += [
+                        f"新口径通过：{'是' if result['passed'] else '否'}；接触峰值{result['contact_peak_force_n']:.2f}N、压入{result['contact_penetration_m'] * 1000:.3f}mm、最长连续{result['contact_longest_s']:.3f}s；6cm外扩仅诊断。"
+                    ]
+                if "expanded_swept_min_m" in result and "passed" not in result:
                     text += [
                         f"6厘米外扩足印的最小投影分离量 {result['expanded_swept_min_m'] * 100:.2f}cm；负值表示预留空间发生重叠。近场保护制动 {result['braking_events']} 次、{result['braking_frames']} 帧。"
                     ]
-                if "physically_stopped" in result:
+                if "physically_stopped" in result and "passed" not in result:
                     text += [
                         f"实际停稳：{'是' if result['physically_stopped'] else '否'}；完成且全程外扩余量合格：{'是' if result['safe_completed'] else '否'}。终止触发后的实际制动尾段 {result['tail_time_s']:.1f}s、{result['tail_distance_m'] * 100:.1f}cm。"
                     ]
@@ -174,7 +186,7 @@ class AnalysisPanel(ttk.Frame):
             r.metadata.get("protocol", ""),
             r.metadata.get("lidar_note", ""),
             r.metadata.get("sensor_note", ""),
-            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。第67/69课使用无偏无滑移里程计来隔离规划避障问题，零定位误差是实验设定。",
+            "结束较早的方法在回放中保持末帧；这些停留帧不参加统计。第67/69课以精确位姿隔离避障问题，零定位误差是实验设定。第六轮可有接触侧滑，停稳检查包含侧向速度。",
         ]
         self.help.configure(state="normal")
         self.help.delete("1.0", "end")
@@ -200,6 +212,8 @@ class AnalysisPanel(ttk.Frame):
             self.robustness.draw(self.record, self.focus_key, frame)
         elif self.tabs.index(self.tabs.select()) == 7:
             self.execution.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 8:
+            self.contact.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -231,3 +245,5 @@ class AnalysisPanel(ttk.Frame):
             self.robustness.draw(self.record, self.focus_key, self.frame)
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 7:
             self.execution.draw(self.record, self.focus_key, self.frame)
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 8:
+            self.contact.draw(self.record, self.focus_key, self.frame)

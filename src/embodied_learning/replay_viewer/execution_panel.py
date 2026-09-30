@@ -36,9 +36,15 @@ class ExecutionPanel(ttk.Frame):
         request = np.where(d["braking_active"][ix], 0, d["requested_command"][ix, 0])
         request = np.where(d["control_fresh"][ix], request, np.nan)
         a.step(t, request, where="post", ls="--", c="#64748b", label="新请求（失联处断开）")
-        a.step(t, d["commands"][ix, 0], where="post", c=color, label="实际执行速度")
+        a.step(
+            t,
+            d["commands"][ix, 0],
+            where="post",
+            c=color,
+            label="电机速度请求" if "world_velocity" in d else "实际执行速度",
+        )
         a.plot(t[-1], d["commands"][f, 0], "o", c=color, ms=4)
-        a.set(title="车仍按实际动作移动", xlabel="时间 (s)", ylabel="速度 (m/s)")
+        a.set(title="执行端送出什么动作", xlabel="时间 (s)", ylabel="速度 (m/s)")
         b.step(t, d["control_age_ticks"][ix] * 0.1, where="post", c="#64748b", label="消息年龄 (s)")
         b.plot(t[-1], d["control_age_ticks"][f] * 0.1, "o", c="#64748b", ms=4)
         b.axhline(0.2, c="#c53e51", ls="--", lw=1, label="本轮过期门槛0.2s")
@@ -65,7 +71,11 @@ class ExecutionPanel(ttk.Frame):
             text=(
                 f"{record.method_info(key)['label']} · 本组时间 {record.timestamps[f]:.1f}s；新结果：{'有' if d['control_fresh'][f] else '无'}；本地接管：{'是' if d['local_override'][f] else '否'}。\n"
                 f"实际排队{r['perturbation']['delay_steps'] * 0.1:g}s；消息年龄{d['control_age_ticks'][f] * 0.1:g}s；待执行运动{int(d['pending_motion'][f])}条；停车仍受减速度限制。\n"
-                "只有保护组能在执行端减速并清旧动作；过期后锁住本回合。原参照没有接管；停住≠到达。"
+                + (
+                    "本轮三组都保留执行端保护；速度请求不是实际速度，实测运动另见接触页。"
+                    if "world_velocity" in d
+                    else "只有保护组能在执行端减速并清旧动作；过期后锁住本回合。原参照没有接管；停住≠到达。"
+                )
             )
         )
         self.canvas.draw_idle()

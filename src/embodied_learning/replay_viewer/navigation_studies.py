@@ -14,6 +14,21 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "margin_strict": (
+        "6cm预留·碰到即停",
+        "新接触物理模型；仍多留6cm，第一次接触即中止任务并减速。",
+        "#c53e51",
+    ),
+    "zero_strict": (
+        "贴近通过·碰到即停",
+        "取消额外余量；真实身体不缩小，第一次接触即中止任务并减速。",
+        "#247cc1",
+    ),
+    "zero_light": (
+        "贴近通过·允许轻擦",
+        "取消额外余量，允许轻微接触继续走；超出40N、5mm或连续0.5秒则中止并减速。",
+        "#119c74",
+    ),
     "baseline_exec": (
         "原执行参照",
         "仍用原停车预测；制动也排队。控制无输出时继续旧动作，没有本地保护。",
@@ -250,7 +265,7 @@ class NavigationStudySource:
                         else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
                     )
                 )
-                if summary["protocol"].get("round") == 5:
+                if summary["protocol"].get("round") in (5, 6):
                     label += f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s / " + (
                         "规划无输出1s" if row["profile"] == "blackout" else "正常输出"
                     )
@@ -292,7 +307,7 @@ class NavigationStudySource:
             "71": ("baseline", "recovery"),
         }[variant]
         keys = tuple(selected) if selected is not None else keys
-        if summary["protocol"].get("round") == 5:
+        if summary["protocol"].get("round") in (5, 6):
             keys = tuple(k for k in keys if k in rows)
         labels = (
             {k: condition_label(summary["protocol"]["conditions"][k]) for k in keys}
@@ -397,6 +412,10 @@ class NavigationStudySource:
                             )
                         }
                     )
+                if "world_velocity" in a:
+                    telemetry[key].update(
+                        {k: pad(a[k]) for k in ("world_velocity", "contact_interval")}
+                    )
                 # Never show the final accumulated obstacle map as a live-time map.
                 # The shared prior is fixed; live returns and plans remain time-aligned.
                 methods[key]["display_map"] = "实验开始时的先验地图"
@@ -487,6 +506,7 @@ class NavigationStudySource:
                         "scan": "新种子单变量扫描",
                         "environment": "同条件环境参照",
                         "blackout": "规划无输出故障",
+                        "delay": "延迟参照",
                     }[cohort]
                     + "："
                     + "；".join(
@@ -550,6 +570,18 @@ class NavigationStudySource:
                             f"{labels[k][0]} {int(rows[k]['safe_completed'])}/1" for k in keys
                         ),
                     )
+                if round_number == 6:
+                    r = rows[keys[0]]
+                    metadata.update(
+                        protocol="三组同用真实接触响应：6cm、零余量禁接触、零余量允许轻擦。实际到点并停稳为主；旧6cm门槛不决定通过。末帧保持不计分。",
+                        settings=f"第69课第六轮 · 55×44cm身体不缩小 · 接触物理500Hz · 实际排队{r['perturbation']['delay_steps'] * 0.1:g}s · 位姿精确是设定",
+                        sensor_note="雷达/深度为存档；RGB重渲染，无视觉定位。速度请求≠身体实际速度。",
+                        scene_note="12×12m；新障碍未画入先验；接触会受阻、滑动与旋转，不穿墙。",
+                        cohort="本回合真实到点并满足接触口径："
+                        + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
+                        braking_models={k: "coupled" for k in keys},
+                    )
+
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])
             maps = (

@@ -61,6 +61,10 @@ class SafetyPanel(ttk.Frame):
             self.canvas.draw_idle()
             return
         rig = NavigationRig(**record.metadata["rig"])
+        if record.metadata.get("tracking_round") == 6:
+            from dataclasses import replace
+
+            rig = replace(rig, margin_m=record.method_info(key)["result"]["controller_margin_m"])
         f = min(frame, record.lengths[key] - 1)
         a, b = self.figure.subplots(1, 2)
         pose = record.track_by_key[key].poses[f]
@@ -148,10 +152,15 @@ class SafetyPanel(ttk.Frame):
             )
             + (
                 " 第五轮此页仅示意旧0.2秒分支，未画完整队列；实际接管见执行端保护页。"
-                if record.metadata.get("tracking_round") == 5
+                if record.metadata.get("tracking_round") in (5, 6)
                 else ""
             )
         )
+        if record.metadata.get("tracking_round") == 6:
+            self.note.configure(
+                text=self.note.cget("text")
+                + " 第六轮黄框是运动学预测示意，未包含伺服滞后或接触侧滑；实际速度/接触另见接触页。"
+            )
         self.canvas.draw_idle()
 
     def _draw_decisions(self, record, key, frame):

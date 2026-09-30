@@ -53,7 +53,8 @@ class ReplayWindow:
             width=55
             if getattr(source, "robust_views", {})
             or any(
-                s["protocol"].get("round") == 5 for s in getattr(source, "summaries", {}).values()
+                s["protocol"].get("round") in (5, 6)
+                for s in getattr(source, "summaries", {}).values()
             )
             else 29,
             textvariable=self.case_var,
@@ -378,7 +379,9 @@ class ReplayWindow:
         )
         self.map.layer.set(layer)
         self.map._draw_map()
-        if not (solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5, 6, 7)):
+        if not (
+            solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5, 6, 7, 8)
+        ):
             self.analysis.tabs.select(1 if choice == "split" else 0)
         self.refresh()
 

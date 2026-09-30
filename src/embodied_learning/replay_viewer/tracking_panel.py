@@ -43,7 +43,11 @@ class TrackingPanel(ttk.Frame):
         b.plot(t, data["expanded_gap_m"][: f + 1] * 100, color=color)
         b.axhline(0, color="#dc7840", ls="--", lw=1, label="外扩足印开始重叠")
         b.set(
-            title="外扩6cm的余量（局部放大）",
+            title=(
+                f"全高度足印＋{record.method_info(key)['result']['controller_margin_m'] * 100:g}cm（诊断）"
+                if record.metadata.get("tracking_round") == 6
+                else "外扩6cm的余量（局部放大）"
+            ),
             xlabel="时间 (s)",
             ylabel="投影分离量 (cm)",
             ylim=(-1, 8),

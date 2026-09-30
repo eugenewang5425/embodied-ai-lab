@@ -425,6 +425,8 @@ class StatsPanel(ttk.Frame):
 
     def _result_suffix(self, key):
         result = self.record.method_info(key).get("result")
+        if result and "passed" in result:
+            return f" [{result['reached']}/1·{'通过' if result['passed'] else '未过'}]"
         if result and "safe_completed" in result and result["reached"]:
             return f" [1/1·余量{'合格' if result['safe_completed'] else '未过'}]"
         return f" [{result['reached']}/{result['target_count']}]" if result else ""

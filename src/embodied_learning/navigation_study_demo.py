@@ -16,6 +16,7 @@ def main():
         (
             name
             for name in (
+                "contact_navigation_v6",
                 "execution_safety_v5",
                 "navigation_robustness_v4",
                 "braking_navigation_v3",
@@ -76,6 +77,11 @@ def main():
         default_case = next(
             (c for c in candidates if c == "69_narrow_crate_11__delay_4__normal"), candidates[0]
         )
+    if source.summaries.get("69", {}).get("protocol", {}).get("round") == 6:
+        candidates = [e.case for e in source.entries if e.variant == "69"]
+        default_case = next(
+            (c for c in candidates if c == "69_narrow_low_14__delay_2__normal"), candidates[0]
+        )
     root = tk.Tk()
     app = ReplayWindow(
         root,
@@ -94,7 +100,9 @@ def main():
         {
             "67": "depth",
             "68": "repaired",
-            "69": "queue_guard"
+            "69": "zero_light"
+            if "zero_light" in app.record.method_keys
+            else "queue_guard"
             if "queue_guard" in app.record.method_keys
             else "zero"
             if "zero" in app.record.method_keys
@@ -109,7 +117,7 @@ def main():
     )
     if args.lesson != "68":
         app.analysis.tabs.select(
-            {2: 4, 3: 5, 4: 6, 5: 7}.get(app.record.metadata.get("tracking_round"), 3)
+            {2: 4, 3: 5, 4: 6, 5: 7, 6: 8}.get(app.record.metadata.get("tracking_round"), 3)
         )
     if args.play:
         root.after(500, app.toggle)
