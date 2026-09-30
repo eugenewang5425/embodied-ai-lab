@@ -137,6 +137,11 @@ class SafetyPanel(ttk.Frame):
             text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
             f"速度 {command[0]:.2f} m/s，角速度 {command[1]:.2f} rad/s；中心刹停位移 {distance:.2f} m。黄框不含6cm余量；灰点仅是历史抽样。无回波≠安全。"
             + (" 第三轮还检查立即刹停，此图仅画延迟分支。" if model != "legacy" else "")
+            + (
+                " 第四轮仍画控制器的0.2秒预留，不是实际队列延迟；实际响应见误差与延迟页。"
+                if record.metadata.get("tracking_round") == 4
+                else ""
+            )
         )
         self.canvas.draw_idle()
 

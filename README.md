@@ -12,8 +12,8 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 第1–56课完成；基准62未过跨场景门槛；第63–71课开展房间/园区闭环、避障、修图与导航决策。09-30新增69课第三轮230回合：同比例制动组固定27/27、新噪声9/9、偏置布局9/9到达且采样余量合格；限速组合固定退为24/27。精确定位、静态仿真的边界保留。此前70/71收益尚未组合。见[综合基准](docs/62-navigation-benchmark.md)与[最新阶段复盘](docs/navigation-stage-review-69-71.md)。 |
-| **Verified** | 839 quick tests passed (91.2 s); 60 affected tests passed (34.8 s), including real Tk checks (2026-09-30, Windows). [Round-three independent audit](docs/benchmarks/braking-navigation-v3-validation.json) checks real braking tails, motion and swept body geometry. Ruff check and changed-file format passed. No new full slow run; [09-28 full-run failure and retry evidence](docs/benchmarks/navigation-studies-69-71-validation.json) remains separate. |
+| **Status** | 第1–56课完成；基准62仍未过跨场景门槛。第63–71课已开展房间/园区闭环与分离导航实验。09-30新增69课第四轮233回合：新种子零扰动7/9合格，实际延迟0.4秒窄路9/9接触；定位误差下的搜索失败、11次接触和9.304秒后续规划均保留。此前45/45只对第三轮批次成立，70/71尚未组合。见[第四轮讲义](docs/69-robustness-round4.md)与[最新阶段复盘](docs/navigation-stage-review-69-71.md)。 |
+| **Verified** | 844 quick tests passed (132.4 s); 66 affected tests passed (49.6 s), including real Tk checks (2026-09-30, Windows). [Round-four independent audit](docs/benchmarks/navigation-robustness-v4-validation.json) checks pose injection, command queues, actual motion and swept geometry. Ruff check and changed-file format passed. No new full slow run; [09-28 full-run failure and retry evidence](docs/benchmarks/navigation-studies-69-71-validation.json) remains separate. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -200,7 +200,7 @@ uv run python scripts/render_photo_room_replay.py
 | 第 66 课 | 街区式园区巡检 | 已完成基线；雷达停车，尚无在线绕行/修图 | [讲义](docs/66-campus-patrol.md) |
 | 第 67 课 | 车身标定与观测驱动避障 | 已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝 | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
 | 第 68 课 | 扫描校准与错误地图修复 | 已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成 | [讲义](docs/68-scan-based-map-repair.md) |
-| 第 69 课 | 足印、路径跟踪与转弯制动 | 三轮81/132/230回合；第三轮同比例制动固定27/27及两项留出各9/9余量合格，限速退化保留 | [第六十九课讲义](docs/69-footprint-planning.md) / [第二轮讲义](docs/69-footprint-tracking-round2.md) / [第三轮讲义](docs/69-braking-round3.md) |
+| 第 69 课 | 足印、跟踪、制动与误差边界 | 四轮81/132/230/233回合；新种子零扰动7/9，真实延迟0.4秒窄路9/9接触；保留失效边界 | [第六十九课讲义](docs/69-footprint-planning.md) / [第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md) / [第六十九课第三轮讲义](docs/69-braking-round3.md) / [第六十九课第四轮讲义](docs/69-robustness-round4.md) |
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
 
@@ -312,6 +312,8 @@ uv run python scripts/render_photo_room_replay.py
 │   ├── 69-tracking-round2-plan.md
 │   ├── 69-braking-round3.md
 │   ├── 69-braking-round3-plan.md
+│   ├── 69-robustness-round4.md
+│   ├── 69-robustness-round4-plan.md
 │   ├── 70-arrival-decisions.md
 │   ├── 71-bounded-recovery.md
 │   ├── navigation-stage-review-69-71.md
@@ -1720,7 +1722,25 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 读图：固定窄路/普通箱体/种子0，灰虚线是相同首次规划，彩色线含实际制动尾段。仅同比例组16.1秒到达且余量合格；限速组合8秒因观测拒绝触发失败，再实际制动0.5秒、7.86cm停稳。拒绝来自一束偏移约1cm的雷达回波，被复制到三个高度，不能当成三份独立证据。
 
-讲义：[第六十九课第三轮讲义](docs/69-braking-round3.md)；[230回合摘要](docs/benchmarks/braking-navigation-v3.json)；[独立审计](docs/benchmarks/braking-navigation-v3-validation.json)。默认窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play`（需第三轮记录）。新增“制动过程”页、五组同步切换和余量合格标注，变量、公式、限速失败、计算耗时、9道思考题及复现完整保留。仍为精确定位、静态运动学实验；不等于实机安全或硬实时通过。
+讲义：[第六十九课第三轮讲义](docs/69-braking-round3.md)；[230回合摘要](docs/benchmarks/braking-navigation-v3.json)；[独立审计](docs/benchmarks/braking-navigation-v3-validation.json)。第三轮窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/braking_navigation_v3 --play`。新增“制动过程”页、五组同步切换和余量合格标注，变量、公式、限速失败、计算耗时、9道思考题及复现完整保留。仍为精确定位、静态运动学实验；不等于实机安全或硬实时通过。
+
+### 第四轮：定位误差与实际执行延迟的边界
+
+第四轮233回合保持同比例制动，分别注入恒定世界y/朝向误差或实际指令队列延迟。**新种子零扰动仅7/9余量合格；延迟0.1秒8/9，0.2/0.3秒0/9，0.4秒窄路9/9发生接触。** y−0.5cm为9/9、y+0.5cm为5/9，而±1/2/4cm均未到达，所有非零朝向等级也未到达。结果非单调，不发布“允许偏差/延迟”阈值。失败既有搜索预算与路线转换，也有真实迟刹；全233回合11次接触均保留。
+
+![第69课第四轮单变量边界](docs/img/lesson69-round4-boundaries.png)
+
+上排：每个位置/朝向/延迟等级的9回合结果，绿色为到达且余量合格，灰色为未到达但无接触，红色为实体接触；柱顶只数绿色。下排同时报告最差与中位外扩分离量，近零刻度放大。很早停下的失败可能间隙很大，不能据此宣布导航更强。
+
+![第69课第四轮不同环境的同条件对照](docs/img/lesson69-round4-environments.png)
+
+固定普通箱体和种子8；每个格仅一回合，展示同样的位置/朝向误差或执行延迟在开阔、街区、窄路中的不同结果，不当作多种子泛化率。
+
+![第69课第四轮实际轨迹](docs/img/lesson69-round4-trajectories.png)
+
+固定窄路普通箱体种子8，展示零扰动及三个因素的最大正等级。彩色实线为真实运动，灰虚线为估计，橙点线为首次规划，叉号是实际终点；零扰动失败也保留。
+
+讲义：[第六十九课第四轮讲义](docs/69-robustness-round4.md)；[233回合摘要](docs/benchmarks/navigation-robustness-v4.json)；[独立审计](docs/benchmarks/navigation-robustness-v4-validation.json)。默认窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play`。五个条件视图、每组至多五个同步按钮；第七页“误差与延迟”说明请求与执行时间、偏差符号及单位。完整变量表、负结果、机制解释、10道思考题和复现命令随讲义归档。
 
 ## 第七十课：估计到了，身体真的到了吗？
 
@@ -1754,7 +1774,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 窗口固定为准确图种子0、34.20s；方法按钮一次同步各面板，保留时间。金色圆盘是动作预测，RGB为真实位姿重渲染，扫描和动作来自存档。69–71均接入相同模块，无需分别打开多个窗口调来源。
 
-**阶段复盘**：[为什么相同算法换环境或决策后表现不同](docs/navigation-stage-review-69-71.md)；[第一轮111回合摘要](docs/benchmarks/navigation-studies-69-71-v1.json)；[第一轮验证](docs/benchmarks/navigation-studies-69-71-validation.json)。69第二/三轮另有132/230回合；第三轮受控制动门槛通过，三项尚未组合。下一批检验定位/执行误差边界与观测误拒，再扩大70/71反例、统一身体做组合消融。原数组本地保存，新克隆按讲义命令生成；后续课程视频待个人音色准备后制作。
+**阶段复盘**：[为什么相同算法换环境或决策后表现不同](docs/navigation-stage-review-69-71.md)；[第一轮111回合摘要](docs/benchmarks/navigation-studies-69-71-v1.json)；[第一轮验证](docs/benchmarks/navigation-studies-69-71-validation.json)。69第二/三/四轮另有132/230/233回合；第三轮原批次通过，第四轮新种子与扰动暴露规划和执行延迟失效。三项尚未组合；下一批分别诊断搜索/观测拒绝和包含队列的停车保护，再扩大70/71反例、统一身体做组合消融。原数组本地保存，新克隆按讲义命令生成；后续课程视频待个人音色准备后制作。
 
 ## 进度清单
 
@@ -1832,6 +1852,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 - [x] 第六十九课：三种规划表示81回合；普通场景18/18保持，窄路0/9未过门
 - [x] 第六十九课第二轮：跟踪×路线保留132回合；固定到达21/27、窄路3/9、留出0/6；保留余量违规和制动失败证据
 - [x] 第六十九课第三轮：制动×曲率限速230回合；同比例组固定27/27、两项留出各9/9余量合格；限速退化与真实刹停尾段归档
+- [x] 第六十九课第四轮：误差与真实执行延迟233回合；零扰动新种子7/9，0.4秒延迟窄路9/9接触，失效与实时边界归档
 - [x] 第七十课：三种到点规则18回合；预算与停稳组各48/48、零误报
 - [x] 第七十一课：有限恢复12回合；准确图18/24→24/24，修后图原误报保留
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差

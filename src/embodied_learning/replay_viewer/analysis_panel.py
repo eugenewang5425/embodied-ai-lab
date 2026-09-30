@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 
 from .braking_panel import BrakingPanel
 from .panels import ErrorPanel
+from .robustness_panel import RobustnessPanel
 from .safety_panel import SafetyPanel
 from .tracking_panel import TrackingPanel
 
@@ -51,6 +52,8 @@ class AnalysisPanel(ttk.Frame):
         self.tabs.add(self.tracking, text="跟踪与余量")
         self.braking = BrakingPanel(self.tabs)
         self.tabs.add(self.braking, text="制动过程")
+        self.robustness = RobustnessPanel(self.tabs)
+        self.tabs.add(self.robustness, text="误差与延迟")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -105,6 +108,10 @@ class AnalysisPanel(ttk.Frame):
             "金色星/旗：当前要去的巡检点；金线：当前规划路径。相机中的金色符号是导航提示，目标可能被建筑挡住。",
             "PF 就是粒子滤波：同时保留许多可能的位置，用雷达和地图的匹配程度，给靠谱的猜测更高权重。它依赖地图质量，也可能选错位置。\n",
         ]
+        if r.metadata.get("tracking_round") == 4:
+            text[-1] = (
+                "本轮固定同一个同比例制动控制器，人工注入一种恒定位置/朝向偏差或执行延迟；没有运行PF或视觉定位。角度偏差不能用位置误差均值表示。\n"
+            )
         for key in r.method_keys:
             info = r.method_info(key)
             text += [info["label"], info["description"]]
@@ -128,6 +135,11 @@ class AnalysisPanel(ttk.Frame):
                 text += [
                     f"任务结果：{RESULTS[result['status']]}；真正到达 {result['reached']}/{result['target_count']} 点，自报到达 {result['announced']} 点，接触障碍 {result['contacts']} 帧。"
                 ]
+                if "perturbation" in result:
+                    c = result["perturbation"]
+                    text += [
+                        f"注入世界y误差 {c['dy_m'] * 100:+g}cm，朝向误差 {c['yaw_deg']:+g}度，实际执行延迟 {c['delay_steps'] * 0.1:.1f}s。"
+                    ]
                 if result.get("min_clearance_m") is not None:
                     text += [f"实际运动中车身离障碍最近 {result['min_clearance_m']:.3f} m。"]
                 if "false_arrivals" in result:
@@ -176,6 +188,8 @@ class AnalysisPanel(ttk.Frame):
             self.tracking.draw(self.record, self.focus_key, frame)
         elif self.tabs.index(self.tabs.select()) == 5:
             self.braking.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 6:
+            self.robustness.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -203,3 +217,5 @@ class AnalysisPanel(ttk.Frame):
             self.tracking.draw(self.record, self.focus_key, self.frame)
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 5:
             self.braking.draw(self.record, self.focus_key, self.frame)
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 6:
+            self.robustness.draw(self.record, self.focus_key, self.frame)

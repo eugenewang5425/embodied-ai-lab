@@ -92,9 +92,11 @@ app = ReplayWindow(root, MySource())
 
 ## 验证
 
-69课第三轮：本地存在`results/braking_navigation_v3`时默认打开最新五组比较（旧参照＋制动/限速2×2）。第六页“制动过程”显示进入帧速度、实际命令、名义速度上界和制动请求；失败尾段真实执行到停稳，表格区分到达与余量合格。来源按钮保持当前帧和第3/4/5索引的诊断页，五组全显示；车身页按所选制动模型画延迟分支，立即分支另说明。运行`uv run python scripts/check_braking_window.py`生成固定种子0、7秒、同比例组的本机截图。看第二轮请加`--footprint results/footprint_tracking_v2`，看第一轮指定`footprint_navigation_v1`。详见[第三轮讲义](69-braking-round3.md)。
+69课第四轮：本地存在`results/navigation_robustness_v4/summary.json`时默认选新记录。世界y正/负偏差、朝向正/负偏差、实际执行延迟按五个回合视图分组，每组至多五个条件；零扰动参照只是复用同一存档，不重复计入233回合。它们是同一算法的不同条件，不是不同定位来源。第七页“误差与延迟”显示请求/执行速度、制动标志、执行请求来源时间、注入量和待执行运动数量；切换按钮保持当前帧及诊断页并同步相机、3D、雷达与目标。朝向误差看度数，不能只看位置误差均值；RGB仍按真值重渲染。车身页0.2秒示意仍是固定预测预留，实际执行延迟看新页。运行`uv run python scripts/check_robustness_window.py`生成固定种子8、6秒、延迟0.4秒的实际窗口截图。看第三轮请加`--footprint results/braking_navigation_v3`。详见[第六十九课第四轮讲义](69-robustness-round4.md)。
 
-69课第二轮：本地没有第三轮而有`results/footprint_tracking_v2/summary.json`时默认选该记录，四个中文方法按钮和第五页“跟踪与余量”继续可用。按钮一次同步相机、3D、目标、雷达、统计和诊断，并保持当前帧及诊断页；短回合只画到其真实末帧。左图比较相对首次规划的横向偏差，右图局部放大外扩足印分离量，负数表示预留空间重叠而非实体碰撞。定位误差零为实验受控假设。第二轮独立窗口截图由`uv run python scripts/check_footprint_tracking_window.py`生成。详见[第二轮讲义](69-footprint-tracking-round2.md)。
+69课第三轮：没有第四轮而本地存在`results/braking_navigation_v3`时默认打开最新五组比较（旧参照＋制动/限速2×2）。第六页“制动过程”显示进入帧速度、实际命令、名义速度上界和制动请求；失败尾段真实执行到停稳，表格区分到达与余量合格。来源按钮保持当前帧和第3/4/5索引的诊断页，五组全显示；车身页按所选制动模型画延迟分支，立即分支另说明。运行`uv run python scripts/check_braking_window.py`生成固定种子0、7秒、同比例组的本机截图。看第二轮请加`--footprint results/footprint_tracking_v2`，看第一轮指定`footprint_navigation_v1`。详见[第三轮讲义](69-braking-round3.md)。
+
+69课第二轮：本地没有第三/四轮而有`results/footprint_tracking_v2/summary.json`时默认选该记录，四个中文方法按钮和第五页“跟踪与余量”继续可用。按钮一次同步相机、3D、目标、雷达、统计和诊断，并保持当前帧及诊断页；短回合只画到其真实末帧。左图比较相对首次规划的横向偏差，右图局部放大外扩足印分离量，负数表示预留空间重叠而非实体碰撞。定位误差零为实验受控假设。第二轮独立窗口截图由`uv run python scripts/check_footprint_tracking_window.py`生成。详见[第二轮讲义](69-footprint-tracking-round2.md)。
 
 第69–71课继续使用同一个模块化窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69`（也可70/71）。入口自动列出本地已有的课程档案，无需为了查看69课额外生成67/68全部记录。每个方法按钮一次同步相机、3D、目标、雷达点、地图、统计及“车身与决策诊断”，并保留时间。
 

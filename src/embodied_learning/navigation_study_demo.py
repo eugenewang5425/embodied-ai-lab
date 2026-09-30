@@ -16,6 +16,7 @@ def main():
         (
             name
             for name in (
+                "navigation_robustness_v4",
                 "braking_navigation_v3",
                 "footprint_tracking_v2",
                 "footprint_navigation_v1",
@@ -62,15 +63,22 @@ def main():
         parser.error(
             f"先生成第{args.lesson}课记录；运行 experiments.navigation_followups --lesson {args.lesson}（67/68见各课复现步骤）。"
         )
+    source = NavigationStudySource(available.get("67"), available.get("68"), followups)
+    default_case = "69_narrow_crate_0"
+    if source.summaries.get("69", {}).get("protocol", {}).get("round") == 4:
+        candidates = [e.case for e in source.entries if e.variant == "69"]
+        default_case = next(
+            (c for c in candidates if c == "69_narrow_crate_8__delay"), candidates[0]
+        )
     root = tk.Tk()
     app = ReplayWindow(
         root,
-        NavigationStudySource(available.get("67"), available.get("68"), followups),
+        source,
         args.case
         or {
             "67": "67_plaza_low_0",
             "68": "68_1",
-            "69": "69_narrow_crate_0",
+            "69": default_case,
             "70": "70_repaired_1",
             "71": "71_reference_0",
         }[args.lesson],
@@ -80,7 +88,9 @@ def main():
         {
             "67": "depth",
             "68": "repaired",
-            "69": "coupled"
+            "69": "zero"
+            if "zero" in app.record.method_keys
+            else "coupled"
             if "coupled" in app.record.method_keys
             else "combined"
             if "combined" in app.record.method_keys
@@ -90,7 +100,9 @@ def main():
         }[args.lesson]
     )
     if args.lesson != "68":
-        app.analysis.tabs.select({2: 4, 3: 5}.get(app.record.metadata.get("tracking_round"), 3))
+        app.analysis.tabs.select(
+            {2: 4, 3: 5, 4: 6}.get(app.record.metadata.get("tracking_round"), 3)
+        )
     if args.play:
         root.after(500, app.toggle)
     root.lift()

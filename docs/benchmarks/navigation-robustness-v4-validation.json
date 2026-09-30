@@ -1,0 +1,103 @@
+{
+  "date": "2026-09-30",
+  "records": 233,
+  "frames": 19768,
+  "executed_steps": 19535,
+  "delayed_executed_steps_checked": 4522,
+  "swept_samples": 133534,
+  "bridge_full_arrays_equal": 27,
+  "max_motion_difference": 3.737543607940097e-11,
+  "max_body_gap_difference_m": 7.271960811294775e-15,
+  "max_expanded_gap_difference_m": 7.271960811294775e-15,
+  "actual_arrivals": 62,
+  "safe_completed": 62,
+  "false_arrivals": 0,
+  "contacts": 11,
+  "stopped": 222,
+  "no_motion_negative_records": 5,
+  "source_live_and_snapshot_hashes": {
+    "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+    "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+    "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+    "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+    "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+    "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+    "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+    "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345",
+    "src\\embodied_learning\\experiments\\navigation_robustness.py": "b1363f3965a8797d5b96c1aa44df1efd87b89aa07af06a58ee791b96b1bbac6e",
+    "src\\embodied_learning\\navigation_robustness.py": "4b214c31189a2802e8fd5759c8cc1b6f981c9ff0ad9cc48228748936580a4958"
+  },
+  "summary_sha256": "e7cc4d0594e0d53c6bd92bab80ef497d814952c18123d7476cf13d5168b360a9",
+  "benchmark_sha256": "427c92419e48413bd4d9da5972bc2f706548ddd1368dec3e1d63211c4255a0c3",
+  "boundary": "Constant single-factor pose errors or FIFO command-intention delay, fresh sensors; <=1cm physical-corner travel sampling, padded geometry evaluated at the same poses, no continuous or hardware safety guarantee.",
+  "visual_review": "Four plots and own Tk window inspected; grouped conditions, requested/applied braking, truth/estimate, camera, map and goals synchronized.",
+  "images": {
+    "lesson69-round4-boundaries.png": {
+      "sha256": "ba4a55611402a0291c9c61a417527922af4612009db8098dce06832ef5a2210f",
+      "size": [
+        2578,
+        1294
+      ]
+    },
+    "lesson69-round4-delay.png": {
+      "sha256": "db4cf9bb30c2fbcfcc2f9810d96372258e77313823bf7ddda984fd2b56c53441",
+      "size": [
+        2418,
+        847
+      ]
+    },
+    "lesson69-round4-environments.png": {
+      "sha256": "83b272979184bc79298569b4aec9d38be42b02ce76d84c5dab633faa1a96fe8e",
+      "size": [
+        2258,
+        811
+      ]
+    },
+    "lesson69-round4-trajectories.png": {
+      "sha256": "df2f6a6d63cf03e56163581f70c1d19a178f69101fe696e4868ea94687e84efb",
+      "size": [
+        2258,
+        910
+      ]
+    },
+    "lesson69-round4-window.png": {
+      "sha256": "1a08a8637932c918a1b1b5642c34db854726f52d52a11a34ed017b6ad95a3ac6",
+      "size": [
+        1680,
+        1060
+      ]
+    }
+  },
+  "test_logs": {
+    "quick": {
+      "sha256": "32e7ad209a9c7b86ee2b81068666447d0a9183a79458cce92cfb4daa2a41102b",
+      "wrapper": "[tests] exit=0, elapsed=132.4s",
+      "summary": "844 passed, 187 deselected in 130.68s (0:02:10)"
+    },
+    "affected": {
+      "sha256": "f58e8c3f84d48380695024c7608a3c84f02a95a6bde4b454150997729efac898",
+      "wrapper": "[tests] exit=0, elapsed=49.6s",
+      "summary": "66 passed in 48.81s"
+    }
+  },
+  "local_links_checked": 409,
+  "documents_sha256": {
+    "README.md": "1c92f5864e56d65d0112ab596c65ab105b33a7b1ca1829511a17f5655dc862e7",
+    "docs\\69-robustness-round4-plan.md": "a32de17bd386bc1b7456ff1fd5e91e35652cc1ab4f8a0bce637193f8fe59ca97",
+    "docs\\69-robustness-round4.md": "72bf0f8636f93afb412bef627a5fbaebb8c34bbb7308c8ff098f25e9f5ee8548",
+    "docs\\69-braking-round3.md": "c4b2d50a3732a2eaf764a400f09b1d73834d84891a62c7d70bc94a9e60b7124a",
+    "docs\\69-footprint-planning.md": "cf2a837a77fb744e6252c89869eedf34a53d8618b3caaad6a6f4508d05b22fcd",
+    "docs\\69-footprint-tracking-round2.md": "6561e8f92ac9866173ccc56643a691a26e12f475de8a940eebcc5fdc3eabe7c6",
+    "docs\\navigation-stage-review-69-71.md": "bb908b0538f835bdac6f2ea599d4d20baa511fd0df104da658eef0b1bc50099f",
+    "docs\\01-learning-roadmap.md": "0cd714ea8dd872e00d9bc162713f50f04c7dbdaff7daf5c8035226848d8aa3da",
+    "docs\\multisensor-navigation-roadmap.md": "88ed6e98eabd856d0e19030dd62c15d43c29d2dbcba32b2cebfac107315b4aab",
+    "docs\\replay-window.md": "d83b9ebeedb5fcd209afe09907babf8f8421790a14816b2f399a6c0dfe13332a",
+    "docs\\34-experiment-decision-log.md": "f619336e706ea0fa871141fb36c55c9d6a996b89d9db65d33fc9600c07e75aca"
+  },
+  "audit_sources_sha256": {
+    "scripts\\validate_navigation_robustness.py": "49d8f8cd4213dcc07a89b835efcc632c06113a47ce69240ba42667b253ad4690",
+    "scripts\\validate_braking_navigation.py": "891c197203677db2c4f5c659beb4577a27988e43571147f28a2fe73035633f0e",
+    "scripts\\validate_footprint_tracking.py": "ab76015d586516af3ea131be53833ce719efb4aa4d83ae09d25f8c99f9f6acf1"
+  },
+  "wall_s": 8.751735899990308
+}

@@ -123,9 +123,49 @@ LAYOUTS = {
     "street": "街区通道",
     "narrow": "两米窄通道",
     "offset_narrow": "留出偏置窄弯",
-    "blocked": "不足车宽的负例",
+    "blocked": "预留空间不足的窄口",
 }
 OBSTACLES = {"crate": "普通箱体", "low": "14厘米路障", "beam": "悬空横杆"}
+
+
+GROUP_NAMES = {
+    "zero": "零扰动桥接",
+    "y_plus": "位置向地图上方偏",
+    "y_minus": "位置向地图下方偏",
+    "yaw_plus": "朝向逆时针偏",
+    "yaw_minus": "朝向顺时针偏",
+    "delay": "执行延迟",
+}
+
+
+def condition_label(c):
+    colors = ["#119c74", "#247cc1", "#8b5cf6", "#d68026", "#c53e51"]
+    if c["dy_m"]:
+        value = c["dy_m"] * 100
+        return (
+            f"y{value:+g}cm",
+            "同一控制器；估计位置的世界y坐标恒加此误差，地图和目标不移动。",
+            colors[[0.5, 1, 2, 4].index(abs(value)) + 1],
+        )
+    if c["yaw_deg"]:
+        value = c["yaw_deg"]
+        return (
+            f"朝向{value:+g}°",
+            "同一控制器；估计朝向恒加此角度。正为逆时针，负为顺时针；不是位置误差。",
+            colors[[0.5, 1, 2, 4].index(abs(value)) + 1],
+        )
+    if c["delay_steps"]:
+        value = c["delay_steps"]
+        return (
+            f"延迟{value * 0.1:.1f}s",
+            "同一控制器；运动和制动请求都排队后执行，传感器即时、位姿准确。",
+            colors[value],
+        )
+    return (
+        "零扰动参照",
+        "同一同比例制动控制器；精确定位、立即执行。是受控参照，不是定位算法的成绩。",
+        colors[0],
+    )
 
 
 class NavigationStudySource:
@@ -146,6 +186,7 @@ class NavigationStudySource:
             self.title = "67–71课 · 身体、规划、到点与恢复"
         self.summaries, self.entries = {}, []
         self.cache = {}
+        self.robust_views = {}
         for lesson, directory in self.directories.items():
             summary = json.loads((directory / "summary.json").read_text(encoding="utf8"))
             protocol = (directory / "protocol.json").read_bytes()
@@ -160,6 +201,26 @@ class NavigationStudySource:
                 if case in seen:
                     continue
                 seen.add(case)
+                if summary["protocol"].get("round") == 4:
+                    available = {
+                        r["method"] for r in summary["rows"] if self.case_id(lesson, r) == case
+                    }
+                    groups = {
+                        name: [k for k in keys if k in available]
+                        for name, keys in summary["protocol"]["view_groups"].items()
+                        if any(k in available for k in keys if k != "zero")
+                    } or {"zero": ["zero"]}
+                    for group, keys in groups.items():
+                        view = case + "__" + group
+                        self.robust_views[lesson, view] = (case, keys, group)
+                        self.entries.append(
+                            ReplayEntry(
+                                view,
+                                lesson,
+                                f"69 · {GROUP_NAMES[group]} / {LAYOUTS[row['layout']]} / {OBSTACLES[row['obstacle']]} / 种子 {row['seed']}",
+                            )
+                        )
+                    continue
                 label = (
                     f"{lesson} · {LAYOUTS[row['layout']]} / {OBSTACLES[row['obstacle']]}"
                     if lesson in ("67", "69")
@@ -188,7 +249,13 @@ class NavigationStudySource:
         if (case, variant) in self.cache:
             return self.cache[case, variant]
         summary, directory = self.summaries[variant], self.directories[variant]
-        rows = {r["method"]: r for r in summary["rows"] if self.case_id(variant, r) == case}
+        base_case, selected, group = self.robust_views.get((variant, case), (case, None, None))
+        rows = {
+            r["method"]: r
+            for r in summary["rows"]
+            if self.case_id(variant, r) == base_case
+            and (selected is None or r["method"] in selected)
+        }
         keys = {
             "67": ("stop", "lidar", "depth"),
             "68": ("raw", "rigid", "repaired", "reference"),
@@ -198,6 +265,12 @@ class NavigationStudySource:
             "70": ("baseline", "uncertainty", "joint"),
             "71": ("baseline", "recovery"),
         }[variant]
+        keys = tuple(selected) if selected is not None else keys
+        labels = (
+            {k: condition_label(summary["protocol"]["conditions"][k]) for k in keys}
+            if selected is not None
+            else LABELS
+        )
         if set(rows) != set(keys):
             raise ValueError("incomplete study comparison")
         arrays = {k: read_checked(directory / rows[k]["file"], rows[k]["sha256"]) for k in keys}
@@ -220,7 +293,7 @@ class NavigationStudySource:
         maps = {}
         for i, key in enumerate(keys):
             a = arrays[key]
-            label, description, color = LABELS[key]
+            label, description, color = labels[key]
             true_key = "truth" if i == 0 else key + "_truth"
             tracks += [
                 Track(true_key, label + "·实际", color, pad(a["truth"]), true_key, "truth"),
@@ -268,6 +341,19 @@ class NavigationStudySource:
                             )
                         }
                     )
+                if "requested_command" in a:
+                    telemetry[key].update(
+                        {
+                            k: pad(a[k])
+                            for k in (
+                                "requested_command",
+                                "executed_target",
+                                "executed_braking",
+                                "executed_request_frame",
+                                "pending_motion",
+                            )
+                        }
+                    )
                 # Never show the final accumulated obstacle map as a live-time map.
                 # The shared prior is fixed; live returns and plans remain time-aligned.
                 methods[key]["display_map"] = "实验开始时的先验地图"
@@ -300,7 +386,7 @@ class NavigationStudySource:
             "protocol": "各方法独立驾驶；结束后保持末帧，保持帧不计分。",
             "map_metrics": "实线=实际轨迹；虚线=估计轨迹；金线=当前规划；青点=当前雷达回波。",
             "cohort": "；".join(
-                f"{LABELS[k][0]} {sum(r['status'] == 'completed' for r in summary['rows'] if r['method'] == k)}/{sum(r['method'] == k for r in summary['rows'])} 回合完成"
+                f"{labels[k][0]} {sum(r['status'] == 'completed' for r in summary['rows'] if r['method'] == k)}/{sum(r['method'] == k for r in summary['rows'])} 回合完成"
                 for k in keys
             ),
         }
@@ -354,10 +440,13 @@ class NavigationStudySource:
                         "heldout_layout": "偏置布局留出",
                         "negative": "过窄负例",
                         "development": "开发预试",
+                        "bridge": "旧批次桥接",
+                        "scan": "新种子单变量扫描",
+                        "environment": "同条件环境参照",
                     }[cohort]
                     + "："
                     + "；".join(
-                        f"{LABELS[k][0]} {sum(r['reached'] for r in summary['rows'] if r['method'] == k and r['cohort'] == cohort)}/{sum(r['method'] == k and r['cohort'] == cohort for r in summary['rows'])} 回合到达"
+                        f"{labels[k][0]} {sum(r['reached'] for r in summary['rows'] if r['method'] == k and r['cohort'] == cohort)}/{sum(r['method'] == k and r['cohort'] == cohort for r in summary['rows'])} 回合到达"
                         for k in keys
                     ),
                 )
@@ -386,6 +475,19 @@ class NavigationStudySource:
                             for k in keys
                         )
                     )
+                if round_number == 4:
+                    metadata.update(
+                        protocol="同一同比例制动算法，分别注入一种误差；不是不同定位算法。结束后保持末帧，保持帧不计分。",
+                        settings=f"69课第四轮 · {GROUP_NAMES[group]}；车身和6cm余量不变；0.2s预测预留≠本轮实际延迟",
+                        sensor_note="雷达/深度存档；RGB按真值重渲染。没有视觉定位。",
+                        lidar_note="青点按有偏估计投影；点与墙错开可能是注入的位姿误差。无回波≠无障碍。",
+                        braking_models={k: "coupled" for k in keys},
+                        robustness_group=group,
+                        cohort="本回合到达且余量合格："
+                        + "；".join(
+                            f"{labels[k][0]} {int(rows[k]['safe_completed'])}/1" for k in keys
+                        ),
+                    )
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])
             maps = (
@@ -413,7 +515,7 @@ class NavigationStudySource:
                     scene_note="冻结同一张地图、同一粒子滤波；独立比较到点或恢复策略。",
                     settings="25cm半径；300粒子；真实45cm到点线不变；粒子集中不等于真实误差小。",
                     cohort="；".join(
-                        f"{LABELS[k][0]} {sum(r['status'] == 'completed' for r in summary['rows'] if r['method'] == k and r['map_kind'] == kind)}/{sum(r['method'] == k and r['map_kind'] == kind for r in summary['rows'])} 轮完成"
+                        f"{labels[k][0]} {sum(r['status'] == 'completed' for r in summary['rows'] if r['method'] == k and r['map_kind'] == kind)}/{sum(r['method'] == k and r['map_kind'] == kind for r in summary['rows'])} 轮完成"
                         for k in keys
                     ),
                 )

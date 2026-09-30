@@ -1,5 +1,7 @@
 # 第69课第三轮：车要停下来，为什么还得继续转弯？
 
+> 后续[第六十九课第四轮讲义](69-robustness-round4.md)已进一步扫描新种子、位置/朝向偏差和实际执行延迟。本页保留第三轮原批次结果；45/45不是对所有噪声与执行条件的保证。看本批窗口请指定`--footprint results/braking_navigation_v3`。
+
 日期：2026-09-30。承接[第二轮讲义](69-footprint-tracking-round2.md)，按[第三轮预登记](69-braking-round3-plan.md)冻结参数后运行。仍属第69课，不把同一问题的迭代另编新课号。
 
 **结论：保持转弯形状的制动，在本批受控实验中补上了窄路执行缺口。** “仅同比例制动”组固定批次27/27到达，新噪声留出9/9、偏置布局留出9/9，全部保持采样检查下的6cm外扩余量；过窄负例正确拒绝、没有移动。但叠加曲率限速后，固定批次退为24/27。其他组失败与余量违规全部保留。这里没有证明任意环境、真实定位误差或实机下都可靠。
@@ -196,7 +198,7 @@ uv run python scripts/check_braking_counterfactual.py
 uv run python -m embodied_learning.experiments.braking_navigation
 uv run python scripts/analyze_braking_navigation.py
 uv run python docs/img/make_braking_figures.py
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/braking_navigation_v3 --play
 uv run python scripts/check_braking_window.py
 uv run python scripts/validate_braking_navigation.py
 ```

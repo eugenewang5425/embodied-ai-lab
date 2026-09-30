@@ -50,7 +50,7 @@ class ReplayWindow:
         self.case_box = ttk.Combobox(
             select,
             state="readonly",
-            width=29,
+            width=55 if getattr(source, "robust_views", {}) else 29,
             textvariable=self.case_var,
             values=list(self.case_labels.values()),
         )
@@ -373,7 +373,7 @@ class ReplayWindow:
         )
         self.map.layer.set(layer)
         self.map._draw_map()
-        if not (solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5)):
+        if not (solo and self.analysis.tabs.index(self.analysis.tabs.select()) in (3, 4, 5, 6)):
             self.analysis.tabs.select(1 if choice == "split" else 0)
         self.refresh()
 
