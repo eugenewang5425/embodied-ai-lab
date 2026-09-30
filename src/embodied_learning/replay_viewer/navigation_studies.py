@@ -14,6 +14,31 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "legacy_brake": (
+        "旧版制动参照",
+        "第二轮组合控制器，保留旧预测；补录失败后实际减速尾段。",
+        "#94a3b8",
+    ),
+    "discrete": (
+        "一致预测＋独立减速",
+        "预测和执行统一到10Hz；线速度与角速度分别减到零。四组对照的基线。",
+        "#dc7840",
+    ),
+    "coupled": (
+        "仅同比例制动",
+        "停车时线速度与角速度按相同比例降低，保持当前转弯半径；正常速度规则不变。",
+        "#119c74",
+    ),
+    "speed": (
+        "仅曲率限速",
+        "根据前方路线弯曲程度降低速度；仍独立减速，检验仅慢下来是否足够。",
+        "#8b5cf6",
+    ),
+    "joint_brake": (
+        "同比例制动＋限速",
+        "同时采用同比例停车和曲率速度预算；是否更好需看独立回合结果。",
+        "#247cc1",
+    ),
     "original": (
         "旧跟踪＋旧裁剪",
         "追35厘米外的路径点；保留路线时直接连到前视点。第一轮矩形组的相同基线。",
@@ -93,7 +118,13 @@ LABELS = {
         "#247cc1",
     ),
 }
-LAYOUTS = {"plaza": "开阔场地", "street": "街区通道", "narrow": "两米窄通道"}
+LAYOUTS = {
+    "plaza": "开阔场地",
+    "street": "街区通道",
+    "narrow": "两米窄通道",
+    "offset_narrow": "留出偏置窄弯",
+    "blocked": "不足车宽的负例",
+}
 OBSTACLES = {"crate": "普通箱体", "low": "14厘米路障", "beam": "悬空横杆"}
 
 
@@ -161,8 +192,8 @@ class NavigationStudySource:
         keys = {
             "67": ("stop", "lidar", "depth"),
             "68": ("raw", "rigid", "repaired", "reference"),
-            "69": ("original", "tangent", "retained", "combined")
-            if summary["protocol"].get("round") == 2
+            "69": tuple(summary["protocol"]["methods"])
+            if summary["protocol"].get("round", 1) >= 2
             else ("circle_grid", "circle_metric", "rectangle"),
             "70": ("baseline", "uncertainty", "joint"),
             "71": ("baseline", "recovery"),
@@ -219,6 +250,21 @@ class NavigationStudySource:
                                 "prior_expanded_gap_m",
                                 "path_curvature_m_inv",
                                 "tracking_angular_raw",
+                            )
+                        }
+                    )
+                if "braking_active" in a:
+                    telemetry[key].update(
+                        {
+                            k: pad(a[k])
+                            for k in (
+                                "braking_active",
+                                "incoming_velocity",
+                                "phase",
+                                "speed_cap",
+                                "preview_curvature",
+                                "nominal_command",
+                                "stop_clearance",
                             )
                         }
                     )
@@ -295,18 +341,51 @@ class NavigationStudySource:
             )
             camera = CameraSpec(rig.camera_z_m, rig.camera_x_m, rig.vfov_deg)
             dt = summary["protocol"]["dt_s"]
-            if summary["protocol"].get("round") == 2:
+            if summary["protocol"].get("round", 1) >= 2:
                 cohort = rows[keys[0]]["cohort"]
+                round_number = summary["protocol"]["round"]
                 metadata.update(
-                    tracking_round=2,
-                    settings="69课第二轮；55×44cm车身、6cm余量不变；零定位误差是设定，跟踪偏差另见诊断页",
-                    cohort=("固定批次" if cohort == "fixed" else "留出噪声种子")
+                    tracking_round=round_number,
+                    settings=f"69课第{round_number}轮；55×44cm车身、6cm余量不变；零定位误差是设定，跟踪偏差另见诊断页",
+                    cohort={
+                        "fixed": "固定批次",
+                        "heldout": "留出噪声种子",
+                        "heldout_noise": "新噪声留出",
+                        "heldout_layout": "偏置布局留出",
+                        "negative": "过窄负例",
+                        "development": "开发预试",
+                    }[cohort]
                     + "："
                     + "；".join(
                         f"{LABELS[k][0]} {sum(r['reached'] for r in summary['rows'] if r['method'] == k and r['cohort'] == cohort)}/{sum(r['method'] == k and r['cohort'] == cohort for r in summary['rows'])} 回合到达"
                         for k in keys
                     ),
                 )
+                if round_number == 3:
+                    metadata["braking_models"] = {
+                        k: (
+                            "legacy"
+                            if k == "legacy_brake"
+                            else "coupled"
+                            if k in ("coupled", "joint_brake")
+                            else "independent"
+                        )
+                        for k in keys
+                    }
+                    metadata["sensor_note"] = (
+                        "雷达/深度为存档；RGB为重渲染，无视觉定位。失败后实际刹停。"
+                    )
+                    aliases = dict(
+                        zip(keys, ("旧参照", "独立", "同比例", "限速", "组合"), strict=True)
+                    )
+                    metadata["cohort"] = (
+                        metadata["cohort"].split("：")[0]
+                        + "到达："
+                        + "；".join(
+                            f"{aliases[k]} {sum(r['reached'] for r in summary['rows'] if r['method'] == k and r['cohort'] == cohort)}/{sum(r['method'] == k and r['cohort'] == cohort for r in summary['rows'])}"
+                            for k in keys
+                        )
+                    )
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])
             maps = (

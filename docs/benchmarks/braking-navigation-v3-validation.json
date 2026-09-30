@@ -1,0 +1,99 @@
+{
+  "date": "2026-09-30",
+  "records": 230,
+  "frames": 34123,
+  "executed_steps": 33893,
+  "independent_swept_geometry_samples": 241452,
+  "source_live_and_snapshot_hashes": {
+    "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+    "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+    "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+    "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+    "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+    "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+    "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+    "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345"
+  },
+  "legacy_bitwise_executed_prefixes": 27,
+  "same_initial_plan_five_arm_cases": 46,
+  "max_motion_difference": 7.675726720890452e-11,
+  "max_expanded_gap_difference_m": 7.271960811294775e-15,
+  "max_physical_body_gap_difference_m": 7.271960811294775e-15,
+  "physically_stopped_records": 230,
+  "collision_records": 0,
+  "actual_arrivals": 174,
+  "arrived_and_margin_clear": 168,
+  "no_motion_negative_records": 5,
+  "terminal_rule": "Rest confirmed by incoming executed velocity, not final zero marker; failure tail included in independent swept scoring.",
+  "geometry_boundary": "Finite <=1cm corner-travel samples and static boxes; no continuous-time proof or hardware certification.",
+  "summary_sha256": "ace00c428d645418b7a124b431b75d994f4c8de7f7cb1e965b268599113d18ad",
+  "benchmark_sha256": "4659cc82dd9faa781d3e6bf91ecc9059c45306da57bd7272573352e3584b6825",
+  "images": {
+    "lesson69-round3-control.png": {
+      "sha256": "1f52b3d5cb56e51ea30af86a9d5db316a701c2c35004295bc4d62d0717991342",
+      "size": [
+        2034,
+        1214
+      ]
+    },
+    "lesson69-round3-results.png": {
+      "sha256": "d7ff32b2f6e0aaa9cb92312e2ea6893de168abab871c0e28785ec71df6d9f7c7",
+      "size": [
+        2034,
+        1293
+      ]
+    },
+    "lesson69-round3-stop-mechanism.png": {
+      "sha256": "4e295fe076745191ec46c5cb2bd4f0f2fc035376443a6a32ac3f46bf3868e435",
+      "size": [
+        2034,
+        738
+      ]
+    },
+    "lesson69-round3-trajectories.png": {
+      "sha256": "8422ef5d339ae6f995850a4c958f0a04c28ae0cd13acac8dbbaf8381127bee59",
+      "size": [
+        2034,
+        1374
+      ]
+    },
+    "lesson69-round3-window.png": {
+      "sha256": "42908ca050f31574161af62d5a82a4539ba3f229d74ce492c12b00da03770dea",
+      "size": [
+        1680,
+        1060
+      ]
+    }
+  },
+  "visual_review": "Four charts and own Tk window inspected; five methods, safe-completion labels, camera, goal, LiDAR and sixth diagnostic tab synchronized.",
+  "logs": {
+    "quick": {
+      "result": "839 passed, 186 deselected",
+      "sha256": "8188ddaf2de446c05997ea6aa2a2ac50c1c4ed9a7eb3ee3cb87eefcc9cddba9b",
+      "wrapper": "[tests] exit=0, elapsed=91.2s"
+    },
+    "affected": {
+      "result": "60 passed",
+      "sha256": "adfa754e2a918c9749ea32fde5e4575e3b4927ba7eac749a2610c59c2af888c9",
+      "wrapper": "[tests] exit=0, elapsed=34.8s"
+    }
+  },
+  "regression_scope": "quick plus all affected navigation/window tests; frozen legacy algorithm modules unchanged; no new whole-repository slow run",
+  "local_links_checked": 383,
+  "documents_sha256": {
+    "README.md": "44b82cc66ed7a0aea4a01e28c395aba206b87d20ee162e25c07de1d0555d9b9f",
+    "docs\\69-braking-round3.md": "dfa4d1ebf99e5cc2c8bc3f3069d0e1559240d0c87ed3c74ff4718a25407b60a0",
+    "docs\\69-braking-round3-plan.md": "2c702a8ce9afd7928c341448f6b38c15d0cc3350c975d949251e2d77f15cc052",
+    "docs\\69-footprint-planning.md": "c9ddb4b293377b613ef00c34fe421e8305869b049ffd7ff75047ac1c6f3fa0c6",
+    "docs\\69-footprint-tracking-round2.md": "0450e8d8282f5440f0c53c29c5452c3670867c6b45f37f3dc380d40dbfc669b1",
+    "docs\\navigation-stage-review-69-71.md": "8f31a576ec3a65e10b0b8fbfd6c2a77cb358e4cb7610ec0aab80bf1564469ed0",
+    "docs\\01-learning-roadmap.md": "5a0ae3542ae758e4863752d5da2242808a349cf6347f887ac698c19a4836dd31",
+    "docs\\multisensor-navigation-roadmap.md": "95e85957de034e0366a55060ee38573fa58aa497c991d77179c42176f97c394f",
+    "docs\\replay-window.md": "672d125482cacd86afb64e9776d8969277b61eda1ac24e055f471b3a36fc0b0b"
+  },
+  "audit_sources_sha256": {
+    "scripts\\validate_braking_navigation.py": "891c197203677db2c4f5c659beb4577a27988e43571147f28a2fe73035633f0e",
+    "scripts\\validate_footprint_tracking.py": "ab76015d586516af3ea131be53833ce719efb4aa4d83ae09d25f8c99f9f6acf1"
+  },
+  "wall_s": 10.007043200006592
+}

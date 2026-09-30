@@ -1,5 +1,7 @@
 # 第 69 课第二轮：有路却跟不住，问题出在转向还是刹车？
 
+> 同日后续已完成[第六十九课第三轮讲义](69-braking-round3.md)的制动实验；本页保留第二轮132回合及其失败。默认窗口会选择本地最新批次，看本页记录请明确指定`--footprint results/footprint_tracking_v2`。
+
 日期：2026-09-30。承接[第六十九课讲义](69-footprint-planning.md)，实验登记见[第二轮计划](69-tracking-round2-plan.md)。这是同一课的第二轮验证，未新增课号，也未把70/71课的到点与恢复合入。
 
 **本轮只取得部分改善。** 在相同27个固定条件下，同时修改转向跟踪与路线保留后，到达由18/27变为21/27，窄路由0/9变为3/9；这三个成功都来自开发用种子0的三种障碍高度。留出的种子3、4仍为0/6。132回合均无实体接触，但成功例也短暂侵入了外扩安全空间。因此“稳定通过窄路”和“全程保持外扩余量”两项门槛都没有通过。
@@ -161,7 +163,7 @@
 ```powershell
 uv run python -m embodied_learning.experiments.footprint_tracking --output results/footprint_tracking_v2
 uv run python docs/img/make_footprint_tracking_figures.py
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --play
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/footprint_tracking_v2 --play
 uv run python scripts/check_footprint_tracking_window.py
 uv run python scripts/validate_footprint_tracking.py
 ```

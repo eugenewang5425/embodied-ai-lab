@@ -92,7 +92,9 @@ app = ReplayWindow(root, MySource())
 
 ## 验证
 
-69课第二轮：本地有`results/footprint_tracking_v2/summary.json`时默认选该记录，新增四个中文方法按钮和第五页“跟踪与余量”。按钮一次同步相机、3D、目标、雷达、统计和诊断，并保持当前帧及诊断页；短回合只画到其真实末帧。左图比较相对首次规划的横向偏差，右图局部放大外扩足印分离量，负数表示预留空间重叠而非实体碰撞。定位误差零为实验受控假设。看第一轮请明确传`--footprint results/footprint_navigation_v1`；第二轮独立窗口截图由`uv run python scripts/check_footprint_tracking_window.py`生成。详见[第二轮讲义](69-footprint-tracking-round2.md)。
+69课第三轮：本地存在`results/braking_navigation_v3`时默认打开最新五组比较（旧参照＋制动/限速2×2）。第六页“制动过程”显示进入帧速度、实际命令、名义速度上界和制动请求；失败尾段真实执行到停稳，表格区分到达与余量合格。来源按钮保持当前帧和第3/4/5索引的诊断页，五组全显示；车身页按所选制动模型画延迟分支，立即分支另说明。运行`uv run python scripts/check_braking_window.py`生成固定种子0、7秒、同比例组的本机截图。看第二轮请加`--footprint results/footprint_tracking_v2`，看第一轮指定`footprint_navigation_v1`。详见[第三轮讲义](69-braking-round3.md)。
+
+69课第二轮：本地没有第三轮而有`results/footprint_tracking_v2/summary.json`时默认选该记录，四个中文方法按钮和第五页“跟踪与余量”继续可用。按钮一次同步相机、3D、目标、雷达、统计和诊断，并保持当前帧及诊断页；短回合只画到其真实末帧。左图比较相对首次规划的横向偏差，右图局部放大外扩足印分离量，负数表示预留空间重叠而非实体碰撞。定位误差零为实验受控假设。第二轮独立窗口截图由`uv run python scripts/check_footprint_tracking_window.py`生成。详见[第二轮讲义](69-footprint-tracking-round2.md)。
 
 第69–71课继续使用同一个模块化窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 69`（也可70/71）。入口自动列出本地已有的课程档案，无需为了查看69课额外生成67/68全部记录。每个方法按钮一次同步相机、3D、目标、雷达点、地图、统计及“车身与决策诊断”，并保留时间。
 

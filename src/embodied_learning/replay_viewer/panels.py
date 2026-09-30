@@ -377,6 +377,7 @@ class StatsPanel(ttk.Frame):
     def set_record(self, record):
         self.record = record
         self.table.delete(*self.table.get_children())
+        self.table.configure(height=max(4, min(6, len(record.estimates))))
         for track in record.estimates:
             self.table.tag_configure(track.key, foreground=track.color)
             self.table.insert("", "end", iid=track.key, tags=(track.key,))
@@ -424,6 +425,8 @@ class StatsPanel(ttk.Frame):
 
     def _result_suffix(self, key):
         result = self.record.method_info(key).get("result")
+        if result and "safe_completed" in result and result["reached"]:
+            return f" [1/1·余量{'合格' if result['safe_completed'] else '未过'}]"
         return f" [{result['reached']}/{result['target_count']}]" if result else ""
 
     def set_view(self, key, lidar=True):

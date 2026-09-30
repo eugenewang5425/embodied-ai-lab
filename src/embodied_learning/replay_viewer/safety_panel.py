@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.patches import Circle, Polygon
 
+from embodied_learning.braking_control import braking_path
 from embodied_learning.navigation_geometry import (
     NavigationRig,
     body_points,
@@ -76,6 +77,9 @@ class SafetyPanel(ttk.Frame):
         a.scatter(current[::4, 1], current[::4, 0], s=4, color="#8c67be", label="当前深度")
         command = record.telemetry[key]["commands"][f]
         path = stop_path(*command, rig)
+        model = record.metadata.get("braking_models", {}).get(key, "legacy")
+        if model != "legacy":
+            path = braking_path(command, rig, model == "coupled", rig.latency_s)[0]
         footprint = np.array(
             [
                 [-rig.rear_m, -rig.half_width_m, 0],
@@ -105,7 +109,7 @@ class SafetyPanel(ttk.Frame):
             xlabel="左 ← 横向 (m) → 右",
             ylabel="车头前方 (m)",
         )
-        a.set_title("黄框：按本帧速度刹停扫过的车身", fontsize=10)
+        a.set_title("黄框：按本组制动模型的0.2秒延迟扫掠", fontsize=10)
         handles, labels = a.get_legend_handles_labels()
         self.figure.legend(handles, labels, loc="outside upper center", ncol=4, fontsize=7)
         image = b.imshow(
@@ -132,6 +136,7 @@ class SafetyPanel(ttk.Frame):
         self.note.configure(
             text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
             f"速度 {command[0]:.2f} m/s，角速度 {command[1]:.2f} rad/s；中心刹停位移 {distance:.2f} m。黄框不含6cm余量；灰点仅是历史抽样。无回波≠安全。"
+            + (" 第三轮还检查立即刹停，此图仅画延迟分支。" if model != "legacy" else "")
         )
         self.canvas.draw_idle()
 

@@ -8,6 +8,7 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from .braking_panel import BrakingPanel
 from .panels import ErrorPanel
 from .safety_panel import SafetyPanel
 from .tracking_panel import TrackingPanel
@@ -17,7 +18,8 @@ RESULTS = {
     "false_completion": "自认为完成，但有点未真正到达",
     "timeout": "超时/停滞",
     "no_path": "估计位置无法继续规划",
-    "collision_abort": "发生接触，已停止",
+    "collision_abort": "发生接触，仿真终止",
+    "goal_overshoot": "刹停后仍在目标圈外",
     "stalled": "停车后无法继续前进",
 }
 
@@ -47,6 +49,8 @@ class AnalysisPanel(ttk.Frame):
         self.tabs.add(self.safety, text="车身与决策诊断")
         self.tracking = TrackingPanel(self.tabs)
         self.tabs.add(self.tracking, text="跟踪与余量")
+        self.braking = BrakingPanel(self.tabs)
+        self.tabs.add(self.braking, text="制动过程")
         self.focus_key = None
         self.frame = 0
         self.visible = set()
@@ -134,6 +138,10 @@ class AnalysisPanel(ttk.Frame):
                     text += [
                         f"6厘米外扩足印的最小投影分离量 {result['expanded_swept_min_m'] * 100:.2f}cm；负值表示预留空间发生重叠。近场保护制动 {result['braking_events']} 次、{result['braking_frames']} 帧。"
                     ]
+                if "physically_stopped" in result:
+                    text += [
+                        f"实际停稳：{'是' if result['physically_stopped'] else '否'}；完成且全程外扩余量合格：{'是' if result['safe_completed'] else '否'}。终止触发后的实际制动尾段 {result['tail_time_s']:.1f}s、{result['tail_distance_m'] * 100:.1f}cm。"
+                    ]
                 if "planning_over_200ms" in result and result["planning_calls"]:
                     text += [
                         f"规划调用 {result['planning_calls']} 次，其中 {result['planning_over_200ms']} 次超过200毫秒。仿真会等待计算，不能把播放速度当实时性能。"
@@ -166,6 +174,8 @@ class AnalysisPanel(ttk.Frame):
             self.safety.draw(self.record, self.focus_key, frame)
         elif self.tabs.index(self.tabs.select()) == 4:
             self.tracking.draw(self.record, self.focus_key, frame)
+        elif self.tabs.index(self.tabs.select()) == 5:
+            self.braking.draw(self.record, self.focus_key, frame)
 
     def _draw_separate(self):
         r, f = self.record, self.frame
@@ -191,3 +201,5 @@ class AnalysisPanel(ttk.Frame):
             self.safety.draw(self.record, self.focus_key, self.frame)
         elif self.record is not None and self.tabs.index(self.tabs.select()) == 4:
             self.tracking.draw(self.record, self.focus_key, self.frame)
+        elif self.record is not None and self.tabs.index(self.tabs.select()) == 5:
+            self.braking.draw(self.record, self.focus_key, self.frame)
