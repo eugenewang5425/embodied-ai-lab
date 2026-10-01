@@ -14,6 +14,16 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "lidar_only": (
+        "仅平面雷达",
+        "只用32cm高雷达更新地图、规划与刹停保护；低路障和悬空杆有高度盲区。画面中的深度仅供复盘，本组没有使用。",
+        "#c53e51",
+    ),
+    "lidar_depth": (
+        "雷达＋深度",
+        "加入米制深度发现雷达高度之外的障碍，更新地图并绕行；身体、跟踪与保护规则和雷达组相同。不是RGB定位。",
+        "#119c74",
+    ),
     "progress_old": (
         "旧路点进度",
         "证据更新地图与低速不变；只有进入首路点35cm以内才跳过，可能追车后的旧点而停住。",
@@ -305,11 +315,11 @@ class NavigationStudySource:
                         else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
                     )
                 )
-                if summary["protocol"].get("round") in (5, 6, 7, 8, 9, 10):
+                if summary["protocol"].get("round") in (5, 6, 7, 8, 9, 10, 11):
                     label += f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s / " + (
                         "规划无输出1s" if row["profile"] == "blackout" else "正常输出"
                     )
-                    if summary["protocol"].get("round") in (8, 9, 10):
+                    if summary["protocol"].get("round") in (8, 9, 10, 11):
                         label = (
                             f"69第{summary['protocol']['round']}轮 · "
                             + {
@@ -321,6 +331,10 @@ class NavigationStudySource:
                                 "occluded": "旧箱体被遮挡",
                                 "present_low": "真实14cm低墙",
                                 "present_beam": "真实悬空横杆墙",
+                                "bypass_low": "新低路障·可绕行",
+                                "bypass_beam": "新悬空杆·可绕行",
+                                "bypass_crate": "新普通箱体·可绕行",
+                                "clear_overhead": "高杆·整车可从下方通过",
                             }[row["profile"]]
                             + f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s"
                         )
@@ -478,8 +492,31 @@ class NavigationStudySource:
                     telemetry[key].update(
                         {k: pad(a[k]) for k in ("map_frames", "map_counts", "map_error")}
                     )
-                    if summary["protocol"].get("round") in (8, 9, 10):
+                    if summary["protocol"].get("round") in (8, 9, 10, 11):
                         methods[key]["display_map"] = "当前观测通行图"
+                    if "planning_prior_frames" in a:
+                        telemetry[key]["planning_prior_frames"] = pad(a["planning_prior_frames"])
+                    if summary["protocol"].get("round") == 11:
+                        # Evaluation-only projection: a high overhead fixture
+                        # must not be labelled a missed collision obstacle.
+                        boxes = a["actual_boxes"]
+                        yy, xx = np.mgrid[:120, :120]
+                        x, y = (xx + 0.5) * 0.1, (yy + 0.5) * 0.1
+                        blocking = np.zeros((120, 120), bool)
+                        top = summary["protocol"]["rig"]["top_m"]
+                        for box in boxes[(boxes[:, 4] < top) & (boxes[:, 5] > 0)]:
+                            blocking |= (
+                                (x >= box[0]) & (x <= box[1]) & (y >= box[2]) & (y <= box[3])
+                            )
+                        current = a["map_frames"]
+                        errors = np.stack(
+                            (
+                                (current & ~blocking).sum(axis=(1, 2)),
+                                (blocking & ~current).sum(axis=(1, 2)),
+                            ),
+                            axis=1,
+                        )
+                        telemetry[key]["body_height_map_error"] = pad(errors)
                 if "waypoint_progress" in a:
                     telemetry[key]["waypoint_progress"] = pad(a["waypoint_progress"])
             else:
@@ -537,7 +574,7 @@ class NavigationStudySource:
                 for j, b in enumerate(boxes)
             ]
             maps["实验开始时的先验地图"] = arrays[keys[0]]["prior_map"]
-            if summary["protocol"].get("round") in (8, 9, 10):
+            if summary["protocol"].get("round") in (8, 9, 10, 11):
                 maps["当前观测通行图"] = arrays[keys[0]]["prior_map"]
             metadata.update(
                 rig=rig.to_dict(),
@@ -575,6 +612,7 @@ class NavigationStudySource:
                         "map_update": "错误地图对照",
                         "progress": "新种子路点进度对照",
                         "depth_sampling": "新种子深度采样对照",
+                        "sensor_ablation": "新障碍可绕行对照",
                     }[cohort]
                     + "："
                     + "；".join(
@@ -649,14 +687,14 @@ class NavigationStudySource:
                         + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
                         braking_models={k: "coupled" for k in keys},
                     )
-                if round_number in (7, 8, 9, 10):
+                if round_number in (7, 8, 9, 10, 11):
                     r = rows[keys[0]]
                     metadata.update(
                         protocol="同一真实接触平台与轻擦阈值；第七轮只换速度，第八轮只换地图清除规则。地图修正不是位姿修正；末帧保持不计分。",
                         settings=f"第69课第{round_number}轮 · 55×44cm车身 · 零额外预留 · 物理500Hz · 排队{r['perturbation']['delay_steps'] * 0.1:g}s · 精确位姿为设定",
                         sensor_note="雷达/深度为同步记录；RGB重渲染，无视觉定位。真实速度与接触力另见诊断。",
                         scene_note="12×12m街区/通道；真实障碍与可能错误的先验地图分别提供。未模拟行驶中移动物体。",
-                        live_map=round_number in (8, 9, 10),
+                        live_map=round_number in (8, 9, 10, 11),
                         cohort="本回合真实到点并满足轻擦口径："
                         + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
                         braking_models={k: "coupled" for k in keys},
@@ -668,6 +706,12 @@ class NavigationStudySource:
                         metadata["depth_dimensions_by_method"] = summary["protocol"][
                             "depth_dimensions_by_method"
                         ]
+                    if round_number == 11:
+                        metadata.update(
+                            protocol="同一身体、地图规则、规划与保护；只改变控制是否使用深度。结束后末帧保持不计分。",
+                            scene_note="新增障碍未画入先验，两侧有绕行通道；75cm高杆高于58cm整车，可从下方通过。",
+                            depth_used_by=summary["protocol"]["depth_used_by"],
+                        )
 
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])

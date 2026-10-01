@@ -162,6 +162,13 @@ class SafetyPanel(ttk.Frame):
                 text=self.note.cget("text")
                 + " 第六轮黄框是运动学预测示意，未包含伺服滞后或接触侧滑；实际速度/接触另见接触页。"
             )
+        if record.metadata.get("tracking_round") == 11:
+            used = key in record.metadata["depth_used_by"]
+            self.note.configure(
+                text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
+                f"黄框示意0.2秒延迟刹停，中心位移{distance:.2f}m；完整排队保护见执行端页。\n"
+                f"紫点/深度{'参与控制' if used else '仅供复盘，本组未用'}；灰点是历史抽样。无回波不代表整车高度内安全。"
+            )
         self.canvas.draw_idle()
 
     def _draw_decisions(self, record, key, frame):

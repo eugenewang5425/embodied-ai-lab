@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-01",
+  "baseline_commit": "9abe189a7095cbeb50843bf08e19a0328eda6b56",
+  "formal_episodes": 24,
+  "development_counterexamples_replayed": 1,
+  "physics_steps_replayed": 465850,
+  "formal_map_frames_rebuilt": 9134,
+  "cleared_voxels_checked": 1067,
+  "max_state_error": 0.0,
+  "max_contact_error": 8.881784197001252e-16,
+  "tests": [
+    {
+      "command": "python scripts/test.py quick",
+      "passed": 905,
+      "elapsed_s": 109.36,
+      "scope_note": "run before adding archive assertion; subsequently all new lesson tests checked"
+    },
+    {
+      "command": "python scripts/test.py full tests/test_navigation_bypass.py tests/test_navigation_progress.py tests/test_navigation_reinforcement.py tests/test_contact_viewer.py tests/test_navigation_study_viewer.py tests/test_replay_viewer.py",
+      "passed": 58,
+      "elapsed_s": 86.61
+    },
+    {
+      "command": "python scripts/test.py full tests/test_navigation_bypass.py",
+      "passed": 11,
+      "elapsed_s": 13.75,
+      "scope_note": "after adding high-overhead scoring assertion"
+    }
+  ],
+  "verified_local_links": 570,
+  "images": {
+    "docs/img/lesson69-round11-failures.png": {
+      "sha256": "4d592781e9279622e9ef4870ac3d92b9de8982dd853b601b70d7dcd22491b9a1",
+      "pixels": [
+        2318,
+        750
+      ],
+      "visually_inspected": true
+    },
+    "docs/img/lesson69-round11-outcomes.png": {
+      "sha256": "b091774b2d8b74814aa5c798c0b3fe92ccc9d1d0272739c2a7f17ce3ed8202f9",
+      "pixels": [
+        2098,
+        658
+      ],
+      "visually_inspected": true
+    },
+    "docs/img/lesson69-round11-trajectories.png": {
+      "sha256": "9110d08e75af99da80aaea71fc0366f1f7a37bb26dd2a21401e88e0e066379a9",
+      "pixels": [
+        2018,
+        1000
+      ],
+      "visually_inspected": true
+    },
+    "docs/img/lesson69-round11-window-bypass_beam.png": {
+      "sha256": "09ec5cc1f729dbdf837a310995b1df4a8e399c5d9a59f0496285e16adeebb239",
+      "pixels": [
+        1680,
+        1000
+      ],
+      "visually_inspected": true
+    },
+    "docs/img/lesson69-round11-window-bypass_low.png": {
+      "sha256": "50718dc221f90b650703c02a0b0d2400f8be6a48dfef5def27e6c10dae598be2",
+      "pixels": [
+        1680,
+        1000
+      ],
+      "visually_inspected": true
+    },
+    "docs/img/lesson69-round11-window-clear_overhead.png": {
+      "sha256": "0e37583e29ee7a208688180c253f63b298f22e9efc9a41c194b0cfe36f0a78f5",
+      "pixels": [
+        1680,
+        1000
+      ],
+      "visually_inspected": true
+    }
+  },
+  "inspection_notes": [
+    "failure figure initial shared legend overlapped title; constrained outside legend fixes it",
+    "three own Tk windows; one click maintains time, map, camera, scene, goal and statistics",
+    "depth display explicitly distinguishes controller input from unused archived sensor",
+    "all frozen source and registration bytes verified; new hash anchors preserved by .gitattributes"
+  ],
+  "remaining": [
+    "development seed0 contact failure with same frozen code",
+    "formal beam30 and crate31 no-path failures",
+    "new layouts, pose error, occlusion and real concurrent physics unverified"
+  ],
+  "scope": "controlled static street experiment; precise supplied pose, rendered RGB; not real robot or RGB localization"
+}

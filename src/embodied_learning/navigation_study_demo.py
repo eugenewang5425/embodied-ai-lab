@@ -16,6 +16,7 @@ def main():
         (
             name
             for name in (
+                "navigation_reinforcement_v11",
                 "navigation_reinforcement_v10",
                 "navigation_reinforcement_v9",
                 "navigation_reinforcement_v8",
@@ -86,7 +87,7 @@ def main():
         default_case = next(
             (c for c in candidates if c == "69_narrow_low_14__delay_2__normal"), candidates[0]
         )
-    if source.summaries.get("69", {}).get("protocol", {}).get("round") in (7, 8, 9, 10):
+    if source.summaries.get("69", {}).get("protocol", {}).get("round") in (7, 8, 9, 10, 11):
         candidates = [e.case for e in source.entries if e.variant == "69"]
         default_case = candidates[0]
     root = tk.Tk()
@@ -107,7 +108,9 @@ def main():
         {
             "67": "depth",
             "68": "repaired",
-            "69": "depth_dense"
+            "69": "lidar_depth"
+            if "lidar_depth" in app.record.method_keys
+            else "depth_dense"
             if "depth_dense" in app.record.method_keys
             else "progress_fixed"
             if "progress_fixed" in app.record.method_keys
@@ -132,7 +135,7 @@ def main():
     )
     if args.lesson != "68":
         app.analysis.tabs.select(
-            {2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 8, 8: 9, 9: 9, 10: 9}.get(
+            {2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 8, 8: 9, 9: 9, 10: 9, 11: 9}.get(
                 app.record.metadata.get("tracking_round"), 3
             )
         )

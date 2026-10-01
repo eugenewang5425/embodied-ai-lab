@@ -1,0 +1,211 @@
+{
+  "episodes": 25,
+  "formal_episodes": 24,
+  "development_counterexample": {
+    "method": "lidar_depth",
+    "depth_width": 320,
+    "depth_height": 240,
+    "prefix_advance_frames": 16,
+    "fixed_speed_cap_m_s": 0.2,
+    "map_removed_voxels": 101,
+    "initial_false_occupied_cells": 0,
+    "final_false_occupied_cells": 525,
+    "final_missed_occupied_cells": 77,
+    "max_actual_speed_m_s": 0.20020810425337798,
+    "controller_margin_m": 0.0,
+    "contact_allowed": true,
+    "passed": false,
+    "contact_events": 13,
+    "contact_peak_force_n": 85.9414635787384,
+    "contact_impulse_ns": 0.6018364787446858,
+    "contact_penetration_m": 0.0001386994274272281,
+    "contact_total_s": 0.068,
+    "contact_longest_s": 0.018000000000000002,
+    "severe_contact": true,
+    "six_cm_diagnostic_min_m": -0.06600659582504431,
+    "terminal_world_velocity": [
+      0.00032198119753480264,
+      -0.0014048529690696707,
+      0.0017335306406533052
+    ],
+    "condition_key": "delay_2",
+    "profile": "bypass_crate",
+    "local_override_frames": 4,
+    "expiry_frames": 0,
+    "blackout_encountered": false,
+    "perturbation": {
+      "key": "delay_2",
+      "dy_m": 0.0,
+      "yaw_deg": 0.0,
+      "delay_steps": 2
+    },
+    "layout": "street",
+    "obstacle": "crate",
+    "seed": 0,
+    "status": "heavy_contact_abort",
+    "reached": 0,
+    "announced": 0,
+    "false_arrival": false,
+    "final_estimated_goal_distance_m": 5.279054475198613,
+    "target_count": 1,
+    "contacts": 13,
+    "mean_m": 0.0,
+    "p95_m": 0.0,
+    "end_m": 0.0,
+    "abs_heading_error_deg": 0.0,
+    "frames": 208,
+    "elapsed_sim_s": 20.700000000000003,
+    "events": [],
+    "min_clearance_m": -0.00013869942742728014,
+    "expanded_swept_min_m": -0.00013869942742728014,
+    "expanded_overlap_frames": 0,
+    "safe_completed": false,
+    "braking_frames": 5,
+    "braking_events": 1,
+    "trigger_frame": 205,
+    "arrival_eligible_frame": null,
+    "physically_stopped": true,
+    "terminal_incoming_velocity": [
+      0.00046364217519248184,
+      0.0017335306406533052
+    ],
+    "tail_time_s": 0.2,
+    "tail_distance_m": 0.0013066768264799592,
+    "final_goal_distance_m": 5.279054475198613,
+    "travelled_m": 3.8936203001628558,
+    "controller_p95_ms": 50.06627998518525,
+    "planning_log": [
+      {
+        "reason": "smooth_observed_route",
+        "expanded": 0,
+        "wall_s": 0.20245920002344064
+      },
+      {
+        "reason": "smooth_observed_route",
+        "expanded": 0,
+        "wall_s": 0.21791370000573806
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.029980799998156726
+      },
+      {
+        "reason": "smooth_observed_route",
+        "expanded": 0,
+        "wall_s": 0.19657780000125058
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.02694010001141578
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.028093200002331287
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.026212900003883988
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.026411899976665154
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.025523099990095943
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.025715399999171495
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.025720100005855784
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.0251503000035882
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.0231084999977611
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.023245400021551177
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.02157650000299327
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.022075399989262223
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.02102240000385791
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.01961330001358874
+      },
+      {
+        "reason": "retained_original_curve",
+        "expanded": 0,
+        "wall_s": 0.018781799997668713
+      },
+      {
+        "reason": "planned",
+        "expanded": 71,
+        "wall_s": 0.16484209999907762
+      }
+    ],
+    "planning_reasons": {
+      "smooth_observed_route": 3,
+      "retained_original_curve": 16,
+      "planned": 1
+    },
+    "file": "street_crate_s0_delay_2_lidar_depth_bypass_crate.npz",
+    "sha256": "9eeccdd4fbe058b3803950a193d07f3276345f8e85bbab0cc95e073304696432",
+    "cohort": "development",
+    "wall_s": 24.323870599997463
+  },
+  "development_summary_sha256": "b03c201eab97f7ad420e489f8a5dc04324cbedb3f250e5707cded92f9ae53eaf",
+  "round": 11,
+  "map_rebuilt_frames": 9134,
+  "independently_checked_cleared_voxels": 1067,
+  "frames": 9342,
+  "physics_steps": 465850,
+  "max_state_replay_error": 0.0,
+  "max_contact_replay_error": 8.881784197001252e-16,
+  "summary_sha256": "fa75b7a5f3201a057e179d1ce74fabf08df0b79dea00403874dc83f42e1d9a37",
+  "checks": [
+    "direct 2ms mj_step from stored applied force",
+    "contacts independently extracted in contact frame",
+    "force budgets",
+    "physical stop including lateral velocity",
+    "true arrival and contact policy",
+    "frame/substep anchors",
+    "approach cap",
+    "all archive and frozen source hashes",
+    "sampled feasible bypass, not supplied to controllers",
+    "paired raw sensors identical during stationary warmup",
+    "LiDAR-only map reconstructed without camera input"
+  ]
+}

@@ -1,0 +1,2429 @@
+{
+  "protocol": {
+    "lesson": "69",
+    "round": 11,
+    "dt_s": 0.1,
+    "physics_dt_s": 0.002,
+    "smoke": true,
+    "methods": [
+      "lidar_only",
+      "lidar_depth"
+    ],
+    "cases": [
+      [
+        "street",
+        "low",
+        0,
+        "development",
+        "delay_2",
+        "lidar_only",
+        "bypass_low"
+      ],
+      [
+        "street",
+        "low",
+        0,
+        "development",
+        "delay_2",
+        "lidar_depth",
+        "bypass_low"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "lidar_only",
+        "bypass_beam"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "lidar_depth",
+        "bypass_beam"
+      ],
+      [
+        "street",
+        "crate",
+        0,
+        "development",
+        "delay_2",
+        "lidar_only",
+        "bypass_crate"
+      ],
+      [
+        "street",
+        "crate",
+        0,
+        "development",
+        "delay_2",
+        "lidar_depth",
+        "bypass_crate"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "lidar_only",
+        "clear_overhead"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "lidar_depth",
+        "clear_overhead"
+      ]
+    ],
+    "rig": {
+      "front_m": 0.3,
+      "rear_m": 0.25,
+      "half_width_m": 0.22,
+      "top_m": 0.58,
+      "lidar_x_m": 0.08,
+      "lidar_z_m": 0.32,
+      "camera_x_m": 0.2,
+      "camera_z_m": 0.55,
+      "vfov_deg": 65.0,
+      "width": 80,
+      "height": 60,
+      "lidar_rays": 180,
+      "max_range_m": 8.0,
+      "latency_s": 0.2,
+      "brake_m_s2": 0.8,
+      "angular_brake_rad_s2": 1.8,
+      "margin_m": 0
+    },
+    "contact_limits": {
+      "peak_force_n": 40.0,
+      "penetration_m": 0.005,
+      "continuous_contact_s": 0.5
+    },
+    "mujoco_version": "3.11.0",
+    "max_steps": 900,
+    "warmup_frames": 5,
+    "depth_dimensions_by_method": {
+      "lidar_only": [
+        320,
+        240
+      ],
+      "lidar_depth": [
+        320,
+        240
+      ]
+    },
+    "noise_streams": "independent lidar and depth",
+    "depth_used_by": [
+      "lidar_depth"
+    ],
+    "feasibility_witnesses": {
+      "bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.0
+          ],
+          [
+            6.9,
+            7.0
+          ],
+          [
+            6.9,
+            6.0
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1772,
+        "sampled_body_clearance_m": 0.1669846591952875,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.0
+          ],
+          [
+            6.9,
+            7.0
+          ],
+          [
+            6.9,
+            6.0
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1772,
+        "sampled_body_clearance_m": 0.16755178702667406,
+        "straight_body_clearance_m": -0.4200000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.0
+          ],
+          [
+            6.9,
+            7.0
+          ],
+          [
+            6.9,
+            6.0
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1772,
+        "sampled_body_clearance_m": 0.1669846591952875,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.0
+          ],
+          [
+            6.9,
+            7.0
+          ],
+          [
+            6.9,
+            6.0
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1772,
+        "sampled_body_clearance_m": 0.16755178702667406,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      }
+    },
+    "progress_tolerance_m": 0.05,
+    "map_resolution_m": 0.1,
+    "free_confirmations": 3,
+    "free_depth_budget_m": 0.12,
+    "baseline_summary_sha256": "956e047e266ed17ab3d1ed03b073db8108fafdede4125019b49fbcc19737de01",
+    "registration_sha256": "f20de4aff9a9b0bfd6d12840c2db56fe690dd1417a87e9ac7f22bdbcbf2e7c4c",
+    "source_sha256": {
+      "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+      "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+      "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+      "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+      "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+      "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+      "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+      "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345",
+      "src\\embodied_learning\\experiments\\navigation_robustness.py": "b1363f3965a8797d5b96c1aa44df1efd87b89aa07af06a58ee791b96b1bbac6e",
+      "src\\embodied_learning\\navigation_robustness.py": "4b214c31189a2802e8fd5759c8cc1b6f981c9ff0ad9cc48228748936580a4958",
+      "src\\embodied_learning\\experiments\\execution_navigation.py": "dd6d5da65c4ec9750084d39383fca36189d292a8ee37c0a645883925a4023f2a",
+      "src\\embodied_learning\\execution_safety.py": "af7d7d732b70d03abab39759ffd31f255cb50741363781554b93849ee5a5d3bf",
+      "src\\embodied_learning\\experiments\\contact_navigation.py": "a3f63bf6c003761387fd0b5043cb3ba51f34e42c2d9d3ba1090e19032266fd30",
+      "src\\embodied_learning\\contact_motion.py": "da1d517c77c9e9c436287a0a8f7b29ec38bef65bc6e9900fab12b20798d07457",
+      "src\\embodied_learning\\experiments\\navigation_reinforcement.py": "a1e89872d2598004c37bcbf1f2860cf7660dc8baed9884edc5101c6ff7124186",
+      "src\\embodied_learning\\navigation_map_update.py": "66666ca105da1ff848a3952338f047a693de58e6df282e8a41b91ef89a58078c",
+      "src\\embodied_learning\\experiments\\navigation_progress_study.py": "baadca0cfd3ee1c21c1983caba8c61630739433ad2dec3b06bf47369c7263e7e",
+      "src\\embodied_learning\\navigation_progress.py": "1bb1e7873baf585be061ab16e35e4116e7b0a52867229007aa06e531f1a1f004",
+      "src\\embodied_learning\\experiments\\navigation_bypass_study.py": "c643f67ed5b12f6ca4d76a7dff3fe40f5f04832a43e4c7776f2a5a1ff3d1711b",
+      "src\\embodied_learning\\navigation_sensor_ablation.py": "cc9159d03520af920e8b2096ddd23b43b6afaff1c885f6bc0918f27066aac28d"
+    },
+    "plant": "frozen round-six real planar contacts; force-limited velocity servo",
+    "controller": "coupled braking + queue forecast + local guard; known pose"
+  },
+  "protocol_sha256": "f5cabb32cb88874c5c87583a389fa6fd5d7e46ba39542b2b2ead2dc39a8fca05",
+  "rows": [
+    {
+      "method": "lidar_only",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 19,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 0,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 484,
+      "final_missed_occupied_cells": 96,
+      "max_actual_speed_m_s": 0.19999999999999934,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": false,
+      "contact_events": 2,
+      "contact_peak_force_n": 137.86826685974134,
+      "contact_impulse_ns": 3.4943814474334998,
+      "contact_penetration_m": 0.0002049109946510308,
+      "contact_total_s": 0.294,
+      "contact_longest_s": 0.2820000000000002,
+      "severe_contact": true,
+      "six_cm_diagnostic_min_m": -0.06020491099465103,
+      "terminal_world_velocity": [
+        -5.093801700677102e-14,
+        -2.959174683113451e-16,
+        8.05814557311705e-16
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_low",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "low",
+      "seed": 0,
+      "status": "heavy_contact_abort",
+      "reached": 0,
+      "announced": 0,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 5.19999999134607,
+      "target_count": 1,
+      "contacts": 2,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 203,
+      "elapsed_sim_s": 20.200000000000003,
+      "events": [],
+      "min_clearance_m": -0.0002049109946510308,
+      "expanded_swept_min_m": -0.0002049109946510308,
+      "expanded_overlap_frames": 3,
+      "safe_completed": false,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 200,
+      "arrival_eligible_frame": null,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        -5.093801700677102e-14,
+        8.05814557311705e-16
+      ],
+      "tail_time_s": 0.2,
+      "tail_distance_m": 2.3976522101103616e-08,
+      "final_goal_distance_m": 5.19999999134607,
+      "travelled_m": 3.800000056606974,
+      "controller_p95_ms": 41.30523998755961,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.028335300012258813
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0250199000001885
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02405080001335591
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021887300012167543
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022512399998959154
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021612499986076728
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023820599977625534
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02039859999786131
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02025339999818243
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019911899988073856
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022190299991052598
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02185079999617301
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019254099985118955
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01872030002414249
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0171394000062719
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017261100001633167
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017465600016294047
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016627699980745092
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016049700003350154
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01554349999059923
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 1,
+        "retained_original_curve": 19
+      },
+      "file": "street_low_s0_delay_2_lidar_only_bypass_low.npz",
+      "sha256": "1772e35057e31f272520fa8c42cea700a5807042e10dc766d47a83f47091811e",
+      "cohort": "development",
+      "wall_s": 21.86586960000568
+    },
+    {
+      "method": "lidar_depth",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 44,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 134,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 677,
+      "final_missed_occupied_cells": 0,
+      "max_actual_speed_m_s": 0.20007325058170788,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.04247220329887591,
+      "terminal_world_velocity": [
+        0.00628136608061809,
+        0.00026225075741886315,
+        -4.773144402832345e-05
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_low",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "low",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.15896687776124133,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 466,
+      "elapsed_sim_s": 46.5,
+      "events": [
+        {
+          "frame": 465,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.018741983002750873,
+      "expanded_swept_min_m": 0.018741983002750873,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 458,
+      "arrival_eligible_frame": 463,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006286728662956355,
+        -4.773144402832345e-05
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972643101370193,
+      "final_goal_distance_m": 0.15896687776124133,
+      "travelled_m": 9.05950302400565,
+      "controller_p95_ms": 41.76982498756843,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.1924155000015162
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.21249320000060834
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.2062889999942854
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.028500500018708408
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.03700169999501668
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.027237500005867332
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026229399984003976
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026157000014791265
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02506710001034662
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02452330000232905
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024299000011524186
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02482710001640953
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022903200006112456
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022676499997032806
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021724500023992732
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02432960001169704
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021566700015682727
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020066400000359863
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020331600011559203
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019701599987456575
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019235199986724183
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01746380000258796
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016891999985091388
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017921899998327717
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016490000009071082
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016449499991722405
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016158699989318848
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015536699997028336
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014597700006561354
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013965299993287772
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01597900001797825
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013081699988106266
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.012044800008879974
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01240979999420233
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011732499988283962
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01079339999705553
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.010214599984465167
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009128899982897565
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009262700012186542
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.012741100013954565
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007930499996291474
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007230499992147088
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006833799998275936
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005820000020321459
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00527009999495931
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005094200023449957
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00497219999670051
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 3,
+        "retained_original_curve": 44
+      },
+      "file": "street_low_s0_delay_2_lidar_depth_bypass_low.npz",
+      "sha256": "c3cd7d93165f06eb18f6072c9e374c1713623211065e1c47552e45e6ac90b1ef",
+      "cohort": "development",
+      "wall_s": 51.61284300000989
+    },
+    {
+      "method": "lidar_only",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 19,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 0,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 488,
+      "final_missed_occupied_cells": 96,
+      "max_actual_speed_m_s": 0.19999999999999934,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": false,
+      "contact_events": 2,
+      "contact_peak_force_n": 137.8682668593198,
+      "contact_impulse_ns": 3.494381447433537,
+      "contact_penetration_m": 0.00020491099464213514,
+      "contact_total_s": 0.294,
+      "contact_longest_s": 0.2820000000000002,
+      "severe_contact": true,
+      "six_cm_diagnostic_min_m": -0.16020491099464268,
+      "terminal_world_velocity": [
+        -4.9918174888183887e-14,
+        -1.7572374168429696e-19,
+        6.595832665446979e-19
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_beam",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "heavy_contact_abort",
+      "reached": 0,
+      "announced": 0,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 5.09999999134607,
+      "target_count": 1,
+      "contacts": 2,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 208,
+      "elapsed_sim_s": 20.700000000000003,
+      "events": [],
+      "min_clearance_m": -0.00020491099464214901,
+      "expanded_swept_min_m": -0.10020491099464268,
+      "expanded_overlap_frames": 8,
+      "safe_completed": false,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 205,
+      "arrival_eligible_frame": null,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        -4.9918174888183887e-14,
+        6.595832665446979e-19
+      ],
+      "tail_time_s": 0.2,
+      "tail_distance_m": 2.397652210106571e-08,
+      "final_goal_distance_m": 5.09999999134607,
+      "travelled_m": 3.9000000566069746,
+      "controller_p95_ms": 42.74344998848392,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.029408000002149493
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.025119400001130998
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024423900002148002
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023377900011837482
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023614200006704777
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023141599987866357
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021350900002289563
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020593099994584918
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02049649998662062
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020153799996478483
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022293100017122924
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019179800001438707
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.028706799988867715
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01951120002195239
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0175732999923639
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018666000018129125
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016260900010820478
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01781329998630099
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016090899996925145
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015832900011446327
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 1,
+        "retained_original_curve": 19
+      },
+      "file": "street_beam_s0_delay_2_lidar_only_bypass_beam.npz",
+      "sha256": "e8564b478a486cde90a17718e39ee2620019f5cf4f275dcc497be587804bd8d6",
+      "cohort": "development",
+      "wall_s": 23.142891800001962
+    },
+    {
+      "method": "lidar_depth",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 43,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 27,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 667,
+      "final_missed_occupied_cells": 77,
+      "max_actual_speed_m_s": 0.2000755042577663,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.052766989300206846,
+      "terminal_world_velocity": [
+        0.006280761008878429,
+        0.00027755069931011117,
+        -4.967727311839922e-05
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_beam",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.1641932609891168,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 466,
+      "elapsed_sim_s": 46.5,
+      "events": [
+        {
+          "frame": 465,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.19920579823682694,
+      "expanded_swept_min_m": 0.0072330106997930965,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 458,
+      "arrival_eligible_frame": 463,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006286771825458647,
+        -4.967727311839922e-05
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972665829207827,
+      "final_goal_distance_m": 0.1641932609891168,
+      "travelled_m": 9.05950997489953,
+      "controller_p95_ms": 45.03787500289036,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.1946954999875743
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.20953449999797158
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.20733420000760816
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.1931380000023637
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.04371800000080839
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.04573370001162402
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.042279899993445724
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02526590001070872
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026589899993268773
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024172899982659146
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02474590000929311
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024168600008124486
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02288620002218522
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022986700001638383
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02128739998443052
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022559499979251996
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02035010000690818
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020332399988546968
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02034829999320209
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01908299999195151
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01757930000894703
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018023400014499202
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016744100023061037
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01693479999084957
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01896760001545772
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01722979999613017
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0154294999956619
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019879800005583093
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019951900001615286
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01404850001563318
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01430479998816736
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013038800010690466
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01689900000928901
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01753770001232624
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01759079998009838
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01091189999715425
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.010225500009255484
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009845599997788668
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.010878200002480298
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008093500015093014
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01382940000621602
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007756799983326346
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006745100021362305
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005843100021593273
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006216400011908263
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.004961099999491125
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0047716999833937734
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 4,
+        "retained_original_curve": 43
+      },
+      "file": "street_beam_s0_delay_2_lidar_depth_bypass_beam.npz",
+      "sha256": "da9b874fc16d2c0dfbadce731a77b9b5002de868a1777bf491e89317e1142a2b",
+      "cohort": "development",
+      "wall_s": 52.4342428999953
+    },
+    {
+      "method": "lidar_only",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 45,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 0,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 677,
+      "final_missed_occupied_cells": 66,
+      "max_actual_speed_m_s": 0.20002273243628624,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.030084762444650304,
+      "terminal_world_velocity": [
+        0.006280693747483802,
+        0.00027789972952022994,
+        -4.77513667839952e-05
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_crate",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "crate",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.1576539370083275,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 466,
+      "elapsed_sim_s": 46.5,
+      "events": [
+        {
+          "frame": 465,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.031289108763842166,
+      "expanded_swept_min_m": 0.031289108763842166,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 458,
+      "arrival_eligible_frame": 463,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006286729120358191,
+        -4.77513667839952e-05
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972643345324178,
+      "final_goal_distance_m": 0.1576539370083275,
+      "travelled_m": 9.059482969737696,
+      "controller_p95_ms": 40.61189998901682,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.19410240001161583
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.03117760000168346
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.2150371999887284
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.028341299999738112
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.029270300001371652
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0290095999953337
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026177799998549744
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.025297699990915135
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024510999995982274
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02420789998723194
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.027312999998684973
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.024374200002057478
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023734799993690103
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022266600019065663
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02101930000935681
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020417299994733185
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020211299997754395
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019818699976895005
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01915440001175739
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017789000004995614
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018410200020298362
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01798060000874102
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017529300006572157
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016947800002526492
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016455100005259737
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01627409999491647
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015116399998078123
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01455690001603216
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015140200004680082
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013979499984998256
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01268989997333847
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01273590000346303
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.012863799987826496
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011608900007558987
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01148089999333024
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01161439999123104
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.010252100008074194
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008951099996920675
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00899780000327155
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007920300005935133
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008201400021789595
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006821500021032989
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006210099993040785
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005971800012048334
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005066100013209507
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0047516000049654394
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.004296699975384399
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 2,
+        "retained_original_curve": 45
+      },
+      "file": "street_crate_s0_delay_2_lidar_only_bypass_crate.npz",
+      "sha256": "112797049fbfcd839877e4de346b2178c3b4c6bd1b3ec94df9c1049072b1db9c",
+      "cohort": "development",
+      "wall_s": 53.90643229999114
+    },
+    {
+      "method": "lidar_depth",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 16,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 101,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 525,
+      "final_missed_occupied_cells": 77,
+      "max_actual_speed_m_s": 0.20020810425337798,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": false,
+      "contact_events": 13,
+      "contact_peak_force_n": 85.9414635787384,
+      "contact_impulse_ns": 0.6018364787446858,
+      "contact_penetration_m": 0.0001386994274272281,
+      "contact_total_s": 0.068,
+      "contact_longest_s": 0.018000000000000002,
+      "severe_contact": true,
+      "six_cm_diagnostic_min_m": -0.06600659582504431,
+      "terminal_world_velocity": [
+        0.00032198119753480264,
+        -0.0014048529690696707,
+        0.0017335306406533052
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_crate",
+      "local_override_frames": 4,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "crate",
+      "seed": 0,
+      "status": "heavy_contact_abort",
+      "reached": 0,
+      "announced": 0,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 5.279054475198613,
+      "target_count": 1,
+      "contacts": 13,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 208,
+      "elapsed_sim_s": 20.700000000000003,
+      "events": [],
+      "min_clearance_m": -0.00013869942742728014,
+      "expanded_swept_min_m": -0.00013869942742728014,
+      "expanded_overlap_frames": 0,
+      "safe_completed": false,
+      "braking_frames": 5,
+      "braking_events": 1,
+      "trigger_frame": 205,
+      "arrival_eligible_frame": null,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.00046364217519248184,
+        0.0017335306406533052
+      ],
+      "tail_time_s": 0.2,
+      "tail_distance_m": 0.0013066768264799592,
+      "final_goal_distance_m": 5.279054475198613,
+      "travelled_m": 3.8936203001628558,
+      "controller_p95_ms": 50.06627998518525,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.20245920002344064
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.21791370000573806
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.029980799998156726
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.19657780000125058
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02694010001141578
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.028093200002331287
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026212900003883988
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.026411899976665154
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.025523099990095943
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.025715399999171495
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.025720100005855784
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0251503000035882
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0231084999977611
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023245400021551177
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02157650000299327
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022075399989262223
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02102240000385791
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01961330001358874
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018781799997668713
+        },
+        {
+          "reason": "planned",
+          "expanded": 71,
+          "wall_s": 0.16484209999907762
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 3,
+        "retained_original_curve": 16,
+        "planned": 1
+      },
+      "file": "street_crate_s0_delay_2_lidar_depth_bypass_crate.npz",
+      "sha256": "9eeccdd4fbe058b3803950a193d07f3276345f8e85bbab0cc95e073304696432",
+      "cohort": "development",
+      "wall_s": 24.323870599997463
+    },
+    {
+      "method": "lidar_only",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 44,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 0,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 641,
+      "final_missed_occupied_cells": 96,
+      "max_actual_speed_m_s": 0.19999999999999934,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": 1.0899999999999999,
+      "terminal_world_velocity": [
+        0.00628626286264685,
+        0.0,
+        0.0
+      ],
+      "condition_key": "delay_2",
+      "profile": "clear_overhead",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.16061605375633192,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 455,
+      "elapsed_sim_s": 45.400000000000006,
+      "events": [
+        {
+          "frame": 454,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 1.1499999999999997,
+      "expanded_swept_min_m": 1.1499999999999997,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 447,
+      "arrival_eligible_frame": 452,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.00628626286264685,
+        0.0
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972401856163103,
+      "final_goal_distance_m": 0.16061605375633192,
+      "travelled_m": 8.839383946243668,
+      "controller_p95_ms": 35.84090000367718,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.027545099990675226
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02407620000303723
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022756699996534735
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022858500014990568
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02394839999033138
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022008100000675768
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021097099990583956
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022034800000255927
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.020331200008513406
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01987109999754466
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01878230000147596
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019076800002949312
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0186933999939356
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.017888300004415214
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018249899992952123
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016904100019019097
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.016560999996727332
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015719500021077693
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01705470000160858
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015894899988779798
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015403699973830953
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015424500015797094
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014911100006429479
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013356899988139048
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013376799994148314
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013093799992930144
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01244550000410527
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011616400006460026
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011155599990161136
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01108250001561828
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.012515999987954274
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009709200006909668
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009188099997118115
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008793699991656467
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008585599978687242
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00853120000101626
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007645000005140901
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00786730000982061
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007274799980223179
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006468799983849749
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006077900005038828
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005539500009035692
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005471999989822507
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005049100000178441
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.0044615000078920275
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 1,
+        "retained_original_curve": 44
+      },
+      "file": "street_beam_s0_delay_2_lidar_only_clear_overhead.npz",
+      "sha256": "1db215c5538b012366a3ae439fa738da9a101efb793466bcde5431585e9c6358",
+      "cohort": "development",
+      "wall_s": 51.84584829999949
+    },
+    {
+      "method": "lidar_depth",
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 44,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 20,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 641,
+      "final_missed_occupied_cells": 96,
+      "max_actual_speed_m_s": 0.19999999999999934,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": 1.0899999999999999,
+      "terminal_world_velocity": [
+        0.00628626286264685,
+        0.0,
+        0.0
+      ],
+      "condition_key": "delay_2",
+      "profile": "clear_overhead",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.16061605375633192,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 455,
+      "elapsed_sim_s": 45.400000000000006,
+      "events": [
+        {
+          "frame": 454,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 1.1499999999999997,
+      "expanded_swept_min_m": 1.1499999999999997,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 447,
+      "arrival_eligible_frame": 452,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.00628626286264685,
+        0.0
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972401856163103,
+      "final_goal_distance_m": 0.16061605375633192,
+      "travelled_m": 8.839383946243668,
+      "controller_p95_ms": 37.83674001460895,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "wall_s": 0.027533000014955178
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022657800000160933
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023317100014537573
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.023897800012491643
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.02217509999172762
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021844000002602115
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.021620199986500666
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022146500006783754
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.022704500006511807
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019579999992856756
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019405200000619516
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018275200010975823
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.019872099976055324
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018217199976788834
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018224300001747906
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.018237299984320998
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01772740000160411
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01632999998400919
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015575500001432374
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.015669699991121888
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01603100000647828
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014222199999494478
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014429099974222481
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014311699982499704
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.014028500008862466
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.012818999995943159
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.013524500012863427
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011960200004978105
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.011150100006489083
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.01115810000919737
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.010684199980460107
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009847200009971857
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.00924220000160858
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009242899977834895
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.009628400002839044
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008636500017018989
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008293800026876852
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.008775299997068942
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006938399979844689
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006509800005005673
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.007285200001206249
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005920299998251721
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.006740400014678016
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.005700099980458617
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "wall_s": 0.004715499992016703
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 1,
+        "retained_original_curve": 44
+      },
+      "file": "street_beam_s0_delay_2_lidar_depth_clear_overhead.npz",
+      "sha256": "5ee6717b1c83541a62f46380181b4ce9a9f871390e28938f275a830c04a78f51",
+      "cohort": "development",
+      "wall_s": 54.481973099987954
+    }
+  ],
+  "wall_s": 333.62232409999706
+}

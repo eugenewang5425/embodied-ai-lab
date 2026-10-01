@@ -12,8 +12,8 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 | | |
 |---|---|
-| **Status** | 第1–56课完成；基准62跨场景门槛仍未过。69课第九轮36回合修复进度/门控，可绕箱体7/9→9/9；第十轮36回合加密深度，移走墙/低墙0/6→6/6，真低墙/横杆仍拒绝。遮挡0/3、整图误占据和实时计算边界保留；72–73课SO-101抓取6/9。见[阶段复盘](docs/navigation-stage-review-69-71.md)。 |
-| **Verified** | 894 quick tests passed (129.4 s); the two archive checks deferred while collecting data subsequently passed. 47 distinct affected tests verified across selected runs, including real Tk, old-version bridges and method-specific depth projection. [Rounds 9/10 audit](docs/benchmarks/navigation-reinforcement-9-10-delivery.json): 72 episodes, 790300 physics steps, 15878 map frames and 34528 independently checked clearing events. Source/protocol hashes and visual layouts checked; historical full slow-run limits remain separate. |
+| **Status** | 第1–56课完成，基准62跨场景门槛仍未过。69第十一轮24回合改为先验未知且可绕的新障碍：低路障0/3→3/3，悬空杆0/3→2/3；普通箱体3/3→2/3，高杆各3/3。融合正式零接触但有两次无路，开发接触反例保留，候选尚不安全。72–73课SO-101抓取6/9。见[阶段复盘](docs/navigation-stage-review-69-71.md)。 |
+| **Verified** | 905 quick tests passed (109.36 s); 58 affected tests passed (86.61 s), including old bridges and real Tk. [Round 11 audit](docs/benchmarks/navigation-reinforcement-v11-validation.json): 24 formal episodes plus one development contact counterexample, 465850 physics steps, 9134 formal map frames and 1067 independently checked clearing events. Source/protocol hashes and actual visual layouts checked; historical slow-run limits remain separate. |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Quick start** | see below |
 
@@ -126,7 +126,7 @@ uv run python scripts/render_photo_room_replay.py
 - **地图分离试跑（第 65 课）**：固定同一批扫描做理想图/真值投影图/里程计投影图三方对照 + 100/400 粒子单变量扫描——表示间隙 −0.03 m（端点图≈理想图）、落点间隙 +1.34 m（自建图失败主因是落点误差）；粒子数不是杠杆（400 粒子自建图基本不变、理想图发散反而 1/12→6/12）。P5 巡检路线生成器 [patrol_routes.py](src/embodied_learning/experiments/patrol_routes.py) 就绪并通过第 64 课可达性交叉验证。
 - **园区巡检基线（第 66 课）**：24×24 m 园区四种定位来源各 3 轮共 12 回合——真值 3/3 完成、雷达＋参考图 2/3、纯里程计与雷达＋自建图均 0/3，全组零接触；自建图组失败于雷达近障停车后超时，在线绕行与修图分别由第 67/68 课以受控实验补上。
 - **新进展（67–68课）**：完成车身/相机/雷达标定、81回合避障与冻结修图后的12回合独立导航；统一窗口可一键同步查看。连续原始 RGB 采集、视觉定位及两套控制器的完整融合仍待做。[阶段小结与下一步](docs/navigation-stage-review-66-68.md)。第65课似然场扫描尚未执行，保留为独立诊断。
-- **分离实验与最新进展（69–71课）**：到点规则48/48、有限恢复准确图18/24→24/24仍是分离平台。69第七轮低速窄路7/9→9/9，第八轮修图未改善；第九轮进度/门控使可绕箱体7/9→9/9，第十轮细深度使移走墙/低墙0/6→6/6。遮挡拒绝、真障碍负例和计算代价保留，见[阶段复盘](docs/navigation-stage-review-69-71.md)与[下一阶段](docs/navigation-next-stage-after-round10.md)。
+- **分离实验与最新进展（69–71课）**：到点规则48/48、有限恢复准确图18/24→24/24仍是分离平台。69第七轮低速窄路7/9→9/9，第八轮修图未改善；第九轮进度/门控使可绕箱体7/9→9/9，第十轮细深度使移走墙/低墙0/6→6/6。第十一轮改成可绕新障碍，低路障融合3/3、悬空杆2/3、普通箱体2/3；开发接触、正式拒绝与计算边界保留，见[阶段复盘](docs/navigation-stage-review-69-71.md)与[下一阶段](docs/navigation-next-stage-after-round10.md)。
 
 ## 课程索引
 
@@ -202,7 +202,7 @@ uv run python scripts/render_photo_room_replay.py
 | 第 66 课 | 街区式园区巡检 | 已完成基线；雷达停车，尚无在线绕行/修图 | [讲义](docs/66-campus-patrol.md) |
 | 第 67 课 | 车身标定与观测驱动避障 | 已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝 | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
 | 第 68 课 | 扫描校准与错误地图修复 | 已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成 | [讲义](docs/68-scan-based-map-repair.md) |
-| 第 69 课 | 足印、跟踪、制动、接触与在线地图 | 十轮81/132/230/233/135/39/30/36/36/36回合；最新进度修复7/9→9/9，细深度移走墙0/6→6/6，遮挡仍拒绝 | [第六十九课讲义](docs/69-footprint-planning.md) / [第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md) / [第六十九课第三轮讲义](docs/69-braking-round3.md) / [第六十九课第四轮讲义](docs/69-robustness-round4.md) / [第六十九课第五轮讲义](docs/69-execution-round5.md) / [第六十九课第六轮讲义](docs/69-contact-round6.md) / [第六十九课第七轮讲义](docs/69-speed-round7.md) / [第六十九课第八轮讲义](docs/69-online-map-round8.md) / [第六十九课第九轮讲义](docs/69-progress-round9.md) / [第六十九课第十轮讲义](docs/69-depth-sampling-round10.md) |
+| 第 69 课 | 足印、跟踪、制动、接触与在线地图 | 十一轮81/132/230/233/135/39/30/36/36/36/24回合；最新可绕低障碍3/3、悬空杆2/3，箱体融合2/3低于雷达3/3；开发接触与正式拒绝保留 | [第六十九课讲义](docs/69-footprint-planning.md) / [第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md) / [第六十九课第三轮讲义](docs/69-braking-round3.md) / [第六十九课第四轮讲义](docs/69-robustness-round4.md) / [第六十九课第五轮讲义](docs/69-execution-round5.md) / [第六十九课第六轮讲义](docs/69-contact-round6.md) / [第六十九课第七轮讲义](docs/69-speed-round7.md) / [第六十九课第八轮讲义](docs/69-online-map-round8.md) / [第六十九课第九轮讲义](docs/69-progress-round9.md) / [第六十九课第十轮讲义](docs/69-depth-sampling-round10.md) / [第六十九课第十一轮讲义](docs/69-reachable-obstacles-round11.md) |
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
 | 第 72 课 | SO-101三维机械臂、工具与相机坐标 | 固定开源模型；32姿态雅可比与64相机往返审计；姿态限制负例保留 | [讲义](docs/72-so101-geometry.md) |
@@ -1692,7 +1692,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 讲义：[第六十八课讲义](docs/68-scan-based-map-repair.md)；窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 68 --play`。这是恒定尺度偏差下的离线修复，尚非通用在线SLAM；与67课深度控制器尚未合并。
 
-**阶段复盘**：[同一算法不同环境的表现](docs/navigation-stage-review-69-71.md)。第七轮低速有收益，第八轮地图更新未提高到达；第九轮修进度与门控，第十轮加密深度已完成。遮挡与全局误占据仍保留，下一项见[后续受控安排](docs/navigation-next-stage-after-round10.md)。跨场景、视觉与真实异步门槛继续保留；原始数组本地保存，新克隆按讲义生成。
+**阶段复盘**：[同一算法不同环境的表现](docs/navigation-stage-review-69-71.md)。第七轮低速有收益，第八轮地图更新未提高到达；第九轮修进度与门控，第十轮加密深度，第十一轮验证可绕新障碍已完成。接触反例、正式误拒与遮挡仍保留，下一项见[后续受控安排](docs/navigation-next-stage-after-round11.md)。跨场景、视觉与真实异步门槛继续保留；原始数组本地保存，新克隆按讲义生成。
 
 **67—68课讲解视频**：[4分14秒中文配音与字幕版：剧本、预览和复现入口](docs/video/README.md)。包含相机视角、雷达点、实际轨迹、81回合统计、修图收益及失败案例；本机成片位于 `results/navigation_video_v1/navigation-67-68-narrated.mp4`。
 
@@ -1834,7 +1834,7 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v8 --case 69_street_crate_20__delay_2__shifted --play
 ```
 
-第七、八轮作为冻结参照保留；最新窗口优先选择本地第十轮。第九、十轮结果、验收与下一阶段见下方，原36回合地图失败记录不覆盖。
+第七至十轮作为冻结参照保留；最新回放窗口优先选择本地第十一轮。第九、十轮结果、验收与下一阶段见下方，原36回合地图失败记录不覆盖。
 
 ### 第九轮：让前进和转向使用同一个方向
 
@@ -1865,6 +1865,24 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 ```
 
 两轮共72回合、790300物理步独立重放状态/接触差0；15878帧地图和34528次删除证据核验。讲义补变量关联、原理、结果/失败、思考题和复现；五张科学图、三张本应用窗口图实际读图，一键切换相机/三维/雷达/目标/地图/统计，按本方法深度尺寸反投影。[两轮登记](docs/navigation-reinforcement-9-10-plan.md)、[交付验收](docs/benchmarks/navigation-reinforcement-9-10-delivery.json)、[下一阶段安排](docs/navigation-next-stage-after-round10.md)。
+
+### 第十一轮：直行会碰，但旁边有路可绕
+
+原低墙/横杆横贯通道且已在地图里，只能验证拒绝；本轮换成地图未知、两侧可绕的有限障碍。24回合：低路障仅雷达0/3、雷达＋深度3/3；悬空杆0/3、2/3；普通箱体3/3、2/3；高杆各3/3直接通过。正式融合零接触，但两次无路；开发种子0同源码的85.94N接触失败保留，不宣布安全完成。
+
+![可绕新障碍的实际轨迹](docs/img/lesson69-round11-trajectories.png)
+
+固定种子29：红仅雷达、绿雷达＋深度；橙为新障碍足印，高杆虚框表示整车可从下方经过。叉号接触中止，圆点到达并停稳，星号真实目标；高杆两组轨迹重合。两组同用新点连续坐标候选，雷达组没有偷偷使用深度保护。
+
+![第十一轮逐条件真实到点结果](docs/img/lesson69-round11-outcomes.png)
+
+每柱3回合，报告不同条件而非只看总分6/12→10/12。加深度在低障碍有收益，但普通箱体反而多一次失败；窗口的位姿误差为零是受控设定，不是定位成绩。全部失败图、变量/原理、思考题与复现见[第六十九课第十一轮讲义](docs/69-reachable-obstacles-round11.md)，[独立审计](docs/benchmarks/navigation-reinforcement-v11-validation.json)含24正式＋1开发反例。
+
+```powershell
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v11 --case 69_street_low_29__delay_2__bypass_low --play
+```
+
+相机、三维、雷达点、当前目标、当前地图和统计一键切换；深度标明是否参与控制。[下一阶段](docs/navigation-next-stage-after-round11.md)先解释接触与误拒，再扩大位姿误差、真实计算延迟和69—71组合。
 
 ## 第七十课：估计到了，身体真的到了吗？
 
@@ -1898,7 +1916,7 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 
 窗口固定为准确图种子0、34.20s；方法按钮一次同步各面板，保留时间。金色圆盘是动作预测，RGB为真实位姿重渲染，扫描和动作来自存档。69–71均接入相同模块，无需分别打开多个窗口调来源。
 
-**阶段复盘**：[同一算法不同环境的表现](docs/navigation-stage-review-69-71.md)。第七轮低速有收益，第八轮地图更新未提高到达；第九轮修进度与门控，第十轮加密深度已完成。遮挡与全局误占据仍保留，下一项见[后续受控安排](docs/navigation-next-stage-after-round10.md)。跨场景、视觉与真实异步门槛继续保留；原始数组本地保存，新克隆按讲义生成。
+**阶段复盘**：[同一算法不同环境的表现](docs/navigation-stage-review-69-71.md)。第七轮低速有收益，第八轮地图更新未提高到达；第九轮修进度与门控，第十轮加密深度，第十一轮验证可绕新障碍已完成。接触反例、正式误拒与遮挡仍保留，下一项见[后续受控安排](docs/navigation-next-stage-after-round11.md)。跨场景、视觉与真实异步门槛继续保留；原始数组本地保存，新克隆按讲义生成。
 
 ## 进度清单
 
