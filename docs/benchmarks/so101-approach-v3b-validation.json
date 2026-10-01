@@ -1,0 +1,28 @@
+{
+  "episodes": 72,
+  "physical_steps": 763200,
+  "max_state_error": 0.0,
+  "max_force_error_n": 0.0,
+  "max_geometry_error_m": 0.0,
+  "counts": {
+    "joint": {
+      "success": 17,
+      "total": 27
+    },
+    "center_cartesian": {
+      "success": 21,
+      "total": 27
+    },
+    "open": {
+      "success": 0,
+      "total": 9
+    },
+    "offset": {
+      "success": 0,
+      "total": 9
+    }
+  },
+  "archive_sha256": "fd7751726c201d60061a4a1bc598a44a8c8cd1b539c6d87317a9526bba1183cc",
+  "validator_sha256": "2971b1b9969e46b06c6c01a920c1fd9a932c23c5664d345d7185881cb82a2e7b",
+  "note": "原评分、真实请求和逐2ms状态/力核验；不证明视觉或实机有效"
+}

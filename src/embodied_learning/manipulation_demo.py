@@ -9,14 +9,18 @@ from embodied_learning.manipulation_viewer.window import ManipulationWindow
 
 
 def main():
+    results_root = Path(__file__).resolve().parents[2] / "results"
+    latest = results_root / "so101_approach_v3b"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--results",
         type=Path,
-        default=Path(__file__).resolve().parents[2] / "results/so101_grasping_v2",
+        default=latest
+        if (latest / "summary.json").exists()
+        else results_root / "so101_grasping_v2",
     )
     parser.add_argument("--position")
-    parser.add_argument("--method", choices=("clamp", "open", "offset"), default="clamp")
+    parser.add_argument("--method", help="使用该记录登记的方法名；默认选择最终候选")
     parser.add_argument("--play", action="store_true")
     args = parser.parse_args()
     if not (args.results / "summary.json").exists():

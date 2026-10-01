@@ -1,0 +1,447 @@
+{
+  "experiment": "so101_physical_grasping",
+  "schema_version": 1,
+  "study_round": 2,
+  "development": true,
+  "date": "2026-10-01",
+  "model_commit": "4d038b3feae26ec82b46a4d586379114012a8ac7",
+  "model_manifest_sha256": "1af36b8ec5ab9c8f98541575b935dbea4c4b58c7944c72481e01cafb169548f8",
+  "physics_dt_s": 0.002,
+  "control_dt_s": 0.02,
+  "phases": [
+    "静置",
+    "接近物体",
+    "下降对准",
+    "夹紧",
+    "抬升",
+    "保持",
+    "搬运",
+    "下放",
+    "松开",
+    "撤离",
+    "放置检查"
+  ],
+  "runtime": {
+    "mujoco": "3.11.0",
+    "numpy": "2.5.2"
+  },
+  "positions_xy_m": [
+    [
+      0.22,
+      0.015
+    ],
+    [
+      0.22,
+      0.055
+    ]
+  ],
+  "method_labels": {
+    "joint": "原策略：关节插值、TCP对准",
+    "cartesian": "仅改变下降路径：空间直线、TCP对准",
+    "center_joint": "仅改变对准：关节路径、实际开口中心",
+    "center_cartesian": "空间直线＋实际开口中心",
+    "open": "空夹对照：校准后仍不闭合",
+    "offset": "偏差对照：校准后仍偏5.5cm"
+  },
+  "method_colors": {
+    "joint": "#2563eb",
+    "cartesian": "#a855f7",
+    "center_joint": "#d97706",
+    "center_cartesian": "#0f766e",
+    "open": "#64748b",
+    "offset": "#c2410c"
+  },
+  "episodes": [
+    {
+      "method": "cartesian",
+      "label": "仅改变下降路径：空间直线、TCP对准",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.015,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11788590757371575,
+      "final_xy_error_m": 0.001795547821538634,
+      "peak_jaw_normal_n": [
+        9.692881448737783,
+        9.995815711729971
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0016507232511935727,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 2.9044132999842986,
+      "key": "p00_cartesian",
+      "position_key": "p00"
+    },
+    {
+      "method": "center_cartesian",
+      "label": "空间直线＋实际开口中心",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.015,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1178079977974329,
+      "final_xy_error_m": 0.0014892111780410867,
+      "peak_jaw_normal_n": [
+        6.297902258080142,
+        10.816565397922737
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001742038542285846,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.841027499991469,
+      "key": "p00_center_cartesian",
+      "position_key": "p00"
+    },
+    {
+      "method": "center_joint",
+      "label": "仅改变对准：关节路径、实际开口中心",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.015,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11833505051978177,
+      "final_xy_error_m": 0.0004441240511749476,
+      "peak_jaw_normal_n": [
+        5.97159729464412,
+        10.518435011652876
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149861680743906,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7447315999888815,
+      "key": "p00_center_joint",
+      "position_key": "p00"
+    },
+    {
+      "method": "joint",
+      "label": "原策略：关节插值、TCP对准",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.015,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11828978536070855,
+      "final_xy_error_m": 0.0016403470680620479,
+      "peak_jaw_normal_n": [
+        12.06984858083916,
+        9.410365846795738
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149861680743906,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 0.7941770000034012,
+      "key": "p00_joint",
+      "position_key": "p00"
+    },
+    {
+      "method": "cartesian",
+      "label": "仅改变下降路径：空间直线、TCP对准",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.055,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11757037876525389,
+      "final_xy_error_m": 0.0038962896674416096,
+      "peak_jaw_normal_n": [
+        34.351906236354026,
+        11.151196086907927
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.003135809507962068,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.240451899997424,
+      "key": "p01_cartesian",
+      "position_key": "p01"
+    },
+    {
+      "method": "center_cartesian",
+      "label": "空间直线＋实际开口中心",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.055,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11703074148563253,
+      "final_xy_error_m": 0.0038812168943577613,
+      "peak_jaw_normal_n": [
+        6.715931520844137,
+        11.550572211084454
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020209950176776417,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.645293899986427,
+      "key": "p01_center_cartesian",
+      "position_key": "p01"
+    },
+    {
+      "method": "center_joint",
+      "label": "仅改变对准：关节路径、实际开口中心",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.055,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11769307933483131,
+      "final_xy_error_m": 0.0017099732238221165,
+      "peak_jaw_normal_n": [
+        6.633708080182412,
+        10.426923615261387
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017570497976483017,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.749095599981956,
+      "key": "p01_center_joint",
+      "position_key": "p01"
+    },
+    {
+      "method": "joint",
+      "label": "原策略：关节插值、TCP对准",
+      "config": {
+        "object_xyz": [
+          0.22,
+          0.055,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 0.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0020316896099229487,
+      "final_xy_error_m": 0.15278322651610604,
+      "peak_jaw_normal_n": [
+        24.413224718877494,
+        5.287056937317709
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0037001572737557567,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 0.7754715000046417,
+      "key": "p01_joint",
+      "position_key": "p01"
+    }
+  ],
+  "sensor_note": "已知初始物体位置；关节开度反馈来自当前帧，RGB未参与控制",
+  "simulation_note": "物体仅初始化设置朝向；之后只由mj_step产生运动。原限矩、质量、摩擦、模型与评分不变。",
+  "force_timing": "physics_time=t对应[t-dt,t]求解力；控制帧为mj_forward瞬时诊断",
+  "protocol": "docs/73-approach-round2-plan.md",
+  "cases": [
+    [
+      "p00",
+      [
+        0.22,
+        0.015
+      ],
+      0.0,
+      "joint"
+    ],
+    [
+      "p00",
+      [
+        0.22,
+        0.015
+      ],
+      0.0,
+      "cartesian"
+    ],
+    [
+      "p00",
+      [
+        0.22,
+        0.015
+      ],
+      0.0,
+      "center_joint"
+    ],
+    [
+      "p00",
+      [
+        0.22,
+        0.015
+      ],
+      0.0,
+      "center_cartesian"
+    ],
+    [
+      "p01",
+      [
+        0.22,
+        0.055
+      ],
+      0.0,
+      "joint"
+    ],
+    [
+      "p01",
+      [
+        0.22,
+        0.055
+      ],
+      0.0,
+      "cartesian"
+    ],
+    [
+      "p01",
+      [
+        0.22,
+        0.055
+      ],
+      0.0,
+      "center_joint"
+    ],
+    [
+      "p01",
+      [
+        0.22,
+        0.055
+      ],
+      0.0,
+      "center_cartesian"
+    ]
+  ],
+  "source_sha256": {
+    "so101_approach_study.py": "d61dcff7920d9c1bc7a9bf820ecdde82f64a67ad4383ba220b00537537d3d617",
+    "gripper_calibration.py": "02e91c89936c279ff2a2df2ebd804e5228882b2e20d78fda888c65fb34454ca0",
+    "so101_grasping.py": "512f06ce9fca3119a5ab5dd127812bc975758ceaa62a84ad4de3b0f68528c27b",
+    "so101.py": "0df6c31f99b0b7b355571bf3517cb2d0dd1d7756d513ea6eb864c5b2f4a5adf5",
+    "73-approach-round2-plan.md": "314c4c801dbe45561687c64c801489bee00b3ac7516bab3fbde20956a8b6e20d"
+  },
+  "wall_s": 12.05984509998234,
+  "archive_sha256": "518451f8a88ca2118cb3c27a2e52de321034ef47f6813ee33d1e555b6d52d254"
+}

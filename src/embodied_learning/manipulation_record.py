@@ -8,6 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
+from embodied_learning.experiments.so101_grasping import COLORS, METHODS
 from embodied_learning.so101 import ASSETS, CONTROL_DT, DT, SceneConfig, verify_assets
 
 
@@ -42,6 +43,16 @@ class ManipulationRecord:
         if len(self.rows) != len(summary["episodes"]) or not self.rows:
             raise ValueError("Duplicate or missing episode keys")
         self.positions = sorted({row["position_key"] for row in self.rows.values()})
+        labels = summary.get("method_labels", METHODS)
+        colors = summary.get("method_colors", COLORS)
+        present = {row["method"] for row in self.rows.values()}
+        if not present <= labels.keys():
+            raise ValueError("Missing method descriptions")
+        self.methods = {key: label for key, label in labels.items() if key in present}
+        self.colors = {key: colors.get(key, "#64748b") for key in self.methods}
+        expected = summary.get("cases")
+        if expected and {f"{p}_{m}" for p, _, _, m in expected} != set(self.rows):
+            raise ValueError("Incomplete registered experiment")
         self.arrays = {}
         with np.load(archive_path, allow_pickle=False) as archive:
             for key, row in self.rows.items():
@@ -104,3 +115,6 @@ class ManipulationRecord:
     def select(self, position, method):
         key = f"{position}_{method}"
         return self.rows[key], self.arrays[key]
+
+    def available_methods(self, position):
+        return tuple(key for key in self.methods if f"{position}_{key}" in self.rows)

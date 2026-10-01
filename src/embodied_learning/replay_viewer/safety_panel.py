@@ -41,6 +41,7 @@ class SafetyPanel(ttk.Frame):
         self.record = None
         self.key = None
         self.frame = 0
+        self.physical_predictors = {}
 
     def draw(self, record, key, frame):
         self.record, self.key, self.frame = record, key, frame
@@ -87,7 +88,19 @@ class SafetyPanel(ttk.Frame):
         command = record.telemetry[key]["commands"][f]
         path = stop_path(*command, rig)
         model = record.metadata.get("braking_models", {}).get(key, "legacy")
-        if model != "legacy":
+        if model == "physical":
+            from embodied_learning.physical_braking import (
+                PhysicalStopPredictor,
+                measured_body_velocity,
+            )
+
+            if key not in self.physical_predictors:
+                self.physical_predictors[key] = PhysicalStopPredictor(rig)
+            incoming = measured_body_velocity(record.telemetry[key]["world_velocity"][f], pose)
+            path = self.physical_predictors[key].predict(
+                incoming, first_command=command, record_states=False
+            )[0]
+        elif model != "legacy":
             path = braking_path(command, rig, model == "coupled", rig.latency_s)[0]
         footprint = np.array(
             [
@@ -118,7 +131,10 @@ class SafetyPanel(ttk.Frame):
             xlabel="左 ← 横向 (m) → 右",
             ylabel="车头前方 (m)",
         )
-        a.set_title("黄框：按本组制动模型的0.2秒延迟扫掠", fontsize=10)
+        a.set_title(
+            "黄框：当前动作后立即制动的物理扫掠" if model == "physical"
+            else "黄框：按本组制动模型的0.2秒延迟扫掠", fontsize=10
+        )
         handles, labels = a.get_legend_handles_labels()
         self.figure.legend(handles, labels, loc="outside upper center", ncol=4, fontsize=7)
         image = b.imshow(
@@ -162,13 +178,20 @@ class SafetyPanel(ttk.Frame):
                 text=self.note.cget("text")
                 + " 第六轮黄框是运动学预测示意，未包含伺服滞后或接触侧滑；实际速度/接触另见接触页。"
             )
-        if record.metadata.get("tracking_round") == 11:
+        if record.metadata.get("tracking_round") in (11, 12, 13, 14):
             used = key in record.metadata["depth_used_by"]
             self.note.configure(
                 text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
                 f"黄框示意0.2秒延迟刹停，中心位移{distance:.2f}m；完整排队保护见执行端页。\n"
                 f"紫点/深度{'参与控制' if used else '仅供复盘，本组未用'}；灰点是历史抽样。无回波不代表整车高度内安全。"
             )
+            if record.metadata.get("tracking_round") >= 12:
+                self.note.configure(
+                    text=f"{record.method_info(key)['label']} · t={record.timestamps[f]:.1f}s · {REASONS.get(reason, reason)}\n"
+                    + (f"黄框使用实际三方向速度与力限，示意当前动作后立即制动（中心{distance:.3f}m）；不含剩余队列。\n"
+                       if model == "physical" else "黄框为原运动学延迟示意，未包含实际伺服减速滞后。\n")
+                    + "完整队列判定看执行端保护页存档值；灰点仅历史抽样，RGB重渲染，不参与定位。"
+                )
         self.canvas.draw_idle()
 
     def _draw_decisions(self, record, key, frame):

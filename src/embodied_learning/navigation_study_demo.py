@@ -1,11 +1,38 @@
 """Open the reusable lesson 67–71 navigation comparison window."""
 
 import argparse
+import json
 import tkinter as tk
 from pathlib import Path
 
 from embodied_learning.replay_viewer.navigation_studies import NavigationStudySource
 from embodied_learning.replay_viewer.window import ReplayWindow
+
+
+def qualified_navigation_batch(directory):
+    """Do not promote an incomplete collection to the default demonstration."""
+    path = directory / "summary.json"
+    if not path.exists():
+        return False
+    summary = json.loads(path.read_text(encoding="utf8"))
+    cases = {tuple(c) for c in summary["protocol"]["cases"]}
+    rows = summary["rows"]
+    actual = {
+        (r["layout"], r["obstacle"], r["seed"], r["cohort"],
+         r["condition_key"], r["method"], r["profile"]) for r in rows
+    }
+    final_method = summary["protocol"].get("stability_required", {}).get("method", "corridor_depth")
+    positive = [r for r in rows if r["method"] == final_method
+                and r["cohort"] != "impossible_negative"]
+    negative = [r for r in rows if r["cohort"] == "impossible_negative"]
+    return (
+        len(rows) == len(actual) == len(cases) and actual == cases
+        and len(positive) == 60 and len(negative) == 3
+        and all(r["passed"] and r["reached"] and r["physically_stopped"]
+                and not r["false_arrival"] for r in positive)
+        and all(not r["announced"] and r["physically_stopped"]
+                and not r["severe_contact"] for r in negative)
+    )
 
 
 def main():
@@ -16,6 +43,8 @@ def main():
         (
             name
             for name in (
+                "navigation_reinforcement_v14",
+                "navigation_reinforcement_v13",
                 "navigation_reinforcement_v11",
                 "navigation_reinforcement_v10",
                 "navigation_reinforcement_v9",
@@ -28,7 +57,8 @@ def main():
                 "footprint_tracking_v2",
                 "footprint_navigation_v1",
             )
-            if (result_root / name / "summary.json").exists()
+            if (qualified_navigation_batch(result_root / name) if name.endswith(("v13", "v14"))
+                else (result_root / name / "summary.json").exists())
         ),
         "footprint_navigation_v1",
     )
@@ -87,9 +117,15 @@ def main():
         default_case = next(
             (c for c in candidates if c == "69_narrow_low_14__delay_2__normal"), candidates[0]
         )
-    if source.summaries.get("69", {}).get("protocol", {}).get("round") in (7, 8, 9, 10, 11):
+    if source.summaries.get("69", {}).get("protocol", {}).get("round") in (7, 8, 9, 10, 11, 12, 13, 14):
         candidates = [e.case for e in source.entries if e.variant == "69"]
         default_case = candidates[0]
+        if source.summaries["69"]["protocol"]["round"] == 13:
+            default_case = next((c for c in candidates
+                                 if c == "69_street_crate_32__delay_2__bypass_crate"), candidates[0])
+        if source.summaries["69"]["protocol"]["round"] == 14:
+            default_case = next((c for c in candidates
+                                 if c == "69_street_crate_37__delay_2__bypass_crate"), candidates[0])
     root = tk.Tk()
     app = ReplayWindow(
         root,
@@ -108,7 +144,13 @@ def main():
         {
             "67": "depth",
             "68": "repaired",
-            "69": "lidar_depth"
+            "69": "height_depth"
+            if "height_depth" in app.record.method_keys
+            else "corridor_depth"
+            if "corridor_depth" in app.record.method_keys
+            else "physical_depth"
+            if "physical_depth" in app.record.method_keys
+            else "lidar_depth"
             if "lidar_depth" in app.record.method_keys
             else "depth_dense"
             if "depth_dense" in app.record.method_keys
@@ -135,7 +177,7 @@ def main():
     )
     if args.lesson != "68":
         app.analysis.tabs.select(
-            {2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 8, 8: 9, 9: 9, 10: 9, 11: 9}.get(
+            {2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 8, 8: 9, 9: 9, 10: 9, 11: 9, 12: 9, 13: 9, 14: 9}.get(
                 app.record.metadata.get("tracking_round"), 3
             )
         )

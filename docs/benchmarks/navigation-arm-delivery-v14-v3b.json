@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-01",
+  "navigation_qualified": true,
+  "navigation_new_positives": 60,
+  "navigation_negative_correct": 3,
+  "known_failure_regressions": 5,
+  "arm_paired_original": 17,
+  "arm_paired_candidate": 21,
+  "arm_paired_total": 27,
+  "arm_rescued": 6,
+  "arm_regressed": 2,
+  "arm_candidate_stable": false,
+  "tests": {
+    "navigation-clearance-full.log": {
+      "sha256": "fa407b9291f828b81c466815af4b0551cfd5837fbb95ec3d5bcc61f6e4dd3ff7",
+      "tail": [
+        "1121 passed, 11 warnings in 4853.69s (1:20:53)",
+        "[tests] exit=0, elapsed=4855.7s"
+      ]
+    },
+    "navigation-arm-final-quick.log": {
+      "sha256": "c3f2ed5f479471be733f7424943d00796f2b9de701871f5fc44012b02ec21f04",
+      "tail": [
+        "933 passed, 197 deselected in 134.22s (0:02:14)",
+        "[tests] exit=0, elapsed=136.0s"
+      ]
+    },
+    "navigation-arm-selected.log": {
+      "sha256": "1df99af8eafccefe94212514c51afe3389933a9bd42827705d2874ad40723df4",
+      "tail": [
+        "38 passed in 14.71s",
+        "[tests] exit=0, elapsed=15.6s"
+      ]
+    },
+    "so101-approach-window.log": {
+      "sha256": "3dd6f8771fd4209daf5da92f9537d889c31b9de99d1542f4f29ac5967d3bd6b2",
+      "tail": [
+        "Window camera/scene/diagnostics synchronized; captures saved"
+      ]
+    }
+  },
+  "qa": "Actual scientific figures and own-window screenshots inspected; method/time synchronization checked.",
+  "limits": "Navigation exact pose, fixed static layouts, low speed, synchronous simulation. Controller P95 exceeds 100ms; arm uses known initial object position, no visual feedback.",
+  "benchmarks": {
+    "navigation-clearance-validation-v13.json": "00e6d9787a97b62eb359c13c208c93a5b6fc5561aa37a2ececf02ddf7dea40c0",
+    "navigation-clearance-validation-v14.json": "f6ca523c0227b1aabf3b0dd5740e01eeccf38a8fe1a0501ad503ba2f362da813",
+    "navigation-height-known-regressions-v14-validation.json": "8156320c6a4627f60acf4e28dac5ec6eb4f22c312471f9e0b860749261c043da",
+    "so101-approach-v3b-validation.json": "a80c0f04f97ccf39a601ab2f06f11eb04a2b23b3dc75b1ce3a952db563c43274"
+  }
+}

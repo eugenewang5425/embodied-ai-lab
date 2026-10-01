@@ -14,6 +14,26 @@ from .campus import read_checked
 from .model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 LABELS = {
+    "height_depth": (
+        "物理停车＋三维车身择路",
+        "保留障碍高度，分别检查底盘、支架和相机；高回波不会压成地面障碍。停车、2cm择路偏好、完整身体和轻擦评分与蓝色参照相同。",
+        "#119c74",
+    ),
+    "legacy_depth": (
+        "雷达＋深度·原停车预测",
+        "用原速度请求直接推算停车；实际车身减速有伺服滞后。与另两组使用相同雷达、深度和地图规则。",
+        "#c53e51",
+    ),
+    "physical_depth": (
+        "雷达＋深度·物理停车预测",
+        "把实际前向、侧向和旋转速度、驱动力限制及排队动作算进停车；选路仍沿用原零外扩方式。",
+        "#247cc1",
+    ),
+    "corridor_depth": (
+        "物理停车＋择路余量",
+        "物理停车相同；选路偏好多留2cm。已有近墙起点允许逐渐恢复余量，始终检查完整身体；仍按真实到达和轻擦门限评分。",
+        "#119c74",
+    ),
     "lidar_only": (
         "仅平面雷达",
         "只用32cm高雷达更新地图、规划与刹停保护；低路障和悬空杆有高度盲区。画面中的深度仅供复盘，本组没有使用。",
@@ -206,6 +226,10 @@ LABELS = {
 LAYOUTS = {
     "plaza": "开阔场地",
     "street": "街区通道",
+    "street_east": "障碍东移街区",
+    "street_wide": "偏南宽箱体街区",
+    "street_west": "西移宽障碍街区",
+    "street_north": "北移障碍街区",
     "narrow": "两米窄通道",
     "offset_narrow": "留出偏置窄弯",
     "blocked": "预留空间不足的窄口",
@@ -251,6 +275,18 @@ def condition_label(c):
         "同一同比例制动控制器；精确定位、立即执行。是受控参照，不是定位算法的成绩。",
         colors[0],
     )
+
+
+def registered_method_keys(protocol, row):
+    """Keep partial comparisons invalid, while respecting final-only holdouts."""
+    identity = (row["layout"], row["obstacle"], row["seed"],
+                row["condition_key"], row["profile"])
+    expected = {
+        c[5] for c in protocol["cases"] if (c[0], c[1], c[2], c[4], c[6]) == identity
+    }
+    if not expected or not expected.issubset(protocol["methods"]):
+        raise ValueError("case is missing from registered comparison")
+    return tuple(k for k in protocol["methods"] if k in expected)
 
 
 class NavigationStudySource:
@@ -315,11 +351,11 @@ class NavigationStudySource:
                         else f"{lesson} · {'到点判据' if lesson == '70' else '无路恢复'} / {LABELS[row['map_kind']][0]}"
                     )
                 )
-                if summary["protocol"].get("round") in (5, 6, 7, 8, 9, 10, 11):
+                if summary["protocol"].get("round") in (5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
                     label += f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s / " + (
                         "规划无输出1s" if row["profile"] == "blackout" else "正常输出"
                     )
-                    if summary["protocol"].get("round") in (8, 9, 10, 11):
+                    if summary["protocol"].get("round") in (8, 9, 10, 11, 12, 13, 14):
                         label = (
                             f"69第{summary['protocol']['round']}轮 · "
                             + {
@@ -338,6 +374,8 @@ class NavigationStudySource:
                             }[row["profile"]]
                             + f" / 延迟{row['perturbation']['delay_steps'] * 0.1:g}s"
                         )
+                        if summary["protocol"].get("round") >= 12:
+                            label += " / " + LAYOUTS[row["layout"]]
                 self.entries.append(ReplayEntry(case, lesson, f"{label} / 种子 {row['seed']}"))
         self.entries = tuple(self.entries)
 
@@ -376,6 +414,8 @@ class NavigationStudySource:
             "71": ("baseline", "recovery"),
         }[variant]
         keys = tuple(selected) if selected is not None else keys
+        if summary["protocol"].get("round", 1) >= 12:
+            keys = registered_method_keys(summary["protocol"], next(iter(rows.values())))
         if summary["protocol"].get("round") in (5, 6, 7, 8):
             keys = tuple(k for k in keys if k in rows)
         labels = (
@@ -383,6 +423,12 @@ class NavigationStudySource:
             if selected is not None
             else LABELS
         )
+        if summary["protocol"].get("round") == 14:
+            labels = {**labels, "corridor_depth": (
+                "物理停车＋二维择路",
+                "仍把新回波压到地面后按宽底盘找路；物理停车、2cm择路偏好和评分与三维组相同。",
+                "#247cc1",
+            )}
         if set(rows) != set(keys):
             raise ValueError("incomplete study comparison")
         arrays = {k: read_checked(directory / rows[k]["file"], rows[k]["sha256"]) for k in keys}
@@ -492,11 +538,11 @@ class NavigationStudySource:
                     telemetry[key].update(
                         {k: pad(a[k]) for k in ("map_frames", "map_counts", "map_error")}
                     )
-                    if summary["protocol"].get("round") in (8, 9, 10, 11):
+                    if summary["protocol"].get("round") in (8, 9, 10, 11, 12, 13, 14):
                         methods[key]["display_map"] = "当前观测通行图"
                     if "planning_prior_frames" in a:
                         telemetry[key]["planning_prior_frames"] = pad(a["planning_prior_frames"])
-                    if summary["protocol"].get("round") == 11:
+                    if summary["protocol"].get("round") in (11, 12, 13, 14):
                         # Evaluation-only projection: a high overhead fixture
                         # must not be labelled a missed collision obstacle.
                         boxes = a["actual_boxes"]
@@ -574,7 +620,7 @@ class NavigationStudySource:
                 for j, b in enumerate(boxes)
             ]
             maps["实验开始时的先验地图"] = arrays[keys[0]]["prior_map"]
-            if summary["protocol"].get("round") in (8, 9, 10, 11):
+            if summary["protocol"].get("round") in (8, 9, 10, 11, 12, 13, 14):
                 maps["当前观测通行图"] = arrays[keys[0]]["prior_map"]
             metadata.update(
                 rig=rig.to_dict(),
@@ -613,6 +659,9 @@ class NavigationStudySource:
                         "progress": "新种子路点进度对照",
                         "depth_sampling": "新种子深度采样对照",
                         "sensor_ablation": "新障碍可绕行对照",
+                        "paired_holdout": "三组同种子配对",
+                        "stability_holdout": "最终候选独立稳定性检验",
+                        "impossible_negative": "真正无路负例（单列）",
                     }[cohort]
                     + "："
                     + "；".join(
@@ -687,14 +736,14 @@ class NavigationStudySource:
                         + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
                         braking_models={k: "coupled" for k in keys},
                     )
-                if round_number in (7, 8, 9, 10, 11):
+                if round_number in (7, 8, 9, 10, 11, 12, 13, 14):
                     r = rows[keys[0]]
                     metadata.update(
                         protocol="同一真实接触平台与轻擦阈值；第七轮只换速度，第八轮只换地图清除规则。地图修正不是位姿修正；末帧保持不计分。",
                         settings=f"第69课第{round_number}轮 · 55×44cm车身 · 零额外预留 · 物理500Hz · 排队{r['perturbation']['delay_steps'] * 0.1:g}s · 精确位姿为设定",
                         sensor_note="雷达/深度为同步记录；RGB重渲染，无视觉定位。真实速度与接触力另见诊断。",
                         scene_note="12×12m街区/通道；真实障碍与可能错误的先验地图分别提供。未模拟行驶中移动物体。",
-                        live_map=round_number in (8, 9, 10, 11),
+                        live_map=round_number in (8, 9, 10, 11, 12, 13, 14),
                         cohort="本回合真实到点并满足轻擦口径："
                         + "；".join(f"{labels[k][0]} {int(rows[k]['passed'])}/1" for k in keys),
                         braking_models={k: "coupled" for k in keys},
@@ -706,12 +755,27 @@ class NavigationStudySource:
                         metadata["depth_dimensions_by_method"] = summary["protocol"][
                             "depth_dimensions_by_method"
                         ]
-                    if round_number == 11:
+                    if round_number in (11, 12, 13, 14):
                         metadata.update(
                             protocol="同一身体、地图规则、规划与保护；只改变控制是否使用深度。结束后末帧保持不计分。",
                             scene_note="新增障碍未画入先验，两侧有绕行通道；75cm高杆高于58cm整车，可从下方通过。",
                             depth_used_by=summary["protocol"]["depth_used_by"],
                         )
+                    if round_number >= 12:
+                        metadata.update(
+                            protocol="三组分别检验停车模型和择路余量；额外布局只运行最终候选，不能与配对组混用分母。末帧保持不计分。",
+                            settings=f"第69课第{round_number}轮 · 55×44cm身体 · 实际排队0.2s · 最高0.2m/s · 仅绿色择路偏好多留2cm · 精确位姿为设定",
+                            braking_models={k: "legacy" if k == "legacy_depth" else "physical" for k in keys},
+                            scene_note=LAYOUTS[rows[keys[0]]["layout"]] + "；新障碍未画入先验；0.30m负例入口小于0.44m车宽，仅该负例应拒绝。",
+                        )
+                        if cohort == "impossible_negative":
+                            metadata["cohort"] = "真正无路负例：预期停车拒绝，不进入60回合到达率分母。"
+                        if round_number == 12:
+                            metadata["protocol"] = "只比较原停车预测与完整驱动物理停车；规划和地图规则保持相同，未添加2cm择路偏好。"
+                            metadata["settings"] = "第69课第12轮 · 55×44cm身体 · 0.2s排队 · 最高0.2m/s · 无额外择路余量 · 精确位姿是设定"
+                        if round_number == 14:
+                            metadata["protocol"] = "同一物理停车与2cm择路偏好，只比较是否保留新回波高度；新布局仅运行最终候选。末帧保持不计分。"
+                            metadata["settings"] = "第69课第14轮 · 55×44cm身体 · 0.2s排队 · 最高0.2m/s · 2cm择路偏好 · 绿组按三维部件检查 · 精确位姿是设定"
 
         else:
             grids = read_checked(directory / "maps.npz", summary["maps_sha256"])

@@ -1,0 +1,1928 @@
+{
+  "protocol": {
+    "lesson": "69",
+    "round": 13,
+    "dt_s": 0.1,
+    "physics_dt_s": 0.002,
+    "smoke": true,
+    "methods": [
+      "legacy_depth",
+      "physical_depth",
+      "corridor_depth"
+    ],
+    "cases": [
+      [
+        "street",
+        "low",
+        0,
+        "development",
+        "delay_2",
+        "corridor_depth",
+        "bypass_low"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "corridor_depth",
+        "bypass_beam"
+      ],
+      [
+        "street",
+        "crate",
+        0,
+        "development",
+        "delay_2",
+        "corridor_depth",
+        "bypass_crate"
+      ],
+      [
+        "street",
+        "beam",
+        0,
+        "development",
+        "delay_2",
+        "corridor_depth",
+        "clear_overhead"
+      ]
+    ],
+    "rig": {
+      "front_m": 0.3,
+      "rear_m": 0.25,
+      "half_width_m": 0.22,
+      "top_m": 0.58,
+      "lidar_x_m": 0.08,
+      "lidar_z_m": 0.32,
+      "camera_x_m": 0.2,
+      "camera_z_m": 0.55,
+      "vfov_deg": 65.0,
+      "width": 80,
+      "height": 60,
+      "lidar_rays": 180,
+      "max_range_m": 8.0,
+      "latency_s": 0.2,
+      "brake_m_s2": 0.8,
+      "angular_brake_rad_s2": 1.8,
+      "margin_m": 0
+    },
+    "contact_limits": {
+      "peak_force_n": 40.0,
+      "penetration_m": 0.005,
+      "continuous_contact_s": 0.5
+    },
+    "mujoco_version": "3.11.0",
+    "max_steps": 900,
+    "warmup_frames": 5,
+    "depth_dimensions_by_method": {
+      "legacy_depth": [
+        320,
+        240
+      ],
+      "physical_depth": [
+        320,
+        240
+      ],
+      "corridor_depth": [
+        320,
+        240
+      ]
+    },
+    "noise_streams": "independent lidar and depth",
+    "depth_used_by": [
+      "legacy_depth",
+      "physical_depth",
+      "corridor_depth"
+    ],
+    "feasibility_witnesses": {
+      "street/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.4200000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_east/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000009,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_east/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.42000000000000093,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_east/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000009,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_east/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_wide/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6200000000000008,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_wide/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.4300000000000008,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_wide/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6200000000000008,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_wide/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      }
+    },
+    "stability_required": {
+      "method": "corridor_depth",
+      "positive_episodes": 4,
+      "layouts": [
+        "street",
+        "street_east",
+        "street_wide"
+      ],
+      "seeds": [
+        0
+      ]
+    },
+    "workers": 2,
+    "progress_tolerance_m": 0.05,
+    "map_resolution_m": 0.1,
+    "free_confirmations": 3,
+    "free_depth_budget_m": 0.12,
+    "baseline_summary_sha256": "fa75b7a5f3201a057e179d1ce74fabf08df0b79dea00403874dc83f42e1d9a37",
+    "registration_sha256": "ecb5999cfda1df9c667a56174f23ce9e958b7f5b0460503cf0205ad4de73e541",
+    "source_sha256": {
+      "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+      "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+      "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+      "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+      "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+      "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+      "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+      "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345",
+      "src\\embodied_learning\\experiments\\navigation_robustness.py": "b1363f3965a8797d5b96c1aa44df1efd87b89aa07af06a58ee791b96b1bbac6e",
+      "src\\embodied_learning\\navigation_robustness.py": "4b214c31189a2802e8fd5759c8cc1b6f981c9ff0ad9cc48228748936580a4958",
+      "src\\embodied_learning\\experiments\\execution_navigation.py": "dd6d5da65c4ec9750084d39383fca36189d292a8ee37c0a645883925a4023f2a",
+      "src\\embodied_learning\\execution_safety.py": "af7d7d732b70d03abab39759ffd31f255cb50741363781554b93849ee5a5d3bf",
+      "src\\embodied_learning\\experiments\\contact_navigation.py": "a3f63bf6c003761387fd0b5043cb3ba51f34e42c2d9d3ba1090e19032266fd30",
+      "src\\embodied_learning\\contact_motion.py": "da1d517c77c9e9c436287a0a8f7b29ec38bef65bc6e9900fab12b20798d07457",
+      "src\\embodied_learning\\experiments\\navigation_reinforcement.py": "a1e89872d2598004c37bcbf1f2860cf7660dc8baed9884edc5101c6ff7124186",
+      "src\\embodied_learning\\navigation_map_update.py": "66666ca105da1ff848a3952338f047a693de58e6df282e8a41b91ef89a58078c",
+      "src\\embodied_learning\\experiments\\navigation_progress_study.py": "baadca0cfd3ee1c21c1983caba8c61630739433ad2dec3b06bf47369c7263e7e",
+      "src\\embodied_learning\\navigation_progress.py": "1bb1e7873baf585be061ab16e35e4116e7b0a52867229007aa06e531f1a1f004",
+      "src\\embodied_learning\\experiments\\navigation_bypass_study.py": "c643f67ed5b12f6ca4d76a7dff3fe40f5f04832a43e4c7776f2a5a1ff3d1711b",
+      "src\\embodied_learning\\navigation_sensor_ablation.py": "cc9159d03520af920e8b2096ddd23b43b6afaff1c885f6bc0918f27066aac28d",
+      "src\\embodied_learning\\experiments\\navigation_clearance_study.py": "a05a444c91c3020ecf041da5ba4e0031b452ca0552e2ef1da6dd52532fc3594e",
+      "src\\embodied_learning\\physical_braking.py": "29bf85daeb36a23d611a8b1e4144665920651d78346bb6be1b26908d0fc0940a",
+      "src\\embodied_learning\\clearance_navigation.py": "b56870c82ddac5176d364fd433f2970da0a41c3e1012e07aab51f7696a2523b5"
+    },
+    "plant": "frozen round-six real planar contacts; force-limited velocity servo",
+    "controller": "same sensing/planning/tracking; compare kinematic vs force-servo stopping forecasts; known pose"
+  },
+  "protocol_sha256": "ba3a08c210178d5b606743bf4c5dbeeaca4a3af45358986a538461da5ce61eca",
+  "rows": [
+    {
+      "method": "corridor_depth",
+      "planning_margin_m": 0.02,
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 45,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 174,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 682,
+      "final_missed_occupied_cells": 0,
+      "max_actual_speed_m_s": 0.20010523757875334,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.032625199423304,
+      "terminal_world_velocity": [
+        0.0061639548912713485,
+        0.0012472651535245284,
+        -0.00010275888324734941
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_low",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "low",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.1640808924067925,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 487,
+      "elapsed_sim_s": 48.6,
+      "events": [
+        {
+          "frame": 486,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.028464081492888926,
+      "expanded_swept_min_m": 0.028464081492888926,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 479,
+      "arrival_eligible_frame": 484,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006288372764244367,
+        -0.00010275888324734941
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.0797349092484205,
+      "final_goal_distance_m": 0.1640808924067925,
+      "travelled_m": 9.361599501690327,
+      "controller_p95_ms": 137.300030014012,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.23085340001853183
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.34810629999265075
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.3438650000025518
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04401979999965988
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04703370001516305
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04646710000815801
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.028736100008245558
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.044483000005129725
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04660080000758171
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04162990002078004
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.030977099988376722
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03951709999819286
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03649769999901764
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.032363299978896976
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0289784999913536
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.1385539000038989
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03664189999108203
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.029643199988640845
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03476190002402291
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.029265099990880117
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.034105599974282086
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.031710200011730194
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.030270000017480925
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.029474500013748184
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.029102100001182407
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0283488999994006
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.026351400010753423
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.025758400006452575
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.026816700003109872
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.015042899991385639
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02398279999033548
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021634999982779846
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.023116900003515184
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02269209999940358
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02024310000706464
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.019984800019301474
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.018427400005748495
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.017053699993994087
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.016248100000666454
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.015509800025029108
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.014726599998539314
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.013901400001486763
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.012464900006307289
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.010422299994388595
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.010266400000546128
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009450799989281222
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.00820800001383759
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.005588900006841868
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.005277099990053102
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 4,
+        "retained_original_curve": 45
+      },
+      "file": "street_low_s0_delay_2_corridor_depth_bypass_low.npz",
+      "sha256": "488809b8a64219d880c94190ce9259802c393124084e4f054e2cd59e595c6101",
+      "cohort": "development",
+      "wall_s": 87.7654407999944
+    },
+    {
+      "method": "corridor_depth",
+      "planning_margin_m": 0.02,
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 44,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 52,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 664,
+      "final_missed_occupied_cells": 77,
+      "max_actual_speed_m_s": 0.2002470153324721,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.02217353919907894,
+      "terminal_world_velocity": [
+        0.006267592047645489,
+        -0.0004982998362661069,
+        6.636703392658724e-05
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_beam",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.15342527750890392,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 470,
+      "elapsed_sim_s": 46.900000000000006,
+      "events": [
+        {
+          "frame": 469,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.22865934244769792,
+      "expanded_swept_min_m": 0.03782646080092111,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 462,
+      "arrival_eligible_frame": 467,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006287157528083507,
+        6.636703392658724e-05
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972864661304115,
+      "final_goal_distance_m": 0.15342527750890392,
+      "travelled_m": 9.139753916404981,
+      "controller_p95_ms": 142.12712000298777,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.2331285999971442
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.05723040000884794
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.054690999997546896
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04054099999484606
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04561709999688901
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.3010700000158977
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03739270000369288
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03808960001333617
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.2536617000005208
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04314100000192411
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0449576000100933
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03938090000883676
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02696690001175739
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.039989100012462586
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03648490001796745
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03660719998879358
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.036184700002195314
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03477339999517426
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.029313199978787452
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03263220001826994
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.030742899980396032
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02783500001532957
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.030696400004671887
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.028463599999668077
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.027889499993762
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02700230001937598
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.025857400003587827
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.024718000000575557
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02475169999524951
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.025662000000011176
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.023484000004827976
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02098679999471642
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021291499986546114
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021291600016411394
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021237000008113682
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.017624200001591817
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.016686299990396947
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01601749999099411
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.014001800009282306
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.013139799993950874
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01222770000458695
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.011820699990494177
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01074019999941811
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.006713799986755475
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009411699982592836
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.00602120000985451
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.004998499993234873
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 3,
+        "retained_original_curve": 44
+      },
+      "file": "street_beam_s0_delay_2_corridor_depth_bypass_beam.npz",
+      "sha256": "63b7db91e5eca0e5269cc92a709f23917d23e849591f04e834805097281bc2d1",
+      "cohort": "development",
+      "wall_s": 88.42252800002461
+    },
+    {
+      "method": "corridor_depth",
+      "planning_margin_m": 0.02,
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 44,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 20,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 641,
+      "final_missed_occupied_cells": 96,
+      "max_actual_speed_m_s": 0.19999999999999934,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": 1.0899999999999999,
+      "terminal_world_velocity": [
+        0.00628626286264685,
+        0.0,
+        0.0
+      ],
+      "condition_key": "delay_2",
+      "profile": "clear_overhead",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.16061605375633192,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 455,
+      "elapsed_sim_s": 45.400000000000006,
+      "events": [
+        {
+          "frame": 454,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 1.1499999999999997,
+      "expanded_swept_min_m": 1.1499999999999997,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 447,
+      "arrival_eligible_frame": 452,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.00628626286264685,
+        0.0
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972401856163103,
+      "final_goal_distance_m": 0.16061605375633192,
+      "travelled_m": 8.839383946243668,
+      "controller_p95_ms": 116.94839000992943,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0493908999778796
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04225420000148006
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03989929999806918
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.036808200005907565
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03151770000113174
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03784590002032928
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.037106000003404915
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03616310001234524
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02836359999491833
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.022282199992332608
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03308890000334941
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03214150000712834
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02902600000379607
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03518070001155138
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03181590000167489
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02249390000361018
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02928680001059547
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.025666600005934015
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.017354400013573468
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02698729999247007
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.025536199973430485
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021968699991703033
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.017147699982160702
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.023768799990648404
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.023347900016233325
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.015859800012549385
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.021116500021889806
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01972750001004897
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.018909300008090213
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.018787599983625114
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01811249999445863
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.016932600003201514
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.015511799982050434
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.010266600002069026
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01948760001687333
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.013666099985130131
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.013306100008776411
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.012160299986135215
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.011344400001689792
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.010773799993330613
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009604399994714186
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009434399980818853
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.008113100018817931
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.005259199999272823
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0052724000124726444
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 1,
+        "retained_original_curve": 44
+      },
+      "file": "street_beam_s0_delay_2_corridor_depth_clear_overhead.npz",
+      "sha256": "3ca473f0dba4cd42c2a99639abb5094f3580e38af28d9c04ab0d065b6cc65812",
+      "cohort": "development",
+      "wall_s": 82.19113160000416
+    },
+    {
+      "method": "corridor_depth",
+      "planning_margin_m": 0.02,
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 42,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 72,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 677,
+      "final_missed_occupied_cells": 66,
+      "max_actual_speed_m_s": 0.2000588323595412,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.04295088976913308,
+      "terminal_world_velocity": [
+        0.005841356999656681,
+        0.002322853671856306,
+        -2.384348535953845e-10
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_crate",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "crate",
+      "seed": 0,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.16547314091367518,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 473,
+      "elapsed_sim_s": 47.2,
+      "events": [
+        {
+          "frame": 472,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.018656234520671222,
+      "expanded_swept_min_m": 0.018656234520671222,
+      "expanded_overlap_frames": 0,
+      "safe_completed": true,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 465,
+      "arrival_eligible_frame": 470,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006286262862646963,
+        -2.384348535953845e-10
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972401856155259,
+      "final_goal_distance_m": 0.16547314091367518,
+      "travelled_m": 9.102226512231045,
+      "controller_p95_ms": 134.18073999346234,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.32947229998535477
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.36912479999591596
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0455194000096526
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.039867900020908564
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.047238700004527345
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03990519998478703
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03889670001808554
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.043699300003936514
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03995700000086799
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.028598600008990616
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.041582200006814674
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.04130010001244955
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03853329998673871
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.038138700008857995
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03891909998492338
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03660930000478402
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.035056900000199676
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03177550001419149
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.02533269999548793
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03207070002099499
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03117289999499917
+        },
+        {
+          "reason": "planned",
+          "expanded": 32,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.14136700000381097
+        },
+        {
+          "reason": "planned",
+          "expanded": 31,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.13375489998725243
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": true,
+          "wall_s": 0.0202387000026647
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": true,
+          "wall_s": 0.019704899983480573
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": true,
+          "wall_s": 0.012864999996963888
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": true,
+          "wall_s": 0.016700899985153228
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01867429999401793
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01327520000631921
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01933510001981631
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.019291200005682185
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01991719999932684
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01283059999695979
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.020076899993000552
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0199525999778416
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.018572200002381578
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01292989999637939
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.012833999993745238
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009587799984728917
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.011730900005204603
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.010470799985341728
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.00663170000188984
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.009162600006675348
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.006149599998025224
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.006001000001560897
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.005170399992493913
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0047741000016685575
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 3,
+        "retained_original_curve": 42,
+        "planned": 2
+      },
+      "file": "street_crate_s0_delay_2_corridor_depth_bypass_crate.npz",
+      "sha256": "583ed862a340032ca3885e3211cf26a1b118b901dfc7774fd7e35427692c5029",
+      "cohort": "development",
+      "wall_s": 86.30744770000456
+    }
+  ],
+  "wall_s": 175.07142160000512
+}

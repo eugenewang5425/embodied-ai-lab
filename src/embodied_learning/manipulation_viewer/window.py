@@ -7,7 +7,7 @@ from tkinter import filedialog, ttk
 
 import numpy as np
 
-from embodied_learning.experiments.so101_grasping import METHODS, PHASES
+from embodied_learning.experiments.so101_grasping import PHASES
 from embodied_learning.plotting import configure_plot_font
 from embodied_learning.replay_viewer.clock import ReplayClock
 from embodied_learning.so101 import TABLE_Z
@@ -17,12 +17,13 @@ from .renderer import ManipulationRenderer
 
 
 class ManipulationWindow:
-    def __init__(self, root, record, position=None, method="clamp"):
+    def __init__(self, root, record, position=None, method=None):
         configure_plot_font()
         self.root, self.record = root, record
         self.closed, self.updating, self.timer = False, False, None
         self.position = position or record.positions[len(record.positions) // 2]
-        self.method = method
+        preferred = "center_cartesian" if "center_cartesian" in record.methods else "clamp"
+        self.method = method or preferred
         self.engine = ManipulationRenderer()
         self.last_frame = -1
         root.title("第72—73课 · SO-101三维标定与物理抓取")
@@ -46,19 +47,22 @@ class ManipulationWindow:
         self.position_var = tk.StringVar(value=self.position)
         self.position_labels = {}
         for p in record.positions:
-            row, _ = record.select(p, "clamp")
+            row, _ = record.select(p, record.available_methods(p)[0])
             x, y = row["config"]["object_xyz"][:2]
-            self.position_labels[p] = f"{p} · X={x * 100:.0f}cm，Y={y * 100:+.1f}cm"
+            yaw = row.get("object_yaw_deg", 0)
+            self.position_labels[p] = f"{p} · X={x * 100:.1f}，Y={y * 100:+.1f}cm，朝向{yaw:+.0f}°"
         self.position_box = ttk.Combobox(
-            selection, state="readonly", width=32, values=list(self.position_labels.values())
+            selection, state="readonly", width=45, values=list(self.position_labels.values())
         )
         self.position_box.pack(side="left", padx=8)
         self.position_box.bind("<<ComboboxSelected>>", self._position_selected)
-        self.method_var = tk.StringVar(value=method)
+        method_row = ttk.Frame(outer)
+        method_row.pack(fill="x", pady=(0, 4))
+        self.method_var = tk.StringVar(value=self.method)
         self.method_buttons = {}
-        for key, label in METHODS.items():
+        for key, label in record.methods.items():
             button = ttk.Radiobutton(
-                selection,
+                method_row,
                 text=label.split("：")[0],
                 value=key,
                 variable=self.method_var,
@@ -156,6 +160,12 @@ class ManipulationWindow:
     def load_selection(self):
         old_time = self.clock.timestamps[self.clock.frame] if hasattr(self, "clock") else 0.0
         playing = self.clock.playing if hasattr(self, "clock") else False
+        available = self.record.available_methods(self.position)
+        if self.method not in available:
+            self.method = available[0]
+            self.method_var.set(self.method)
+        for key, button in self.method_buttons.items():
+            button.configure(state="normal" if key in available else "disabled")
         self.row, self.values = self.record.select(self.position, self.method)
         self.clock = ReplayClock(self.values["timestamps"])
         self.clock.set_speed(float(self.speed.get()))
@@ -169,8 +179,18 @@ class ManipulationWindow:
         self.scale.configure(to=len(self.clock.timestamps) - 1)
         self.updating = False
         self.method_note.configure(
-            text=METHODS[self.method]
-            + "。三组只改变夹爪或抓取位置；都使用已知物体位置，相机尚未参与控制。"
+            text=self.record.methods[self.method]
+            + (
+                "。比较空间路径与当前开口校准；空夹/偏差只在登记条件有回合。金点是名义参考中心，校准后的TCP会偏移。"
+                if self.record.summary.get("study_round") == 2
+                else "。三组只改变夹爪或抓取位置；"
+            )
+            + "使用已知物体位置（初始化给定），相机尚未参与控制。"
+            + (
+                f"本方法全批完成{sum(r['success'] for r in self.record.rows.values() if r['method'] == self.method)}/{sum(r['method'] == self.method for r in self.record.rows.values())}；开发例不代表泛化，候选尚未全范围通过。"
+                if self.record.summary.get("study_round") == 2
+                else ""
+            )
         )
         self.refresh()
 
@@ -221,7 +241,7 @@ class ManipulationWindow:
             text=(
                 f"当前：{phase}｜物体中心离桌高度={(obj[2] - TABLE_Z) * 100:.1f}cm｜两指接触力={forces[0]:.2f}/{forces[1]:.2f}N｜"
                 f"夹爪关节={np.rad2deg(v['qpos'][frame, 5]):.1f}°\n"
-                f"夹爪本段目标 XYZ=({target[0] * 100:.1f}, {target[1] * 100:.1f}, {target[2] * 100:.1f})cm｜"
+                f"本段名义参考 XYZ=({target[0] * 100:.1f}, {target[1] * 100:.1f}, {target[2] * 100:.1f})cm｜"
                 f"完整回合：稳定抬起{'通过' if row['stable_lift'] else '未通过'}、放置{'通过' if row['stable_placement'] else '未通过'}｜"
                 f"终点偏差={row['final_xy_error_m'] * 100:.2f}cm｜仿真回放，非实时实机"
             )

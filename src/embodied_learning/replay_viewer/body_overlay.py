@@ -32,15 +32,26 @@ def draw_body_guides(image, record, frame, key):
     # the top goal banner, leaving both goal markers and offscreen arrows clear.
     label_font = font(17)
     draw.rectangle((0, 83, image.width, 136), fill="#172333")
+    width_cm = rig.half_width_m * 200
+    label = (
+        f"黄线：实际车宽{width_cm:g}cm，无额外预留（地面投影）"
+        if rig.margin_m == 0
+        else f"黄线：车宽{width_cm:g}cm＋两侧各{rig.margin_m * 100:g}cm余量（地面投影）"
+    )
+    planning_margin = record.method_info(key).get("result", {}).get("planning_margin_m", 0)
+    note = (
+        f"选路偏好多留{planning_margin * 100:g}cm；相机下方仍有盲区"
+        if planning_margin else "相机下方有盲区；画面无障碍不代表车身能通过"
+    )
     draw.text(
         (10, 86),
-        f"黄线：车宽44cm＋两侧各{rig.margin_m * 100:g}cm余量（地面投影）",
+        label,
         font=label_font,
         fill="#ffd46b",
     )
     draw.text(
         (10, 109),
-        "相机下方有盲区；画面无障碍不代表车身能通过",
+        note,
         font=label_font,
         fill="white",
     )

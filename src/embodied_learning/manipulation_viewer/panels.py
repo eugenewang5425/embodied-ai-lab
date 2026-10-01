@@ -8,8 +8,6 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import ImageOps, ImageTk
 
-from embodied_learning.experiments.so101_grasping import COLORS, METHODS
-
 
 class ImagePanel(ttk.Frame):
     def __init__(self, parent, title, note):
@@ -63,15 +61,15 @@ class DiagnosticsPanel(ttk.Frame):
         self.position, self.method = position, method
         for axis in self.axes:
             axis.clear()
-        for key in METHODS:
+        for key in record.available_methods(position):
             _, values = record.select(position, key)
             baseline = values["object_xyz"][np.flatnonzero(values["phase"] == 0)[-1], 2]
             height = values["object_xyz"][:, 2] - baseline
             self.axes[0].plot(
                 values["timestamps"],
                 height * 100,
-                color=COLORS[key],
-                label=METHODS[key].split("：")[0],
+                color=record.colors[key],
+                label=record.methods[key].split("：")[0],
                 lw=2.5 if key == method else 1.2,
             )
         self.axes[0].axhline(10, color="#475569", ls="--")
@@ -79,7 +77,7 @@ class DiagnosticsPanel(ttk.Frame):
         self.axes[0].legend(
             loc="lower left",
             bbox_to_anchor=(0, 1.02),
-            ncol=3,
+            ncol=2,
             fontsize=8,
             frameon=False,
             borderaxespad=0,

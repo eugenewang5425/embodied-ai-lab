@@ -1,0 +1,780 @@
+{
+  "protocol": {
+    "lesson": "69",
+    "round": 14,
+    "dt_s": 0.1,
+    "physics_dt_s": 0.002,
+    "smoke": true,
+    "rig": {
+      "front_m": 0.3,
+      "rear_m": 0.25,
+      "half_width_m": 0.22,
+      "top_m": 0.58,
+      "lidar_x_m": 0.08,
+      "lidar_z_m": 0.32,
+      "camera_x_m": 0.2,
+      "camera_z_m": 0.55,
+      "vfov_deg": 65.0,
+      "width": 80,
+      "height": 60,
+      "lidar_rays": 180,
+      "max_range_m": 8.0,
+      "latency_s": 0.2,
+      "brake_m_s2": 0.8,
+      "angular_brake_rad_s2": 1.8,
+      "margin_m": 0
+    },
+    "contact_limits": {
+      "peak_force_n": 40.0,
+      "penetration_m": 0.005,
+      "continuous_contact_s": 0.5
+    },
+    "mujoco_version": "3.11.0",
+    "max_steps": 900,
+    "warmup_frames": 5,
+    "depth_dimensions_by_method": {
+      "corridor_depth": [
+        320,
+        240
+      ],
+      "height_depth": [
+        320,
+        240
+      ]
+    },
+    "noise_streams": "independent lidar and depth",
+    "depth_used_by": [
+      "corridor_depth",
+      "height_depth"
+    ],
+    "stability_required": {
+      "method": "height_depth",
+      "positive_episodes": 5,
+      "layouts": [
+        "street",
+        "street_west",
+        "street_north"
+      ],
+      "seeds": [
+        37,
+        38,
+        39,
+        40,
+        41
+      ]
+    },
+    "workers": 1,
+    "progress_tolerance_m": 0.05,
+    "map_resolution_m": 0.1,
+    "free_confirmations": 3,
+    "free_depth_budget_m": 0.12,
+    "baseline_summary_sha256": "fa75b7a5f3201a057e179d1ce74fabf08df0b79dea00403874dc83f42e1d9a37",
+    "plant": "frozen round-six real planar contacts; force-limited velocity servo",
+    "controller": "private frozen round-13 lifecycle; only keep measured heights in planning feasibility",
+    "cases": [
+      [
+        "street",
+        "beam",
+        33,
+        "development",
+        "delay_2",
+        "height_depth",
+        "bypass_beam"
+      ]
+    ],
+    "methods": [
+      "corridor_depth",
+      "height_depth"
+    ],
+    "parent_protocol_sha256": "9ea95441f8ebb5c66659260c59891980d24b908bc401626dcf3e4a8ede24a50a",
+    "registration_sha256": "0ceb3b6c120481a5d78fc1483b64ce874f574a79519921870dca184fc70ecd33",
+    "source_sha256": {
+      "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+      "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+      "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+      "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+      "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+      "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+      "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+      "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345",
+      "src\\embodied_learning\\experiments\\navigation_robustness.py": "b1363f3965a8797d5b96c1aa44df1efd87b89aa07af06a58ee791b96b1bbac6e",
+      "src\\embodied_learning\\navigation_robustness.py": "4b214c31189a2802e8fd5759c8cc1b6f981c9ff0ad9cc48228748936580a4958",
+      "src\\embodied_learning\\experiments\\execution_navigation.py": "dd6d5da65c4ec9750084d39383fca36189d292a8ee37c0a645883925a4023f2a",
+      "src\\embodied_learning\\execution_safety.py": "af7d7d732b70d03abab39759ffd31f255cb50741363781554b93849ee5a5d3bf",
+      "src\\embodied_learning\\experiments\\contact_navigation.py": "a3f63bf6c003761387fd0b5043cb3ba51f34e42c2d9d3ba1090e19032266fd30",
+      "src\\embodied_learning\\contact_motion.py": "da1d517c77c9e9c436287a0a8f7b29ec38bef65bc6e9900fab12b20798d07457",
+      "src\\embodied_learning\\experiments\\navigation_reinforcement.py": "a1e89872d2598004c37bcbf1f2860cf7660dc8baed9884edc5101c6ff7124186",
+      "src\\embodied_learning\\navigation_map_update.py": "66666ca105da1ff848a3952338f047a693de58e6df282e8a41b91ef89a58078c",
+      "src\\embodied_learning\\experiments\\navigation_progress_study.py": "baadca0cfd3ee1c21c1983caba8c61630739433ad2dec3b06bf47369c7263e7e",
+      "src\\embodied_learning\\navigation_progress.py": "1bb1e7873baf585be061ab16e35e4116e7b0a52867229007aa06e531f1a1f004",
+      "src\\embodied_learning\\experiments\\navigation_bypass_study.py": "c643f67ed5b12f6ca4d76a7dff3fe40f5f04832a43e4c7776f2a5a1ff3d1711b",
+      "src\\embodied_learning\\navigation_sensor_ablation.py": "cc9159d03520af920e8b2096ddd23b43b6afaff1c885f6bc0918f27066aac28d",
+      "src\\embodied_learning\\experiments\\navigation_clearance_study.py": "f37d19200e634b943393f561fbc3666e6c538b29a363f232deea30cd7de2fcdd",
+      "src\\embodied_learning\\physical_braking.py": "29bf85daeb36a23d611a8b1e4144665920651d78346bb6be1b26908d0fc0940a",
+      "src\\embodied_learning\\clearance_navigation.py": "b56870c82ddac5176d364fd433f2970da0a41c3e1012e07aab51f7696a2523b5",
+      "src\\embodied_learning\\experiments\\navigation_height_study.py": "46837aa058ecd0768f3ee41690b8e6853292a5e3585007733bb66516b1a9ce77",
+      "src\\embodied_learning\\height_aware_planning.py": "f83f0ebae07ef373060b51f3350b02534a64e5d60b9e2f7ede35af30bc271f54"
+    },
+    "feasibility_witnesses": {
+      "street/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.4200000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.6700000000000005,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_west/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.7200000000000004,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_west/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.5200000000000001,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_west/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.7200000000000004,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_west/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_north/bypass_low": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.12999999999999923,
+        "straight_body_clearance_m": -0.6199999999999998,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_north/bypass_beam": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": -0.3699999999999998,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_north/bypass_crate": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.12999999999999923,
+        "straight_body_clearance_m": -0.6199999999999998,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      },
+      "street_north/clear_overhead": {
+        "route_xy_m": [
+          [
+            1.5,
+            6.0
+          ],
+          [
+            2.5,
+            7.1
+          ],
+          [
+            9.6,
+            7.1
+          ],
+          [
+            10.5,
+            6.0
+          ]
+        ],
+        "samples": 1549,
+        "sampled_body_clearance_m": 0.17999999999999927,
+        "straight_body_clearance_m": 1.0999999999999992,
+        "use": "offline sampled geometry audit only; not a controller input or continuous proof"
+      }
+    }
+  },
+  "protocol_sha256": "b0f170766f71ff21dbbe39ca11e9d9d68b149502573006cfa455197207d2a8df",
+  "rows": [
+    {
+      "method": "height_depth",
+      "planning_margin_m": 0.02,
+      "depth_width": 320,
+      "depth_height": 240,
+      "prefix_advance_frames": 42,
+      "fixed_speed_cap_m_s": 0.2,
+      "map_removed_voxels": 37,
+      "initial_false_occupied_cells": 0,
+      "final_false_occupied_cells": 664,
+      "final_missed_occupied_cells": 77,
+      "max_actual_speed_m_s": 0.20028134984650686,
+      "controller_margin_m": 0.0,
+      "contact_allowed": true,
+      "passed": true,
+      "contact_events": 0,
+      "contact_peak_force_n": 0.0,
+      "contact_impulse_ns": 0.0,
+      "contact_penetration_m": 0.0,
+      "contact_total_s": 0.0,
+      "contact_longest_s": 0.0,
+      "severe_contact": false,
+      "six_cm_diagnostic_min_m": -0.2359859633889021,
+      "terminal_world_velocity": [
+        0.005969488363637831,
+        0.0019703576971420987,
+        -2.9769893818310543e-10
+      ],
+      "condition_key": "delay_2",
+      "profile": "bypass_beam",
+      "local_override_frames": 0,
+      "expiry_frames": 0,
+      "blackout_encountered": false,
+      "perturbation": {
+        "key": "delay_2",
+        "dy_m": 0.0,
+        "yaw_deg": 0.0,
+        "delay_steps": 2
+      },
+      "layout": "street",
+      "obstacle": "beam",
+      "seed": 33,
+      "status": "completed",
+      "reached": 1,
+      "announced": 1,
+      "false_arrival": false,
+      "final_estimated_goal_distance_m": 0.15413394613944803,
+      "target_count": 1,
+      "contacts": 0,
+      "mean_m": 0.0,
+      "p95_m": 0.0,
+      "end_m": 0.0,
+      "abs_heading_error_deg": 0.0,
+      "frames": 465,
+      "elapsed_sim_s": 46.400000000000006,
+      "events": [
+        {
+          "frame": 464,
+          "success": true
+        }
+      ],
+      "min_clearance_m": 0.019030007026265006,
+      "expanded_swept_min_m": -0.17525435887548163,
+      "expanded_overlap_frames": 68,
+      "safe_completed": false,
+      "braking_frames": 0,
+      "braking_events": 0,
+      "trigger_frame": 457,
+      "arrival_eligible_frame": 462,
+      "physically_stopped": true,
+      "terminal_incoming_velocity": [
+        0.006286262862646974,
+        -2.9769893818310543e-10
+      ],
+      "tail_time_s": 0.7000000000000001,
+      "tail_distance_m": 0.07972401856158062,
+      "final_goal_distance_m": 0.15413394613944803,
+      "travelled_m": 9.031725459150246,
+      "controller_p95_ms": 129.98367998516187,
+      "planning_log": [
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.5087219999986701
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.451921100000618
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06845739998971112
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.08112059999257326
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06991339998785406
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06261660001473501
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06780619997880422
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.07305959999212064
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.05878370002028532
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0685706999793183
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06313490000320598
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.06007649999810383
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0623014000011608
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.058334600005764514
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.062331799999810755
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.05491249999613501
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.057128700020257384
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.042648600006941706
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.053368199995020404
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03307569999014959
+        },
+        {
+          "reason": "planned",
+          "expanded": 50,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.29707309999503195
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03133920000982471
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03180220001377165
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03322990000015125
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.027432200004113838
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0302971999917645
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03185600001597777
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03289890001178719
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.035348800010979176
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.020060500013642013
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03338979999534786
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03214150000712834
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03159050000249408
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03270349997910671
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.03375569998752326
+        },
+        {
+          "reason": "smooth_observed_route",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.019400499993935227
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.012481900019338354
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.015265299996826798
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.017169899976579472
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.013718899979721755
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.01357460001599975
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0117401999887079
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.00879339998937212
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0073794000199995935
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.00825109999277629
+        },
+        {
+          "reason": "retained_original_curve",
+          "expanded": 0,
+          "relaxed_preferred_start": false,
+          "wall_s": 0.0071672000049147755
+        }
+      ],
+      "planning_reasons": {
+        "smooth_observed_route": 3,
+        "retained_original_curve": 42,
+        "planned": 1
+      },
+      "file": "street_beam_s33_delay_2_height_depth_bypass_beam.npz",
+      "sha256": "d4f054b5abeb8d0c9ce6783d2ce30968a50f776f4f6012ab0df5fa4a62fc1656",
+      "cohort": "development",
+      "wall_s": 88.90510990002076
+    }
+  ],
+  "wall_s": 88.9266666000185
+}

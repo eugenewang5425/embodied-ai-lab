@@ -58,7 +58,7 @@ class MapUpdatePanel(ttk.Frame):
                 self.note.configure(
                     text=f"{record.method_info(key)['label']} · t={t[-1]:.1f}s · 深度{w}×{h} · 当前路点索引{int(wp)}\n本帧跳过已走首点：{'是' if passed else '否'}；索引是当前路径内的编号，重规划会重置。\n三帧、3×3邻域、12cm预算均不变；右图只评分，未修改自身定位。"
                 )
-                if record.metadata.get("tracking_round") == 11:
+                if record.metadata.get("tracking_round") in (11, 12, 13, 14):
                     used = key in record.metadata["depth_used_by"]
                     self.note.configure(
                         text=f"{record.method_info(key)['label']} · t={t[-1]:.1f}s · 当前路点{int(wp)}\n"
