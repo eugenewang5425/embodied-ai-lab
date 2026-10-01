@@ -1,21 +1,18 @@
-<!--
-  English hero for international readers (added 2026-09-04). Chinese docs below unchanged.
--->
-
 # 🤖 Embodied-AI Learning Lab
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab where control theory, robot kinematics, odometry and sensor fusion are built from scratch, checked by tiered automated tests, and recorded as reproducible experiments. Each lesson = one concept + one runnable demo + one honest report (failures included).
+A learner's lab covering control, robot perception, mapping, navigation, learning and SO-101 manipulation. Experiments are checked with paired comparisons, physical replay and tiered tests; reports keep both improvements and failures. The latest work uses MuJoCo simulation, with RGB cameras currently used for replay views rather than visual control.
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
-| **Status** | 69第十二至十四轮修停车预测和高度误拒：新范围60/60到达停稳，零接触，3个无路负例正确拒绝；精确位姿/同步仿真边界保留。73第二轮72回合，新27对17/27→21/27，仍6失败、2退步。基准62跨场景门槛未过。见[阶段复盘](docs/navigation-stage-review-69-71.md)。 |
-| **Verified** | 905 quick tests passed (109.36 s); 58 affected tests passed (86.61 s), including old bridges and real Tk. [Round 11 audit](docs/benchmarks/navigation-reinforcement-v11-validation.json): 24 formal episodes plus one development contact counterexample, 465850 physics steps, 9134 formal map frames and 1067 independently checked clearing events. Source/protocol hashes and actual visual layouts checked; historical slow-run limits remain separate. |
+| **Navigation · lesson 69** | Rounds 12–14: 60/60 fresh validation episodes reached and stopped, with zero contact; 3 impossible entrances correctly rejected. Exact pose, static layouts and low speed; computation still exceeds the 100 ms control interval. [Report](docs/69-physical-height-navigation.md) |
+| **Manipulation · lesson 73** | Round 2: 17/27 → 21/27 on the same new position/orientation conditions. Six cases rescued, two regressed; six failures remain. Known initial object pose, physical grasping, no visual feedback. [Report](docs/73-so101-approach-geometry.md) |
+| **Verified · 2026-10-01** | Latest full run: 1121 passed; after the final additions: 933 quick tests and 38 selected tests passed. Navigation and grasping records independently replayed; figures and actual windows inspected. [Delivery evidence](docs/benchmarks/navigation-arm-delivery-v14-v3b.json) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
-| **Quick start** | see below |
+| **Start here** | [Quick start](#quick-start) · [Latest navigation & grasping windows](#latest-demos) · [课程索引](#课程索引) |
 
 <p align="center">
 
@@ -30,14 +27,35 @@ A learner's lab where control theory, robot kinematics, odometry and sensor fusi
 
 ## Quick start
 
+Install `uv`, then run these commands from the repository directory in PowerShell. The project uses Python 3.12.
+
 ```powershell
-uv sync
-uv run python scripts/test.py quick     # 日常快速回归
-uv run python scripts/test.py full      # 共用基础模块变更或阶段验收时全量回归
-uv run python -m embodied_learning.swingup_demo --results results/swingup_2026-09-02
+uv sync --locked
+uv run python -m embodied_learning.env_check --steps 300 --seed 7
+uv run python -m embodied_learning.viewer --policy pd --seconds 10 --seed 7
 ```
 
-Full per-lesson demo & reproduction commands are in the Chinese sections below.
+`results/` contains local experiment archives and is excluded from Git. A fresh clone has the code, figures and compact benchmark summaries; generate an experiment before opening its replay window. Below, paired generation/replay commands use the same directory. Use a new output directory for another run.
+
+<a id="latest-demos"></a>
+
+### 最新导航与抓取窗口
+
+**导航：第 69 课第十四轮。** 先生成 75 回合正式记录，再打开指定的街区箱体回合。窗口一键同步相机、三维场景、雷达点、当前地图、目标和统计；可切换参照与改进算法、查看失败、暂停和拖动时间。[讲义](docs/69-physical-height-navigation.md)
+
+```powershell
+uv run python -m embodied_learning.experiments.navigation_height_study --workers 3 --output results/navigation_reinforcement_v14
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v14 --case 69_street_crate_37__delay_2__bypass_crate --play
+```
+
+**机械臂：第 73 课第二轮。** 先生成 72 回合正式记录，再打开空间路径与开口中心校准组。外部相机、腕部相机、三维场景、夹爪接触力和物体统计共同切换。[讲义](docs/73-so101-approach-geometry.md)
+
+```powershell
+uv run python -m embodied_learning.experiments.so101_approach_study --workers 3 --output results/so101_approach_v3b
+uv run python -m embodied_learning.manipulation_demo --results results/so101_approach_v3b --position p04a1 --method center_cartesian --play
+```
+
+已有上述完整记录时，直接运行对应第二条命令即可。导航 60/60 是限定仿真范围的验证；机械臂 21/27 仍未达到稳定抓取。两者 RGB 均为存档位姿重渲染，尚未参与控制，下一步见[导航阶段复盘](docs/navigation-stage-review-69-71.md)和[机械臂路线](docs/manipulation-roadmap.md)。逐课原理、变量、数据、思考题和复现步骤见下方课程索引。
 
 ### 测试流程
 
@@ -93,12 +111,6 @@ uv run python -m embodied_learning.experiments.photo_room_validation --layout re
 uv run python scripts/render_photo_room_replay.py
 ```
 
-<!--
-  DEMO GIF placeholder (Task C): add 3 short GIFs here — pendulum swing-up,
-  planar 2R arm path with feedforward, landmark observation + simplest fusion.
-  Delete this block once the GIFs are in.
--->
-
 <a id="cn"></a>
 
 ---
@@ -117,11 +129,21 @@ uv run python scripts/render_photo_room_replay.py
 
 - **三维操作主线（72—73课）**：首轮SO-101正常6/9；[第七十三课第二轮讲义](docs/73-so101-approach-geometry.md)新增72物理回合，同27新条件17/27→21/27、两负对照各0/9；救回6例但退步2例，继续补接触反馈。已知初始位置，RGB尚未参与控制。见[操作路线](docs/manipulation-roadmap.md)。
 
-- **主线课程 1–56 课已完成**：倒立摆（PD/LQR/扰动/噪声/摆起）→ 平面 2R 机械臂（FK/IK/Jacobian/路径/时序/前馈）→ 移动机器人（坐标变换/里程计/标定/噪声统计/地标观测/最简融合/ROS 2 节点与 TF/目标点反馈）→ 三维感知（针孔相机/投影反投影/深度误差传播 → 单目相对深度米制标定 → 真实 Depth Anything 仿射检验 → 内参标定 → 点云 ICP 配准 → MobileSAM 视觉接地）→ 阶段 5（行为克隆 BC：开环可学、闭环不成 → PPO 摆起：扶稳学到、完整摆起未成 → 残差 RL：a=0 守卫逐位一致但朴素残差毁掉可用底座 → PBRS 塑形：悬崖顶首次触达 → DAPG 示教：直立到达成为常态 → Go-Explore：稳定带被找到并捕获 417 次 → 两阶段奖励：首达 2/3 种子但仍未稳定 → 手写 SAC：α 坍缩与回放熵归零 → DAgger 在线纠错：数据有效只修到达 → 多峰块策略：表示层修复到达（均值路径首次 3/3）→ 组合学习：保护性成立、增值性不成立 → 差速车纯学习：接近学到、到达输给目标熵 → 2R 臂纯学习：跨任务目标熵均衡收敛 → ACT/torch：0/60 但归因清晰化为信息-精度硬墙）→ **回到感知-建图-规划主线**（第 43 课：占据栅格 + A* + 纯追踪，有障碍 15/15 无碰撞到达 vs 盲飞 3/15/1005 次碰撞 → 第 44 课：定位误差穿栈——真值位姿 15/15 而复用第 15 课里程计后 0/15（1% 偏差即崩），融合观测后 15/15、误差 2.5 cm 与真值组几乎等价 → 第 45 课：最小栅格 SLAM（帧间扫描匹配，无信标）0/15 与纯里程计同量级——相对锚不能闭环 → 第 46 课：回环闭合（绝对锚第二形态，末端 9.2 m→0.14 m）→ 第 47 课：加权位姿图优化——形状修复成立（FG 均值 5.03 < 弧长 5.33 m）、黄金锚末端 0.016 m、末端精度 vs 全程形状的 σ 权衡入册 → 第 48 课：鲁棒位姿图——毒化回环注入实验（LS 7.63 m 比无回环更糟；Huber 压回 5.22 m；单核两难：好回环在同核下无法闭合，SC/MM 是解法 → 第 49 课：回环匹配器工程化——接受率阶梯 0.32→0.43→0.52→0.76（K）；当时方向正确率 ≤5.4% 使用了第 54 课勘误的旧判据 → 第 50 课：特征化回环检测——三项特征评分分布重叠；2.6% vs oracle 4.9% 为后来勘误的旧判据 → 第 51 课：SC/MM 可切换约束——第 48 课同款绝对锚注入下 λ 可行域为空、MM 硬组件选择死锁，正解需要相对回环边 → 第 52 课：相对回环边下毒化同样毒、开关折中 s=0.61 → 第 53 课：同题交 scipy 生产求解器仍不拒绝——失败是问题属性 → 第 54 课：度量勘误（旧方向正确率是评估目标伪影，修正后匹配器 58-72% 正确）→ 第 55 课：里程计候选筛选后的模拟标记检索 12/12、几何方向正确 11/12（不是真实 RGB-D）→ 第 56 课：修正内圈巡游后的理想图定位显著改善，自建图未过有界跟踪门、理想图绑架恢复 4/5；后续跨场景基准见 docs/62。
-- **自动验收**：本次全仓1121项通过（80分54秒；53课稠密求解约40分52秒），最后新增内容另跑快速层933项（134秒）、受影响完整选择集38项（15秒）及实际窗口检查；Ruff通过。实验、独立重放与测试耗时分开统计。数组本地`results/`，摘要及SHA-256在`docs/benchmarks/`。
+**基础课程 1–56 均已形成实验、讲义与演示记录。** “完成一课”表示做完对照并记录结论；目标能力是否通过，仍看每课的结果和失败边界。完整数字保留在课程索引与逐课结果中。
+
+| 课程范围 | 学什么 | 实验告诉我们什么 |
+| --- | --- | --- |
+| 1–7 | 倒立摆控制、扰动、读数噪声与摆起 | 分开观察真实状态、传感读数和控制动作，比较 PD、LQR 与能量摆起的适用范围 |
+| 8–13 | 平面 2R 臂的坐标、逆解、路径与电机限制 | “几何上到得了”还要经过轨迹、时间、力矩和停稳检验 |
+| 14–21 | 小车坐标、里程计、标定、地标融合、ROS 2 与目标反馈 | 系统偏差和随机噪声要分别处理；估计到点不等于身体实际到点 |
+| 22–27 | 相机、单目深度定尺、内参、ICP 与视觉接地 | 投影、尺度、观测误差和匹配身份一起决定三维测量是否可信 |
+| 28–42 | BC、PPO、残差学习、示教、SAC、DAgger 与块策略 | 拟合、探索、首次到达和稳定控制是不同指标；学习策略的负结果全部保留 |
+| 43–56 | 建图、规划、定位、回环、位姿图与图定位 | 融合可修漂移；回环末端变准不保证全程形状正确；理想图有效，自建图仍未过门 |
+
+- **最近一次代码验收（2026-10-01）**：全仓 1121 项通过（pytest 耗时 4853.69 s，约 80 分 54 秒）；该次全量之后的新增内容另跑快速层 933 项和受影响完整选择集 38 项，并检查实际窗口。Ruff 通过。它们是不同批次，不能合并成一次全量成绩。[验收记录](docs/benchmarks/navigation-arm-delivery-v14-v3b.json)包含日志与数据哈希；原始数组保存在本地 `results/`。
 - **记录体系**：审查报告与 issue/PR 文稿见[实验审查报告](docs/26-experiment-review-2026-09-05.md)、[问题与 PR 草稿](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（只追加）；演示真机验收标准见实验审查报告第六节。
 - **闭环导航与官方 AMCL 对照已过参数门禁（第 64 课 v4）**：照片房间四组定位来源对照（真值/里程计/参考图 PF/自建图 PF）60 回合——全组零接触、不可达 12/12 安全拒绝、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 nav2 AMCL 批量执行器修复后（launch 参数化 + `ros2 param get` 硬门禁）27/27 有效：A-budget 0.078 m 最好，更新频率 4.6× 只换来 0.104→0.089 m——粒子数/波束数才是主变量。此前"AMCL 参数不敏感"结论已撤回（三组配置当时从未真正生效）。
-- **ROS 2 环境已就绪**：WSL2 + Ubuntu 24.04.4（vhd 约 8 GB，本机自定义路径）+ ROS 2 Jazzy（287 包）+ Gazebo Harmonic 8.15.0 + colcon；`wsl` 进入即可用（bashrc 已自动加载）。
+- **ROS 2 本机环境记录**：WSL2 / Ubuntu 24.04.4 + ROS 2 Jazzy + Gazebo Harmonic 8.15.0 + colcon，安装与核验见[环境审计](docs/00-environment-audit.md)。这些是作者电脑的环境记录；克隆代码不会自动安装 WSL 或 ROS 2。
 - **多传感器长期路线图已启动**：目标是在三维房间完成 LiDAR＋RGB-D 定位、建图、巡检与失效恢复，并用对照实验解释每个模块的贡献（[路线图](docs/multisensor-navigation-roadmap.md)，约 10–14 周 8 阶段，第一轮 RGB-D）。阶段 0 已完成：统一评分器修复三个因果边界（首个修正前不再借用未来结果、无输出不再伪有效、时间匹配加容差）且 9 项已知答案测试通过，已有 AMCL 结论复核不受影响。
 - **地图分离试跑（第 65 课）**：固定同一批扫描做理想图/真值投影图/里程计投影图三方对照 + 100/400 粒子单变量扫描——表示间隙 −0.03 m（端点图≈理想图）、落点间隙 +1.34 m（自建图失败主因是落点误差）；粒子数不是杠杆（400 粒子自建图基本不变、理想图发散反而 1/12→6/12）。P5 巡检路线生成器 [patrol_routes.py](src/embodied_learning/experiments/patrol_routes.py) 就绪并通过第 64 课可达性交叉验证。
 - **园区巡检基线（第 66 课）**：24×24 m 园区四种定位来源各 3 轮共 12 回合——真值 3/3 完成、雷达＋参考图 2/3、纯里程计与雷达＋自建图均 0/3，全组零接触；自建图组失败于雷达近障停车后超时，在线绕行与修图分别由第 67/68 课以受控实验补上。
@@ -176,13 +198,13 @@ uv run python scripts/render_photo_room_replay.py
 | 第 42 课 | ACT/torch 到达 | Transformer 块策略 683k 参数、0/60 但归因清晰化：信息-精度硬墙 | Robot Learning（Transformer 策略表示） | [讲义](docs/47-session-42-act-torch-reaching.md) |
 | 第 43 课 | 占据栅格建图 + A* 规划 + 纯追踪（回主线） | Bresenham log-odds 建图、8 邻域 A*（膨胀=刹车门限一致）、差速适配纯追踪；有障碍 15/15 无碰撞到达 vs 盲飞 3/15 | Algorithm 篇·Robot Navigation（costmap/planner/controller 最小版） | [讲义](docs/48-session-43-grid-nav.md) |
 | 第 44 课 | 定位误差穿栈（位姿不确定下） | 第 43 课栈三组位姿对照：真值 15/15、里程计 1% 0/15（误差 1.22 m）、2% 0/15（2.25 m）、2%+地标融合 15/15（2.5 cm 与真值几乎等价） | Algorithm 篇·Robot Navigation（定位误差传播；SLAM 前置） | [讲义](docs/49-session-44-nav-pose-error.md) |
-| 第 45 课 | 最小栅格 SLAM（帧间扫描匹配） | 无信标扫描匹配闭环：S 与 E 同 0/15（2.47 vs 2.25 m）、匹配器接受率 4.6%：相对锚不能闭环，绝对锚（信标/回环）必要 | Algorithm 篇·Robot Navigation（scan-to-submap；回环前置） | [讲义](docs/50-session-45-scan-slam.md) |
+| 第 45 课 | 最小栅格 SLAM（帧间扫描匹配） | 无信标扫描匹配闭环：S 与 E 同 0/15（2.47 vs 2.25 m）、匹配器接受率 4.6%：本场景的帧间匹配尚不能约束长期漂移 | Algorithm 篇·Robot Navigation（scan-to-submap；回环前置） | [讲义](docs/50-session-45-scan-slam.md) |
 | 第 46 课 | 回环闭合（绝对锚第二形态） | 采集-重放四链巡逻对照：N/S 4.8–5.0 m，回环（L/LT）闭合末端 9.2 m→0.14/0.16 m；黄金边分离结构与匹配；形状未修（真因子图下一步） | Algorithm 篇·Robot Navigation（loop closure；pose-graph 后端） | [讲义](docs/51-session-46-loop-closure.md) |
 | 第 47 课 | 加权位姿图优化（后端） | 世界帧因子+unary 回环锚+G-N：FG 均值 5.03 < 弧长 5.33（形状✓）末端 1.21 m；黄金锚末端 0.016 m、均值反升（σ 权衡） | Algorithm 篇·Robot Navigation（pose-graph 后端） | [讲义](docs/52-session-47-pose-graph.md) |
 | 第 48 课 | 鲁棒位姿图（毒化回环注入） | 受控注入错峰回环：LS 均值 4.82→7.63（脆弱性✓）、Huber-IRLS 压回 5.22（抵抗✓）；单核两难（好回环同核不闭合 8.79 m）；δ 退火阴性 | Algorithm 篇·Robot Navigation（robust back-end） | [讲义](docs/53-session-48-robust-graph.md) |
 | 第 49 课 | 回环匹配器工程化（量化方向退化） | 锚定-抛光 + 弧长重采样 + top-k 三件套：接受率阶梯 0.32→0.43→0.52→0.76（K）；旧判据方向正确率 ≤5.4% 后经第 54 课勘误；相似结构的伪影峰仍需甄别；协议重建修复第 46 课四处设计条件 | Algorithm 篇·Robot Navigation（scan matching；回环候选判别） | [讲义](docs/54-session-49-matcher-engineering.md) |
 | 第 50 课 | 特征化回环检测（阴性记录） | 三项特征评分分布重叠；2.6% vs oracle 4.9% 属后来勘误的旧判据，不能据此判断实际方向正确率；自建地图一致性存在自证问题 | Algorithm 篇·Robot Navigation（place recognition 的判别力边界） | [讲义](docs/55-session-50-feature-loops.md) |
-| 第 51 课 | 可切换约束 SC/MM（阴性记录） | 第 48 课同款绝对锚注入：SC λ 扫描 17 组可行域为空（λ≤20 杀好边、λ≥50 留毒化，两切换带反相重叠）、MM 硬组件选择死锁；正解条件=相对回环边 | Algorithm 篇·Robot Navigation（switchable constraints / max-mixtures） | [讲义](docs/56-session-51-switchable-graph.md) |
+| 第 51 课 | 可切换约束 SC/MM（阴性记录） | 第 48 课同款绝对锚注入：SC λ 扫描 17 组可行域为空（λ≤20 杀好边、λ≥50 留毒化，两切换带反相重叠）、MM 硬组件选择死锁；下一课检验相对回环边，仍未解决毒化问题 | Algorithm 篇·Robot Navigation（switchable constraints / max-mixtures） | [讲义](docs/56-session-51-switchable-graph.md) |
 | 第 52 课 | 相对回环边（SC/MM 真实工作域） | 毒化相对边同样毒（5.42 > N 4.84）；90°+1 m 注入与真值仅差 ~2 m，开关折中 s=0.61 半闭合而非拒绝；MM 退火后 valid 仍 0——连续开关≠分类器 | Algorithm 篇·Robot Navigation（相对边下的鲁棒核语义） | [讲义](docs/57-session-52-relative-loops.md) |
 | 第 53 课 | 生产求解器对照（问题属性判定） | 同题交 scipy least_squares（huber/soft_l1 × 尺度扫描）：生产核同样不拒绝毒化边（6.32 > N 4.86）、网格无解——失败是问题属性，不是实现产物 | Algorithm 篇·Robot Navigation（与生产实现的对照方法论） | [讲义](docs/58-session-53-production-solver.md) |
 | 第 54 课 | 度量勘误 + 各向异性对照 | 49/50 课方向正确率是评估目标伪影（est 位姿差值烤入漂移）；修正判据（隐含位姿 vs 真值）后 ISO 0.722/ANISO 0.583；环境假设证伪 | Algorithm 篇·Robot Navigation（评估目标与信息载体一致性） | [讲义](docs/59-session-54-aniso-env.md) |
@@ -202,15 +224,27 @@ uv run python scripts/render_photo_room_replay.py
 | 第 66 课 | 街区式园区巡检 | 已完成基线；雷达停车，尚无在线绕行/修图 | [讲义](docs/66-campus-patrol.md) |
 | 第 67 课 | 车身标定与观测驱动避障 | 已完成：81回合；融合组18/27到达、零碰撞、9次窄路拒绝 | [讲义](docs/67-body-aware-obstacle-avoidance.md) |
 | 第 68 课 | 扫描校准与错误地图修复 | 已完成受控离线实验：5/24→23/24真实到点，仍1轮误报完成 | [讲义](docs/68-scan-based-map-repair.md) |
-| 第 69 课 | 足印、跟踪、制动、接触与在线地图 | 最新十二至十四轮修物理停车和高度误拒：60/60新验证通过、零接触；三例无路拒绝，原失败保留 | [第六十九课讲义](docs/69-footprint-planning.md) / [第六十九课第二轮讲义](docs/69-footprint-tracking-round2.md) / [第六十九课第三轮讲义](docs/69-braking-round3.md) / [第六十九课第四轮讲义](docs/69-robustness-round4.md) / [第六十九课第五轮讲义](docs/69-execution-round5.md) / [第六十九课第六轮讲义](docs/69-contact-round6.md) / [第六十九课第七轮讲义](docs/69-speed-round7.md) / [第六十九课第八轮讲义](docs/69-online-map-round8.md) / [第六十九课第九轮讲义](docs/69-progress-round9.md) / [第六十九课第十轮讲义](docs/69-depth-sampling-round10.md) / [第六十九课第十一轮讲义](docs/69-reachable-obstacles-round11.md) / [第六十九课第十二至十四轮讲义](docs/69-physical-height-navigation.md) |
+| 第 69 课 | 足印、跟踪、制动、接触与在线地图 | 最新第十四轮：60/60 新验证通过、零接触；3 个无路入口正确拒绝，旧失败保留 | [讲义](docs/69-footprint-planning.md) / [最新补充](docs/69-physical-height-navigation.md) / [全部轮次](#lesson69-rounds) |
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
 | 第 72 课 | SO-101三维机械臂、工具与相机坐标 | 固定开源模型；32姿态雅可比与64相机往返审计；姿态限制负例保留 | [讲义](docs/72-so101-geometry.md) |
-| 第 73 课 | 真实接触抓取、空间路径与开口校准 | 首轮6/9；新27对17/27→21/27，仍6失败及2退步，尚无视觉抓取 | [第七十三课讲义](docs/73-so101-physical-grasping.md) / [第七十三课第二轮讲义](docs/73-so101-approach-geometry.md) |
+| 第 73 课 | 真实接触抓取、空间路径与开口校准 | 首轮6/9；新27对17/27→21/27，仍6失败及2退步，尚无视觉抓取 | [讲义](docs/73-so101-physical-grasping.md) / [第二轮](docs/73-so101-approach-geometry.md) |
+
+<a id="lesson69-rounds"></a>
+
+#### 第 69 课轮次索引
+
+| 轮次 | 这次改变什么 | 讲义 |
+| --- | --- | --- |
+| 1–3 | 车身足印 → 跟踪与路线保留 → 制动形状 | [第一轮](docs/69-footprint-planning.md) · [第二轮](docs/69-footprint-tracking-round2.md) · [第三轮](docs/69-braking-round3.md) |
+| 4–6 | 位姿与延迟边界 → 队列预测 → 允许轻微擦碰的接触物理 | [第四轮](docs/69-robustness-round4.md) · [第五轮](docs/69-execution-round5.md) · [第六轮](docs/69-contact-round6.md) |
+| 7–9 | 降低速度 → 观测更新地图 → 进度与执行门控 | [第七轮](docs/69-speed-round7.md) · [第八轮](docs/69-online-map-round8.md) · [第九轮](docs/69-progress-round9.md) |
+| 10–11 | 深度采样 → 确实能绕开的新障碍 | [第十轮](docs/69-depth-sampling-round10.md) · [第十一轮](docs/69-reachable-obstacles-round11.md) |
+| 12–14 | 真实物理停车 → 择路余量 → 按部件高度判断通行 | [合并讲义](docs/69-physical-height-navigation.md) |
 
 ### SO-101机械臂：相机、三维场景与接触统计
 
-从此前2R平面臂进入三维桌面抓取。使用固定版本的SO-101开源模型，实际物理接触夹起4cm、50g方块并放到目标区域；没有将物体焊接到手臂。正常组6/9完成，另外两组各0/9，三个正常失败回合保留。[机械臂推进路线](docs/manipulation-roadmap.md)说明标定、抓取、视觉、恢复与学习的顺序。
+从此前 2R 平面臂进入三维桌面抓取。使用固定版本的 SO-101 开源模型，以实际接触夹起 4 cm、50 g 方块并放到目标区域；物体没有焊接到手臂。首轮正常组 6/9、两种负对照各 0/9；第二轮在新的 27 对相同位置与朝向条件上由 17/27 提升到 21/27，仍有 6 次失败、2 次退步。[机械臂推进路线](docs/manipulation-roadmap.md)说明标定、抓取、视觉、恢复与学习的顺序。
 
 ![机械臂可复用窗口：相机、三维场景与物理统计](docs/img/lesson73-window.png)
 
@@ -234,7 +268,7 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
    - 用于机器人系统、传感器、LiDAR、SLAM、导航与多节点通信。
    - 已安装：Ubuntu 24.04.4（WSL 发行版 `Ubuntu-24.04`，vhd 约 8 GB，位于本机自定义路径）、ROS 2 Jazzy（ros-jazzy-desktop，287 个包）、Gazebo Harmonic（gz sim 8.15.0）、colcon；Linux 侧 Python 3.12.3。
    - 使用：任意终端输入 `wsl` 进入；`~/.bashrc` 已自动加载 ROS 2；`gz sim` 打开 Gazebo 窗口。环境核验见[环境审计](docs/00-environment-audit.md)。
-   - 第二十课已在此环境运行真实 ROS 消息与 TF；暂不启动 Gazebo 世界或导航。
+   - 第二十课运行真实 ROS 消息与 TF；第六十四课进一步完成官方 Nav2/AMCL 参数门禁对照。最新街区导航与抓取实验运行于 Windows 原生 MuJoCo，Gazebo 综合世界仍待接入。
 3. **Isaac Lab：暂不进入主线**
    - 当前电脑的 RTX 5070 Laptop GPU 具有 8GB 显存，低于完整 Isaac Lab 工作流建议的 16GB。
    - 后续可按具体任务评估轻量/headless 运行、远程 GPU 或云环境。
@@ -321,7 +355,7 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
 │   ├── 59-session-54-aniso-env.md
 │   ├── 60-session-55-rgbd-loops.md
 │   ├── 61-session-56-map-localization.md
-│   ├── 62-navigation-benchmark.md          # ── 62=跨场景基准；63–71=第 63–71 课（课号与文档号对齐）
+│   ├── 62-navigation-benchmark.md          # 62=跨场景基准；63–73 课号与文档号对齐
 │   ├── 63-photo-room-3d-validation.md
 │   ├── 64-closed-loop-navigation.md
 │   ├── 65-map-separation.md
@@ -337,8 +371,13 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
 │   ├── 69-robustness-round4-plan.md
 │   ├── 69-execution-round5.md
 │   ├── 69-execution-round5-plan.md
+│   ├── 69-physical-height-navigation.md    # 第十二至十四轮；其余轮次见课程索引
 │   ├── 70-arrival-decisions.md
 │   ├── 71-bounded-recovery.md
+│   ├── 72-so101-geometry.md
+│   ├── 73-so101-physical-grasping.md
+│   ├── 73-so101-approach-geometry.md
+│   ├── manipulation-roadmap.md
 │   ├── navigation-stage-review-69-71.md
 │   ├── campus-map-repair-plan.md、campus-patrol-window.md、replay-window.md
 │   ├── multisensor-navigation-roadmap.md、navigation-stage-review-66-68.md
@@ -357,6 +396,8 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
 ```
 
 ## 快速运行
+
+以下各课展示对应轮次的历史结果；“下一步”和测试数量按当时记录理解，最新状态以首页的 2026-10-01 汇总为准。`results/…日期…` 是作者本地归档目录，不随 Git 克隆。复跑请使用各课生成命令的新目录，再将演示命令的 `--results` 指向该目录；完整参数与数据说明见相应讲义。
 
 ![第一课预览：环境自检与随机基线仿真帧](docs/img/lesson-01-env-check.png)
 
@@ -655,7 +696,7 @@ uv run python -m embodied_learning.experiments.mobile_frames --output results/mo
 
 见[第十四课讲义与观察练习](docs/16-session-14-mobile-frames.md)。新增 36 项测试，全量 251 项通过；已用真实桌面核验播放、单步、案例切换和错误变换叠加。下一步将真实位姿与编码器里程计分开，只加入单一可控偏差，暂不进入 SLAM。
 
-## 第十五课，编码器里程计与累积误差
+## 第十五课：编码器里程计与累积误差
 
 ![第十五课预览：编码器里程计累积误差](docs/img/lesson-15-odometry.png)
 
@@ -697,7 +738,7 @@ uv run python -m embodied_learning.calibration_demo
 
 验证页明确标出与旧实验的对应：紫色不修正 = 旧 +2%、绿色准确尺子标定 ≈ 旧 0%、橙色尺子偏大1%标定 ≈ 旧 +1%。切方法保留当前时刻；直行终点误差仍为 19.40 cm、数值舍入量级、9.69 cm。新增的是可见的标定过程，不是新运动能力；近零不代表实车精度。
 
-正式结果仍在 `results/encoder_calibration_2026-09-03_v2/`，本次只改教学 UI、测试及文档，不重跑或覆盖旧实验。315 项全量测试连续两次通过，Ruff 静态及格式检查通过；computer-use 实际核验了测量表、两种尺子的计算步骤、验证页和可选灯杆显示。正式结果仍在 `results/encoder_calibration_2026-09-03_v2/`，本次只改教学 UI、测试及文档，不重跑或覆盖旧实验。315 项全量测试连续两次通过，Ruff 静态及格式检查通过；computer-use 实际核验了测量表、两种尺子的计算步骤、验证页和可选灯杆显示。完整原理、假设、复现命令与 Tk 隔离边界见[第十六课讲义](docs/18-session-16-encoder-calibration.md)。
+正式结果仍在 `results/encoder_calibration_2026-09-03_v2/`，本次只改教学 UI、测试及文档，不重跑或覆盖旧实验。315 项全量测试连续两次通过，Ruff 静态及格式检查通过；computer-use 实际核验了测量表、两种尺子的计算步骤、验证页和可选灯杆显示。完整原理、假设、复现命令与 Tk 隔离边界见[第十六课讲义](docs/18-session-16-encoder-calibration.md)。
 
 ## 第十七课：标定之后的随机测量噪声
 
@@ -1412,7 +1453,7 @@ uv run python -m embodied_learning.act_torch_demo --results results/act_torch_re
 
 ```powershell
 uv run python -m embodied_learning.experiments.grid_nav --output results/grid_nav_my_run --seed 0
-uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_2026-09-06_v2
+uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_my_run
 ```
 
 新增 17 项测试；全量 **765 项通过**（实测口径勘误：此前各课"全量 N 项"与
@@ -1453,7 +1494,7 @@ uv run python -m embodied_learning.grid_nav_demo --results results/grid_nav_2026
 
 ```powershell
 uv run python -m embodied_learning.experiments.nav_pose_error --output results/nav_pose_error_my_run --seed 0
-uv run python -m embodied_learning.nav_pose_error_demo --results results/nav_pose_error_2026-09-07
+uv run python -m embodied_learning.nav_pose_error_demo --results results/nav_pose_error_my_run
 ```
 
 新增 17 项测试；全量 **782 项通过**。正式记录 `results/nav_pose_error_2026-09-07/`（墙钟
@@ -1481,12 +1522,12 @@ uv run python -m embodied_learning.nav_pose_error_demo --results results/nav_pos
 **主结果（诚实负结果＋机制定论）**：T 15/15（闸门第三次逐位复现）；**S 与 E 同为 0/15**
 （误差 2.47 vs 2.25 m）——**相对锚不能闭环**；匹配器接受率 4.6%（残差 2.0 cm 达标、
 接受率未达设计预期 ≥10%，如实入册）；S 地图自洽但整体漂移（shift 6.95 vs E 4.67 格）。
-**绝对锚对照**：第 44 课信标组 15/15、2.5 cm——**绝对锚（信标/回环）是估计闭环的必要条件**。
+**已知地标对照**：第 44 课信标组 15/15、2.5 cm——本场景中，可靠的已知地标观测能约束长期漂移，当前帧间扫描匹配尚不能。
 "信息-精度硬墙"的导航变体：没有绝对参照的信息，只能给出自洽，不能给出真值。
 
 ```powershell
 uv run python -m embodied_learning.experiments.scan_slam --output results/scan_slam_my_run --seed 0
-uv run python -m embodied_learning.scan_slam_demo --results results/scan_slam_2026-09-07
+uv run python -m embodied_learning.scan_slam_demo --results results/scan_slam_my_run
 ```
 
 新增 15 项测试；全量 **797 项通过**。正式记录 `results/scan_slam_2026-09-07/`（墙钟 15.3 min），
@@ -1518,8 +1559,10 @@ S 帧间匹配 / L 回环（宽-粗-精配准 + 弧长轨迹校正）/ LT 黄金
 
 ```powershell
 uv run python -m embodied_learning.experiments.loop_closures --output results/loop_closure_my_run --seed 0
-uv run python -m embodied_learning.loop_closures_demo --results results/loop_closure_2026-09-07
+uv run python -m embodied_learning.loop_closures_demo --results results/loop_closure_my_run
 ```
+
+本课把回到起点后的闭合结果作为锚来校正历史轨迹；这个特定实现不表示一般回环检测都能直接提供绝对世界坐标。
 
 新增 14 项测试；全量 811 项通过。正式记录 `results/loop_closure_2026-09-07/`，
 协议重设计与调试链见[第四十六课讲义](docs/51-session-46-loop-closure.md)。
@@ -1549,7 +1592,7 @@ uv run python -m embodied_learning.loop_closures_demo --results results/loop_clo
 
 ```powershell
 uv run python -m embodied_learning.experiments.pose_graph --output results/pose_graph_my_run --seed 0
-uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_2026-09-07
+uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_my_run
 ```
 
 新增 13 项测试；全量 824 项通过。正式记录 `results/pose_graph_2026-09-07/`，
@@ -1641,7 +1684,7 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 ![第 64 课闭环 v4：四组定位来源的平均误差](docs/img/lesson64-loc-error.png)
 
-读图：四条柱为各组 60 回合（可达任务）的平均定位误差，A 组 0.0000 是时间对齐验证；B 组含 3 次漂移超时，全组零接触帧，不可达任务由先验图 12/12 安全拒绝。
+读图：正式批次共 60 回合，四条柱分别汇总每组 12 个可达任务回合的平均定位误差（共 48 回合）；其余 12 回合是不可达负例，未计入这四条误差柱。A 组 0.0000 是时间对齐验证；B 组包含 3 次漂移超时，全组零接触帧，不可达任务由先验图 12/12 安全拒绝。
 
 ![第 64 课代表性轨迹：B 组漂移超时 vs C 组到达](docs/img/lesson64-trajectory.png)
 
@@ -1692,12 +1735,40 @@ uv run python -m embodied_learning.pose_graph_demo --results results/pose_graph_
 
 讲义：[第六十八课讲义](docs/68-scan-based-map-repair.md)；窗口：`uv run python -m embodied_learning.navigation_study_demo --lesson 68 --play`。这是恒定尺度偏差下的离线修复，尚非通用在线SLAM；与67课深度控制器尚未合并。
 
-**阶段复盘**：[同一算法不同环境的表现](docs/navigation-stage-review-69-71.md)。第七轮低速有收益，第八轮地图更新未提高到达；第九轮修进度与门控，第十轮加密深度，第十一轮验证新障碍，十二至十四轮已通过限定新范围；遮挡、位姿误差与异步仍保留，下一项见[后续受控安排](docs/navigation-next-stage-after-round11.md)。跨场景、视觉与真实异步门槛继续保留；原始数组本地保存，新克隆按讲义生成。
+**67—68 课阶段小结**：[车身标定、避障与修图各解决什么](docs/navigation-stage-review-66-68.md)。后续窄路、到点与恢复实验见第 69—71 课；它们仍是分离对照，尚未完成同一平台的组合验证。
 
 **67—68课讲解视频**：[4分14秒中文配音与字幕版：剧本、预览和复现入口](docs/video/README.md)。包含相机视角、雷达点、实际轨迹、81回合统计、修图收益及失败案例；本机成片位于 `results/navigation_video_v1/navigation-67-68-narrated.mp4`。
 
 
-## 第六十九课：足印能放下，执行能否通过？
+## 第六十九课：足印、执行与观测地图能否一起支持通行？
+
+当前协议允许轻微擦碰但须到达停稳；第十四轮的新验证实际全部零接触。早期轮次使用额外 6 cm 禁接触协议，后续改为保持真实车身的接触物理；不同协议的成绩分别保留，不能直接拼成同一组提升率。
+
+### 第十二至十四轮：让停车算对，让规划看见高度
+
+**最终三维车身择路60/60到达停稳、零接触、零误报，三例无路入口正确拒绝。** 先修限力驱动和完整速度的停车预测，再留2cm择路偏好；第十三轮仍58/60，最后修复把悬空回波投影成地面障碍的误拒。原失败全部保留，同12对参照10/12→12/12，五个已见失败另作5/5回归。
+
+![新导航范围与配对成绩](docs/img/lesson69-round14-outcomes.png)
+
+左侧同12对条件，右侧三个布局、四障碍高度、五新种子的60例覆盖；分母不同。低路障仍约束底盘，悬空杆仍约束支架，高杆可从车顶上方通过，不能把所有高处障碍忽略。
+
+![固定种子37的真实运动轨迹](docs/img/lesson69-round14-trajectories.png)
+
+蓝虚线二维择路，绿实线三维部件择路，黑叉目标；箱体蓝线在途中无路退出，绿线完成。轨迹来自真实物理执行，相机仍重渲染，位姿精确为受控输入。
+
+独立核验75回合1,642,850个2ms物理步，状态／接触差均0。计算P95约127—218ms，超过100ms周期，未通过真实异步和实机门槛。讲义：[第六十九课第十二至十四轮讲义](docs/69-physical-height-navigation.md)；[正式摘要](docs/benchmarks/navigation-reinforcement-v14.json)／[重放验收](docs/benchmarks/navigation-clearance-validation-v14.json)。
+
+已有记录可直接运行第二行；新克隆先运行第一行（新实验使用新目录）：
+
+```powershell
+uv run python -m embodied_learning.experiments.navigation_height_study --workers 3 --output results/navigation_reinforcement_v14
+uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v14 --case 69_street_crate_37__delay_2__bypass_crate --play
+```
+
+<details>
+<summary>第一至十一轮：原始结果、失败证据与演示命令</summary>
+
+### 第一轮：足印能放下，执行能否通过？
 
 固定55×44cm车身、6cm外扩、雷达＋深度和原跟踪器，对照旧圆形栅格、圆形米制与朝向矩形。**三组均18/27到达、零碰撞，窄路仍0/9**。矩形组找到初始几何路线并实际走3.52–3.62m后停止，实验完成但窄路能力尚未过门。
 
@@ -1886,23 +1957,7 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 
 相机、三维、雷达点、当前目标、当前地图和统计一键切换；深度标明是否参与控制。[下一阶段](docs/navigation-next-stage-after-round11.md)先解释接触与误拒，再扩大位姿误差、真实计算延迟和69—71组合。
 
-### 第十二至十四轮：让停车算对，让规划看见高度
-
-**最终三维车身择路60/60到达停稳、零接触、零误报，三例无路入口正确拒绝。** 先修限力驱动和完整速度的停车预测，再留2cm择路偏好；第十三轮仍58/60，最后修复把悬空回波投影成地面障碍的误拒。原失败全部保留，同12对参照10/12→12/12，五个已见失败另作5/5回归。
-
-![新导航范围与配对成绩](docs/img/lesson69-round14-outcomes.png)
-
-左侧同12对条件，右侧三个布局、四障碍高度、五新种子的60例覆盖；分母不同。低路障仍约束底盘，悬空杆仍约束支架，高杆可从车顶上方通过，不能把所有高处障碍忽略。
-
-![固定种子37的真实运动轨迹](docs/img/lesson69-round14-trajectories.png)
-
-蓝虚线二维择路，绿实线三维部件择路，黑叉目标；箱体蓝线在途中无路退出，绿线完成。轨迹来自真实物理执行，相机仍重渲染，位姿精确为受控输入。
-
-独立核验75回合1,642,850个2ms物理步，状态／接触差均0。计算P95约127—218ms，超过100ms周期，未通过真实异步和实机门槛。讲义：[第六十九课第十二至十四轮讲义](docs/69-physical-height-navigation.md)；[正式摘要](docs/benchmarks/navigation-reinforcement-v14.json)／[重放验收](docs/benchmarks/navigation-clearance-validation-v14.json)。
-
-```powershell
-uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v14 --case 69_street_crate_37__delay_2__bypass_crate --play
-```
+</details>
 
 ## 第七十课：估计到了，身体真的到了吗？
 
@@ -1950,7 +2005,10 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 
 一键切换实际3D、外部／腕部相机、目标、两指力和统计，保留时间；失败也可查看。见[第七十三课第二轮讲义](docs/73-so101-approach-geometry.md)，含变量关联、原理、全部失败、理论与六道思考题。
 
+已有记录可直接运行第二行；新克隆先运行第一行（新实验使用新目录）：
+
 ```powershell
+uv run python -m embodied_learning.experiments.so101_approach_study --workers 3 --output results/so101_approach_v3b
 uv run python -m embodied_learning.manipulation_demo --results results/so101_approach_v3b --position p04a1 --method center_cartesian --play
 ```
 
@@ -2031,16 +2089,20 @@ uv run python -m embodied_learning.manipulation_demo --results results/so101_app
 - [x] 第六十九课第二轮：跟踪×路线保留132回合；固定到达21/27、窄路3/9、留出0/6；保留余量违规和制动失败证据
 - [x] 第六十九课第三轮：制动×曲率限速230回合；同比例组固定27/27、两项留出各9/9余量合格；限速退化与真实刹停尾段归档
 - [x] 第六十九课第四轮：误差与真实执行延迟233回合；零扰动新种子7/9，0.4秒延迟窄路9/9接触，失效与实时边界归档
+- [x] 第六十九课第五轮：队列预测×执行端保护135回合；延迟接触减少，到达未恢复；过期停车、几何口径差异和余量失败归档
 - [x] 第六十九课第六轮：39回合接触物理对照；取消额外余量后主批0/9→6/9，轻擦机制可用但正式额外收益未证实
 - [x] 第六十九课第七轮：30回合固定低速；同条件窄路7/9→9/9，时间代价与实体放不下负例保留
+- [x] 第六十九课第八轮：36回合观测地图更新；增删与物理重放通过，9/18→7/18未改善到达，近地面与路点失效保留
 - [x] 第六十九课第九轮：36回合进度/门控；可绕箱体7/9→9/9，遮挡仍无路
 - [x] 第六十九课第十轮：36回合深度采样；移走墙/低墙0/6→6/6，真低墙/横杆负例保留
-- [x] 第六十九课第八轮：36回合观测地图更新；增删与物理重放通过，9/18→7/18未改善到达，近地面与路点失效保留
-- [x] 第六十九课第五轮：队列预测×执行端保护135回合；延迟接触减少，到达未恢复；过期停车、几何口径差异和余量失败归档
+- [x] 第六十九课第十一轮：24 个可绕障碍回合，仅雷达 6/12、融合 10/12；两次规划误拒与开发接触反例保留
 - [x] 第六十九课十二至十四轮：新范围60/60到达停稳、零接触；无路负例3/3正确拒绝。
-- [x] 第七十三课第二轮：72物理回合与窗口验收，配对17/27→21/27；保留6失败与2退步。
 - [x] 第七十课：三种到点规则18回合；预算与停稳组各48/48、零误报
 - [x] 第七十一课：有限恢复12回合；准确图18/24→24/24，修后图原误报保留
+- [x] 第七十二课：SO-101 三维运动学、相机和模型哈希审计，姿态限制负例保留
+- [x] 第七十三课首轮：实际接触抓取正常 6/9，两种负对照各 0/9；三个失败回合保留
+- [x] 第七十三课第二轮：72物理回合与窗口验收，配对17/27→21/27；保留6失败与2退步。
+
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开
 - [ ] 学员区分：固定比例标定、位姿校正、观测去噪；解释为什么重置可能使当前误差增大
