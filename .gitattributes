@@ -22,3 +22,10 @@ src/embodied_learning/experiments/so101_approach_study.py -text
 docs/73-approach-round2-plan.md -text
 scripts/validate_so101_approach.py -text
 docs/img/make_so101_approach_figures.py -text
+
+# Also preserve previously unanchored dependencies used by these executed batches.
+src/embodied_learning/experiments/grid_nav.py -text
+src/embodied_learning/experiments/navigation_robustness.py -text
+src/embodied_learning/experiments/execution_navigation.py -text
+src/embodied_learning/experiments/contact_navigation.py -text
+src/embodied_learning/experiments/navigation_reinforcement.py -text
