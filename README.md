@@ -126,7 +126,7 @@ uv run python scripts/render_photo_room_replay.py
 - **地图分离试跑（第 65 课）**：固定同一批扫描做理想图/真值投影图/里程计投影图三方对照 + 100/400 粒子单变量扫描——表示间隙 −0.03 m（端点图≈理想图）、落点间隙 +1.34 m（自建图失败主因是落点误差）；粒子数不是杠杆（400 粒子自建图基本不变、理想图发散反而 1/12→6/12）。P5 巡检路线生成器 [patrol_routes.py](src/embodied_learning/experiments/patrol_routes.py) 就绪并通过第 64 课可达性交叉验证。
 - **园区巡检基线（第 66 课）**：24×24 m 园区四种定位来源各 3 轮共 12 回合——真值 3/3 完成、雷达＋参考图 2/3、纯里程计与雷达＋自建图均 0/3，全组零接触；自建图组失败于雷达近障停车后超时，在线绕行与修图分别由第 67/68 课以受控实验补上。
 - **新进展（67–68课）**：完成车身/相机/雷达标定、81回合避障与冻结修图后的12回合独立导航；统一窗口可一键同步查看。连续原始 RGB 采集、视觉定位及两套控制器的完整融合仍待做。[阶段小结与下一步](docs/navigation-stage-review-66-68.md)。第65课似然场扫描尚未执行，保留为独立诊断。
-- **分离实验与最新进展（69–71课）**：到点规则48/48、有限恢复准确图18/24→24/24仍是分离平台。69第七轮低速窄路7/9→9/9，第八轮修图未改善；第九轮进度/门控使可绕箱体7/9→9/9，第十轮细深度使移走墙/低墙0/6→6/6。第十一轮改成可绕新障碍，低路障融合3/3、悬空杆2/3、普通箱体2/3；开发接触、正式拒绝与计算边界保留，见[阶段复盘](docs/navigation-stage-review-69-71.md)与[下一阶段](docs/navigation-next-stage-after-round10.md)。
+- **分离实验与最新进展（69–71课）**：到点规则48/48、有限恢复准确图18/24→24/24仍是分离平台。69第七轮低速窄路7/9→9/9，第八轮修图未改善；第九轮进度/门控使可绕箱体7/9→9/9，第十轮细深度使移走墙/低墙0/6→6/6。第十一轮改成可绕新障碍，低路障融合3/3、悬空杆2/3、普通箱体2/3；开发接触、正式拒绝与计算边界保留，见[阶段复盘](docs/navigation-stage-review-69-71.md)与[下一阶段](docs/navigation-next-stage-after-round11.md)。
 
 ## 课程索引
 
@@ -1877,6 +1877,8 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 ![第十一轮逐条件真实到点结果](docs/img/lesson69-round11-outcomes.png)
 
 每柱3回合，报告不同条件而非只看总分6/12→10/12。加深度在低障碍有收益，但普通箱体反而多一次失败；窗口的位姿误差为零是受控设定，不是定位成绩。全部失败图、变量/原理、思考题与复现见[第六十九课第十一轮讲义](docs/69-reachable-obstacles-round11.md)，[独立审计](docs/benchmarks/navigation-reinforcement-v11-validation.json)含24正式＋1开发反例。
+
+**接触原因已复盘**：箱体已被观测，20.0s请求停车、20.2s执行、20.418s底盘前左角接触。原停车预测56.0mm，限力伺服不受碰撞阻滞的停车行程79.7mm；贴边规划约3.9mm余量，朝向又偏约2.38°。同状态立即刹车或提前100ms排队刹车均可无接触停稳，但未到达。详见[接触逐帧复盘](docs/69-contact-failure-diagnosis-round11.md)与[机器可读审计](docs/benchmarks/navigation-contact-diagnosis-v11.json)。下一项先匹配物理停车预测，原正式成绩和接触门限保持冻结。
 
 ```powershell
 uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v11 --case 69_street_low_29__delay_2__bypass_low --play

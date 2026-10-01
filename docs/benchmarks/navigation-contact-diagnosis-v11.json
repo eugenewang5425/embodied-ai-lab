@@ -1,0 +1,269 @@
+{
+  "scope": "frozen development seed0 crate fusion diagnosis, not a new formal benchmark",
+  "selected_by": "the only fusion heavy_contact_abort in the frozen development batch",
+  "script_sha256": "cd89a57c85ce230c06997834b82d6d98693f173c841e684b71a6fa42c953b6f6",
+  "summary_sha256": "b03c201eab97f7ad420e489f8a5dc04324cbedb3f250e5707cded92f9ae53eaf",
+  "archive": "street_crate_s0_delay_2_lidar_depth_bypass_crate.npz",
+  "archive_sha256": "9eeccdd4fbe058b3803950a193d07f3276345f8e85bbab0cc95e073304696432",
+  "comparison_archive": "street_crate_s0_delay_2_lidar_only_bypass_crate.npz",
+  "comparison_archive_sha256": "112797049fbfcd839877e4de346b2178c3b4c6bd1b3ec94df9c1049072b1db9c",
+  "source_sha256": {
+    "src\\embodied_learning\\experiments\\braking_navigation.py": "226555537f2a3552f8479de079d7f0263002f418a4c8ea0dcdcbd156fd9a089d",
+    "src\\embodied_learning\\braking_control.py": "4b0f8ab94b93a5d3f96013018c379f4d4121572befb273f17451572ba382cdfd",
+    "src\\embodied_learning\\path_tracking.py": "0af96714c4f6b159e5d8c0f3326ce369dc0f5320a9d9eb5d2e6d1a0e6f9c5222",
+    "src\\embodied_learning\\footprint_planning.py": "bacc92bd09181c5fbfb287f5e6fc7b490fe3874759f8ca210e0ec0b82f3da00e",
+    "src\\embodied_learning\\navigation_geometry.py": "48906fbc5a8073e779307f3f7007d3979f41dab9333146c273d30bc420730b66",
+    "src\\embodied_learning\\experiments\\footprint_tracking.py": "19f74a7fe4f6572fe3eaeed28fc981d5ec473e00795961043ad1417047df92e7",
+    "src\\embodied_learning\\experiments\\observed_navigation.py": "8d7dbbf9802e7030bf2f00fb2c8d9a016fbcf178ce64825fc2b7f997e32ba0da",
+    "src\\embodied_learning\\experiments\\grid_nav.py": "0bf9d99606659f463931af56847cd0a7c4e219390c3b639c650049338b6b6345",
+    "src\\embodied_learning\\experiments\\navigation_robustness.py": "b1363f3965a8797d5b96c1aa44df1efd87b89aa07af06a58ee791b96b1bbac6e",
+    "src\\embodied_learning\\navigation_robustness.py": "4b214c31189a2802e8fd5759c8cc1b6f981c9ff0ad9cc48228748936580a4958",
+    "src\\embodied_learning\\experiments\\execution_navigation.py": "dd6d5da65c4ec9750084d39383fca36189d292a8ee37c0a645883925a4023f2a",
+    "src\\embodied_learning\\execution_safety.py": "af7d7d732b70d03abab39759ffd31f255cb50741363781554b93849ee5a5d3bf",
+    "src\\embodied_learning\\experiments\\contact_navigation.py": "a3f63bf6c003761387fd0b5043cb3ba51f34e42c2d9d3ba1090e19032266fd30",
+    "src\\embodied_learning\\contact_motion.py": "da1d517c77c9e9c436287a0a8f7b29ec38bef65bc6e9900fab12b20798d07457",
+    "src\\embodied_learning\\experiments\\navigation_reinforcement.py": "a1e89872d2598004c37bcbf1f2860cf7660dc8baed9884edc5101c6ff7124186",
+    "src\\embodied_learning\\navigation_map_update.py": "66666ca105da1ff848a3952338f047a693de58e6df282e8a41b91ef89a58078c",
+    "src\\embodied_learning\\experiments\\navigation_progress_study.py": "baadca0cfd3ee1c21c1983caba8c61630739433ad2dec3b06bf47369c7263e7e",
+    "src\\embodied_learning\\navigation_progress.py": "1bb1e7873baf585be061ab16e35e4116e7b0a52867229007aa06e531f1a1f004",
+    "src\\embodied_learning\\experiments\\navigation_bypass_study.py": "c643f67ed5b12f6ca4d76a7dff3fe40f5f04832a43e4c7776f2a5a1ff3d1711b",
+    "src\\embodied_learning\\navigation_sensor_ablation.py": "cc9159d03520af920e8b2096ddd23b43b6afaff1c885f6bc0918f27066aac28d"
+  },
+  "physics_steps_replayed": 10350,
+  "map_frames_rebuilt": 205,
+  "state_replay_max_error": 0.0,
+  "peak_force_replay_max_error": 0.0,
+  "first_contact": {
+    "interval_frame": 204,
+    "substep": 8,
+    "reported_sample_time_s": 20.418000000000003,
+    "pre_step_state": [
+      5.276733805931962,
+      5.221183494916337,
+      -0.11561216108607164,
+      0.08576160180697504,
+      -0.010016804563137556,
+      0.02755280839528983
+    ],
+    "post_step_state": [
+      5.276816016907773,
+      5.221136550221335,
+      -0.11532583104634192,
+      0.04110548790534596,
+      -0.02347234750114239,
+      0.1431650198648597
+    ],
+    "contacts": [
+      {
+        "geom_names": [
+          "obstacle_6",
+          "body_0"
+        ],
+        "position_m": [
+          5.6000545824686325,
+          5.405108417610874,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "normal_force_n": 85.9414635787384,
+        "penetration_m": 0.00010916493726592646
+      },
+      {
+        "geom_names": [
+          "obstacle_6",
+          "body_0"
+        ],
+        "position_m": [
+          5.6000545824686325,
+          5.405108417610874,
+          0.29999999999999993
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "normal_force_n": 85.9414635787384,
+        "penetration_m": 0.00010916493726592646
+      }
+    ]
+  },
+  "recorded_peak_normal_force_n": 85.9414635787384,
+  "recorded_max_penetration_m": 0.0001386994274272281,
+  "recorded_longest_contact_s": 0.018000000000000002,
+  "peak_force_abort_threshold_n": 40,
+  "first_brake_request_frame": 200,
+  "first_brake_execution_frame": 202,
+  "first_local_guard_override_frame": 204,
+  "prediction_checks": [
+    {
+      "frame": 195,
+      "time_s": 19.5,
+      "stored_points_forecast_clearance_m": 0.09465180621936967,
+      "raw_points_forecast_clearance_m": 0.09553282209727416,
+      "oracle_forecast_separation_m": 0.09899518578967986,
+      "predicted_stop_distance_m": 0.05599999604821761,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 198,
+      "time_s": 19.8,
+      "stored_points_forecast_clearance_m": 0.04435000018042452,
+      "raw_points_forecast_clearance_m": 0.04626161459485161,
+      "oracle_forecast_separation_m": 0.048531782668526535,
+      "predicted_stop_distance_m": 0.0559999411049674,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 199,
+      "time_s": 19.900000000000002,
+      "stored_points_forecast_clearance_m": 0.02701592975094369,
+      "raw_points_forecast_clearance_m": 0.027015929750943246,
+      "oracle_forecast_separation_m": 0.030984173582860486,
+      "predicted_stop_distance_m": 0.055999948347676555,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 200,
+      "time_s": 20.0,
+      "stored_points_forecast_clearance_m": 0.0090545347461366,
+      "raw_points_forecast_clearance_m": 0.013242934124482996,
+      "oracle_forecast_separation_m": 0.01291089661978384,
+      "predicted_stop_distance_m": 0.05599996216032159,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 201,
+      "time_s": 20.1,
+      "stored_points_forecast_clearance_m": 0.009230880087306548,
+      "raw_points_forecast_clearance_m": 0.009481165192873897,
+      "oracle_forecast_separation_m": 0.01303873073967965,
+      "predicted_stop_distance_m": 0.03599998066326942,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 202,
+      "time_s": 20.200000000000003,
+      "stored_points_forecast_clearance_m": 0.009455033558774861,
+      "raw_points_forecast_clearance_m": 0.011953472816087909,
+      "oracle_forecast_separation_m": 0.013253548232914691,
+      "predicted_stop_distance_m": 0.01600193846890264,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 203,
+      "time_s": 20.3,
+      "stored_points_forecast_clearance_m": 0.002149931301467123,
+      "raw_points_forecast_clearance_m": 0.0024845613050770154,
+      "oracle_forecast_separation_m": 0.005933843522037463,
+      "predicted_stop_distance_m": 0.0069147406341398925,
+      "local_guard_overrode": false
+    },
+    {
+      "frame": 204,
+      "time_s": 20.400000000000002,
+      "stored_points_forecast_clearance_m": -0.004207733522677559,
+      "raw_points_forecast_clearance_m": -0.0039002488245282185,
+      "oracle_forecast_separation_m": -0.0004372020047002101,
+      "predicted_stop_distance_m": 0.0018283189863029666,
+      "local_guard_overrode": true
+    }
+  ],
+  "counterfactual_stop_trials": {
+    "queued": {
+      "frame": 200,
+      "time_s": 20.0,
+      "immediate_local_brake": false,
+      "new_obstacle_contact_disabled_for_model_audit": false,
+      "pending_request_frames": [
+        198,
+        199
+      ],
+      "elapsed_s": 0.7000000000000001,
+      "travel_until_stop_m": 0.07404718471067276,
+      "end_displacement_m": [
+        0.07200104997163947,
+        -0.012829997735532395
+      ],
+      "sampled_geometry_separation_m": -0.00013869942742728014,
+      "contact_peak_force_n": 85.9414635787384,
+      "physically_stopped": true
+    },
+    "queued_unimpeded": {
+      "frame": 200,
+      "time_s": 20.0,
+      "immediate_local_brake": false,
+      "new_obstacle_contact_disabled_for_model_audit": true,
+      "pending_request_frames": [
+        198,
+        199
+      ],
+      "elapsed_s": 0.7000000000000001,
+      "travel_until_stop_m": 0.07973658211343554,
+      "end_displacement_m": [
+        0.07894198510214778,
+        -0.011131537845355588
+      ],
+      "sampled_geometry_separation_m": -0.0056318776931960635,
+      "contact_peak_force_n": 0.0,
+      "physically_stopped": true
+    },
+    "immediate": {
+      "frame": 200,
+      "time_s": 20.0,
+      "immediate_local_brake": true,
+      "new_obstacle_contact_disabled_for_model_audit": false,
+      "pending_request_frames": [],
+      "elapsed_s": 0.5,
+      "travel_until_stop_m": 0.039733200065790945,
+      "end_displacement_m": [
+        0.03928336106395758,
+        -0.005936843960490101
+      ],
+      "sampled_geometry_separation_m": 0.026571328289623553,
+      "contact_peak_force_n": 0.0,
+      "physically_stopped": true
+    },
+    "one_tick_earlier": {
+      "frame": 199,
+      "time_s": 19.900000000000002,
+      "immediate_local_brake": false,
+      "new_obstacle_contact_disabled_for_model_audit": false,
+      "pending_request_frames": [
+        197,
+        198
+      ],
+      "elapsed_s": 0.7000000000000001,
+      "travel_until_stop_m": 0.07973928493187821,
+      "end_displacement_m": [
+        0.07877695095633896,
+        -0.012233750041610314
+      ],
+      "sampled_geometry_separation_m": 0.009035842303090236,
+      "contact_peak_force_n": 0.0,
+      "physically_stopped": true
+    }
+  },
+  "box_neighborhood_points_removed_during_last_1s": 0,
+  "last_plan_first_edge_sampled_separation_m": 0.0038835367893300665,
+  "last_plan_first_edge_yaw_rad": -0.15716057312067366,
+  "first_contact_heading_minus_plan_deg": 2.3805486550532535,
+  "first_contact_pose_separation_m": -0.00010916493726592646,
+  "same_xy_aligned_to_plan_separation_m": 0.007208529585356227,
+  "brake_first_interval_requested_speed_m_s": 0.12000972797734945,
+  "brake_first_interval_measured_end_speed_m_s": 0.1491474403350707,
+  "brake_first_interval_average_deceleration_m_s2": 0.5086228764227874,
+  "counterfactual_limits": [
+    "same saved qpos and all three qvel components, same force servo and contact settings",
+    "pending intents reconstructed solely from requests issued before the trial frame",
+    "immediate trial changes braking timing; it stops before the goal and is not task success",
+    "contact-disabled trial measures motor response, with original geometry retained for scoring",
+    "aligned body pose is a geometry diagnostic, not a simulated new controller",
+    "raw/voxel point comparisons and oracle evaluation do not identify every upstream map effect"
+  ],
+  "figure_sha256": "87587f1110e364f385110fa9498d0f7de3a01f9513635ca4a3582bb49602a4c0"
+}

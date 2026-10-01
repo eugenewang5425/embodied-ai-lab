@@ -5,3 +5,4 @@ docs/navigation-reinforcement-9-10-plan.md -text
 src/embodied_learning/navigation_sensor_ablation.py -text
 src/embodied_learning/experiments/navigation_bypass_study.py -text
 docs/navigation-bypass-round11-plan.md -text
+scripts/audit_navigation_contact_failure.py -text
