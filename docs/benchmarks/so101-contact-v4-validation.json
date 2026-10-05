@@ -1,0 +1,630 @@
+{
+  "episodes": 126,
+  "physical_steps": 1223400,
+  "max_state_error": 0.0,
+  "max_force_error_n": 0.0,
+  "max_geometry_error_m": 0.0,
+  "counts": {
+    "baseline": {
+      "success": 21,
+      "total": 27
+    },
+    "surface": {
+      "success": 24,
+      "total": 27
+    },
+    "gate": {
+      "success": 11,
+      "total": 27
+    },
+    "surface_gate": {
+      "success": 23,
+      "total": 27
+    },
+    "open": {
+      "success": 0,
+      "total": 9
+    },
+    "offset": {
+      "success": 0,
+      "total": 9
+    }
+  },
+  "archive_sha256": "30df1b67288e62718606a8ee527944432232f6c9f7da6655d366a2ef26368a8c",
+  "validator_sha256": "2971b1b9969e46b06c6c01a920c1fd9a932c23c5664d345d7185881cb82a2e7b",
+  "note": "原评分、真实请求和逐2ms状态/力核验；不证明视觉或实机有效",
+  "causal_gate_audit": {
+    "past_intervals_checked": 93720,
+    "contact_refusals": 17
+  },
+  "development_gate_audit": {
+    "past_intervals_checked": 20820,
+    "contact_refusals": 7
+  },
+  "baseline_bridge": [
+    {
+      "position": "p00a1",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p00a2",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p02a0",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p03a2",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p04a1",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p05a0",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p06a2",
+      "arrays": 15,
+      "bitwise_identical": true
+    },
+    {
+      "position": "p08a0",
+      "arrays": 15,
+      "bitwise_identical": true
+    }
+  ],
+  "gate_control_bridge": [
+    {
+      "position": "p00a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p00a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p00a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p00a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p00a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p00a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p01a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p02a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p03a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p04a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p05a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p06a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p07a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a0",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 401,
+      "refused": true,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a0",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a1",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a1",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a2",
+      "pair": [
+        "baseline",
+        "gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    },
+    {
+      "position": "p08a2",
+      "pair": [
+        "surface",
+        "surface_gate"
+      ],
+      "frames": 1061,
+      "refused": false,
+      "bitwise_identical_until_end": true
+    }
+  ],
+  "contact_validator_sha256": "ac8401e19b474658beed56ae17d89435140afa5803de7d0846b6c88531760373",
+  "wall_s": 107.31227680004667
+}

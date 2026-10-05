@@ -12,6 +12,16 @@ from embodied_learning.replay_viewer.clock import ReplayClock
 from embodied_learning.replay_viewer.model import CameraSpec, ReplayEntry, ReplayRecord, Track
 
 
+def assert_sparse_rgb_rounding(reference, current):
+    # Repeated unchanged renders on this GPU vary by one 8-bit level in
+    # <0.1% of pixels. Black frames, shifted geometry and visible overlays
+    # still fail both these tightly bounded image checks.
+    assert reference.shape == current.shape
+    difference = np.abs(reference.astype(np.int16) - current.astype(np.int16))
+    assert difference.max() <= 1
+    assert np.mean(np.any(difference != 0, axis=2)) <= 0.001
+
+
 def small_record(offset=0.5):
     times = np.array([0.0, 0.04, 0.10, 0.22, 0.40])
     truth = np.array([[1 + t, 1.5, math.radians(179)] for t in times])
@@ -135,8 +145,14 @@ def test_robot_camera_extrinsics_and_clean_view_follow_truth():
         assert np.allclose(orientation[:, 1], [0, 0, 1], atol=1e-12)
         assert engine.model.cam_fovy[cid] == 70
         # First-person pixels do not contain optional estimate markers or tails.
+        geometry_count = engine.renderer.scene.ngeom
+        for i in range(len(record.tracks)):
+            body = engine.model.body(f"actor_{i}")
+            start, count = int(body.geomadr[0]), int(body.geomnum[0])
+            assert np.all(engine.model.geom_rgba[start : start + count, 3] == 0)
         clean = np.array(engine.render(0, (320, 240), set(), False, "robot"))
-        assert np.array_equal(first, clean)
+        assert engine.renderer.scene.ngeom == geometry_count
+        assert_sparse_rgb_rounding(first, clean)
         turned = np.array(engine.render(1, (320, 240), set(), False, "robot"))
         assert np.allclose(engine.data.cam_xpos[cid], [1.0, 1.7, 0.25])
         orientation = engine.data.cam_xmat[cid].reshape(3, 3)
@@ -188,12 +204,12 @@ def test_resizing_overview_does_not_destroy_camera_framebuffer():
         # Resizing closes an existing renderer while the other context is current.
         overview.render(0, (500, 320), {"truth"})
         after = np.array(camera.render(0, (320, 240), set(), False, "robot"))
-        assert np.array_equal(before, after)
         # Exercise the reverse direction as well.
         overview_before = np.array(overview.render(0, (500, 320), {"truth"}))
         camera.render(0, (340, 240), set(), False, "robot")
         overview_after = np.array(overview.render(0, (500, 320), {"truth"}))
-        assert np.array_equal(overview_before, overview_after)
+        for reference, current in ((before, after), (overview_before, overview_after)):
+            assert_sparse_rgb_rounding(reference, current)
     finally:
         camera.close()
         overview.close()

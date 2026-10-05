@@ -1,0 +1,94 @@
+{
+  "status": "complete_with_corrective_rerun",
+  "date": "2026-10-05",
+  "formal_episodes": 126,
+  "physical_steps": 1223400,
+  "physical_replay_error": {
+    "state": 0.0,
+    "force": 0.0,
+    "geometry": 0.0
+  },
+  "tests": {
+    "quick": {
+      "exit": 0,
+      "wall_s": 131.6,
+      "counts": {
+        "passed": 936,
+        "deselected": 199
+      },
+      "log_path": "results/so101_contact_quick_final.log",
+      "sha256": "879bf491a4a04e49b1fd30167734c2ef8ea42d3bf79ebcaaa206eab2c273e4eb"
+    },
+    "selected": {
+      "exit": 0,
+      "wall_s": 27.4,
+      "counts": {
+        "passed": 20
+      },
+      "log_path": "results/so101_contact_selected_final.log",
+      "sha256": "9a50977de7eb454a69a5b98ca6af4f8a5d06f6d9a3492d50f592ab2865909eee"
+    },
+    "replay": {
+      "exit": 0,
+      "wall_s": 5.6,
+      "counts": {
+        "passed": 12
+      },
+      "log_path": "results/so101_contact_replay_regression_final.log",
+      "sha256": "6471ebcf3638cfad28398081d29607fa3b067f253967df484e2dc5b2c1e19f07"
+    },
+    "full": {
+      "exit": 1,
+      "wall_s": 5385.4,
+      "counts": {
+        "failed": 1,
+        "passed": 1134
+      },
+      "log_path": "results/so101_contact_full.log",
+      "sha256": "fa3023d61c69ec476969824bcc854d5fa193c5e6c353333376560992f659ed3b"
+    }
+  },
+  "visual_qa": {
+    "figures": 3,
+    "actual_window_captures": 4,
+    "sizes": [
+      [
+        1600,
+        1000
+      ],
+      [
+        1100,
+        800
+      ]
+    ],
+    "inspected": true,
+    "file_sha256": {
+      "lesson73-round3-grid.png": "527841f4ed5696f691ccc1d53bb95d633f8ef268f570c7aae89cd7a6dcfcfc76",
+      "lesson73-round3-results.png": "5639d2e48303528b6606047bb7af9131f9d2acd52e02d9a8b7b6c44f79336e44",
+      "lesson73-round3-traces.png": "306d20b8745154d2faf107bbed594575508dafbd9bf3bf94b32a949ce1a2b030",
+      "lesson73-round3-window-compact.png": "2ce6e1841cb7cfd305c1cdcdca46ea28312eb4f9b6a3e1bda68ccd75119995be",
+      "lesson73-round3-window-drop.png": "70a99c0448410e3c1daf85ad25a3c852c752089e6a3d995ac159342b91292190",
+      "lesson73-round3-window-lift.png": "85992ec0491b67a6a4ebd94a47dfce1685ab2f3fb397f41899fedf6c305a2e2b",
+      "lesson73-round3-window-refusal.png": "b03d3c5ee94f600b03014729901abcd5286efc682060d3853d024305351e4081"
+    }
+  },
+  "source_git_blob_matches_executed": 7,
+  "model_and_score_unchanged": true,
+  "limits": [
+    "known initial position",
+    "RGB replay only",
+    "three drop failures remain",
+    "probe source snapshot not captured"
+  ],
+  "gpu_assertion_note": "Repeated unchanged RGB renders differ by one 8-bit level in <0.1% of pixels; image comparison now bounds both amplitude and changed area. Camera geometry count and annotation opacity additionally checked.",
+  "full_failures_corrected_by_followup": [
+    "tests/test_replay_viewer.py::test_resizing_overview_does_not_destroy_camera_framebuffer"
+  ],
+  "remaining_known_failures": 0,
+  "full_run_threads_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "coverage_note": "Full run and corrective reruns are separate invocations; no second full run is claimed. Corrected image tests retained strict geometric and sparse 8-bit RGB bounds."
+}

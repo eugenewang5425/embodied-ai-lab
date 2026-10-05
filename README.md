@@ -9,8 +9,8 @@ A learner's lab covering control, robot perception, mapping, navigation, learnin
 | | |
 |---|---|
 | **Navigation · lesson 69** | Rounds 12–14: 60/60 fresh validation episodes reached and stopped, with zero contact; 3 impossible entrances correctly rejected. Exact pose, static layouts and low speed; computation still exceeds the 100 ms control interval. [Report](docs/69-physical-height-navigation.md) |
-| **Manipulation · lesson 73** | Round 2: 17/27 → 21/27 on the same new position/orientation conditions. Six cases rescued, two regressed; six failures remain. Known initial object pose, physical grasping, no visual feedback. [Report](docs/73-so101-approach-geometry.md) |
-| **Verified · 2026-10-01** | Latest full run: 1121 passed; after the final additions: 933 quick tests and 38 selected tests passed. Navigation and grasping records independently replayed; figures and actual windows inspected. [Delivery evidence](docs/benchmarks/navigation-arm-delivery-v14-v3b.json) |
+| **Manipulation · lesson 73** | Round 3: surface alignment improved 21/27 → 24/27 on matched fresh conditions, with 3 rescues and no regressions. Pre-lift contact gating alone: 11/27; combined: 23/27. Three drop failures remain; known initial position, no visual feedback. [Report](docs/73-so101-contact-feedback.md) |
+| **Verified · 2026-10-05** | Full run: 1134 passed, one old RGB equality assertion failed. After its correction: all 12 replay tests, 936 quick tests and 20 grasping tests passed in separate runs. Grasping records independently replayed; figures and actual windows inspected. [Delivery evidence](docs/benchmarks/so101-contact-v4-delivery.json) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
 | **Start here** | [Quick start](#quick-start) · [Latest navigation & grasping windows](#latest-demos) · [课程索引](#课程索引) |
 
@@ -48,14 +48,14 @@ uv run python -m embodied_learning.experiments.navigation_height_study --workers
 uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint results/navigation_reinforcement_v14 --case 69_street_crate_37__delay_2__bypass_crate --play
 ```
 
-**机械臂：第 73 课第二轮。** 先生成 72 回合正式记录，再打开空间路径与开口中心校准组。外部相机、腕部相机、三维场景、夹爪接触力和物体统计共同切换。[讲义](docs/73-so101-approach-geometry.md)
+**机械臂：第 73 课第三轮。** 先生成 126 回合正式记录，再打开实际指面校准组。外部相机、腕部相机、三维场景、目标、接触力和统计一键共同切换；可以查看完成、掉落和接触拒绝。[讲义](docs/73-so101-contact-feedback.md)
 
 ```powershell
-uv run python -m embodied_learning.experiments.so101_approach_study --workers 3 --output results/so101_approach_v3b
-uv run python -m embodied_learning.manipulation_demo --results results/so101_approach_v3b --position p04a1 --method center_cartesian --play
+uv run python -m embodied_learning.experiments.so101_contact_study --workers 3 --output results/so101_contact_v4
+uv run python -m embodied_learning.manipulation_demo --results results/so101_contact_v4 --position p04a1 --method surface --play
 ```
 
-已有上述完整记录时，直接运行对应第二条命令即可。导航 60/60 是限定仿真范围的验证；机械臂 21/27 仍未达到稳定抓取。两者 RGB 均为存档位姿重渲染，尚未参与控制，下一步见[导航阶段复盘](docs/navigation-stage-review-69-71.md)和[机械臂路线](docs/manipulation-roadmap.md)。逐课原理、变量、数据、思考题和复现步骤见下方课程索引。
+已有上述完整记录时，直接运行对应第二条命令即可。导航 60/60 是限定仿真范围的验证；机械臂 24/27 仍未达到稳定抓取。两者 RGB 均为存档位姿重渲染，尚未参与控制，下一步见[导航阶段复盘](docs/navigation-stage-review-69-71.md)和[机械臂路线](docs/manipulation-roadmap.md)。逐课原理、变量、数据、思考题和复现步骤见下方课程索引。
 
 ### 测试流程
 
@@ -125,9 +125,9 @@ uv run python scripts/render_photo_room_replay.py
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-10-01 · 基准 62 + 第 63–73 课）
+## 当前状态（2026-10-05 · 基准 62 + 第 63–73 课）
 
-- **三维操作主线（72—73课）**：首轮SO-101正常6/9；[第七十三课第二轮讲义](docs/73-so101-approach-geometry.md)新增72物理回合，同27新条件17/27→21/27、两负对照各0/9；救回6例但退步2例，继续补接触反馈。已知初始位置，RGB尚未参与控制。见[操作路线](docs/manipulation-roadmap.md)。
+- **三维操作主线（72—73课）**：[第七十三课第三轮讲义](docs/73-so101-contact-feedback.md)新增126物理回合，同27新条件指面校准21/27→24/27、救回3例无退步；单独门控11/27、组合23/27，两负对照各0/9。仍有3例掉落，力与压入代价保留，先补动态接触再进入视觉。首两轮原批次保留；已知初始位置，RGB尚未参与控制。见[操作路线](docs/manipulation-roadmap.md)。
 
 **基础课程 1–56 均已形成实验、讲义与演示记录。** “完成一课”表示做完对照并记录结论；目标能力是否通过，仍看每课的结果和失败边界。完整数字保留在课程索引与逐课结果中。
 
@@ -140,7 +140,7 @@ uv run python scripts/render_photo_room_replay.py
 | 28–42 | BC、PPO、残差学习、示教、SAC、DAgger 与块策略 | 拟合、探索、首次到达和稳定控制是不同指标；学习策略的负结果全部保留 |
 | 43–56 | 建图、规划、定位、回环、位姿图与图定位 | 融合可修漂移；回环末端变准不保证全程形状正确；理想图有效，自建图仍未过门 |
 
-- **最近一次代码验收（2026-10-01）**：全仓 1121 项通过（pytest 耗时 4853.69 s，约 80 分 54 秒）；该次全量之后的新增内容另跑快速层 933 项和受影响完整选择集 38 项，并检查实际窗口。Ruff 通过。它们是不同批次，不能合并成一次全量成绩。[验收记录](docs/benchmarks/navigation-arm-delivery-v14-v3b.json)包含日志与数据哈希；原始数组保存在本地 `results/`。
+- **最近一次代码验收（2026-10-05）**：全仓 1134 项通过、1 项旧相机像素断言失败，入口总耗时 5385.4 s（约 89 分 45 秒）。不变场景重复渲染也会出现少量像素的 1 级亮度差，现按“每通道差≤1、变化像素≤0.1%”比较，并保留相机几何及标记透明度检查；修正后回放模块 12 项、全仓快速层 936 项和抓取完整选择集 20 项分别通过。没有再次运行全仓慢层，不能合并成一次全量全绿成绩。Ruff 通过，三张科学图和四张实际窗口图已检查。[验收记录](docs/benchmarks/so101-contact-v4-delivery.json)包含各次日志、数据与图片哈希；原始数组保存在本地 `results/`。
 - **记录体系**：审查报告与 issue/PR 文稿见[实验审查报告](docs/26-experiment-review-2026-09-05.md)、[问题与 PR 草稿](docs/27-issues-pr-drafts-2026-09-05.md)（含演示验收轮缺陷登记 F1–F12 与开放 Issue 9）；设计变更与规划调整见[实验决策日志](docs/34-experiment-decision-log.md)（只追加）；演示真机验收标准见实验审查报告第六节。
 - **闭环导航与官方 AMCL 对照已过参数门禁（第 64 课 v4）**：照片房间四组定位来源对照（真值/里程计/参考图 PF/自建图 PF）60 回合——全组零接触、不可达 12/12 安全拒绝、C/D 误差 0.006/0.012 m 低于 B 0.023 m；官方 nav2 AMCL 批量执行器修复后（launch 参数化 + `ros2 param get` 硬门禁）27/27 有效：A-budget 0.078 m 最好，更新频率 4.6× 只换来 0.104→0.089 m——粒子数/波束数才是主变量。此前"AMCL 参数不敏感"结论已撤回（三组配置当时从未真正生效）。
 - **ROS 2 本机环境记录**：WSL2 / Ubuntu 24.04.4 + ROS 2 Jazzy + Gazebo Harmonic 8.15.0 + colcon，安装与核验见[环境审计](docs/00-environment-audit.md)。这些是作者电脑的环境记录；克隆代码不会自动安装 WSL 或 ROS 2。
@@ -228,7 +228,7 @@ uv run python scripts/render_photo_room_replay.py
 | 第 70 课 | 位置预算与停稳到点 | 18回合；两种新判据各48/48，真实45cm线不变 | [讲义](docs/70-arrival-decisions.md) |
 | 第 71 课 | 观测约束有限恢复 | 12回合；准确图18/24→24/24，旧到点误报仍保留 | [讲义](docs/71-bounded-recovery.md) |
 | 第 72 课 | SO-101三维机械臂、工具与相机坐标 | 固定开源模型；32姿态雅可比与64相机往返审计；姿态限制负例保留 | [讲义](docs/72-so101-geometry.md) |
-| 第 73 课 | 真实接触抓取、空间路径与开口校准 | 首轮6/9；新27对17/27→21/27，仍6失败及2退步，尚无视觉抓取 | [讲义](docs/73-so101-physical-grasping.md) / [第二轮](docs/73-so101-approach-geometry.md) |
+| 第 73 课 | 真实接触抓取、指面校准与反馈 | 第三轮同新条件21/27→24/27、无退步；门控11/27、组合23/27，仍有掉落，尚无视觉抓取 | [首轮讲义](docs/73-so101-physical-grasping.md) / [第二轮](docs/73-so101-approach-geometry.md) / [第三轮](docs/73-so101-contact-feedback.md) |
 
 <a id="lesson69-rounds"></a>
 
@@ -397,7 +397,7 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
 
 ## 快速运行
 
-以下各课展示对应轮次的历史结果；“下一步”和测试数量按当时记录理解，最新状态以首页的 2026-10-01 汇总为准。`results/…日期…` 是作者本地归档目录，不随 Git 克隆。复跑请使用各课生成命令的新目录，再将演示命令的 `--results` 指向该目录；完整参数与数据说明见相应讲义。
+以下各课展示对应轮次的历史结果；“下一步”和测试数量按当时记录理解，最新状态以首页的 2026-10-05 汇总为准。`results/…日期…` 是作者本地归档目录，不随 Git 克隆。复跑请使用各课生成命令的新目录，再将演示命令的 `--results` 指向该目录；完整参数与数据说明见相应讲义。
 
 ![第一课预览：环境自检与随机基线仿真帧](docs/img/lesson-01-env-check.png)
 
@@ -2012,6 +2012,29 @@ uv run python -m embodied_learning.experiments.so101_approach_study --workers 3 
 uv run python -m embodied_learning.manipulation_demo --results results/so101_approach_v3b --position p04a1 --method center_cartesian --play
 ```
 
+## 第七十三课第三轮：指面校准有效，双侧有力仍可能掉落
+
+**126个物理回合；相同27新条件，指尖基线21/27 → 指面校准24/27，救回3例、无退步。** 单独抬升前双侧力门控11/27，指面＋门控23/27；空夹、偏5.5cm各0/9。未满足门控而停止也算任务失败。
+
+![四组完成、拒绝和执行失败](docs/img/lesson73-round3-results.png)
+
+左图绿为完成、紫为门控拒绝、橙为执行后失败；右图把指面与门控两项分开对照。新参考按真实碰撞指面的截面计算，保留原模型、限矩、物体和评分；当前门控只有抬升前双侧力与持续时间检查，没有恢复机制。
+
+![成功、掉落和门控误拒的物体轨迹与物理力](docs/img/lesson73-round3-traces.png)
+
+每排依次为实际抬升、物体XY轨迹、两指及桌面支持力；10cm虚线为抬升门槛，浅灰为保持段，右图8s虚线开始抬升。按键名固定选择首个救回、首个剩余失败、首个误拒。剩余三失败均为Y=−3.5cm、+20°，先有双侧力，抬5.4—6.0cm后掉落；门控未拦住这三例，反而误拒一次原本可完成的抓取。
+
+![第三轮同步窗口](docs/img/lesson73-round3-window-lift.png)
+
+方法按钮一键同步三维、外部／腕部相机、目标、曲线和统计，保留时间；短拒绝回合统一停到结尾。窗口新增过去20ms最小力、连续接触时间、门控结果和全批完成数。已知初始物体位置，RGB仍为重渲染。完成率提高同时峰值力／压入变大，仍未达到稳定教师，下一轮先检验动态接触，再进74课视觉。
+
+讲义：[第七十三课第三轮讲义](docs/73-so101-contact-feedback.md)，含变量关联、开发失败、四组原理、逐格结果、力学代价、八道思考题及复现。[126回合摘要](docs/benchmarks/so101-contact-v4.json) · [配对和失败诊断](docs/benchmarks/so101-contact-v4-diagnosis.json) · [独立审计](docs/benchmarks/so101-contact-v4-validation.json)。
+
+```powershell
+uv run python -m embodied_learning.experiments.so101_contact_study --workers 3 --output results/so101_contact_v4
+uv run python -m embodied_learning.manipulation_demo --results results/so101_contact_v4 --position p04a1 --method surface --play
+```
+
 ## 进度清单
 
 - [x] 本机环境审计
@@ -2102,6 +2125,7 @@ uv run python -m embodied_learning.manipulation_demo --results results/so101_app
 - [x] 第七十二课：SO-101 三维运动学、相机和模型哈希审计，姿态限制负例保留
 - [x] 第七十三课首轮：实际接触抓取正常 6/9，两种负对照各 0/9；三个失败回合保留
 - [x] 第七十三课第二轮：72物理回合与窗口验收，配对17/27→21/27；保留6失败与2退步。
+- [x] 第七十三课第三轮：126物理回合，同新条件指面21/27→24/27、救回3例无退步；门控11/27、组合23/27，3掉落与1误拒保留。
 
 - [ ] 学员解释：为什么“控制器认为到达”不等于“实际任务通过”；定位误差怎样变成停车偏差
 - [ ] 学员解释：消息里的采样时间／坐标系有什么用；为何地图校正与局部里程计分开

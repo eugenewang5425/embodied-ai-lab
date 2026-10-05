@@ -1,0 +1,899 @@
+{
+  "archive_sha256": "30df1b67288e62718606a8ee527944432232f6c9f7da6655d366a2ef26368a8c",
+  "analysis_sha256": "5d796df4d21d73c2944ec2d54fff60cdad1086d2d67b481b70f0c79562fb8af9",
+  "counts": {
+    "baseline": {
+      "total": 27,
+      "success": 21,
+      "refused": 0,
+      "physical_failure": 6
+    },
+    "surface": {
+      "total": 27,
+      "success": 24,
+      "refused": 0,
+      "physical_failure": 3
+    },
+    "gate": {
+      "total": 27,
+      "success": 11,
+      "refused": 16,
+      "physical_failure": 0
+    },
+    "surface_gate": {
+      "total": 27,
+      "success": 23,
+      "refused": 1,
+      "physical_failure": 3
+    },
+    "open": {
+      "total": 9,
+      "success": 0,
+      "refused": 0,
+      "physical_failure": 9
+    },
+    "offset": {
+      "total": 9,
+      "success": 0,
+      "refused": 0,
+      "physical_failure": 9
+    }
+  },
+  "A_B": {
+    "both_success": [
+      "p00a0",
+      "p00a1",
+      "p01a0",
+      "p01a1",
+      "p01a2",
+      "p02a1",
+      "p02a2",
+      "p03a0",
+      "p03a1",
+      "p04a0",
+      "p04a1",
+      "p04a2",
+      "p05a1",
+      "p05a2",
+      "p06a0",
+      "p06a1",
+      "p07a0",
+      "p07a1",
+      "p07a2",
+      "p08a1",
+      "p08a2"
+    ],
+    "rescued": [
+      "p02a0",
+      "p05a0",
+      "p08a0"
+    ],
+    "regressed": [],
+    "both_failure": [
+      "p00a2",
+      "p03a2",
+      "p06a2"
+    ]
+  },
+  "A_C": {
+    "both_success": [
+      "p00a0",
+      "p01a1",
+      "p02a2",
+      "p03a0",
+      "p04a1",
+      "p05a1",
+      "p05a2",
+      "p06a0",
+      "p07a1",
+      "p08a1",
+      "p08a2"
+    ],
+    "rescued": [],
+    "regressed": [
+      "p00a1",
+      "p01a0",
+      "p01a2",
+      "p02a1",
+      "p03a1",
+      "p04a0",
+      "p04a2",
+      "p06a1",
+      "p07a0",
+      "p07a2"
+    ],
+    "both_failure": [
+      "p00a2",
+      "p02a0",
+      "p03a2",
+      "p05a0",
+      "p06a2",
+      "p08a0"
+    ]
+  },
+  "B_D": {
+    "both_success": [
+      "p00a0",
+      "p00a1",
+      "p01a0",
+      "p01a1",
+      "p01a2",
+      "p02a1",
+      "p02a2",
+      "p03a0",
+      "p03a1",
+      "p04a0",
+      "p04a1",
+      "p04a2",
+      "p05a0",
+      "p05a1",
+      "p05a2",
+      "p06a0",
+      "p06a1",
+      "p07a0",
+      "p07a1",
+      "p07a2",
+      "p08a0",
+      "p08a1",
+      "p08a2"
+    ],
+    "rescued": [],
+    "regressed": [
+      "p02a0"
+    ],
+    "both_failure": [
+      "p00a2",
+      "p03a2",
+      "p06a2"
+    ]
+  },
+  "examples": {
+    "rescued": "p02a0",
+    "remaining_failure": "p00a2",
+    "gate_mismatch": "p02a0"
+  },
+  "surface_failures": [
+    {
+      "key": "p00a2_surface",
+      "xyz": [
+        0.21,
+        -0.035,
+        0.715
+      ],
+      "yaw": 20.0,
+      "max_lift_m": 0.06000457511242785,
+      "prelift_gate_elapsed_s": 1.0400000000000005,
+      "prelift_min_forces_n": [
+        18.198061392992408,
+        3.749739893632233,
+        20.959724827215357
+      ],
+      "peak_jaw_normal_n": [
+        32.17347267972662,
+        9.138792840543148
+      ]
+    },
+    {
+      "key": "p03a2_surface",
+      "xyz": [
+        0.23,
+        -0.035,
+        0.715
+      ],
+      "yaw": 20.0,
+      "max_lift_m": 0.053901858023636784,
+      "prelift_gate_elapsed_s": 1.0200000000000005,
+      "prelift_min_forces_n": [
+        16.80155662743946,
+        4.010678938260954,
+        19.38855821792005
+      ],
+      "peak_jaw_normal_n": [
+        25.22080701320667,
+        7.894815147274771
+      ]
+    },
+    {
+      "key": "p06a2_surface",
+      "xyz": [
+        0.245,
+        -0.035,
+        0.715
+      ],
+      "yaw": 20.0,
+      "max_lift_m": 0.05696405246568459,
+      "prelift_gate_elapsed_s": 1.0200000000000005,
+      "prelift_min_forces_n": [
+        16.149295240282335,
+        2.5307563309338255,
+        18.436903952586988
+      ],
+      "peak_jaw_normal_n": [
+        23.92784632022045,
+        6.351085541557868
+      ]
+    }
+  ],
+  "calibration_range_at_clamp_end": [
+    {
+      "position": "p00a0",
+      "success": true,
+      "last_request_opening_rad": 0.354678115751251,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p00a1",
+      "success": true,
+      "last_request_opening_rad": 0.4435326791288631,
+      "clamp_time_above_cap_s": 2.66,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p00a2",
+      "success": false,
+      "last_request_opening_rad": 0.47511362739596347,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p01a0",
+      "success": true,
+      "last_request_opening_rad": 0.44512076507097603,
+      "clamp_time_above_cap_s": 2.7600000000000002,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p01a1",
+      "success": true,
+      "last_request_opening_rad": 0.3504199270231143,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p01a2",
+      "success": true,
+      "last_request_opening_rad": 0.41313705748136864,
+      "clamp_time_above_cap_s": 2.24,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p02a0",
+      "success": true,
+      "last_request_opening_rad": 0.5976002797634807,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p02a1",
+      "success": true,
+      "last_request_opening_rad": 0.38195651482778503,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p02a2",
+      "success": true,
+      "last_request_opening_rad": 0.3538139477391625,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p03a0",
+      "success": true,
+      "last_request_opening_rad": 0.35945277736571146,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p03a1",
+      "success": true,
+      "last_request_opening_rad": 0.43292171476318553,
+      "clamp_time_above_cap_s": 2.32,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p03a2",
+      "success": false,
+      "last_request_opening_rad": 0.4722027831461185,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p04a0",
+      "success": true,
+      "last_request_opening_rad": 0.4435796163844699,
+      "clamp_time_above_cap_s": 2.66,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p04a1",
+      "success": true,
+      "last_request_opening_rad": 0.3508414327891192,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p04a2",
+      "success": true,
+      "last_request_opening_rad": 0.4151028486904353,
+      "clamp_time_above_cap_s": 2.24,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p05a0",
+      "success": true,
+      "last_request_opening_rad": 0.558899699319079,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p05a1",
+      "success": true,
+      "last_request_opening_rad": 0.37536813553553067,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p05a2",
+      "success": true,
+      "last_request_opening_rad": 0.3586620178526475,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p06a0",
+      "success": true,
+      "last_request_opening_rad": 0.36292339947340213,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p06a1",
+      "success": true,
+      "last_request_opening_rad": 0.4257780490748627,
+      "clamp_time_above_cap_s": 2.3000000000000003,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p06a2",
+      "success": false,
+      "last_request_opening_rad": 0.4643616660179864,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p07a0",
+      "success": true,
+      "last_request_opening_rad": 0.44255853263457984,
+      "clamp_time_above_cap_s": 2.6,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p07a1",
+      "success": true,
+      "last_request_opening_rad": 0.35116802253090446,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p07a2",
+      "success": true,
+      "last_request_opening_rad": 0.41637054580304084,
+      "clamp_time_above_cap_s": 2.2600000000000002,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p08a0",
+      "success": true,
+      "last_request_opening_rad": 0.5376401778338686,
+      "clamp_time_above_cap_s": 3.0,
+      "preparation_approximation_at_end": true
+    },
+    {
+      "position": "p08a1",
+      "success": true,
+      "last_request_opening_rad": 0.3713017944213901,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    },
+    {
+      "position": "p08a2",
+      "success": true,
+      "last_request_opening_rad": 0.3623196110364368,
+      "clamp_time_above_cap_s": 2.06,
+      "preparation_approximation_at_end": false
+    }
+  ],
+  "development": {
+    "so101_contact_dev_v1": {
+      "archive_sha256": "d1d22d4474ebf1250518536133b23cab72db7a1a4aca79b452d6abf53f5b658a",
+      "source_sha256": {
+        "so101_contact_study.py": "3b015821f423db1c3dc72b57e38a8f9a1ed4fd9119baf83ebf0be5c44f533960",
+        "gripper_contact.py": "88fc3613d1d7628cdddd30b618e9bea5643f2b3e890121211da8a09c46d29371",
+        "gripper_calibration.py": "02e91c89936c279ff2a2df2ebd804e5228882b2e20d78fda888c65fb34454ca0",
+        "so101_approach_study.py": "5b62d8cf488ea2e37817ecf8a5c389f5227366bc46bbcbf7aacba98cd5279775",
+        "so101_grasping.py": "512f06ce9fca3119a5ab5dd127812bc975758ceaa62a84ad4de3b0f68528c27b",
+        "so101.py": "0df6c31f99b0b7b355571bf3517cb2d0dd1d7756d513ea6eb864c5b2f4a5adf5",
+        "73-contact-round3-plan.md": "e86fd53bbb49e909d21a7cfff94eaee3931388d1c8162d2d48f24b670a28bbb9"
+      },
+      "counts": {
+        "baseline": {
+          "success": 2,
+          "total": 8
+        },
+        "surface": {
+          "success": 1,
+          "total": 8
+        },
+        "gate": {
+          "success": 1,
+          "total": 8
+        },
+        "surface_gate": {
+          "success": 0,
+          "total": 8
+        }
+      }
+    },
+    "so101_contact_dev_v2": {
+      "archive_sha256": "b78daf41989fba6c48166983a9368cc76d36b771ba5be96ab819f675954477b8",
+      "source_sha256": {
+        "so101_contact_study.py": "f313a3a5f352710d8d532906196a0a0b5d1a9c7ec4ceb61ec5ae6aa898669ec7",
+        "gripper_contact.py": "bc4d56dabca14ba471dfceb5053aea74b72aab2b747b32f0bc83832d790a7d8a",
+        "gripper_calibration.py": "02e91c89936c279ff2a2df2ebd804e5228882b2e20d78fda888c65fb34454ca0",
+        "so101_approach_study.py": "5b62d8cf488ea2e37817ecf8a5c389f5227366bc46bbcbf7aacba98cd5279775",
+        "so101_grasping.py": "512f06ce9fca3119a5ab5dd127812bc975758ceaa62a84ad4de3b0f68528c27b",
+        "so101.py": "0df6c31f99b0b7b355571bf3517cb2d0dd1d7756d513ea6eb864c5b2f4a5adf5",
+        "73-contact-round3-plan.md": "e86fd53bbb49e909d21a7cfff94eaee3931388d1c8162d2d48f24b670a28bbb9"
+      },
+      "counts": {
+        "baseline": {
+          "success": 2,
+          "total": 8
+        },
+        "surface": {
+          "success": 8,
+          "total": 8
+        },
+        "gate": {
+          "success": 1,
+          "total": 8
+        },
+        "surface_gate": {
+          "success": 8,
+          "total": 8
+        }
+      }
+    }
+  },
+  "section_probe": [
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.205,
+          -0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.006,
+        "preparation_opening": 0.65
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11248793626991294,
+      "final_xy_error_m": 0.003660125176744445,
+      "peak_jaw_normal_n": [
+        4.382567680261077,
+        17.694591568692758
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.003251072693477068,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.228091900004074
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.235,
+          0.07,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.006,
+        "preparation_opening": 0.65
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1122080729554833,
+      "final_xy_error_m": 0.005609862408601383,
+      "peak_jaw_normal_n": [
+        5.336006985935072,
+        12.982252221173626
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002242483254754509,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.068872799980454
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.205,
+          -0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11718858938660837,
+      "final_xy_error_m": 0.003982195169785936,
+      "peak_jaw_normal_n": [
+        7.19532695697521,
+        14.522293865534918
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002850623989171259,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.839942899998277
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.235,
+          0.07,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11677655783299135,
+      "final_xy_error_m": 0.006225052320184872,
+      "peak_jaw_normal_n": [
+        6.0055008672628905,
+        11.563493978707532
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002141356400019872,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.006587799987756
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.205,
+          -0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.003,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11587159452490903,
+      "final_xy_error_m": 0.009173687198571623,
+      "peak_jaw_normal_n": [
+        3.6304650709986186,
+        16.450539227550493
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0022146409885287453,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 5.887491000001319
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.235,
+          0.07,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.003,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11566175339709128,
+      "final_xy_error_m": 0.006243033880976982,
+      "peak_jaw_normal_n": [
+        19.18934422078514,
+        8.83535740495144
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0037423327046657018,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 6.144717000017408
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.205,
+          -0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.012,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.004283884399985616,
+      "final_xy_error_m": 0.07248190595736982,
+      "peak_jaw_normal_n": [
+        15.90359656998313,
+        5.500814364963178
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017652141194600054,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.369594799994957
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.235,
+          0.07,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.012,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.06541035783541937,
+      "final_xy_error_m": 0.1909642227913638,
+      "peak_jaw_normal_n": [
+        39.27112318987048,
+        9.67697238957136
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004684123770162783,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.000784400035627
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.205,
+          -0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.02,
+        "preparation_opening": 0.9
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.00011868567542094866,
+      "final_xy_error_m": 0.06843178009619633,
+      "peak_jaw_normal_n": [
+        0.0,
+        9.21770434650808
+      ],
+      "peak_other_arm_contact_n": 40.87014427595605,
+      "max_penetration_m": 0.0015149946217580014,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.228468299959786
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.235,
+          0.07,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -15,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": -0.02,
+        "preparation_opening": 0.9
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0011760749664199155,
+      "final_xy_error_m": 0.1686468455706499,
+      "peak_jaw_normal_n": [
+        0.8485500708031711,
+        7.274205956911189
+      ],
+      "peak_other_arm_contact_n": 40.295069860609985,
+      "max_penetration_m": 0.001514990308226282,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.2173656999948435
+    }
+  ],
+  "section_probe_provenance": {
+    "source_snapshot_captured": false,
+    "file_sha256": {
+      "01.npz": "fd6c503f0553d44250bfb9aca2f7f967efd7eb0e0460f8e9984dcca3b476b890",
+      "02.npz": "af4ab91d3facfe75aa10addfd38976bd730e5bfd514a9c10b57e5324ebdeedd0",
+      "03.npz": "1e7123d428688edaaea1249ed7110ede988731c4665bce43112acba7e212ce28",
+      "04.npz": "512db5be2752229820caec767cc120283ef88b7a606b99bd730e934373692d6a",
+      "05.npz": "3d8db59cdd712fc8f46c8cce5bcc393c8fa85a046373bc8c43a8c089716e04e1",
+      "06.npz": "540c8ad13e5304238db2e0c38877dd309d69e931a88d80da283aaba9da3cd417",
+      "07.npz": "d1caaecac9a88b6a1b596e20cdd841e71c23c628e24a2bf1f5ba227a838700ba",
+      "08.npz": "7ef4628715980e811349faece68305d79cf916aba2b7190c1a69bd3d6789f40e",
+      "09.npz": "15f06dd311fc072d6b0b44504fd32e2d9434d1bb19d2235263ebc173e31a555a",
+      "10.npz": "35126f53623955e7c0fd5653a4ef4c2fce5faff3974d53a9696a6ddf062a390e",
+      "summary.json": "af1589c2bf9d55dc1e1932b9d717aae034d159fdc5e02bc61856d75ff1e4d588"
+    },
+    "note": "十次截面探针为开发诊断，保存参数、指标和数组；未保存独立源码快照，不冒充正式独立验证。两批完整开发及正式采集另有源快照。"
+  }
+}

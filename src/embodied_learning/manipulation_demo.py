@@ -10,7 +10,9 @@ from embodied_learning.manipulation_viewer.window import ManipulationWindow
 
 def main():
     results_root = Path(__file__).resolve().parents[2] / "results"
-    latest = results_root / "so101_approach_v3b"
+    latest = results_root / "so101_contact_v4"
+    if not (latest / "summary.json").exists():
+        latest = results_root / "so101_approach_v3b"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--results",

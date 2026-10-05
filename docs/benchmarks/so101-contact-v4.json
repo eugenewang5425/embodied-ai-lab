@@ -1,0 +1,6557 @@
+{
+  "experiment": "so101_physical_grasping",
+  "schema_version": 1,
+  "study_round": 3,
+  "development": false,
+  "date": "2026-10-05",
+  "model_commit": "4d038b3feae26ec82b46a4d586379114012a8ac7",
+  "model_manifest_sha256": "1af36b8ec5ab9c8f98541575b935dbea4c4b58c7944c72481e01cafb169548f8",
+  "physics_dt_s": 0.002,
+  "control_dt_s": 0.02,
+  "phases": [
+    "静置",
+    "接近物体",
+    "下降对准",
+    "夹紧",
+    "抬升",
+    "保持",
+    "搬运",
+    "下放",
+    "松开",
+    "撤离",
+    "放置检查"
+  ],
+  "runtime": {
+    "mujoco": "3.11.0",
+    "numpy": "2.5.2"
+  },
+  "positions_xy_m": [
+    [
+      0.21,
+      -0.035
+    ],
+    [
+      0.21,
+      0.025
+    ],
+    [
+      0.21,
+      0.065
+    ],
+    [
+      0.23,
+      -0.035
+    ],
+    [
+      0.23,
+      0.025
+    ],
+    [
+      0.23,
+      0.065
+    ],
+    [
+      0.245,
+      -0.035
+    ],
+    [
+      0.245,
+      0.025
+    ],
+    [
+      0.245,
+      0.065
+    ]
+  ],
+  "method_labels": {
+    "baseline": "A 指尖校准：第二轮基线",
+    "surface": "B 指面校准：只换接触参考点",
+    "gate": "C 接触门控：基线＋抬升前双侧力检查",
+    "surface_gate": "D 指面＋门控：两项同时使用",
+    "open": "空夹：指面校准但不闭合",
+    "offset": "偏位：指面校准但偏5.5cm"
+  },
+  "method_colors": {
+    "baseline": "#2563eb",
+    "surface": "#0f766e",
+    "gate": "#a855f7",
+    "surface_gate": "#d97706",
+    "open": "#64748b",
+    "offset": "#c2410c"
+  },
+  "episodes": [
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11773365525707336,
+      "final_xy_error_m": 0.0019713752374598804,
+      "peak_jaw_normal_n": [
+        6.341127745231326,
+        11.159996659673252
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001943217238270581,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.9190638000145555,
+      "contact_refused": false,
+      "key": "p00a0_baseline",
+      "position_key": "p00a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11773365525707336,
+      "final_xy_error_m": 0.0019713752374598804,
+      "peak_jaw_normal_n": [
+        6.341127745231326,
+        11.159996659673252
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001943217238270581,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.972637200029567,
+      "key": "p00a0_gate",
+      "position_key": "p00a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11764797164833718,
+      "final_xy_error_m": 0.0019879236459946436,
+      "peak_jaw_normal_n": [
+        5.727130902114484,
+        11.488730965930266
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020062462625648377,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7442641999805346,
+      "key": "p00a0_surface",
+      "position_key": "p00a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11764797164833718,
+      "final_xy_error_m": 0.0019879236459946436,
+      "peak_jaw_normal_n": [
+        5.727130902114484,
+        11.488730965930266
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020062462625648377,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7888577999547124,
+      "key": "p00a0_surface_gate",
+      "position_key": "p00a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1155471826906388,
+      "final_xy_error_m": 0.005031628340474947,
+      "peak_jaw_normal_n": [
+        4.592796186832195,
+        19.704674747020213
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0028775775877058485,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.841237699962221,
+      "contact_refused": false,
+      "key": "p00a1_baseline",
+      "position_key": "p00a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.06121896808466862,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.044923361040653
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149870955986112,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.2004084000363946,
+      "key": "p00a1_gate",
+      "position_key": "p00a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11747927964085791,
+      "final_xy_error_m": 0.0035226696973520593,
+      "peak_jaw_normal_n": [
+        4.197792206592395,
+        13.585673515923862
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025502142924820267,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.4813262000097893,
+      "key": "p00a1_surface",
+      "position_key": "p00a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11747927964085791,
+      "final_xy_error_m": 0.0035226696973520593,
+      "peak_jaw_normal_n": [
+        4.197792206592395,
+        13.585673515923862
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025502142924820267,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.4963151999982074,
+      "key": "p00a1_surface_gate",
+      "position_key": "p00a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.018996929162781062,
+      "final_xy_error_m": 0.06543644460761497,
+      "peak_jaw_normal_n": [
+        5.716538994143555,
+        5.3218803011143585
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0032300748328520645,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5573518999735825,
+      "contact_refused": false,
+      "key": "p00a2_baseline",
+      "position_key": "p00a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.06140929038842061,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.375962947704713
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149934051712846,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.1739870999590494,
+      "key": "p00a2_gate",
+      "position_key": "p00a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.06000457511242785,
+      "final_xy_error_m": 0.07854295601377309,
+      "peak_jaw_normal_n": [
+        32.17347267972662,
+        9.138792840543148
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.005569670057826583,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.4706789000192657,
+      "key": "p00a2_surface",
+      "position_key": "p00a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.06000457511242785,
+      "final_xy_error_m": 0.07854295601377309,
+      "peak_jaw_normal_n": [
+        32.17347267972662,
+        9.138792840543148
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.005569670057826583,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5017403999809176,
+      "key": "p00a2_surface_gate",
+      "position_key": "p00a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1163224366802581,
+      "final_xy_error_m": 0.005779491548744332,
+      "peak_jaw_normal_n": [
+        5.702856067332303,
+        11.29017541570966
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020272880611907386,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.9861693999846466,
+      "contact_refused": false,
+      "key": "p01a0_baseline",
+      "position_key": "p01a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.1170271417359664,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.066866500199588
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149954381040338,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.22643949999474,
+      "key": "p01a0_gate",
+      "position_key": "p01a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11709943179103266,
+      "final_xy_error_m": 0.0051268186665560924,
+      "peak_jaw_normal_n": [
+        5.560145777546633,
+        11.155236182978205
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002046143534618978,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.615682800009381,
+      "key": "p01a0_surface",
+      "position_key": "p01a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11709943179103266,
+      "final_xy_error_m": 0.0051268186665560924,
+      "peak_jaw_normal_n": [
+        5.560145777546633,
+        11.155236182978205
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002046143534618978,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.6657248999690637,
+      "key": "p01a0_surface_gate",
+      "position_key": "p01a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11807737281128627,
+      "final_xy_error_m": 0.001062039418277169,
+      "peak_jaw_normal_n": [
+        6.357612002829962,
+        11.292524104421297
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0016314135659050606,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.23417170002358,
+      "contact_refused": false,
+      "key": "p01a1_baseline",
+      "position_key": "p01a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11807737281128627,
+      "final_xy_error_m": 0.001062039418277169,
+      "peak_jaw_normal_n": [
+        6.357612002829962,
+        11.292524104421297
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0016314135659050606,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.253385099989828,
+      "key": "p01a1_gate",
+      "position_key": "p01a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11807113127706437,
+      "final_xy_error_m": 0.0010205225816594691,
+      "peak_jaw_normal_n": [
+        6.301435762842591,
+        11.407284976380888
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0016519747868783304,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.929049299971666,
+      "key": "p01a1_surface",
+      "position_key": "p01a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11807113127706437,
+      "final_xy_error_m": 0.0010205225816594691,
+      "peak_jaw_normal_n": [
+        6.301435762842591,
+        11.407284976380888
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0016519747868783304,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.9572459000046365,
+      "key": "p01a1_surface_gate",
+      "position_key": "p01a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11744352118423451,
+      "final_xy_error_m": 0.002813860875280184,
+      "peak_jaw_normal_n": [
+        4.507532363745618,
+        13.224362073776204
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0024791365309708817,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.052459200029261,
+      "contact_refused": false,
+      "key": "p01a2_baseline",
+      "position_key": "p01a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.11684992855952256,
+      "peak_jaw_normal_n": [
+        1.3922688047312306,
+        3.7870200120864754
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149952941114798,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.1414386000251397,
+      "key": "p01a2_gate",
+      "position_key": "p01a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11751928069995787,
+      "final_xy_error_m": 0.0029192353545069785,
+      "peak_jaw_normal_n": [
+        4.504008808792077,
+        13.769758757763887
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0024696976220963326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5881229999940842,
+      "key": "p01a2_surface",
+      "position_key": "p01a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11751928069995787,
+      "final_xy_error_m": 0.0029192353545069785,
+      "peak_jaw_normal_n": [
+        4.504008808792077,
+        13.769758757763887
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0024696976220963326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.6422899999888614,
+      "key": "p01a2_surface_gate",
+      "position_key": "p01a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.02327892075561344,
+      "final_xy_error_m": 0.15454261595135785,
+      "peak_jaw_normal_n": [
+        3.1532292469097625,
+        4.395744949444118
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0032002120242047745,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.628740000014659,
+      "contact_refused": false,
+      "key": "p02a0_baseline",
+      "position_key": "p02a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.1567135084788324,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.395744949444118
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001514990094036911,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.1836994999903254,
+      "key": "p02a0_gate",
+      "position_key": "p02a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1114966636681014,
+      "final_xy_error_m": 0.005012044160648426,
+      "peak_jaw_normal_n": [
+        34.20278059962583,
+        9.340588487661988
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004644612554654868,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7778638000017963,
+      "key": "p02a0_surface",
+      "position_key": "p02a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0016094329301259425,
+      "final_xy_error_m": 0.16144794580453362,
+      "peak_jaw_normal_n": [
+        34.20278059962583,
+        5.0688340220594865
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004012272744991906,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.0401746000279672,
+      "key": "p02a0_surface_gate",
+      "position_key": "p02a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11721474241433294,
+      "final_xy_error_m": 0.0033347579452218073,
+      "peak_jaw_normal_n": [
+        6.7918673919576555,
+        11.523359809404294
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020111623164364087,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.285648799967021,
+      "contact_refused": false,
+      "key": "p02a1_baseline",
+      "position_key": "p02a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.15608378232551146,
+      "peak_jaw_normal_n": [
+        2.708838124576726,
+        3.831425722243536
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149892935129618,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.2387568999547511,
+      "key": "p02a1_gate",
+      "position_key": "p02a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11719842591100071,
+      "final_xy_error_m": 0.0033431361551553482,
+      "peak_jaw_normal_n": [
+        5.745637554941068,
+        11.546384810277104
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001980821504660675,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.962916899996344,
+      "key": "p02a1_surface",
+      "position_key": "p02a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11719842591100071,
+      "final_xy_error_m": 0.0033431361551553482,
+      "peak_jaw_normal_n": [
+        5.745637554941068,
+        11.546384810277104
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001980821504660675,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.9366931000258774,
+      "key": "p02a1_surface_gate",
+      "position_key": "p02a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11805617072941965,
+      "final_xy_error_m": 0.00113427861740726,
+      "peak_jaw_normal_n": [
+        6.850531799089117,
+        12.635111435028566
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914464137326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.348875599971507,
+      "contact_refused": false,
+      "key": "p02a2_baseline",
+      "position_key": "p02a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11805617072941965,
+      "final_xy_error_m": 0.00113427861740726,
+      "peak_jaw_normal_n": [
+        6.850531799089117,
+        12.635111435028566
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914464137326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.309132599970326,
+      "key": "p02a2_gate",
+      "position_key": "p02a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11808858661264288,
+      "final_xy_error_m": 0.0010782110775990016,
+      "peak_jaw_normal_n": [
+        6.964636829568485,
+        12.849628477085417
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914464137326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.037327700003516,
+      "key": "p02a2_surface",
+      "position_key": "p02a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.21,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11808858661264288,
+      "final_xy_error_m": 0.0010782110775990016,
+      "peak_jaw_normal_n": [
+        6.964636829568485,
+        12.849628477085417
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914464137326,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.028932800050825,
+      "key": "p02a2_surface_gate",
+      "position_key": "p02a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11731571889618997,
+      "final_xy_error_m": 0.00316323369369992,
+      "peak_jaw_normal_n": [
+        6.605615657469407,
+        11.83523014913606
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020781966116135454,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.1556388000026345,
+      "contact_refused": false,
+      "key": "p03a0_baseline",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11731571889618997,
+      "final_xy_error_m": 0.00316323369369992,
+      "peak_jaw_normal_n": [
+        6.605615657469407,
+        11.83523014913606
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020781966116135454,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.4058958000387065,
+      "key": "p03a0_gate",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.006705402133915461,
+      "final_xy_error_m": 0.0734997474650245,
+      "peak_jaw_normal_n": [
+        17.20951894113115,
+        1.3393574692851198
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0021837087734964157,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.382643899996765,
+      "key": "p03a0_offset",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.07433026146930775,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149934176981808,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.1953078000224195,
+      "key": "p03a0_open",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11725640348646271,
+      "final_xy_error_m": 0.003119807137808836,
+      "peak_jaw_normal_n": [
+        6.536897993736302,
+        12.069595692091784
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.00211430244920275,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.024182099965401,
+      "key": "p03a0_surface",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11725640348646271,
+      "final_xy_error_m": 0.003119807137808836,
+      "peak_jaw_normal_n": [
+        6.536897993736302,
+        12.069595692091784
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.00211430244920275,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.114104799984489,
+      "key": "p03a0_surface_gate",
+      "position_key": "p03a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11661613771139934,
+      "final_xy_error_m": 0.003978283700821653,
+      "peak_jaw_normal_n": [
+        4.433356394975606,
+        13.542200626704311
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0026881294886679334,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.088116600003559,
+      "contact_refused": false,
+      "key": "p03a1_baseline",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.07288675645905042,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.034208592434217
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149944898926286,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.3016446999972686,
+      "key": "p03a1_gate",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.005307104427231812,
+      "final_xy_error_m": 0.07294129551161607,
+      "peak_jaw_normal_n": [
+        16.620595280687024,
+        0.853845422990132
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0019750943072289265,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.4635589999961667,
+      "key": "p03a1_offset",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.07433049482472778,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149944898926286,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.157401100033894,
+      "key": "p03a1_open",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11720191476338215,
+      "final_xy_error_m": 0.0037583347566007516,
+      "peak_jaw_normal_n": [
+        4.329313202999137,
+        13.415930610520503
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002507383478514546,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7531960000051185,
+      "key": "p03a1_surface",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11720191476338215,
+      "final_xy_error_m": 0.0037583347566007516,
+      "peak_jaw_normal_n": [
+        4.329313202999137,
+        13.415930610520503
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002507383478514546,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7538969999877736,
+      "key": "p03a1_surface_gate",
+      "position_key": "p03a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0003323748256492953,
+      "final_xy_error_m": 0.07233545091786982,
+      "peak_jaw_normal_n": [
+        1.837832855523422,
+        4.32050354409703
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149934051568968,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.6081915000104345,
+      "contact_refused": false,
+      "key": "p03a2_baseline",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.07317863594481526,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.32050354409703
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149934051568968,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.1971168000018224,
+      "key": "p03a2_gate",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.005104524835695012,
+      "final_xy_error_m": 0.07244497295852582,
+      "peak_jaw_normal_n": [
+        19.496091301316067,
+        0.5879589648345148
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0027012418233517653,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5131398999947123,
+      "key": "p03a2_offset",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.001938650621020388,
+      "final_xy_error_m": 0.0831852397808782,
+      "peak_jaw_normal_n": [
+        25.22080701320667,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004309159632459482,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.2954185000271536,
+      "key": "p03a2_open",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.053901858023636784,
+      "final_xy_error_m": 0.08964292921024197,
+      "peak_jaw_normal_n": [
+        25.22080701320667,
+        7.894815147274771
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004829122364645201,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5193338000099175,
+      "key": "p03a2_surface",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.053901858023636784,
+      "final_xy_error_m": 0.08964292921024197,
+      "peak_jaw_normal_n": [
+        25.22080701320667,
+        7.894815147274771
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004829122364645201,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.6085709999897517,
+      "key": "p03a2_surface_gate",
+      "position_key": "p03a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1160772537956194,
+      "final_xy_error_m": 0.006443620789542523,
+      "peak_jaw_normal_n": [
+        6.231042714721416,
+        11.663753792037221
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020061050766511795,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.264102399989497,
+      "contact_refused": false,
+      "key": "p04a0_baseline",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.12358712993621561,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.057652872907345
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149954381058726,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.2856162000098266,
+      "key": "p04a0_gate",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 7.333925495833782e-05,
+      "final_xy_error_m": 0.12299838453896277,
+      "peak_jaw_normal_n": [
+        11.678602500039954,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149954381058726,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.380127699987497,
+      "key": "p04a0_offset",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.1253993024829518,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149954381058726,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.1323946000193246,
+      "key": "p04a0_open",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11687096171294609,
+      "final_xy_error_m": 0.005381591042847268,
+      "peak_jaw_normal_n": [
+        6.174093647270136,
+        11.607284663294521
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002064841179508524,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.8997852000175044,
+      "key": "p04a0_surface",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11687096171294609,
+      "final_xy_error_m": 0.005381591042847268,
+      "peak_jaw_normal_n": [
+        6.174093647270136,
+        11.607284663294521
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002064841179508524,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.8661616999888793,
+      "key": "p04a0_surface_gate",
+      "position_key": "p04a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.117717761717551,
+      "final_xy_error_m": 0.002026607438889503,
+      "peak_jaw_normal_n": [
+        6.421627706688862,
+        12.02150857395811
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017306673576962563,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.2514580999850295,
+      "contact_refused": false,
+      "key": "p04a1_baseline",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.117717761717551,
+      "final_xy_error_m": 0.002026607438889503,
+      "peak_jaw_normal_n": [
+        6.421627706688862,
+        12.02150857395811
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017306673576962563,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.125066700042225,
+      "key": "p04a1_gate",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 9.167852796632125e-05,
+      "final_xy_error_m": 0.1220889495462635,
+      "peak_jaw_normal_n": [
+        15.374106561909393,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0018530031453545086,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.238740999950096,
+      "key": "p04a1_offset",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.1253994602158619,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149938903792105,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 2.9497254999587312,
+      "key": "p04a1_open",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11774597403889953,
+      "final_xy_error_m": 0.0018704276036943317,
+      "peak_jaw_normal_n": [
+        6.430023493494206,
+        12.126007682737399
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001742438757523116,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.9302911999984644,
+      "key": "p04a1_surface",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11774597403889953,
+      "final_xy_error_m": 0.0018704276036943317,
+      "peak_jaw_normal_n": [
+        6.430023493494206,
+        12.126007682737399
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001742438757523116,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.923753300041426,
+      "key": "p04a1_surface_gate",
+      "position_key": "p04a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11712043533619876,
+      "final_xy_error_m": 0.0037297067772110973,
+      "peak_jaw_normal_n": [
+        4.549838891655267,
+        13.520053975184268
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002582309430471795,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.0889487999957055,
+      "contact_refused": false,
+      "key": "p04a2_baseline",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.12355668052317621,
+      "peak_jaw_normal_n": [
+        1.3514814978012213,
+        3.8566513445124846
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149952941111225,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.202020199969411,
+      "key": "p04a2_gate",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.00033415567489269993,
+      "final_xy_error_m": 0.12079989765444553,
+      "peak_jaw_normal_n": [
+        18.510216207966316,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002371608107367449,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.2903525000438094,
+      "key": "p04a2_offset",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.12539931906822285,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149952941111225,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.071981000015512,
+      "key": "p04a2_open",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11721888359519461,
+      "final_xy_error_m": 0.0036023589748811697,
+      "peak_jaw_normal_n": [
+        4.526977170104456,
+        13.497868984239508
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025443689611149845,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7036398999625817,
+      "key": "p04a2_surface",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11721888359519461,
+      "final_xy_error_m": 0.0036023589748811697,
+      "peak_jaw_normal_n": [
+        4.526977170104456,
+        13.497868984239508
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025443689611149845,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.663665600004606,
+      "key": "p04a2_surface_gate",
+      "position_key": "p04a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.03732123694235723,
+      "final_xy_error_m": 0.16079188074069323,
+      "peak_jaw_normal_n": [
+        3.7474298925955702,
+        3.8662420887007096
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.003579503229782486,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.529273900028784,
+      "contact_refused": false,
+      "key": "p05a0_baseline",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.16145451206518835,
+      "peak_jaw_normal_n": [
+        0.0,
+        3.8662420887007096
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001514990094021642,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.1181307999650016,
+      "key": "p05a0_gate",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.16286483281987565,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001514990094021642,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.267908800044097,
+      "key": "p05a0_offset",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 1.5241585560321624e-05,
+      "final_xy_error_m": 0.16407875748578524,
+      "peak_jaw_normal_n": [
+        25.48836823633186,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017818566318199142,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.1700906999758445,
+      "key": "p05a0_open",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11504354090023383,
+      "final_xy_error_m": 0.0032328004179497188,
+      "peak_jaw_normal_n": [
+        25.48836823633186,
+        9.737590332131177
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004395616966292325,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.747017700050492,
+      "key": "p05a0_surface",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11504354090023383,
+      "final_xy_error_m": 0.0032328004179497188,
+      "peak_jaw_normal_n": [
+        25.48836823633186,
+        9.737590332131177
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004395616966292325,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7185267999884672,
+      "key": "p05a0_surface_gate",
+      "position_key": "p05a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11717720158099698,
+      "final_xy_error_m": 0.0029456848946441717,
+      "peak_jaw_normal_n": [
+        6.706192547155467,
+        11.456628675366328
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020127219591872907,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.216267100011464,
+      "contact_refused": false,
+      "key": "p05a1_baseline",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11717720158099698,
+      "final_xy_error_m": 0.0029456848946441717,
+      "peak_jaw_normal_n": [
+        6.706192547155467,
+        11.456628675366328
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020127219591872907,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.304801399994176,
+      "key": "p05a1_gate",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 1.2933437006923398e-06,
+      "final_xy_error_m": 0.1604197714915346,
+      "peak_jaw_normal_n": [
+        13.033297961823104,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001691099432959614,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.3727605000021867,
+      "key": "p05a1_offset",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.16286497627636043,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001514996900759704,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.181322300049942,
+      "key": "p05a1_open",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11712114463647094,
+      "final_xy_error_m": 0.003042957741458923,
+      "peak_jaw_normal_n": [
+        6.76445115074527,
+        11.465882338022421
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020114202794451093,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.8850636999704875,
+      "key": "p05a1_surface",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11712114463647094,
+      "final_xy_error_m": 0.003042957741458923,
+      "peak_jaw_normal_n": [
+        6.76445115074527,
+        11.465882338022421
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020114202794451093,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.037712399964221,
+      "key": "p05a1_surface_gate",
+      "position_key": "p05a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11802945587631553,
+      "final_xy_error_m": 0.0008493721603156149,
+      "peak_jaw_normal_n": [
+        6.443203836074762,
+        12.684363347920819
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914463984254,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.365793199976906,
+      "contact_refused": false,
+      "key": "p05a2_baseline",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11802945587631553,
+      "final_xy_error_m": 0.0008493721603156149,
+      "peak_jaw_normal_n": [
+        6.443203836074762,
+        12.684363347920819
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914463984254,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.35007190000033,
+      "key": "p05a2_gate",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "offset",
+      "label": "偏位：指面校准但偏5.5cm",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.00020257711500715203,
+      "final_xy_error_m": 0.16051949766462514,
+      "peak_jaw_normal_n": [
+        13.72208891991276,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0024709190349975867,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.4715956000145525,
+      "key": "p05a2_offset",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "open",
+      "label": "空夹：指面校准但不闭合",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.16286518372497133,
+      "peak_jaw_normal_n": [
+        0.0,
+        0.0
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914463984254,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.1108235000283457,
+      "key": "p05a2_open",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11798325755358763,
+      "final_xy_error_m": 0.0008174782581791626,
+      "peak_jaw_normal_n": [
+        6.529949141184519,
+        12.853271826779947
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914463984254,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.116612799989525,
+      "key": "p05a2_surface",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.23,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11798325755358763,
+      "final_xy_error_m": 0.0008174782581791626,
+      "peak_jaw_normal_n": [
+        6.529949141184519,
+        12.853271826779947
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149914463984254,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.063541200011969,
+      "key": "p05a2_surface_gate",
+      "position_key": "p05a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11727317201131904,
+      "final_xy_error_m": 0.003414996685782581,
+      "peak_jaw_normal_n": [
+        6.650854236976613,
+        11.82064296723922
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0021193564596967106,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.135360900021624,
+      "contact_refused": false,
+      "key": "p06a0_baseline",
+      "position_key": "p06a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11727317201131904,
+      "final_xy_error_m": 0.003414996685782581,
+      "peak_jaw_normal_n": [
+        6.650854236976613,
+        11.82064296723922
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0021193564596967106,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.1669610000099055,
+      "key": "p06a0_gate",
+      "position_key": "p06a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11727909926967117,
+      "final_xy_error_m": 0.0033602405510891244,
+      "peak_jaw_normal_n": [
+        6.732263021884032,
+        11.983345366740611
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002133691941447382,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.831029799999669,
+      "key": "p06a0_surface",
+      "position_key": "p06a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11727909926967117,
+      "final_xy_error_m": 0.0033602405510891244,
+      "peak_jaw_normal_n": [
+        6.732263021884032,
+        11.983345366740611
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002133691941447382,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.959627200034447,
+      "key": "p06a0_surface_gate",
+      "position_key": "p06a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11710317221693556,
+      "final_xy_error_m": 0.0036579631067070783,
+      "peak_jaw_normal_n": [
+        4.5477365134048,
+        13.354360185385682
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0026282289817501116,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.014432900003158,
+      "contact_refused": false,
+      "key": "p06a1_baseline",
+      "position_key": "p06a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.08370180596137708,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.041946178380458
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149860519132335,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.240877799980808,
+      "key": "p06a1_gate",
+      "position_key": "p06a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11731677351490633,
+      "final_xy_error_m": 0.003719550540441934,
+      "peak_jaw_normal_n": [
+        4.491471926018229,
+        13.697106657103488
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002595073636654968,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.619034699979238,
+      "key": "p06a1_surface",
+      "position_key": "p06a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11731677351490633,
+      "final_xy_error_m": 0.003719550540441934,
+      "peak_jaw_normal_n": [
+        4.491471926018229,
+        13.697106657103488
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002595073636654968,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.70334800001001,
+      "key": "p06a1_surface_gate",
+      "position_key": "p06a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.00032135463940208275,
+      "final_xy_error_m": 0.08290668428018647,
+      "peak_jaw_normal_n": [
+        1.8266069386210806,
+        4.280345190930645
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149952282072325,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.6808576000039466,
+      "contact_refused": false,
+      "key": "p06a2_baseline",
+      "position_key": "p06a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.08408040926209365,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.280345190930645
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149952282072325,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.156232999986969,
+      "key": "p06a2_gate",
+      "position_key": "p06a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.05696405246568459,
+      "final_xy_error_m": 0.1103269212640784,
+      "peak_jaw_normal_n": [
+        23.92784632022045,
+        6.351085541557868
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004410961243235752,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.56869009998627,
+      "key": "p06a2_surface",
+      "position_key": "p06a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          -0.035,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.05696405246568459,
+      "final_xy_error_m": 0.1103269212640784,
+      "peak_jaw_normal_n": [
+        23.92784632022045,
+        6.351085541557868
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.004410961243235752,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.5798351000412367,
+      "key": "p06a2_surface_gate",
+      "position_key": "p06a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11626431339390186,
+      "final_xy_error_m": 0.005935822004070114,
+      "peak_jaw_normal_n": [
+        6.160560501235798,
+        11.70142222957948
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020167373239001404,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.101939000014681,
+      "contact_refused": false,
+      "key": "p07a0_baseline",
+      "position_key": "p07a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.13031935875164977,
+      "peak_jaw_normal_n": [
+        0.0,
+        4.049201595438781
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149954249534352,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.288164500030689,
+      "key": "p07a0_gate",
+      "position_key": "p07a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11703547176573248,
+      "final_xy_error_m": 0.006131059392270079,
+      "peak_jaw_normal_n": [
+        6.198690362076547,
+        11.683772140509884
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002046300992456465,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.754046100017149,
+      "key": "p07a0_surface",
+      "position_key": "p07a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11703547176573248,
+      "final_xy_error_m": 0.006131059392270079,
+      "peak_jaw_normal_n": [
+        6.198690362076547,
+        11.683772140509884
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002046300992456465,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.8409019999671727,
+      "key": "p07a0_surface_gate",
+      "position_key": "p07a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11785509850399833,
+      "final_xy_error_m": 0.0017282760431677488,
+      "peak_jaw_normal_n": [
+        6.4240371084237955,
+        12.187733708455596
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017160700105222498,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.3329110000049695,
+      "contact_refused": false,
+      "key": "p07a1_baseline",
+      "position_key": "p07a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11785509850399833,
+      "final_xy_error_m": 0.0017282760431677488,
+      "peak_jaw_normal_n": [
+        6.4240371084237955,
+        12.187733708455596
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017160700105222498,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.299697800015565,
+      "key": "p07a1_gate",
+      "position_key": "p07a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11787456576108724,
+      "final_xy_error_m": 0.0015632141150343287,
+      "peak_jaw_normal_n": [
+        6.417962408123557,
+        12.299350780308107
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017297678323679455,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.079725000017788,
+      "key": "p07a1_surface",
+      "position_key": "p07a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11787456576108724,
+      "final_xy_error_m": 0.0015632141150343287,
+      "peak_jaw_normal_n": [
+        6.417962408123557,
+        12.299350780308107
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0017297678323679455,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.026809100003447,
+      "key": "p07a1_surface_gate",
+      "position_key": "p07a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11726969512968988,
+      "final_xy_error_m": 0.003283803439626738,
+      "peak_jaw_normal_n": [
+        4.557976479298547,
+        13.575918878441035
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025921751733985234,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.178948400018271,
+      "contact_refused": false,
+      "key": "p07a2_baseline",
+      "position_key": "p07a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.13039282511342373,
+      "peak_jaw_normal_n": [
+        1.3295731635581751,
+        3.795864911483921
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.001514997186005427,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.285085599985905,
+      "key": "p07a2_gate",
+      "position_key": "p07a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11736628344540889,
+      "final_xy_error_m": 0.0033303511597573493,
+      "peak_jaw_normal_n": [
+        4.2478554977390015,
+        13.55750380471772
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025566867023572373,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.866063599998597,
+      "key": "p07a2_surface",
+      "position_key": "p07a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.025,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11736628344540889,
+      "final_xy_error_m": 0.0033303511597573493,
+      "peak_jaw_normal_n": [
+        4.2478554977390015,
+        13.55750380471772
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0025566867023572373,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7834671999444254,
+      "key": "p07a2_surface_gate",
+      "position_key": "p07a2"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.026077264589881466,
+      "final_xy_error_m": 0.16518511406150935,
+      "peak_jaw_normal_n": [
+        3.885143677887131,
+        4.012429013862875
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.003209563712239842,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.7096077000023797,
+      "contact_refused": false,
+      "key": "p08a0_baseline",
+      "position_key": "p08a0"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": true,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": false,
+      "stable_lift": false,
+      "stable_placement": false,
+      "lift_hold_s": 0.0,
+      "placement_hold_s": 0.0,
+      "max_lift_m": 0.0,
+      "final_xy_error_m": 0.16667359465624915,
+      "peak_jaw_normal_n": [
+        0.0,
+        3.874565334724916
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149962779176934,
+      "sim_duration_s": 7.999999999999341,
+      "plan_rejected": "抬升前未形成持续0.2s的双侧接触",
+      "wall_s": 1.2227290000300854,
+      "key": "p08a0_gate",
+      "position_key": "p08a0"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1164555918057496,
+      "final_xy_error_m": 0.006304523934957837,
+      "peak_jaw_normal_n": [
+        22.524440183513445,
+        10.27705088162856
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.00419531893712239,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.8702916000038385,
+      "key": "p08a0_surface",
+      "position_key": "p08a0"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": -20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.1164555918057496,
+      "final_xy_error_m": 0.006304523934957837,
+      "peak_jaw_normal_n": [
+        22.524440183513445,
+        10.27705088162856
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.00419531893712239,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 3.811081899970304,
+      "key": "p08a0_surface_gate",
+      "position_key": "p08a0"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11697920283616758,
+      "final_xy_error_m": 0.003498874420021651,
+      "peak_jaw_normal_n": [
+        6.772519330688629,
+        11.630710525484357
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002032696568308432,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.320602699997835,
+      "contact_refused": false,
+      "key": "p08a1_baseline",
+      "position_key": "p08a1"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11697920283616758,
+      "final_xy_error_m": 0.003498874420021651,
+      "peak_jaw_normal_n": [
+        6.772519330688629,
+        11.630710525484357
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.002032696568308432,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.359384000010323,
+      "key": "p08a1_gate",
+      "position_key": "p08a1"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11699974082232911,
+      "final_xy_error_m": 0.0035530174071623445,
+      "peak_jaw_normal_n": [
+        5.980996653087087,
+        11.704751258795195
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020606897901262813,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.038304199988488,
+      "key": "p08a1_surface",
+      "position_key": "p08a1"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 5.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11699974082232911,
+      "final_xy_error_m": 0.0035530174071623445,
+      "peak_jaw_normal_n": [
+        5.980996653087087,
+        11.704751258795195
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0020606897901262813,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.116678700025659,
+      "key": "p08a1_surface_gate",
+      "position_key": "p08a1"
+    },
+    {
+      "method": "baseline",
+      "label": "A 指尖校准：第二轮基线",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11776743118409894,
+      "final_xy_error_m": 0.0013631165081273732,
+      "peak_jaw_normal_n": [
+        6.70524179565263,
+        13.018072917859548
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149956314564894,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.528184900002088,
+      "contact_refused": false,
+      "key": "p08a2_baseline",
+      "position_key": "p08a2"
+    },
+    {
+      "method": "gate",
+      "label": "C 接触门控：基线＋抬升前双侧力检查",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11776743118409894,
+      "final_xy_error_m": 0.0013631165081273732,
+      "peak_jaw_normal_n": [
+        6.70524179565263,
+        13.018072917859548
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149956314564894,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.566070000000764,
+      "key": "p08a2_gate",
+      "position_key": "p08a2"
+    },
+    {
+      "method": "surface",
+      "label": "B 指面校准：只换接触参考点",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11781800839356293,
+      "final_xy_error_m": 0.00127874977255419,
+      "peak_jaw_normal_n": [
+        6.739425029615726,
+        13.225634683960376
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149956314564894,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.214452899992466,
+      "key": "p08a2_surface",
+      "position_key": "p08a2"
+    },
+    {
+      "method": "surface_gate",
+      "label": "D 指面＋门控：两项同时使用",
+      "config": {
+        "object_xyz": [
+          0.245,
+          0.065,
+          0.715
+        ],
+        "object_half_size": 0.02,
+        "object_mass": 0.05,
+        "object_friction": 1.0,
+        "target_xy": [
+          0.18,
+          -0.09
+        ],
+        "gripper_torque_limit_nm": 0.3
+      },
+      "object_yaw_deg": 20.0,
+      "contact_refused": false,
+      "surface_parameters": {
+        "band_x": 0.0,
+        "preparation_opening": 0.45
+      },
+      "success": true,
+      "stable_lift": true,
+      "stable_placement": true,
+      "lift_hold_s": 1.18,
+      "placement_hold_s": 0.98,
+      "max_lift_m": 0.11781800839356293,
+      "final_xy_error_m": 0.00127874977255419,
+      "peak_jaw_normal_n": [
+        6.739425029615726,
+        13.225634683960376
+      ],
+      "peak_other_arm_contact_n": 0.0,
+      "max_penetration_m": 0.0015149956314564894,
+      "sim_duration_s": 21.19999999999913,
+      "plan_rejected": "",
+      "wall_s": 4.249853399989661,
+      "key": "p08a2_surface_gate",
+      "position_key": "p08a2"
+    }
+  ],
+  "cases": [
+    [
+      "p00a0",
+      [
+        0.21,
+        -0.035
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p00a0",
+      [
+        0.21,
+        -0.035
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p00a0",
+      [
+        0.21,
+        -0.035
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p00a0",
+      [
+        0.21,
+        -0.035
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p00a1",
+      [
+        0.21,
+        -0.035
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p00a1",
+      [
+        0.21,
+        -0.035
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p00a1",
+      [
+        0.21,
+        -0.035
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p00a1",
+      [
+        0.21,
+        -0.035
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p00a2",
+      [
+        0.21,
+        -0.035
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p00a2",
+      [
+        0.21,
+        -0.035
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p00a2",
+      [
+        0.21,
+        -0.035
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p00a2",
+      [
+        0.21,
+        -0.035
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p01a0",
+      [
+        0.21,
+        0.025
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p01a0",
+      [
+        0.21,
+        0.025
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p01a0",
+      [
+        0.21,
+        0.025
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p01a0",
+      [
+        0.21,
+        0.025
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p01a1",
+      [
+        0.21,
+        0.025
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p01a1",
+      [
+        0.21,
+        0.025
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p01a1",
+      [
+        0.21,
+        0.025
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p01a1",
+      [
+        0.21,
+        0.025
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p01a2",
+      [
+        0.21,
+        0.025
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p01a2",
+      [
+        0.21,
+        0.025
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p01a2",
+      [
+        0.21,
+        0.025
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p01a2",
+      [
+        0.21,
+        0.025
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p02a0",
+      [
+        0.21,
+        0.065
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p02a0",
+      [
+        0.21,
+        0.065
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p02a0",
+      [
+        0.21,
+        0.065
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p02a0",
+      [
+        0.21,
+        0.065
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p02a1",
+      [
+        0.21,
+        0.065
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p02a1",
+      [
+        0.21,
+        0.065
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p02a1",
+      [
+        0.21,
+        0.065
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p02a1",
+      [
+        0.21,
+        0.065
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p02a2",
+      [
+        0.21,
+        0.065
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p02a2",
+      [
+        0.21,
+        0.065
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p02a2",
+      [
+        0.21,
+        0.065
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p02a2",
+      [
+        0.21,
+        0.065
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "open"
+    ],
+    [
+      "p03a0",
+      [
+        0.23,
+        -0.035
+      ],
+      -20.0,
+      "offset"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "open"
+    ],
+    [
+      "p03a1",
+      [
+        0.23,
+        -0.035
+      ],
+      5.0,
+      "offset"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "open"
+    ],
+    [
+      "p03a2",
+      [
+        0.23,
+        -0.035
+      ],
+      20.0,
+      "offset"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "open"
+    ],
+    [
+      "p04a0",
+      [
+        0.23,
+        0.025
+      ],
+      -20.0,
+      "offset"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "open"
+    ],
+    [
+      "p04a1",
+      [
+        0.23,
+        0.025
+      ],
+      5.0,
+      "offset"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "open"
+    ],
+    [
+      "p04a2",
+      [
+        0.23,
+        0.025
+      ],
+      20.0,
+      "offset"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "open"
+    ],
+    [
+      "p05a0",
+      [
+        0.23,
+        0.065
+      ],
+      -20.0,
+      "offset"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "open"
+    ],
+    [
+      "p05a1",
+      [
+        0.23,
+        0.065
+      ],
+      5.0,
+      "offset"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "open"
+    ],
+    [
+      "p05a2",
+      [
+        0.23,
+        0.065
+      ],
+      20.0,
+      "offset"
+    ],
+    [
+      "p06a0",
+      [
+        0.245,
+        -0.035
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p06a0",
+      [
+        0.245,
+        -0.035
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p06a0",
+      [
+        0.245,
+        -0.035
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p06a0",
+      [
+        0.245,
+        -0.035
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p06a1",
+      [
+        0.245,
+        -0.035
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p06a1",
+      [
+        0.245,
+        -0.035
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p06a1",
+      [
+        0.245,
+        -0.035
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p06a1",
+      [
+        0.245,
+        -0.035
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p06a2",
+      [
+        0.245,
+        -0.035
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p06a2",
+      [
+        0.245,
+        -0.035
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p06a2",
+      [
+        0.245,
+        -0.035
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p06a2",
+      [
+        0.245,
+        -0.035
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p07a0",
+      [
+        0.245,
+        0.025
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p07a0",
+      [
+        0.245,
+        0.025
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p07a0",
+      [
+        0.245,
+        0.025
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p07a0",
+      [
+        0.245,
+        0.025
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p07a1",
+      [
+        0.245,
+        0.025
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p07a1",
+      [
+        0.245,
+        0.025
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p07a1",
+      [
+        0.245,
+        0.025
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p07a1",
+      [
+        0.245,
+        0.025
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p07a2",
+      [
+        0.245,
+        0.025
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p07a2",
+      [
+        0.245,
+        0.025
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p07a2",
+      [
+        0.245,
+        0.025
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p07a2",
+      [
+        0.245,
+        0.025
+      ],
+      20.0,
+      "surface_gate"
+    ],
+    [
+      "p08a0",
+      [
+        0.245,
+        0.065
+      ],
+      -20.0,
+      "baseline"
+    ],
+    [
+      "p08a0",
+      [
+        0.245,
+        0.065
+      ],
+      -20.0,
+      "surface"
+    ],
+    [
+      "p08a0",
+      [
+        0.245,
+        0.065
+      ],
+      -20.0,
+      "gate"
+    ],
+    [
+      "p08a0",
+      [
+        0.245,
+        0.065
+      ],
+      -20.0,
+      "surface_gate"
+    ],
+    [
+      "p08a1",
+      [
+        0.245,
+        0.065
+      ],
+      5.0,
+      "baseline"
+    ],
+    [
+      "p08a1",
+      [
+        0.245,
+        0.065
+      ],
+      5.0,
+      "surface"
+    ],
+    [
+      "p08a1",
+      [
+        0.245,
+        0.065
+      ],
+      5.0,
+      "gate"
+    ],
+    [
+      "p08a1",
+      [
+        0.245,
+        0.065
+      ],
+      5.0,
+      "surface_gate"
+    ],
+    [
+      "p08a2",
+      [
+        0.245,
+        0.065
+      ],
+      20.0,
+      "baseline"
+    ],
+    [
+      "p08a2",
+      [
+        0.245,
+        0.065
+      ],
+      20.0,
+      "surface"
+    ],
+    [
+      "p08a2",
+      [
+        0.245,
+        0.065
+      ],
+      20.0,
+      "gate"
+    ],
+    [
+      "p08a2",
+      [
+        0.245,
+        0.065
+      ],
+      20.0,
+      "surface_gate"
+    ]
+  ],
+  "preferred_method": "surface",
+  "sensor_note": "已知初始位置；仅实时自身开度与过去子步接触力参与候选控制，RGB未参与控制",
+  "simulation_note": "只在初始设置物体朝向；原模型、限矩、质量、摩擦、阶段时长和评分不变",
+  "force_timing": "physics_time=t对应[t-dt,t]求解力；控制帧为mj_forward瞬时诊断",
+  "protocol": "docs/73-contact-round3-plan.md",
+  "calibration": {
+    "band_x_m": 0.0,
+    "preparation_opening_rad": 0.45,
+    "samples": 131
+  },
+  "contact_gate": {
+    "threshold_n": 0.05,
+    "duration_s": 0.2,
+    "phase": 3,
+    "decision_before_phase": 4
+  },
+  "source_sha256": {
+    "so101_contact_study.py": "362f17ac9731606b8d254b6c7c45cfaf41e4c4024a79306efaf5a7ee25c14e28",
+    "gripper_contact.py": "bc4d56dabca14ba471dfceb5053aea74b72aab2b747b32f0bc83832d790a7d8a",
+    "gripper_calibration.py": "02e91c89936c279ff2a2df2ebd804e5228882b2e20d78fda888c65fb34454ca0",
+    "so101_approach_study.py": "5b62d8cf488ea2e37817ecf8a5c389f5227366bc46bbcbf7aacba98cd5279775",
+    "so101_grasping.py": "512f06ce9fca3119a5ab5dd127812bc975758ceaa62a84ad4de3b0f68528c27b",
+    "so101.py": "0df6c31f99b0b7b355571bf3517cb2d0dd1d7756d513ea6eb864c5b2f4a5adf5",
+    "73-contact-round3-plan.md": "defabda85089446aac34bffdc7cb73ed912118af73ca77448e2c7397c049e5ce"
+  },
+  "wall_s": 150.1009527000133,
+  "archive_sha256": "30df1b67288e62718606a8ee527944432232f6c9f7da6655d366a2ef26368a8c"
+}

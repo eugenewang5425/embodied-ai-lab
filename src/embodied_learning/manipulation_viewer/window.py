@@ -22,7 +22,9 @@ class ManipulationWindow:
         self.root, self.record = root, record
         self.closed, self.updating, self.timer = False, False, None
         self.position = position or record.positions[len(record.positions) // 2]
-        preferred = "center_cartesian" if "center_cartesian" in record.methods else "clamp"
+        preferred = record.summary.get("preferred_method") or (
+            "center_cartesian" if "center_cartesian" in record.methods else "clamp"
+        )
         self.method = method or preferred
         self.engine = ManipulationRenderer()
         self.last_frame = -1
@@ -183,15 +185,29 @@ class ManipulationWindow:
             + (
                 "。比较空间路径与当前开口校准；空夹/偏差只在登记条件有回合。金点是名义参考中心，校准后的TCP会偏移。"
                 if self.record.summary.get("study_round") == 2
+                else "。A保留指尖参考，B改用实际指面，C加双侧接触检查，D同时使用；拒绝抬升也计失败。金点是名义参考中心。"
+                if self.record.summary.get("study_round") == 3
                 else "。三组只改变夹爪或抓取位置；"
             )
             + "使用已知物体位置（初始化给定），相机尚未参与控制。"
             + (
                 f"本方法全批完成{sum(r['success'] for r in self.record.rows.values() if r['method'] == self.method)}/{sum(r['method'] == self.method for r in self.record.rows.values())}；开发例不代表泛化，候选尚未全范围通过。"
-                if self.record.summary.get("study_round") == 2
+                if self.record.summary.get("study_round") in (2, 3)
                 else ""
             )
         )
+        if self.record.summary.get("study_round") == 3:
+            count = sum(
+                r["success"] for r in self.record.rows.values() if r["method"] == self.method
+            )
+            total = sum(r["method"] == self.method for r in self.record.rows.values())
+            self.method_note.configure(
+                text=(
+                    f"{self.record.methods[self.method]}。 本批完成{count}/{total}；候选尚未全范围通过。\n"
+                    "A保留指尖参考，B用实际指面，C加双侧接触检查，D同时使用；拒绝抬升也计失败。\n"
+                    "已知物体位置由初始化给定，相机未参与控制。 金点为名义参考，校准后的TCP会偏移。"
+                )
+            )
         self.refresh()
 
     def seek(self, frame):
@@ -237,6 +253,26 @@ class ManipulationWindow:
         forces = v["jaw_normal_n"][frame]
         obj = v["object_xyz"][frame]
         target = v["waypoint_xyz"][frame]
+        contact_note = ""
+        if "gate_elapsed_s" in v:
+            f = v["solved_jaw_min_n"][frame]
+            elapsed = v["gate_elapsed_s"][frame]
+            contact_note = (
+                f"\n过去20ms两指最小力={f[0]:.2f}/{f[1]:.2f}N｜夹紧段连续双侧={elapsed:.2f}s（要求0.20s）｜"
+                + (
+                    "完整回合结果：门控拒绝抬升"
+                    if row.get("contact_refused")
+                    else "完成以原抓取评分为准"
+                )
+            )
+            if self.method in ("surface", "surface_gate", "open", "offset"):
+                cap = self.record.summary["calibration"]["preparation_opening_rad"]
+                used_opening = v["qpos"][max(0, frame - 1), 5]
+                contact_note += (
+                    f"｜指面参考：超{np.rad2deg(cap):.1f}°，使用准备近似"
+                    if used_opening > cap
+                    else "｜指面参考：标定范围内"
+                )
         self.stats.configure(
             text=(
                 f"当前：{phase}｜物体中心离桌高度={(obj[2] - TABLE_Z) * 100:.1f}cm｜两指接触力={forces[0]:.2f}/{forces[1]:.2f}N｜"
@@ -244,6 +280,7 @@ class ManipulationWindow:
                 f"本段名义参考 XYZ=({target[0] * 100:.1f}, {target[1] * 100:.1f}, {target[2] * 100:.1f})cm｜"
                 f"完整回合：稳定抬起{'通过' if row['stable_lift'] else '未通过'}、放置{'通过' if row['stable_placement'] else '未通过'}｜"
                 f"终点偏差={row['final_xy_error_m'] * 100:.2f}cm｜仿真回放，非实时实机"
+                + contact_note
             )
         )
 

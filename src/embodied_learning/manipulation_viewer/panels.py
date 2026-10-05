@@ -47,12 +47,13 @@ class DiagnosticsPanel(ttk.Frame):
         ttk.Label(
             self, text="实验诊断 · 同时看成功与失败", font=("Microsoft YaHei", 12, "bold")
         ).pack(anchor="w")
-        ttk.Label(
+        self.note = ttk.Label(
             self,
             text="各线来自独立配对回合；竖线为当前时刻。接触力是固定/活动指法向力之和。",
             wraplength=600,
             foreground="#526174",
-        ).pack(fill="x")
+        )
+        self.note.pack(fill="x")
         self.figure, self.axes = plt.subplots(2, 1, figsize=(6, 4.5), layout="constrained")
         self.widget = FigureCanvasTkAgg(self.figure, master=self)
         self.widget.get_tk_widget().pack(fill="both", expand=True)
@@ -83,11 +84,24 @@ class DiagnosticsPanel(ttk.Frame):
             borderaxespad=0,
         )
         _, values = record.select(position, method)
-        for j, label, color in ((0, "固定指", "#2563eb"), (1, "活动指", "#c2410c")):
-            self.axes[1].plot(
-                values["timestamps"], values["jaw_normal_n"][:, j], label=label, color=color
+        solved = record.summary.get("study_round") == 3
+        self.note.configure(
+            text=(
+                "各线为独立配对回合；竖线为当前时刻。下图分别为两指过去20ms的最小求解力。"
+                if solved
+                else "各线来自独立配对回合；竖线为当前时刻。下图分别为固定/活动指的诊断力。"
             )
-        self.axes[1].set(xlabel="仿真时间 / s", ylabel="接触力 / N")
+        )
+        force_values = (
+            np.vstack((np.zeros(2), values["physics_jaw_n"][:, :2].reshape(-1, 10, 2).min(axis=1)))
+            if solved
+            else values["jaw_normal_n"][:, :2]
+        )
+        for j, label, color in ((0, "固定指", "#2563eb"), (1, "活动指", "#c2410c")):
+            self.axes[1].plot(values["timestamps"], force_values[:, j], label=label, color=color)
+        self.axes[1].set(
+            xlabel="仿真时间 / s", ylabel="过去20ms最小力 / N" if solved else "接触力 / N"
+        )
         self.axes[1].legend(
             loc="lower left",
             bbox_to_anchor=(0, 1.02),

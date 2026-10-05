@@ -21,6 +21,12 @@ src/embodied_learning/gripper_calibration.py -text
 src/embodied_learning/experiments/so101_approach_study.py -text
 docs/73-approach-round2-plan.md -text
 scripts/validate_so101_approach.py -text
+
+src/embodied_learning/gripper_contact.py -text
+src/embodied_learning/experiments/so101_contact_study.py -text
+docs/73-contact-round3-plan.md -text
+scripts/validate_so101_contact.py -text
+docs/img/make_so101_contact_figures.py -text
 docs/img/make_so101_approach_figures.py -text
 
 # Also preserve previously unanchored dependencies used by these executed batches.
