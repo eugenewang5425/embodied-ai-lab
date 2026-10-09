@@ -1,0 +1,2705 @@
+{
+  "date": "2026-10-09",
+  "selected_model": "UniDepth V2 Small",
+  "dataset_frames": 39,
+  "heldout": [
+    {
+      "model": "da2_metric",
+      "split": "heldout",
+      "frames": 19,
+      "fusion_accepted_frames": 16,
+      "advisory_obstacle_frames": 3,
+      "inference_p50_ms": 78.76520001445897,
+      "inference_p95_ms": 85.2997300156858,
+      "raw_near": {
+        "frames": 19,
+        "absrel": 0.8244147010539707,
+        "rmse_m": 1.6284949465801841,
+        "delta1": 0.1094615876199035
+      },
+      "fused_near": {
+        "frames": 16,
+        "absrel": 0.14584464230574667,
+        "rmse_m": 0.436414553783834,
+        "delta1": 0.8467102849877091
+      },
+      "raw_far": {
+        "frames": 18,
+        "absrel": 0.4791480120685365,
+        "rmse_m": 3.6938286423683167,
+        "delta1": 0.36224697661837174
+      },
+      "fused_far": {
+        "frames": 15,
+        "absrel": 0.28030582070350646,
+        "rmse_m": 3.1365703026453655,
+        "delta1": 0.4355125388403744
+      },
+      "raw_obstacle": {
+        "frames": 5,
+        "absrel": 0.5978252112865448,
+        "rmse_m": 0.3579895406961441,
+        "delta1": 0.19804285918481784
+      },
+      "fused_obstacle": {
+        "frames": 4,
+        "absrel": 0.16285147704184055,
+        "rmse_m": 0.12716784328222275,
+        "delta1": 0.7473551532630028
+      },
+      "matched_raw_near_absrel": 0.8785368809476495,
+      "premature_range_advisories": []
+    },
+    {
+      "model": "unidepth",
+      "split": "heldout",
+      "frames": 19,
+      "fusion_accepted_frames": 17,
+      "advisory_obstacle_frames": 3,
+      "inference_p50_ms": 53.763700008857995,
+      "inference_p95_ms": 60.2445099997567,
+      "raw_near": {
+        "frames": 19,
+        "absrel": 0.8026139265612552,
+        "rmse_m": 1.4767420511496694,
+        "delta1": 0.05004283735315603
+      },
+      "fused_near": {
+        "frames": 17,
+        "absrel": 0.1445195065701709,
+        "rmse_m": 0.4714704357525882,
+        "delta1": 0.8453762830114165
+      },
+      "raw_far": {
+        "frames": 18,
+        "absrel": 0.5906531765229173,
+        "rmse_m": 6.150722616248661,
+        "delta1": 0.3686731524956735
+      },
+      "fused_far": {
+        "frames": 16,
+        "absrel": 0.4406133992597461,
+        "rmse_m": 5.069008566439152,
+        "delta1": 0.33033785550187517
+      },
+      "raw_obstacle": {
+        "frames": 5,
+        "absrel": 0.865047550201416,
+        "rmse_m": 0.49374261498451233,
+        "delta1": 0.0
+      },
+      "fused_obstacle": {
+        "frames": 5,
+        "absrel": 0.0839323453605175,
+        "rmse_m": 0.06948262006044388,
+        "delta1": 0.995497857539472
+      },
+      "matched_raw_near_absrel": 0.8218309002764085,
+      "premature_range_advisories": []
+    }
+  ],
+  "live_cases": [
+    {
+      "name": "20261009_depth_campus_s73_confirmed",
+      "scenario": "campus",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "route_complete",
+        "scenario": "campus",
+        "seed": 73,
+        "tasks_total": 8,
+        "true_completed": 8,
+        "completed": [
+          {
+            "name": "P1 南门岗亭",
+            "elapsed_s": 51.539999999965914,
+            "true_distance_m": 0.24048511182847168,
+            "estimated_distance_m": 0.24015189844536933,
+            "actual_speed_m_s": 6.1031833057138164e-05,
+            "marker_frame": 1545
+          },
+          {
+            "name": "P2 停车区",
+            "elapsed_s": 104.37999999991787,
+            "true_distance_m": 0.22669790174000873,
+            "estimated_distance_m": 0.24006404597676567,
+            "actual_speed_m_s": 0.005254973057671054,
+            "marker_frame": 3130
+          },
+          {
+            "name": "P3 东侧设备间",
+            "elapsed_s": 158.81999999986834,
+            "true_distance_m": 0.24694779657297528,
+            "estimated_distance_m": 0.25848798515453014,
+            "actual_speed_m_s": 0.004873119236648609,
+            "marker_frame": 4763
+          },
+          {
+            "name": "P4 中央路口",
+            "elapsed_s": 213.85999999981829,
+            "true_distance_m": 0.23076592860801987,
+            "estimated_distance_m": 0.2511807494138735,
+            "actual_speed_m_s": 0.000547599758172192,
+            "marker_frame": 6414
+          },
+          {
+            "name": "P5 北侧消防点",
+            "elapsed_s": 268.8000000001958,
+            "true_distance_m": 0.23472304424611,
+            "estimated_distance_m": 0.24739226685398508,
+            "actual_speed_m_s": 0.0005470583252370918,
+            "marker_frame": 8062
+          },
+          {
+            "name": "P6 西北仓库",
+            "elapsed_s": 323.00000000137885,
+            "true_distance_m": 0.23490937225399136,
+            "estimated_distance_m": 0.2508461862767664,
+            "actual_speed_m_s": 0.00022673195374912098,
+            "marker_frame": 9688
+          },
+          {
+            "name": "P7 西侧配电点",
+            "elapsed_s": 377.5200000025689,
+            "true_distance_m": 0.24510116170528323,
+            "estimated_distance_m": 0.2493623309809108,
+            "actual_speed_m_s": 0.0004709875745588715,
+            "marker_frame": 11324
+          },
+          {
+            "name": "P8 返回出发点",
+            "elapsed_s": 430.1600000037179,
+            "true_distance_m": 0.23922028595010664,
+            "estimated_distance_m": 0.24345763366256382,
+            "actual_speed_m_s": 0.004460720301393206,
+            "marker_frame": 12903
+          }
+        ],
+        "false_arrivals": [],
+        "seconds_simulated": 430.18000000371836,
+        "distance_walked_m": 99.59535148718155,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 8.948896288773255,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": null,
+        "stop_requested_s": null,
+        "final_speed_m_s": 0.004460720301393206,
+        "rgb_frames": 12905,
+        "tof_frames": 6453,
+        "elapsed_wall_s": 956.0080648000003,
+        "depth_mode": "assist",
+        "depth_results": 3898,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": true
+      },
+      "baseline": "20261009_campus_s73_derated",
+      "baseline_stop_requested_s": null,
+      "baseline_trace_identical": true,
+      "baseline_route": {
+        "true_completed": 8,
+        "tasks_total": 8,
+        "seconds_simulated": 430.18000000371836,
+        "distance_walked_m": 99.59535148718155,
+        "terminal": "route_complete"
+      },
+      "tasks": [
+        [
+          "P1 南门岗亭",
+          [
+            12.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 停车区",
+          [
+            22.0,
+            2.0
+          ]
+        ],
+        [
+          "P3 东侧设备间",
+          [
+            22.0,
+            12.0
+          ]
+        ],
+        [
+          "P4 中央路口",
+          [
+            12.0,
+            12.0
+          ]
+        ],
+        [
+          "P5 北侧消防点",
+          [
+            12.0,
+            22.0
+          ]
+        ],
+        [
+          "P6 西北仓库",
+          [
+            2.0,
+            22.0
+          ]
+        ],
+        [
+          "P7 西侧配电点",
+          [
+            2.0,
+            12.0
+          ]
+        ],
+        [
+          "P8 返回出发点",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 南门岗亭",
+          "policy_ticks": 2578,
+          "delivered_depth": 443,
+          "fresh_depth": 443,
+          "longest_between_fresh_s": 0.11999999999999034
+        },
+        {
+          "checkpoint": "P2 停车区",
+          "policy_ticks": 2642,
+          "delivered_depth": 440,
+          "fresh_depth": 440,
+          "longest_between_fresh_s": 0.11999999999989797
+        },
+        {
+          "checkpoint": "P3 东侧设备间",
+          "policy_ticks": 2722,
+          "delivered_depth": 454,
+          "fresh_depth": 454,
+          "longest_between_fresh_s": 0.13999999999987267
+        },
+        {
+          "checkpoint": "P4 中央路口",
+          "policy_ticks": 2752,
+          "delivered_depth": 458,
+          "fresh_depth": 458,
+          "longest_between_fresh_s": 0.11999999999989086
+        },
+        {
+          "checkpoint": "P5 北侧消防点",
+          "policy_ticks": 2747,
+          "delivered_depth": 489,
+          "fresh_depth": 489,
+          "longest_between_fresh_s": 0.1999999999998181
+        },
+        {
+          "checkpoint": "P6 西北仓库",
+          "policy_ticks": 2710,
+          "delivered_depth": 542,
+          "fresh_depth": 542,
+          "longest_between_fresh_s": 0.12000000000261934
+        },
+        {
+          "checkpoint": "P7 西侧配电点",
+          "policy_ticks": 2726,
+          "delivered_depth": 545,
+          "fresh_depth": 545,
+          "longest_between_fresh_s": 0.12000000000261934
+        },
+        {
+          "checkpoint": "P8 返回出发点",
+          "policy_ticks": 2632,
+          "delivered_depth": 526,
+          "fresh_depth": 526,
+          "longest_between_fresh_s": 0.10000000000218279
+        }
+      ],
+      "position_error_p95_m": 0.43281767547919836,
+      "position_error_max_m": 0.6842768911100695,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 26.87040000455454,
+          "p95_ms": 28.360279998742044,
+          "p100_ms": 48.87250001775101
+        },
+        "worker_s": {
+          "p50_ms": 45.07704998832196,
+          "p95_ms": 48.37619498430285,
+          "p100_ms": 121.320599981118
+        },
+        "round_trip_s": {
+          "p50_ms": 46.238050010288134,
+          "p95_ms": 49.5477699820185,
+          "p100_ms": 122.55780000123195
+        },
+        "result_age_s": {
+          "p50_ms": 86.70335000306295,
+          "p95_ms": 108.18668000074467,
+          "p100_ms": 176.2196999952721
+        },
+        "delivered_age_s": {
+          "p50_ms": 100.00000000218279,
+          "p95_ms": 119.99999999989086,
+          "p100_ms": 180.00000000392902
+        }
+      },
+      "results": 3898,
+      "delivered_results": 3897,
+      "fresh_results_at_delivery": 3897,
+      "fusion_accepted": 3857,
+      "fusion_rejected_results": 41,
+      "unconfirmed_dense_frames": 67,
+      "upward_rejection_frames": 248,
+      "depth_stop_ticks": 0,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 0,
+        "2": 21507,
+        "3": 2,
+        "4": 0
+      },
+      "advisory_states": {
+        "unknown": 41,
+        "observed": 3857,
+        "obstacle": 0
+      },
+      "video_frames": 4302,
+      "decoded_frames": 4302,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 344144,
+        "policy_steps": 21509,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": null,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.4669791545035289,
+            0.3555357553361662,
+            0.35958715935859265,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48
+          ],
+          "rms_torque_Nm": [
+            0.11749108172557071,
+            0.17814064940608604,
+            0.1993342328758064,
+            0.26887877780796665,
+            0.21610761710515394,
+            0.045389662245832914,
+            0.03209987980530142,
+            0.033599741166693294,
+            0.0722238594773256,
+            0.07246565029826842,
+            0.11569002859665022,
+            0.17462602233431673,
+            0.1970578783786432,
+            0.2296067473427777,
+            0.20001145305302323,
+            0.1406123010185656,
+            0.10772011367860956,
+            0.05643983211294377,
+            0.05732355277329104
+          ],
+          "saturation_fraction": [
+            0.016804012273931843,
+            0.05834185689711284,
+            0.11743630573248408,
+            0.3484151982890883,
+            0.10102457110976801,
+            0.0,
+            0.0,
+            0.0,
+            1.16230415175043e-05,
+            0.002063089869357013,
+            0.013151471477056116,
+            0.05985575805476777,
+            0.13245908689385838,
+            0.15664663629178482,
+            0.08287519178018504,
+            0.03396543307452694,
+            0.012189664791482636,
+            2.6151843414384676e-05,
+            5.520944720814543e-05
+          ],
+          "seconds_above_0_5_Nm": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            26.256585937467424,
+            34.078879399745915,
+            102.11477707138069,
+            272.1833479508258,
+            111.41227735186543,
+            1.5412670357137759,
+            1.1045954359483843,
+            1.0307313374224243,
+            12.459070379933422,
+            4.712604872453699,
+            20.859363846334077,
+            33.94291266451852,
+            101.60632217144489,
+            175.58110858856796,
+            95.59646551009389,
+            29.93653037550986,
+            11.080218044588644,
+            2.9538156887376004,
+            2.8275767096742643
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "d76675c1f56351de952ac5d002c9fbdf83a1e6329a1e47cad6a995d62794f3bd"
+    },
+    {
+      "name": "20261009_depth_courtyard_s72_confirmed",
+      "scenario": "courtyard",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "route_complete",
+        "scenario": "courtyard",
+        "seed": 72,
+        "tasks_total": 3,
+        "true_completed": 3,
+        "completed": [
+          {
+            "name": "P1 门岗",
+            "elapsed_s": 7.260000000002293,
+            "true_distance_m": 0.23055628673940404,
+            "estimated_distance_m": 0.23713722827291092,
+            "actual_speed_m_s": 0.00018457082404400884,
+            "marker_frame": 216
+          },
+          {
+            "name": "P2 配电巡检",
+            "elapsed_s": 17.539999999996837,
+            "true_distance_m": 0.24802154046556663,
+            "estimated_distance_m": 0.20251958177829485,
+            "actual_speed_m_s": 0.00022005881221935772,
+            "marker_frame": 525
+          },
+          {
+            "name": "P3 返回",
+            "elapsed_s": 31.39999999998423,
+            "true_distance_m": 0.2391325953999829,
+            "estimated_distance_m": 0.2459828242233165,
+            "actual_speed_m_s": 0.0009067851104513149,
+            "marker_frame": 940
+          }
+        ],
+        "false_arrivals": [],
+        "seconds_simulated": 31.419999999984213,
+        "distance_walked_m": 4.180947163368812,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 3.674670902994776,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": null,
+        "stop_requested_s": null,
+        "final_speed_m_s": 0.0009067851104513149,
+        "rgb_frames": 943,
+        "tof_frames": 472,
+        "elapsed_wall_s": 68.76594760001171,
+        "depth_mode": "assist",
+        "depth_results": 275,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": true
+      },
+      "baseline": "20261009_courtyard_s72_derated",
+      "baseline_stop_requested_s": null,
+      "baseline_trace_identical": true,
+      "baseline_route": {
+        "true_completed": 3,
+        "tasks_total": 3,
+        "seconds_simulated": 31.419999999984213,
+        "distance_walked_m": 4.180947163368812,
+        "terminal": "route_complete"
+      },
+      "tasks": [
+        [
+          "P1 门岗",
+          [
+            3.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 配电巡检",
+          [
+            3.0,
+            3.0
+          ]
+        ],
+        [
+          "P3 返回",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 门岗",
+          "policy_ticks": 364,
+          "delivered_depth": 69,
+          "fresh_depth": 69,
+          "longest_between_fresh_s": 0.11999999999999034
+        },
+        {
+          "checkpoint": "P2 配电巡检",
+          "policy_ticks": 514,
+          "delivered_depth": 90,
+          "fresh_depth": 90,
+          "longest_between_fresh_s": 0.11999999999989264
+        },
+        {
+          "checkpoint": "P3 返回",
+          "policy_ticks": 693,
+          "delivered_depth": 116,
+          "fresh_depth": 116,
+          "longest_between_fresh_s": 0.11999999999989086
+        }
+      ],
+      "position_error_p95_m": 0.09960528818562936,
+      "position_error_max_m": 0.24004818579713408,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 27.118199999677017,
+          "p95_ms": 27.91557000891771,
+          "p100_ms": 32.08589999121614
+        },
+        "worker_s": {
+          "p50_ms": 46.02050001267344,
+          "p95_ms": 48.09381999948528,
+          "p100_ms": 53.61830000765622
+        },
+        "round_trip_s": {
+          "p50_ms": 47.147100005531684,
+          "p95_ms": 49.20878001139499,
+          "p100_ms": 55.409699998563156
+        },
+        "result_age_s": {
+          "p50_ms": 105.92839998071213,
+          "p95_ms": 109.05497000142361,
+          "p100_ms": 111.47320000104344
+        },
+        "delivered_age_s": {
+          "p50_ms": 119.99999999989086,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 275,
+      "delivered_results": 275,
+      "fresh_results_at_delivery": 275,
+      "fusion_accepted": 275,
+      "fusion_rejected_results": 0,
+      "unconfirmed_dense_frames": 0,
+      "upward_rejection_frames": 7,
+      "depth_stop_ticks": 0,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 0,
+        "2": 1569,
+        "3": 2,
+        "4": 0
+      },
+      "advisory_states": {
+        "unknown": 0,
+        "observed": 275,
+        "obstacle": 0
+      },
+      "video_frames": 315,
+      "decoded_frames": 315,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 25136,
+        "policy_steps": 1571,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": null,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.30048111979819625,
+            0.28063338024649953,
+            0.3203070942098598,
+            0.44962362199138195,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.4697972869691726
+          ],
+          "rms_torque_Nm": [
+            0.10665146028589335,
+            0.15320858171963292,
+            0.15055688740210202,
+            0.21745963834217716,
+            0.15893199886170306,
+            0.03828600109025001,
+            0.02859087256768179,
+            0.04168560533811649,
+            0.04649485852939281,
+            0.05411087895807739,
+            0.0938229243084543,
+            0.14833894048996443,
+            0.15551105099391374,
+            0.19165770330695606,
+            0.15435227877197188,
+            0.10400373347752197,
+            0.08272262219623011,
+            0.04173613768211418,
+            0.03568278704275403
+          ],
+          "saturation_fraction": [
+            0.016987587523870147,
+            0.0364417568427753,
+            0.04702418841502228,
+            0.17393380012730744,
+            0.04392106938255888,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00091502227880331,
+            0.006246021642266073,
+            0.03341820496499045,
+            0.061465626989178866,
+            0.08020369191597708,
+            0.041215786123488224,
+            0.008831954169318906,
+            0.004774029280712922,
+            3.9783577339274344e-05,
+            0.0
+          ],
+          "seconds_above_0_5_Nm": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            1.531501636101186,
+            1.6799345235809642,
+            3.0753675569125445,
+            11.067875264247077,
+            3.6761998905162248,
+            0.06418882834886859,
+            0.07021052722106388,
+            0.13327474264952208,
+            0.348978438580746,
+            0.1972748930013375,
+            0.9521172603014099,
+            1.5765043404298746,
+            3.43110032083958,
+            7.4768525693698,
+            3.4082756566763344,
+            1.0147538396865465,
+            0.374761339127368,
+            0.13605501419422092,
+            0.06848270537294797
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "b97998fec2d7c3f87ba4daf594028b645e3dc0ef24a1d3d96e99ff03865e877f"
+    },
+    {
+      "name": "20261009_depth_obstacle_s83_confirmed",
+      "scenario": "obstacle",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "obstacle",
+        "seed": 83,
+        "tasks_total": 3,
+        "true_completed": 0,
+        "completed": [],
+        "false_arrivals": [],
+        "seconds_simulated": 4.920000000001096,
+        "distance_walked_m": 0.5541409184049648,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 4.419683101068308,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.04844802980989273,
+        "stop_requested_s": 1.899999999999622,
+        "final_speed_m_s": 0.00014022785831114732,
+        "rgb_frames": 148,
+        "tof_frames": 74,
+        "elapsed_wall_s": 12.425956099992618,
+        "depth_mode": "assist",
+        "depth_results": 46,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_obstacle_s83_fixed",
+      "baseline_stop_requested_s": 1.979999999999606,
+      "baseline_trace_identical": false,
+      "baseline_route": {
+        "true_completed": 0,
+        "tasks_total": 3,
+        "seconds_simulated": 5.000000000001137,
+        "distance_walked_m": 0.5828401407903654,
+        "terminal": "sensor_stop"
+      },
+      "tasks": [
+        [
+          "P1 门岗",
+          [
+            3.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 配电巡检",
+          [
+            3.0,
+            3.0
+          ]
+        ],
+        [
+          "P3 返回",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 门岗",
+          "policy_ticks": 246,
+          "delivered_depth": 45,
+          "fresh_depth": 45,
+          "longest_between_fresh_s": 0.11999999999999034
+        },
+        {
+          "checkpoint": "P2 配电巡检",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P3 返回",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        }
+      ],
+      "position_error_p95_m": 0.2814564117958207,
+      "position_error_max_m": 0.28690883796853484,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 27.760400000261143,
+          "p95_ms": 29.017349988862406,
+          "p100_ms": 29.998600017279387
+        },
+        "worker_s": {
+          "p50_ms": 47.49709999305196,
+          "p95_ms": 50.14900000242051,
+          "p100_ms": 55.640999984461814
+        },
+        "round_trip_s": {
+          "p50_ms": 48.58474999491591,
+          "p95_ms": 51.26917501183925,
+          "p100_ms": 56.88639997970313
+        },
+        "result_age_s": {
+          "p50_ms": 108.38039999597981,
+          "p95_ms": 110.9211500030085,
+          "p100_ms": 111.46919999973193
+        },
+        "delivered_age_s": {
+          "p50_ms": 120.00000000006139,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 46,
+      "delivered_results": 45,
+      "fresh_results_at_delivery": 45,
+      "fusion_accepted": 46,
+      "fusion_rejected_results": 0,
+      "unconfirmed_dense_frames": 20,
+      "upward_rejection_frames": 19,
+      "depth_stop_ticks": 39,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 23,
+        "2": 182,
+        "3": 2,
+        "4": 39
+      },
+      "advisory_states": {
+        "unknown": 0,
+        "observed": 25,
+        "obstacle": 21
+      },
+      "video_frames": 50,
+      "decoded_frames": 50,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 3936,
+        "policy_steps": 246,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": 0.12473563297027915,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.5052728672376325,
+            0.23893599665277554,
+            0.2978508365638604,
+            0.43466101828431697,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.5794649833482617,
+            0.4856178305068497
+          ],
+          "rms_torque_Nm": [
+            0.10576969179129192,
+            0.14233989845505396,
+            0.18199500785417524,
+            0.22798047612394826,
+            0.17613061884581513,
+            0.04692606740882598,
+            0.03039255508756115,
+            0.0357509041005197,
+            0.04970345164135552,
+            0.05565295219299,
+            0.10784590649911645,
+            0.1372233635193429,
+            0.18780879405370618,
+            0.20807899608289723,
+            0.16732017810054625,
+            0.11934182163055802,
+            0.0893838591572643,
+            0.04439067730589392,
+            0.04394753930994073
+          ],
+          "saturation_fraction": [
+            0.007621951219512195,
+            0.017276422764227643,
+            0.04573170731707317,
+            0.07850609756097561,
+            0.035823170731707314,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00025406504065040653,
+            0.008130081300813009,
+            0.01676829268292683,
+            0.0546239837398374,
+            0.05157520325203252,
+            0.031504065040650404,
+            0.012957317073170731,
+            0.003556910569105691,
+            0.0,
+            0.0
+          ],
+          "seconds_above_0_5_Nm": [
+            0.05375,
+            0.11750000000000001,
+            0.28,
+            0.4425,
+            0.21125,
+            0.00125,
+            0.0,
+            0.0,
+            0.0,
+            0.00625,
+            0.06125,
+            0.10625,
+            0.315,
+            0.3175,
+            0.185,
+            0.09125,
+            0.03125,
+            0.00125,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            0.1920475000162627,
+            0.20434467788400668,
+            0.6233565697145191,
+            1.6285137771992457,
+            0.7122320382829395,
+            0.015994277400707736,
+            0.011453473932032393,
+            0.017582670643252557,
+            0.05758755234875623,
+            0.029430148889960334,
+            0.1940331536410589,
+            0.19481963155279788,
+            0.6929087994808169,
+            1.051176251416261,
+            0.6058132926817296,
+            0.18578297365944774,
+            0.08277004275310933,
+            0.017990384949371392,
+            0.0162273779549843
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "0bb91f22f632c3687acddba9a8ba13d694b2f428fa44793f2c9354025dbbf526"
+    },
+    {
+      "name": "20261009_depth_tof_outage_s81_confirmed",
+      "scenario": "tof_outage",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "tof_outage",
+        "seed": 81,
+        "tasks_total": 3,
+        "true_completed": 0,
+        "completed": [],
+        "false_arrivals": [],
+        "seconds_simulated": 5.1400000000012085,
+        "distance_walked_m": 0.630914887886463,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 8.98071628089334,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.08299199202449041,
+        "stop_requested_s": 2.1199999999996635,
+        "final_speed_m_s": 0.0032997133729180794,
+        "rgb_frames": 154,
+        "tof_frames": 77,
+        "elapsed_wall_s": 11.907359699980589,
+        "depth_mode": "assist",
+        "depth_results": 48,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_tof_outage_s81_fixed",
+      "baseline_stop_requested_s": 2.1199999999996635,
+      "baseline_trace_identical": true,
+      "baseline_route": {
+        "true_completed": 0,
+        "tasks_total": 3,
+        "seconds_simulated": 5.1400000000012085,
+        "distance_walked_m": 0.630914887886463,
+        "terminal": "sensor_stop"
+      },
+      "tasks": [
+        [
+          "P1 门岗",
+          [
+            3.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 配电巡检",
+          [
+            3.0,
+            3.0
+          ]
+        ],
+        [
+          "P3 返回",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 门岗",
+          "policy_ticks": 257,
+          "delivered_depth": 48,
+          "fresh_depth": 48,
+          "longest_between_fresh_s": 0.12000000000006139
+        },
+        {
+          "checkpoint": "P2 配电巡检",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P3 返回",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        }
+      ],
+      "position_error_p95_m": 0.08815703646944346,
+      "position_error_max_m": 0.11756231266909094,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 26.88864999799989,
+          "p95_ms": 27.57867000764236,
+          "p100_ms": 27.858100016601384
+        },
+        "worker_s": {
+          "p50_ms": 41.428699987591244,
+          "p95_ms": 47.10896998294629,
+          "p100_ms": 54.80319997877814
+        },
+        "round_trip_s": {
+          "p50_ms": 42.47929999837652,
+          "p95_ms": 48.26412998809246,
+          "p100_ms": 58.92349997884594
+        },
+        "result_age_s": {
+          "p50_ms": 100.90279999948848,
+          "p95_ms": 107.70968500378046,
+          "p100_ms": 108.93639998043625
+        },
+        "delivered_age_s": {
+          "p50_ms": 120.00000000006139,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 48,
+      "delivered_results": 48,
+      "fresh_results_at_delivery": 48,
+      "fusion_accepted": 19,
+      "fusion_rejected_results": 29,
+      "unconfirmed_dense_frames": 0,
+      "upward_rejection_frames": 0,
+      "depth_stop_ticks": 0,
+      "sensor_stop_ticks": {
+        "0": 146,
+        "1": 0,
+        "2": 109,
+        "3": 2,
+        "4": 0
+      },
+      "advisory_states": {
+        "unknown": 29,
+        "observed": 19,
+        "obstacle": 0
+      },
+      "video_frames": 52,
+      "decoded_frames": 52,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 4112,
+        "policy_steps": 257,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": 0.15480870650340237,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.4057998131392666,
+            0.25008185151442497,
+            0.3552448574864985,
+            0.4285410228102795,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "rms_torque_Nm": [
+            0.10963252016776653,
+            0.15448109588801093,
+            0.18996086260645842,
+            0.23771705839177792,
+            0.18059513462883967,
+            0.04660848163969878,
+            0.03072266811680886,
+            0.054277136976674786,
+            0.04638021852818706,
+            0.05405533065266983,
+            0.1135854594269037,
+            0.14552114638882932,
+            0.18805590065995584,
+            0.19939553833946183,
+            0.16804347197158337,
+            0.12210135865557642,
+            0.09527683570952032,
+            0.05748290047976905,
+            0.0547207626719842
+          ],
+          "saturation_fraction": [
+            0.008511673151750972,
+            0.024319066147859923,
+            0.05496108949416342,
+            0.08000972762645914,
+            0.032101167315175094,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00048638132295719845,
+            0.010457198443579766,
+            0.01872568093385214,
+            0.05933852140077821,
+            0.051313229571984434,
+            0.03501945525291829,
+            0.01580739299610895,
+            0.004620622568093385,
+            0.0024319066147859923,
+            0.002188715953307393
+          ],
+          "seconds_above_0_5_Nm": [
+            0.058750000000000004,
+            0.15625,
+            0.33875,
+            0.47125,
+            0.20750000000000002,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00625,
+            0.0675,
+            0.125,
+            0.34750000000000003,
+            0.32375,
+            0.21125,
+            0.10875,
+            0.045,
+            0.015,
+            0.01375
+          ],
+          "positive_mechanical_work_J": [
+            0.22582518137985572,
+            0.29579156080045627,
+            0.840539320187972,
+            1.8300732377839537,
+            0.7734105711663217,
+            0.02143397064490118,
+            0.014891202214779128,
+            0.041049651492210064,
+            0.05611770994882121,
+            0.029143857819439144,
+            0.2506629609759115,
+            0.22835263052798135,
+            0.6984039640848343,
+            1.0981639472283133,
+            0.7106958305057499,
+            0.22744424390825954,
+            0.12576442603948518,
+            0.03537133159444887,
+            0.025677358356842997
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "0a9600d32dee49568b9c2478426ac0feb853d195b3d3df4c6c1881602fe6f941"
+    },
+    {
+      "name": "20261009_depth_camera_outage_s82_confirmed",
+      "scenario": "camera_outage",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "camera_outage",
+        "seed": 82,
+        "tasks_total": 3,
+        "true_completed": 0,
+        "completed": [],
+        "false_arrivals": [],
+        "seconds_simulated": 5.220000000001249,
+        "distance_walked_m": 0.5438417071303167,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 3.621803452906259,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.01599257201316469,
+        "stop_requested_s": 2.1999999999997044,
+        "final_speed_m_s": 0.0001598216382466852,
+        "rgb_frames": 157,
+        "tof_frames": 79,
+        "elapsed_wall_s": 11.024697899993043,
+        "depth_mode": "assist",
+        "depth_results": 20,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_camera_outage_s82_fixed",
+      "baseline_stop_requested_s": 2.1999999999997044,
+      "baseline_trace_identical": true,
+      "baseline_route": {
+        "true_completed": 0,
+        "tasks_total": 3,
+        "seconds_simulated": 5.220000000001249,
+        "distance_walked_m": 0.5438417071303167,
+        "terminal": "sensor_stop"
+      },
+      "tasks": [
+        [
+          "P1 门岗",
+          [
+            3.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 配电巡检",
+          [
+            3.0,
+            3.0
+          ]
+        ],
+        [
+          "P3 返回",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 门岗",
+          "policy_ticks": 261,
+          "delivered_depth": 20,
+          "fresh_depth": 20,
+          "longest_between_fresh_s": 2.9800000000015245
+        },
+        {
+          "checkpoint": "P2 配电巡检",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P3 返回",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        }
+      ],
+      "position_error_p95_m": 0.08947597851454435,
+      "position_error_max_m": 0.142867020584125,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 26.941100004478358,
+          "p95_ms": 27.633879995846655,
+          "p100_ms": 27.857700013555586
+        },
+        "worker_s": {
+          "p50_ms": 46.07360000954941,
+          "p95_ms": 53.88392499735346,
+          "p100_ms": 58.88520000735298
+        },
+        "round_trip_s": {
+          "p50_ms": 47.17849999724422,
+          "p95_ms": 57.08135500026401,
+          "p100_ms": 59.936200006632134
+        },
+        "result_age_s": {
+          "p50_ms": 89.09995001798166,
+          "p95_ms": 109.5032049991886,
+          "p100_ms": 119.9362000066202
+        },
+        "delivered_age_s": {
+          "p50_ms": 100.00000000001563,
+          "p95_ms": 119.99999999999389,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 20,
+      "delivered_results": 20,
+      "fresh_results_at_delivery": 20,
+      "fusion_accepted": 20,
+      "fusion_rejected_results": 0,
+      "unconfirmed_dense_frames": 0,
+      "upward_rejection_frames": 0,
+      "depth_stop_ticks": 0,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 0,
+        "2": 117,
+        "3": 144,
+        "4": 0
+      },
+      "advisory_states": {
+        "unknown": 0,
+        "observed": 20,
+        "obstacle": 0
+      },
+      "video_frames": 53,
+      "decoded_frames": 53,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 4176,
+        "policy_steps": 261,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": 0.053444618240507044,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.3026075479750143,
+            0.26534223606237406,
+            0.29495031389215676,
+            0.4313616120777354,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.454438475522956,
+            0.44712802548827923
+          ],
+          "rms_torque_Nm": [
+            0.09088478801254629,
+            0.13508454010503815,
+            0.15199511949413144,
+            0.2225573402047865,
+            0.16506371657592572,
+            0.03778177623253078,
+            0.029282361342968376,
+            0.03426302656345192,
+            0.046769861789937535,
+            0.05090122166064152,
+            0.08746748409738277,
+            0.1331823700734087,
+            0.14744397107188564,
+            0.18581420315547043,
+            0.14913961571965065,
+            0.10254632108776661,
+            0.08266064931421976,
+            0.04103979314199614,
+            0.03926551842026586
+          ],
+          "saturation_fraction": [
+            0.0038314176245210726,
+            0.016044061302681992,
+            0.02681992337164751,
+            0.06944444444444445,
+            0.027059386973180076,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00023946360153256704,
+            0.0023946360153256703,
+            0.01460727969348659,
+            0.02849616858237548,
+            0.037835249042145594,
+            0.021312260536398467,
+            0.007423371647509579,
+            0.0011973180076628352,
+            0.0,
+            0.0
+          ],
+          "seconds_above_0_5_Nm": [
+            0.0275,
+            0.11125,
+            0.1875,
+            0.42375,
+            0.1825,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0025,
+            0.02875,
+            0.10125,
+            0.1825,
+            0.23750000000000002,
+            0.1475,
+            0.058750000000000004,
+            0.02125,
+            0.0,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            0.15144443886264097,
+            0.20672335317365984,
+            0.5147840268667452,
+            1.6785920119501623,
+            0.6744132312008665,
+            0.010080578490260067,
+            0.010493970943220599,
+            0.014650693901440496,
+            0.05944852762146147,
+            0.026873038257039194,
+            0.12316030276785928,
+            0.19135395942677713,
+            0.4624244607127227,
+            0.986868859141689,
+            0.5554422243531967,
+            0.15721087832636543,
+            0.0682051424653822,
+            0.016599612031509614,
+            0.014097806384273433
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "7fb3266c2c963844469ab521e4cb3d06a0bc2078b9625c2b83d0a05ff9eb97c3"
+    }
+  ],
+  "physics_steps": 381504,
+  "max_replay_qpos_error": 0.0,
+  "max_replay_qvel_error": 0.0,
+  "all_physics_contacts": 0,
+  "video_decoded_frames": 4772,
+  "focused_contract_tests": 23,
+  "whole_repository_full_regression": false,
+  "hardware_released": false,
+  "depth_full_campus_route_run": true,
+  "preserved_failures": [
+    "compressed output caused stale depth: 20261009_depth_courtyard_s72 and 20261009_depth_obstacle_s83",
+    "Depth Pro aborted after 5 partial frames",
+    "dataset v1 UTF-8 read failure; v2 scoring-mask fix retained; v3 final",
+    "campus_s73_fast: sky hallucination stopped at 1/8; campus_s73_horizon: side-wall hallucination stopped at 2/8; both retained and replayed"
+  ],
+  "limitations": "Closed-loop simulation only: flat ground, known initial pose and synthetic checkpoints; no defect recognition, physical calibration/deployment, outdoor radiometry, measured S288 thermal/continuous ratings or board latency. Fixed-frame model errors remain uncertain; original camera/ToF stop gates retained.",
+  "initial_formal_cases": [
+    {
+      "name": "20261009_depth_courtyard_s72_fast",
+      "scenario": "courtyard",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "route_complete",
+        "scenario": "courtyard",
+        "seed": 72,
+        "tasks_total": 3,
+        "true_completed": 3,
+        "completed": [
+          {
+            "name": "P1 门岗",
+            "elapsed_s": 7.260000000002293,
+            "true_distance_m": 0.23055628673940404,
+            "estimated_distance_m": 0.23713722827291092,
+            "actual_speed_m_s": 0.00018457082404400884,
+            "marker_frame": 216
+          },
+          {
+            "name": "P2 配电巡检",
+            "elapsed_s": 17.539999999996837,
+            "true_distance_m": 0.24802154046556663,
+            "estimated_distance_m": 0.20251958177829485,
+            "actual_speed_m_s": 0.00022005881221935772,
+            "marker_frame": 525
+          },
+          {
+            "name": "P3 返回",
+            "elapsed_s": 31.39999999998423,
+            "true_distance_m": 0.2391325953999829,
+            "estimated_distance_m": 0.2459828242233165,
+            "actual_speed_m_s": 0.0009067851104513149,
+            "marker_frame": 940
+          }
+        ],
+        "false_arrivals": [],
+        "seconds_simulated": 31.419999999984213,
+        "distance_walked_m": 4.180947163368812,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 3.674670902994776,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": null,
+        "stop_requested_s": null,
+        "final_speed_m_s": 0.0009067851104513149,
+        "rgb_frames": 943,
+        "tof_frames": 472,
+        "elapsed_wall_s": 150.15248329998576,
+        "depth_mode": "assist",
+        "depth_results": 215,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": true
+      },
+      "baseline": "20261009_courtyard_s72_derated",
+      "baseline_stop_requested_s": null,
+      "baseline_trace_identical": true,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 60.13570001232438,
+          "p95_ms": 137.68435998936172,
+          "p100_ms": 226.22760001104325
+        },
+        "worker_s": {
+          "p50_ms": 117.87649997859262,
+          "p95_ms": 221.86225999030282,
+          "p100_ms": 268.7742999987677
+        },
+        "round_trip_s": {
+          "p50_ms": 121.14039997686632,
+          "p95_ms": 224.96475998486858,
+          "p100_ms": 284.1130000015255
+        },
+        "result_age_s": {
+          "p50_ms": 169.65039999104192,
+          "p95_ms": 270.0477699989733,
+          "p100_ms": 324.1130000014891
+        },
+        "delivered_age_s": {
+          "p50_ms": 179.99999999983984,
+          "p95_ms": 279.99999999974654,
+          "p100_ms": 339.9999999996943
+        }
+      },
+      "results": 215,
+      "delivered_results": 214,
+      "fresh_results_at_delivery": 150,
+      "depth_stop_ticks": 0,
+      "advisory_states": {
+        "unknown": 0,
+        "observed": 211,
+        "obstacle": 4
+      },
+      "video_frames": 315,
+      "decoded_frames": 315,
+      "media_pass": true,
+      "model_record_sha256": "60adf69be63332419ae077447d62c00901474666d41060feaafe8ba6d4695f1e"
+    },
+    {
+      "name": "20261009_depth_obstacle_s83_fast",
+      "scenario": "obstacle",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "obstacle",
+        "seed": 83,
+        "tasks_total": 3,
+        "true_completed": 0,
+        "completed": [],
+        "false_arrivals": [],
+        "seconds_simulated": 3.7400000000004923,
+        "distance_walked_m": 0.24990243864716258,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 3.696541474410653,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.03730678511390002,
+        "stop_requested_s": 0.7199999999998568,
+        "final_speed_m_s": 0.000174816516216237,
+        "rgb_frames": 112,
+        "tof_frames": 56,
+        "elapsed_wall_s": 10.142973599984543,
+        "depth_mode": "assist",
+        "depth_results": 34,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_obstacle_s83_fixed",
+      "baseline_stop_requested_s": 1.979999999999606,
+      "baseline_trace_identical": false,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 44.41940000106115,
+          "p95_ms": 47.61018501449143,
+          "p100_ms": 49.48600000352599
+        },
+        "worker_s": {
+          "p50_ms": 64.41664999874774,
+          "p95_ms": 69.43001999316039,
+          "p100_ms": 70.56289998581633
+        },
+        "round_trip_s": {
+          "p50_ms": 65.49024999549147,
+          "p95_ms": 71.14379498816561,
+          "p100_ms": 72.26250000530854
+        },
+        "result_age_s": {
+          "p50_ms": 123.60834999940096,
+          "p95_ms": 129.24776000232964,
+          "p100_ms": 132.2625000052966
+        },
+        "delivered_age_s": {
+          "p50_ms": 139.99999999997215,
+          "p95_ms": 140.00000000007162,
+          "p100_ms": 140.00000000007162
+        }
+      },
+      "results": 34,
+      "delivered_results": 34,
+      "fresh_results_at_delivery": 34,
+      "depth_stop_ticks": 101,
+      "advisory_states": {
+        "unknown": 0,
+        "observed": 5,
+        "obstacle": 29
+      },
+      "video_frames": 38,
+      "decoded_frames": 38,
+      "media_pass": true,
+      "model_record_sha256": "91dcaeccfc0711a22e95a0180611b8a47ba64ca39cdf939ea5c3374805fedb8f"
+    },
+    {
+      "name": "20261009_depth_tof_outage_s81_fast",
+      "scenario": "tof_outage",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "tof_outage",
+        "seed": 81,
+        "tasks_total": 3,
+        "true_completed": 0,
+        "completed": [],
+        "false_arrivals": [],
+        "seconds_simulated": 5.1400000000012085,
+        "distance_walked_m": 0.630914887886463,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 8.98071628089334,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.08299199202449041,
+        "stop_requested_s": 2.1199999999996635,
+        "final_speed_m_s": 0.0032997133729180794,
+        "rgb_frames": 154,
+        "tof_frames": 77,
+        "elapsed_wall_s": 12.835561000014422,
+        "depth_mode": "assist",
+        "depth_results": 48,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_tof_outage_s81_fixed",
+      "baseline_stop_requested_s": 2.1199999999996635,
+      "baseline_trace_identical": true,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 29.507250001188368,
+          "p95_ms": 32.077630009735,
+          "p100_ms": 32.82160000526346
+        },
+        "worker_s": {
+          "p50_ms": 45.92275001050439,
+          "p95_ms": 52.48593000724213,
+          "p100_ms": 57.68299999181181
+        },
+        "round_trip_s": {
+          "p50_ms": 47.40535000746604,
+          "p95_ms": 54.053085016494144,
+          "p100_ms": 59.28009998751804
+        },
+        "result_age_s": {
+          "p50_ms": 105.78855000730414,
+          "p95_ms": 111.85921998489619,
+          "p100_ms": 114.65919998822471
+        },
+        "delivered_age_s": {
+          "p50_ms": 120.00000000006139,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 48,
+      "delivered_results": 48,
+      "fresh_results_at_delivery": 48,
+      "depth_stop_ticks": 0,
+      "advisory_states": {
+        "unknown": 29,
+        "observed": 19,
+        "obstacle": 0
+      },
+      "video_frames": 52,
+      "decoded_frames": 52,
+      "media_pass": true,
+      "model_record_sha256": "905b229102e2c825a903594e0781567f94a11c50e292d4909a616ab015dc081c"
+    }
+  ],
+  "preserved_campus_failures": [
+    {
+      "name": "20261009_depth_campus_s73_fast",
+      "scenario": "campus",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "campus",
+        "seed": 73,
+        "tasks_total": 8,
+        "true_completed": 1,
+        "completed": [
+          {
+            "name": "P1 南门岗亭",
+            "elapsed_s": 51.539999999965914,
+            "true_distance_m": 0.24048511182847168,
+            "estimated_distance_m": 0.24015189844536933,
+            "actual_speed_m_s": 6.1031833057138164e-05,
+            "marker_frame": 1545
+          }
+        ],
+        "false_arrivals": [],
+        "seconds_simulated": 97.05999999992453,
+        "distance_walked_m": 22.97561707802213,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 3.573515545680351,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.01672108939060281,
+        "stop_requested_s": 94.0199999999273,
+        "final_speed_m_s": 0.0002750013040204154,
+        "rgb_frames": 2912,
+        "tof_frames": 1456,
+        "elapsed_wall_s": 205.171868800011,
+        "depth_mode": "assist",
+        "depth_results": 822,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_campus_s73_derated",
+      "baseline_stop_requested_s": null,
+      "baseline_trace_identical": false,
+      "baseline_route": {
+        "true_completed": 8,
+        "tasks_total": 8,
+        "seconds_simulated": 430.18000000371836,
+        "distance_walked_m": 99.59535148718155,
+        "terminal": "route_complete"
+      },
+      "tasks": [
+        [
+          "P1 南门岗亭",
+          [
+            12.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 停车区",
+          [
+            22.0,
+            2.0
+          ]
+        ],
+        [
+          "P3 东侧设备间",
+          [
+            22.0,
+            12.0
+          ]
+        ],
+        [
+          "P4 中央路口",
+          [
+            12.0,
+            12.0
+          ]
+        ],
+        [
+          "P5 北侧消防点",
+          [
+            12.0,
+            22.0
+          ]
+        ],
+        [
+          "P6 西北仓库",
+          [
+            2.0,
+            22.0
+          ]
+        ],
+        [
+          "P7 西侧配电点",
+          [
+            2.0,
+            12.0
+          ]
+        ],
+        [
+          "P8 返回出发点",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 南门岗亭",
+          "policy_ticks": 2578,
+          "delivered_depth": 443,
+          "fresh_depth": 443,
+          "longest_between_fresh_s": 0.13999999999987267
+        },
+        {
+          "checkpoint": "P2 停车区",
+          "policy_ticks": 2275,
+          "delivered_depth": 379,
+          "fresh_depth": 379,
+          "longest_between_fresh_s": 0.11999999999989797
+        },
+        {
+          "checkpoint": "P3 东侧设备间",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P4 中央路口",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P5 北侧消防点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P6 西北仓库",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P7 西侧配电点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P8 返回出发点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        }
+      ],
+      "position_error_p95_m": 0.4881607659306595,
+      "position_error_max_m": 0.5667532220780828,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 27.53279998432845,
+          "p95_ms": 28.665510000428185,
+          "p100_ms": 36.488400015514344
+        },
+        "worker_s": {
+          "p50_ms": 45.71010000654496,
+          "p95_ms": 48.20522998343222,
+          "p100_ms": 62.15509999310598
+        },
+        "round_trip_s": {
+          "p50_ms": 46.89700000744779,
+          "p95_ms": 49.38863999850582,
+          "p100_ms": 63.21959997876547
+        },
+        "result_age_s": {
+          "p50_ms": 88.87245000278199,
+          "p95_ms": 108.69813501421959,
+          "p100_ms": 114.21440000648886
+        },
+        "delivered_age_s": {
+          "p50_ms": 99.9999999999126,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 120.00000000006139
+        }
+      },
+      "results": 822,
+      "delivered_results": 822,
+      "fresh_results_at_delivery": 822,
+      "fusion_accepted": 821,
+      "fusion_rejected_results": 1,
+      "unconfirmed_dense_frames": 0,
+      "upward_rejection_frames": 0,
+      "depth_stop_ticks": 5,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 0,
+        "2": 4846,
+        "3": 2,
+        "4": 5
+      },
+      "advisory_states": {
+        "unknown": 1,
+        "observed": 814,
+        "obstacle": 7
+      },
+      "video_frames": 971,
+      "decoded_frames": 971,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 77648,
+        "policy_steps": 4853,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": 0.06624469299461094,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.3270472886938016,
+            0.2231645788194161,
+            0.30670176643398306,
+            0.4522447342754114,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.46780722429950006,
+            0.48
+          ],
+          "rms_torque_Nm": [
+            0.11743159382303556,
+            0.17896865887792812,
+            0.20146317257050575,
+            0.2717110693167712,
+            0.2192395800295035,
+            0.04567333806356468,
+            0.03224856110716926,
+            0.03089880231907876,
+            0.07364584249446063,
+            0.0733066882486158,
+            0.11640647752457609,
+            0.17538271672262853,
+            0.19822768693019785,
+            0.2313608415091611,
+            0.20223798911405141,
+            0.14224282974368732,
+            0.10901385942062786,
+            0.05711007075275848,
+            0.0583186059672657
+          ],
+          "saturation_fraction": [
+            0.01653616319802184,
+            0.05933185658355656,
+            0.12130383268081599,
+            0.36002215124665154,
+            0.10536008654440553,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.002009066556769009,
+            0.013329383886255925,
+            0.06128940861322893,
+            0.13525139089223162,
+            0.1615109210797445,
+            0.08548835771687616,
+            0.035441994642489184,
+            0.012633937770451267,
+            0.0,
+            2.5757263548320626e-05
+          ],
+          "seconds_above_0_5_Nm": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            5.947799524732372,
+            7.818516926291347,
+            23.85820599840255,
+            63.036143144851124,
+            26.064375496483937,
+            0.3540811582821228,
+            0.25154886929634607,
+            0.16989142100711327,
+            2.932822250817728,
+            1.083124490114242,
+            4.7637544874435696,
+            7.771657891789311,
+            23.492054726704048,
+            40.55510721602155,
+            22.234486291826254,
+            6.954793748352406,
+            2.580718913263655,
+            0.6761044310977666,
+            0.6647081362391065
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "a39f8dc2b7a8ea052436debbf90dbe622283ae62eb1d313f54a146c738615950"
+    },
+    {
+      "name": "20261009_depth_campus_s73_horizon",
+      "scenario": "campus",
+      "summary": {
+        "status": "COMPLETE_RESEARCH_ATTEMPT",
+        "terminal": "sensor_stop",
+        "scenario": "campus",
+        "seed": 73,
+        "tasks_total": 8,
+        "true_completed": 2,
+        "completed": [
+          {
+            "name": "P1 南门岗亭",
+            "elapsed_s": 51.539999999965914,
+            "true_distance_m": 0.24048511182847168,
+            "estimated_distance_m": 0.24015189844536933,
+            "actual_speed_m_s": 6.1031833057138164e-05,
+            "marker_frame": 1545
+          },
+          {
+            "name": "P2 停车区",
+            "elapsed_s": 104.37999999991787,
+            "true_distance_m": 0.22669790174000873,
+            "estimated_distance_m": 0.24006404597676567,
+            "actual_speed_m_s": 0.005254973057671054,
+            "marker_frame": 3130
+          }
+        ],
+        "false_arrivals": [],
+        "seconds_simulated": 116.97999999990641,
+        "distance_walked_m": 26.731741199815865,
+        "campus_contact_frames": 0,
+        "max_tilt_deg": 4.662446859393659,
+        "max_joint_limit_excess_deg": 0.0,
+        "stop_displacement_m": 0.04662426485361189,
+        "stop_requested_s": 113.93999999990918,
+        "final_speed_m_s": 0.008041334462732311,
+        "rgb_frames": 3509,
+        "tof_frames": 1755,
+        "elapsed_wall_s": 255.43972550000763,
+        "depth_mode": "assist",
+        "depth_results": 988,
+        "policy_sha256_after": "53120a401d02f124b35361d791eb74748a7601550c701c511d62cbad9cddff96",
+        "source_cad_sha256_after": "0a4f86aefea24e0d5260c837849a16164ec83cc2d364f58e6c03947de95ce286",
+        "hardware_released": false,
+        "task_success": false
+      },
+      "baseline": "20261009_campus_s73_derated",
+      "baseline_stop_requested_s": null,
+      "baseline_trace_identical": false,
+      "baseline_route": {
+        "true_completed": 8,
+        "tasks_total": 8,
+        "seconds_simulated": 430.18000000371836,
+        "distance_walked_m": 99.59535148718155,
+        "terminal": "route_complete"
+      },
+      "tasks": [
+        [
+          "P1 南门岗亭",
+          [
+            12.0,
+            2.0
+          ]
+        ],
+        [
+          "P2 停车区",
+          [
+            22.0,
+            2.0
+          ]
+        ],
+        [
+          "P3 东侧设备间",
+          [
+            22.0,
+            12.0
+          ]
+        ],
+        [
+          "P4 中央路口",
+          [
+            12.0,
+            12.0
+          ]
+        ],
+        [
+          "P5 北侧消防点",
+          [
+            12.0,
+            22.0
+          ]
+        ],
+        [
+          "P6 西北仓库",
+          [
+            2.0,
+            22.0
+          ]
+        ],
+        [
+          "P7 西侧配电点",
+          [
+            2.0,
+            12.0
+          ]
+        ],
+        [
+          "P8 返回出发点",
+          [
+            2.0,
+            2.0
+          ]
+        ]
+      ],
+      "route_depth_coverage": [
+        {
+          "checkpoint": "P1 南门岗亭",
+          "policy_ticks": 2578,
+          "delivered_depth": 443,
+          "fresh_depth": 443,
+          "longest_between_fresh_s": 0.13999999999987267
+        },
+        {
+          "checkpoint": "P2 停车区",
+          "policy_ticks": 2642,
+          "delivered_depth": 440,
+          "fresh_depth": 440,
+          "longest_between_fresh_s": 0.13999999999987267
+        },
+        {
+          "checkpoint": "P3 东侧设备间",
+          "policy_ticks": 629,
+          "delivered_depth": 105,
+          "fresh_depth": 105,
+          "longest_between_fresh_s": 0.11999999999989086
+        },
+        {
+          "checkpoint": "P4 中央路口",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P5 北侧消防点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P6 西北仓库",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P7 西侧配电点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        },
+        {
+          "checkpoint": "P8 返回出发点",
+          "policy_ticks": 0,
+          "delivered_depth": 0,
+          "fresh_depth": 0,
+          "longest_between_fresh_s": null
+        }
+      ],
+      "position_error_p95_m": 0.48010017691220225,
+      "position_error_max_m": 0.5667532220780828,
+      "timing": {
+        "inference_s": {
+          "p50_ms": 28.10845000203699,
+          "p95_ms": 34.22172497957945,
+          "p100_ms": 40.54869999527
+        },
+        "worker_s": {
+          "p50_ms": 46.44840001128614,
+          "p95_ms": 53.75305999041302,
+          "p100_ms": 64.29469998693094
+        },
+        "round_trip_s": {
+          "p50_ms": 47.65315000258852,
+          "p95_ms": 54.876010000589304,
+          "p100_ms": 65.49849998555146
+        },
+        "result_age_s": {
+          "p50_ms": 92.60334999180486,
+          "p95_ms": 111.08812998363646,
+          "p100_ms": 125.49849998549689
+        },
+        "delivered_age_s": {
+          "p50_ms": 99.9999999999126,
+          "p95_ms": 120.00000000006139,
+          "p100_ms": 139.99999999987267
+        }
+      },
+      "results": 988,
+      "delivered_results": 988,
+      "fresh_results_at_delivery": 988,
+      "fusion_accepted": 973,
+      "fusion_rejected_results": 15,
+      "unconfirmed_dense_frames": 0,
+      "upward_rejection_frames": 46,
+      "depth_stop_ticks": 6,
+      "sensor_stop_ticks": {
+        "0": 0,
+        "1": 0,
+        "2": 5841,
+        "3": 2,
+        "4": 6
+      },
+      "advisory_states": {
+        "unknown": 15,
+        "observed": 967,
+        "obstacle": 6
+      },
+      "video_frames": 1170,
+      "decoded_frames": 1170,
+      "media_pass": true,
+      "replay": {
+        "physical_steps": 93584,
+        "policy_steps": 5849,
+        "max_qpos_error": 0.0,
+        "max_qvel_error": 0.0,
+        "pass": true,
+        "physics_campus_contact_steps": 0,
+        "physics_joint_limit_excess_deg": 0.0,
+        "stop_path_length_m": 0.1352103551184799,
+        "load_screen": {
+          "joint_names": [
+            "left_hip_yaw",
+            "left_hip_roll",
+            "left_hip_pitch",
+            "left_knee",
+            "left_ankle",
+            "neck_pitch",
+            "head_pitch",
+            "head_yaw",
+            "head_roll",
+            "jaw_hinge",
+            "right_hip_yaw",
+            "right_hip_roll",
+            "right_hip_pitch",
+            "right_knee",
+            "right_ankle",
+            "tail_yaw",
+            "tail_pitch",
+            "arm_l",
+            "arm_r"
+          ],
+          "peak_torque_Nm": [
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.31491308860664624,
+            0.28636940941165756,
+            0.3414757093635829,
+            0.4522447342754114,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.48,
+            0.46780722429950006,
+            0.48
+          ],
+          "rms_torque_Nm": [
+            0.11665774883213625,
+            0.17724064391707908,
+            0.19859542784714018,
+            0.2675345607134442,
+            0.215277388197118,
+            0.045353144552719236,
+            0.03198526479770884,
+            0.03274917656951433,
+            0.07178698771916733,
+            0.07193197934796823,
+            0.11530167561205683,
+            0.1734303853774759,
+            0.19587993961840877,
+            0.22874952804175636,
+            0.19889880612835453,
+            0.1399365158095174,
+            0.10725046985285834,
+            0.056158316425580175,
+            0.05704575559238008
+          ],
+          "saturation_fraction": [
+            0.016509232347409815,
+            0.057616686613096255,
+            0.11633398871601983,
+            0.34459950418875024,
+            0.10064754658916054,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0019554624722174733,
+            0.01300435971961019,
+            0.05897375619764062,
+            0.13012908189434091,
+            0.1554325525730894,
+            0.08193708326209609,
+            0.03371302786801163,
+            0.012053342451701145,
+            0.0,
+            3.205676183963071e-05
+          ],
+          "seconds_above_0_5_Nm": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "positive_mechanical_work_J": [
+            7.042828349593049,
+            9.162395320587247,
+            27.46716743471612,
+            72.99560863265486,
+            30.05905106813668,
+            0.4150095236242688,
+            0.2973323258040436,
+            0.25516411924762195,
+            3.3474152993128876,
+            1.2581923955743919,
+            5.62614173978873,
+            9.081687914331491,
+            27.188879704244094,
+            47.17355191234312,
+            25.667998137148377,
+            8.034977625269978,
+            2.9823727006794347,
+            0.7919784434315842,
+            0.7604490446356204
+          ],
+          "qualification": "nominal or provisional torque envelope; no measured motor curve, continuous rating or thermal/battery model"
+        },
+        "scope": "independent physics replay from stored bus controls, all substeps checked; not sensor/decision replay or real hardware"
+      },
+      "protocol_truth_input": false,
+      "model_record_sha256": "937b149985cc1ebf9330cd4daab6bed6683a072eb2b3bdf035f1dc74b9ebbbf6"
+    }
+  ],
+  "depth_full_campus_route_success": true,
+  "simulation_acceptance_complete": true,
+  "counterfactual_checks": {
+    "horizon_frames": 1119,
+    "measurement_confirmation_frames": 2107,
+    "truth_input": false
+  },
+  "software_scope": "simulated hardware, flat ground, known initial state and synthetic RGB checkpoints; not defect recognition or physical deployment",
+  "artifact_sha256": {
+    "manifest.json": "62349d10e8306ef6fce42fe1f1a3cf668e73972756cb38427995cd7ad5e5dbf7",
+    "comparison.json": "e411510733de414177ed25c0bfce31b8c201f4e550f878558e9c8c4411ff45b7",
+    "live_audit.json": "5869f6de5d2f8ac57cadf5c562ea8adea6d59904ecd2117ca9a3919bf32fa7e5",
+    "horizon_counterfactual.json": "44d23995cd5da181d552b17a68db75ae0f570670483a6f0e4b74b9d774ebba39",
+    "measurement_counterfactual.json": "0ecae4719e7d4612929f83f2c4e273b299805846c2ebcad5f34d5f925c48f68b",
+    "report.html": "51a903fa76a65985647927360757ac2a3aeb33265a426e9308b98b8288813c80"
+  },
+  "final_guard_sha256": "3277d3a53ebfd438892fc8f2944b9357fdf61ae88a7d660b86d76bb2033286fe",
+  "ui_validation": {
+    "viewport_css_width": 351,
+    "page_scroll_width": 351,
+    "campus_inspection_links": 8,
+    "video_ready_state": 4,
+    "video_seekable_s": [
+      0,
+      430.2
+    ],
+    "seek_test_s": 143.4,
+    "native_playback_started": true,
+    "case_switches": [
+      "obstacle",
+      "tof_outage",
+      "camera_outage",
+      "campus"
+    ],
+    "manually_viewed_media": [
+      "campus",
+      "obstacle",
+      "tof_outage",
+      "camera_outage",
+      "all 8 checkpoint RGB images"
+    ]
+  }
+}

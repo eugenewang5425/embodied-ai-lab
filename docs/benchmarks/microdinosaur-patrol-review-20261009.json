@@ -1,0 +1,194 @@
+{
+  "schema": 1,
+  "date": "2026-10-09",
+  "scope": "simulation only; known initial pose, flat mapped roads, synthetic RGB checkpoints",
+  "hardware_released": false,
+  "selected_model": "UniDepth V2 Small",
+  "rgb_tof_campus_baselines": [
+    {
+      "run": "20261009_campus_s31_fixed",
+      "completed": 8,
+      "total": 8,
+      "seconds": 427.72000000366467,
+      "distance_m": 97.89401579152313,
+      "physics_steps": 342176,
+      "replay_equal": true
+    },
+    {
+      "run": "20261009_campus_s73_derated",
+      "completed": 8,
+      "total": 8,
+      "seconds": 430.18000000371836,
+      "distance_m": 99.59535148718155,
+      "physics_steps": 344144,
+      "replay_equal": true
+    }
+  ],
+  "final_depth_cases": [
+    {
+      "run": "20261009_depth_campus_s73_confirmed",
+      "baseline": "20261009_campus_s73_derated",
+      "scenario": "campus",
+      "completed": 8,
+      "total": 8,
+      "terminal": "route_complete",
+      "seconds": 430.18000000371836,
+      "distance_m": 99.59535148718155,
+      "baseline_stop_requested_s": null,
+      "stop_requested_s": null,
+      "baseline_trace_identical": true,
+      "stop_net_displacement_m": null,
+      "replay": 344144,
+      "max_qpos_error": 0.0,
+      "max_qvel_error": 0.0
+    },
+    {
+      "run": "20261009_depth_courtyard_s72_confirmed",
+      "baseline": "20261009_courtyard_s72_derated",
+      "scenario": "courtyard",
+      "completed": 3,
+      "total": 3,
+      "terminal": "route_complete",
+      "seconds": 31.419999999984213,
+      "distance_m": 4.180947163368812,
+      "baseline_stop_requested_s": null,
+      "stop_requested_s": null,
+      "baseline_trace_identical": true,
+      "stop_net_displacement_m": null,
+      "replay": 25136,
+      "max_qpos_error": 0.0,
+      "max_qvel_error": 0.0
+    },
+    {
+      "run": "20261009_depth_obstacle_s83_confirmed",
+      "baseline": "20261009_obstacle_s83_fixed",
+      "scenario": "obstacle",
+      "completed": 0,
+      "total": 3,
+      "terminal": "sensor_stop",
+      "seconds": 4.920000000001096,
+      "distance_m": 0.5541409184049648,
+      "baseline_stop_requested_s": 1.979999999999606,
+      "stop_requested_s": 1.899999999999622,
+      "baseline_trace_identical": false,
+      "stop_net_displacement_m": 0.04844802980989273,
+      "replay": 3936,
+      "max_qpos_error": 0.0,
+      "max_qvel_error": 0.0
+    },
+    {
+      "run": "20261009_depth_tof_outage_s81_confirmed",
+      "baseline": "20261009_tof_outage_s81_fixed",
+      "scenario": "tof_outage",
+      "completed": 0,
+      "total": 3,
+      "terminal": "sensor_stop",
+      "seconds": 5.1400000000012085,
+      "distance_m": 0.630914887886463,
+      "baseline_stop_requested_s": 2.1199999999996635,
+      "stop_requested_s": 2.1199999999996635,
+      "baseline_trace_identical": true,
+      "stop_net_displacement_m": 0.08299199202449041,
+      "replay": 4112,
+      "max_qpos_error": 0.0,
+      "max_qvel_error": 0.0
+    },
+    {
+      "run": "20261009_depth_camera_outage_s82_confirmed",
+      "baseline": "20261009_camera_outage_s82_fixed",
+      "scenario": "camera_outage",
+      "completed": 0,
+      "total": 3,
+      "terminal": "sensor_stop",
+      "seconds": 5.220000000001249,
+      "distance_m": 0.5438417071303167,
+      "baseline_stop_requested_s": 2.1999999999997044,
+      "stop_requested_s": 2.1999999999997044,
+      "baseline_trace_identical": true,
+      "stop_net_displacement_m": 0.01599257201316469,
+      "replay": 4176,
+      "max_qpos_error": 0.0,
+      "max_qvel_error": 0.0
+    }
+  ],
+  "obstacle_command_advance_ms": 79.99999999998408,
+  "campus_position_error_p95_m": 0.43281767547919836,
+  "campus_position_error_max_m": 0.6842768911100695,
+  "depth_dataset": {
+    "frames": 39,
+    "development": 20,
+    "heldout": 19,
+    "independent_worlds": false,
+    "near_range_m": [
+      0.15,
+      4.0
+    ],
+    "heldout_models": [
+      {
+        "model": "da2_metric",
+        "frames": 19,
+        "accepted": 16,
+        "matched_raw_near_absrel": 0.8785368809476495,
+        "fused_near_absrel": 0.14584464230574667,
+        "fused_far_absrel": 0.28030582070350646,
+        "inference_p50_ms": 78.76520001445897,
+        "inference_p95_ms": 85.2997300156858
+      },
+      {
+        "model": "unidepth",
+        "frames": 19,
+        "accepted": 17,
+        "matched_raw_near_absrel": 0.8218309002764085,
+        "fused_near_absrel": 0.1445195065701709,
+        "fused_far_absrel": 0.4406133992597461,
+        "inference_p50_ms": 53.763700008857995,
+        "inference_p95_ms": 60.2445099997567
+      }
+    ]
+  },
+  "final_depth_physics_steps": 381504,
+  "max_replay_qpos_error": 0.0,
+  "max_replay_qvel_error": 0.0,
+  "physics_contact_steps": 0,
+  "focused_contract_tests": 23,
+  "whole_repository_full_regression": false,
+  "source_benchmarks": {
+    "microdinosaur-campus-patrol-20261009.json": "053fb84d45b443f188c37e81c344570a8705df92aee4a07ef577b99b857d7fb9",
+    "microdinosaur-depth-20261009.json": "1729d35829bffc9bc57b377640e05c5b3a3696504505db8596cafc7141c659ab",
+    "microdinosaur-explainer-20261009.json": "2b54db063caa0a37c11a24619e586857062a57be6b0c5551115561ad43f6c194"
+  },
+  "preserved_failures": [
+    "compressed output caused stale depth: 20261009_depth_courtyard_s72 and 20261009_depth_obstacle_s83",
+    "Depth Pro aborted after 5 partial frames",
+    "dataset v1 UTF-8 read failure; v2 scoring-mask fix retained; v3 final",
+    "campus_s73_fast: sky hallucination stopped at 1/8; campus_s73_horizon: side-wall hallucination stopped at 2/8; both retained and replayed"
+  ],
+  "counterfactual_checks": {
+    "horizon_frames": 1119,
+    "measurement_confirmation_frames": 2107,
+    "truth_input": false
+  },
+  "film": {
+    "duration_s": 180.0,
+    "fps": 24,
+    "size": [
+      1920,
+      1080
+    ],
+    "decoded_frames": 4320,
+    "decoded_audio_seconds": 180.0,
+    "non_silent_cues": 28,
+    "visual_qa_verified": true,
+    "film_sha256": "953c04373ca2cb74d74ca10064306c5bed143b605aaba5fa2d348e7b5678d0ba",
+    "film_bytes": 39089513
+  },
+  "publication": {
+    "bilibili_url": "https://www.bilibili.com/video/BV1Mtp46EEw9/",
+    "bilibili_status_at_verification": "public_page_playable",
+    "xiaohongshu_status_at_verification": "submitted_under_review",
+    "status_snapshot_date": "2026-10-09"
+  },
+  "preview_sha256": "6dd810f14e03b6460c9fcc95c7409ed21a5d365cb2c6101ec9b36ecf5aef6170",
+  "local_execution_assets_required": true,
+  "limitations": "Closed-loop simulation only: flat ground, known initial pose and synthetic checkpoints; no defect recognition, physical calibration/deployment, outdoor radiometry, measured S288 thermal/continuous ratings or board latency. Fixed-frame model errors remain uncertain; original camera/ToF stop gates retained."
+}

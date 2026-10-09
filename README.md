@@ -2,17 +2,18 @@
 
 **From GIS & remote sensing to robotics — every concept becomes a runnable, testable experiment.**
 
-A learner's lab covering control, robot perception, mapping, navigation, learning and SO-101 manipulation. Experiments are checked with paired comparisons, physical replay and tiered tests; reports keep both improvements and failures. The latest work uses MuJoCo simulation, with RGB cameras currently used for replay views rather than visual control.
+A learner's lab covering control, robot perception, mapping, navigation, learning and SO-101 manipulation. Experiments are checked with paired comparisons, physical replay and tiered tests; reports keep both improvements and failures. Lesson demos use RGB replay views; a separate S288 MicroDinosaur experiment uses RGB checkpoints, ToF ranging and ToF-scaled monocular depth for closed-loop simulated campus patrol. See the [new experiment review](docs/microdinosaur-patrol-review-20261009.md) and [3-minute narrated film](https://www.bilibili.com/video/BV1Mtp46EEw9/).
 
 > **Why this exists:** I come from remote-sensing deep learning (land-cover classification, MSSACT-Net) and spatial analytics. This repo is my bridge to embodied intelligence — control → robot perception → mapping → robot learning — with every step kept small and verifiable.
 
 | | |
 |---|---|
+| **MicroDinosaur · 2026-10-09** | S288 simulated campus patrol: **8/8 checkpoints, 99.60 m**. Added depth stops **80 ms earlier** in one paired obstacle case; normal route trace is unchanged. [Review and video](#microdinosaur-patrol) |
 | **Navigation · lesson 69** | Rounds 12–14: 60/60 fresh validation episodes reached and stopped, with zero contact; 3 impossible entrances correctly rejected. Exact pose, static layouts and low speed; computation still exceeds the 100 ms control interval. [Report](docs/69-physical-height-navigation.md) |
 | **Manipulation · lesson 73** | Round 3: surface alignment improved 21/27 → 24/27 on matched fresh conditions, with 3 rescues and no regressions. Pre-lift contact gating alone: 11/27; combined: 23/27. Three drop failures remain; known initial position, no visual feedback. [Report](docs/73-so101-contact-feedback.md) |
 | **Verified · 2026-10-05** | Full run: 1134 passed, one old RGB equality assertion failed. After its correction: all 12 replay tests, 936 quick tests and 20 grasping tests passed in separate runs. Grasping records independently replayed; figures and actual windows inspected. [Delivery evidence](docs/benchmarks/so101-contact-v4-delivery.json) |
 | **Stack** | MuJoCo + Gymnasium (Windows) · ROS 2 Jazzy + Gazebo Harmonic 8.15 (WSL2 / Ubuntu 24.04) · uv + Python 3.12 |
-| **Start here** | [Quick start](#quick-start) · [Latest navigation & grasping windows](#latest-demos) · [课程索引](#课程索引) |
+| **Start here** | [Quick start](#quick-start) · [MicroDinosaur patrol & film](#microdinosaur-patrol) · [Navigation & grasping windows](#latest-demos) · [课程索引](#课程索引) |
 
 <p align="center">
 
@@ -36,6 +37,26 @@ uv run python -m embodied_learning.viewer --policy pd --seconds 10 --seed 7
 ```
 
 `results/` contains local experiment archives and is excluded from Git. A fresh clone has the code, figures and compact benchmark summaries; generate an experiment before opening its replay window. Below, paired generation/replay commands use the same directory. Use a new output directory for another run.
+
+<a id="microdinosaur-patrol"></a>
+
+### S288 小恐龙园区巡检：相机、ToF 与单目深度
+
+[观看 3 分钟技术讲解（B 站）](https://www.bilibili.com/video/BV1Mtp46EEw9/) · [实验小结与下一步](docs/microdinosaur-patrol-review-20261009.md) · [RGB＋ToF 基准](docs/microdinosaur-campus-patrol.md) · [深度实验详情](docs/microdinosaur-patrol-depth.md)
+
+[![S288 小恐龙巡检：原动作、RGB＋ToF 投影与算法深度](docs/img/microdinosaur-patrol-explainer.jpg)](https://www.bilibili.com/video/BV1Mtp46EEw9/)
+
+保留原 19 个 S288、刚性尾巴与 V07 ONNX 动作策略（50 Hz），用 IMX219-77 彩色相机候选配置（640×480）和规定的 VL53L5CX ToF（8×8、15 Hz、4 m）模拟感知。编码器/IMU估计运动，RGB 标记校正漂移并确认巡检点；UniDepth V2 Small 估计密集深度，ToF 校准尺度并检查质量。深度候选还需物理地平线、同角域双 ToF 分区和连续帧确认，原传感器失效停车保持优先。
+
+| 同条件对照 | 已验证结果 | 结论边界 |
+| --- | --- | --- |
+| 最终压力配置整圈：RGB＋ToF / 加深度 | 两组均 **8/8 点、99.60 m、430.18 s**，动作 trace 相同 | 新增深度没有改善本轮整圈到点率、效率或定位误差 |
+| 固定障碍：RGB＋ToF / 加深度 | 停车指令 **1.98 s → 1.90 s**；深度组停后净位移 **4.84 cm** | 单个匹配案例提前 **80 ms**；不等于最坏停车距离或动态绕障能力 |
+| UniDepth 同帧近场深度 | 17 个有效留出帧 AbsRel **82.2% → 14.5%**；校正接受 **17/19** | 39 帧同一世界/轨迹的冻结数据，近场 0.15–4 m；不是巡检成功率 |
+
+深度五案例 **381,504 个物理步**独立重放状态误差为 0，所有步园区接触与关节越限为 0；**23 项专项契约检查**通过，未重跑全仓 full。天空误判 **1/8** 和侧墙误判 **2/8** 两个整圈失败保留。历史盲走没有环境测距/巡检点确认，其航向实验与新园区场景不同；新增感知能力与新增深度的配对收益分别报告。
+
+当前是**已知初始位姿、平整道路、预布彩色标记的仿真研究**。相机模式、安装外参和部分时延仍是假设，实机室外、板端实时性、电机温升、无标记定位及设备缺陷识别待验证，`hardware_released: false`。成片含本地星瞳 AI 配音与模型署名，按非商用研究范围发布。[紧凑证据](docs/benchmarks/microdinosaur-patrol-review-20261009.json)；大型原始数据及机器人源资产保存在本机。
 
 <a id="latest-demos"></a>
 
@@ -125,7 +146,9 @@ uv run python scripts/render_photo_room_replay.py
 - 利用 GIS、遥感和空间智能基础，逐步进入三维感知、建图、导航、机器人学习与具身智能。
 - 保持项目小步迭代、Git 可追踪、结果可复现。
 
-## 当前状态（2026-10-05 · 基准 62 + 第 63–73 课）
+## 当前状态（2026-10-09 · 基准 62 + 第 63–73 课与 S288 巡检专项）
+
+- **S288 小恐龙专项（2026-10-09）**：原动作策略＋RGB/ToF/单目深度完成 8/8 标记巡检；固定障碍新增深度提前 80 ms 发停车指令，正常整圈轨迹不变。两次误停失败、传感器降级、专项验证和实机边界见[新实验小结](docs/microdinosaur-patrol-review-20261009.md)。
 
 - **三维操作主线（72—73课）**：[第七十三课第三轮讲义](docs/73-so101-contact-feedback.md)新增126物理回合，同27新条件指面校准21/27→24/27、救回3例无退步；单独门控11/27、组合23/27，两负对照各0/9。仍有3例掉落，力与压入代价保留，先补动态接触再进入视觉。首两轮原批次保留；已知初始位置，RGB尚未参与控制。见[操作路线](docs/manipulation-roadmap.md)。
 
