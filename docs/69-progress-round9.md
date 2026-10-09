@@ -103,3 +103,9 @@ uv run python scripts/test.py full tests/test_navigation_progress.py
 独立直接重放456400个2ms物理步，状态与接触误差均0；重建9164帧地图，对15701次删除逐一检查三个原始观测中的9像素深度。旧组桥接冻结第八轮的种子23实际运行，除计算墙钟与新增进度字段外，全部原数组逐值相同。已知答案涵盖首点已走/未走、偏离、折返、交叉、转角提前跳点和未对齐身体。真实窗口及共同回归见[交付验收](benchmarks/navigation-reinforcement-9-10-delivery.json)。
 
 按登记完成后冻结结果，不在正式种子上继续调参。下一轮单独改变深度采样，见[第十轮讲义](69-depth-sampling-round10.md)。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

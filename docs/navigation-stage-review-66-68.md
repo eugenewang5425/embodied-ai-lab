@@ -1,5 +1,8 @@
 # 导航阶段小结：从“位置估得准”走到“身体能安全完成任务”
 
+2026-10-09 文档整理说明：下文按日期保留各轮历史成绩与当时下一步，不能把旧门槛当成当前进入条件。最新安排由[NAV 方向路线](multisensor-navigation-roadmap.md)维护；[方向与历史编号](experiment-index.md#nav)保留各轮身份。
+
+
 日期：2026-09-27。范围：[第 64 课](64-closed-loop-navigation.md)、[第 65 课](65-map-separation.md)及[第 66](66-campus-patrol.md)、[67](67-body-aware-obstacle-avoidance.md)、[68](68-scan-based-map-repair.md)课，必要时回接更早的运动学、相机和配准实验。本页是阶段复盘，不占第 69 课编号。
 
 ## 1. 这阶段真正推进了什么

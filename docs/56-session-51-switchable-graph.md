@@ -67,6 +67,12 @@
 
 可切换约束给每条可疑回环一个连续开关，max-mixtures 给残差选择不同误差成分。它们调的是后端如何信任输入边，不能凭优化本身制造前端没有提供的“这条边真假”信息。第 48 课的绝对锚注入下，λ 扫描的可行域为空，恰好暴露了该协议给好边与坏边的冲突。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Switchable Constraints for Robust Pose Graph SLAM](https://nikosuenderhauf.github.io/assets/papers/IROS12-switchableConstraints.pdf)（Niko Sünderhauf / Peter Protzel，IROS2012）；[Inference on Networks of Mixtures for Robust Robot Mapping](https://april.eecs.umich.edu/papers/details.php?name=olson2012rss)（Edwin Olson / Pratik Agarwal，RSS2012）。
+
+本地可切换约束及 max-mixture 的机制适配；绝对/相对边、尺度与硬组件选择不同，阴性结果按本地问题陈述。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 开关 `s` 接近 0 或 1 分别表示什么？λ 增大时，好边和毒化边为何会受到同向约束？

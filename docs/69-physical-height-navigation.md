@@ -112,6 +112,9 @@
 3. 50cm高回波出现在宽底盘俯视范围内，为何不能直接判碰撞？在哪些部件位置又必须判碰撞？
 4. 额外2cm偏好与允许轻擦40N是同一件事吗？一条路线满足偏好是否能保证物理接触力？
 5. 为何三次相同街区新噪声成功，不能代替两个新街区布局？开发修好原反例为何不算留出验证？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 若CPU计算期间车继续运动，当前预报的初始状态还有效吗？怎样记录采样时间、完成时间和实际执行时间？
 
 ## 10. 复现与下一步
@@ -127,3 +130,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 已存在目录会拒绝覆盖；中断后同命令加`--resume`，先校验源码、登记及已完成存档哈希，只运行剩余案例。`wall_s`是已保存运行段累计，未保存工作或中断间隙不包含其中。原始结果保留本地results，仓库摘要含输入/源码哈希，新克隆需按命令生成。
 
 本轮在限定导航范围通过后继续[第73课](73-so101-physical-grasping.md)的接近几何；首轮正常抓取仍6/9，不能拿导航到达率替代抓取成绩。接下来分别诊断夹爪中心、物体朝向、下降和实际接触，再做新位置/朝向的独立验证。导航位姿误差、遮挡、异步执行及69—71联合系统仍在路线图保留。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

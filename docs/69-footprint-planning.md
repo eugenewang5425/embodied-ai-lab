@@ -105,3 +105,9 @@ uv run python docs/img/make_navigation_followup_figures.py
 实现：[足印规划器](../src/embodied_learning/footprint_planning.py)、[实验入口](../src/embodied_learning/experiments/navigation_followups.py)。全部行、源码和输入哈希见[基准摘要](benchmarks/navigation-studies-69-71-v1.json)，验收见[验证记录](benchmarks/navigation-studies-69-71-validation.json)。原数组留在本地results，不放入Git。
 
 本课实验完成，**窄路闭环未过门**。下一项优先做曲率与实际跟踪能力的单变量验证，保留固定场景与6cm余量。到点和恢复是独立问题，分别进入[第七十课讲义](70-arrival-decisions.md)与[第七十一课讲义](71-bounded-recovery.md)。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

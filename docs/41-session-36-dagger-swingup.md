@@ -35,7 +35,7 @@ argmin E_{s~d_{π_t}} ‖π(s) − π*(s)‖。与第 28 课 BC 和第 32 课 DA
 
 1. **数据分布随策略演化**。BC/DAPG 的 (s,a) 来自**教师自己的轨迹**（教师状态分布 d_{π*}）；
 DAgger 的 (s,a) 来自**学生自己的轨迹**（学生状态分布 d_{π_t}）——复合误差（compounding
-error，Ross 2010 的定量论证：单步误差 ε 与视界 T 下，离线 BC 开环执行误差按 ε·T² 积累）
+error，Ross et al. 2011 的定量论证：单步误差 ε 与视界 T 下，离线 BC 开环执行误差按 ε·T² 积累）
 正是"学生越不像教师，教师离线轨迹覆盖不到学生犯错状态"这个错配。DAgger 的聚合在每一轮
 重新从学生分布采样标签，让协变量偏移（covariate shift）不随轮次增长。
 
@@ -253,6 +253,12 @@ uv run ruff check src tests
 ## 理论对应（Embodied-AI-Guide）
 
 DAgger 让学生在自己到达的状态请求教师标签，再把这些状态加入训练集，直接针对第 28 课的分布偏移。`w=0` 对照隔离了教师纠错数据的贡献；首达从 0 到 5/60 表示数据通路有作用，完整成功仍 0/60 表示动作标签或尾段目标尚未解决。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning](https://proceedings.mlr.press/v15/ross11a.html)（Stéphane Ross / Geoffrey Gordon / Drew Bagnell，2011）。
+
+实际在线教师标注和数据聚合；学习结果与理论条件/专家信息权限分开。引用年份校正为论文2011。 [完整采用关系与引用规则](references.md)。
 
 ## 思考题
 

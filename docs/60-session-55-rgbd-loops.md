@@ -38,6 +38,12 @@
 
 场所识别常先做候选检索，再做几何验证。外观相似度解决“先检查哪几帧”，相对位姿残差解决“这条回环边能否使用”。本课用模拟标记把两种信息分开；11/12 表明检索成功仍不能替代几何正确性检验。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 为什么 12/12 的检索精确率与 11/12 的方向正确率不是同一个数字？剩下那条错误边进入位姿图后可能造成什么？

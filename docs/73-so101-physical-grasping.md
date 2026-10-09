@@ -111,7 +111,16 @@ uv run python scripts/test.py full tests/test_so101_manipulation.py
 3. 偏差组0/9说明位置准确有作用；它能说明某个视觉模型的精度或效果吗？
 4. 同一算法换位置后手指接近方向改变了，怎样设计实验只检验方块朝向的影响？
 5. 50Hz力图最大约5N，500Hz原始记录峰值更大，两个数字为什么能同时正确？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 以后加入抓取恢复，怎样限制重试次数并防止“把物体推到目标附近”冒充抓取成功？
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Robotic Manipulation · 作者教材](https://manipulation.mit.edu/intro.html)（Russ Tedrake，持续更新）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+固定开源模型与本地真实接触仿真；夹紧时双侧受力不保证搬运持续接触，已知物体初始位置与 RGB 回放不等于视觉抓取或实机放行。 [完整采用关系与引用规则](references.md)。
 
 ## 9. 阶段裁决与下一步
 

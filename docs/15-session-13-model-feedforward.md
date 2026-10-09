@@ -125,6 +125,12 @@ uv run python -m ruff check src tests
 
 本课刻意区分"参考轨迹逆动力学前馈 + PD"与 computed-torque 反馈线性化（后者用实际状态计算 M(q)、b，属于 6.2.2 的思路），也刻意不做"纯前馈"实验：在模型精确、无负载、水平面重力力矩为零的条件下，25/25 只是"模型准确时有什么收益"的基线，不能外推到真实机械臂。（4）Algorithm 篇里各类学习方法输出的动作序列，最终也要接受这一层执行可达性的检验；先用显式模型把收益来源拆干净，将来才不至于把模型收益误记到学习方法头上。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 肩部 PD 修正 RMS 从 0.02360 N·m 降到 0.000310 N·m（约 76 倍）。为什么讲义强调"这不是电机总力矩或能耗降低同样比例"？前馈自己出了多少力，去哪里看？

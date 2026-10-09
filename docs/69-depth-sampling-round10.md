@@ -110,3 +110,9 @@ uv run python scripts/test.py full tests/test_navigation_progress.py
 独立重放333900个2ms物理步，状态/接触误差均0；重建6714帧地图，按各组相机尺寸独立投影核验18827次删除的三帧9像素证据。逐记录核对终点距离、实际停稳、接触口径、速度上限、源码与协议哈希。真实Tk已检查两分辨率切换后地图、相机、三维、统计、深度反投影同步；原图/当前图分离，不借用最终图。共同测试与视觉验收见[交付验收](benchmarks/navigation-reinforcement-9-10-delivery.json)。
 
 按登记冻结本批，不能在这些新种子上继续优化再当留出结果。下一步先扩大遮挡/实际新增低障碍与位姿误差的反例，审查地图格子与连续点两套规划约束，再考虑统一69—71身体与评分。跨场景门槛、连续RGB-D、真实异步执行和视觉定位仍待完成。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

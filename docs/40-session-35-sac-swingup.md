@@ -225,6 +225,12 @@ uv run ruff check src tests
 
 SAC 用回放池重复利用数据，孪生 Q 抑制价值过高估计，熵温度 `α` 决定探索动作的代价。`α` 接近零和回放熵坍缩能解释这批训练如何失去多样性，但不能单凭相关性断言这是唯一失败原因。第 29 课 PPO 与本课比较的是算法及其默认训练机制，需要逐项保持任务和评估口径一致。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://arxiv.org/abs/1801.01290)（Tuomas Haarnoja 等，2018）。
+
+本地 numpy SAC 的回放、双Q和熵正则；起态/预算补实验保留，闭环停稳判据另报。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `α` 从控制探索权重降到近零时，动作分布和回放池状态可能怎样变化？为什么回放熵是必要的辅助指标？

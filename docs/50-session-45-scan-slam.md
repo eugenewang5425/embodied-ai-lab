@@ -193,6 +193,12 @@ uv run ruff format --check src/embodied_learning/experiments/scan_slam.py src/em
 
 帧间扫描匹配提供的是相邻观测之间的相对位姿约束；它能减小局部不一致，却无法单靠自身确定整个轨迹在世界坐标中的位置。扫描组与里程计组均 0/15，且误差 2.47 m 对 2.25 m，提醒我们将“残差小”与“全局可定位”分开。后续回环和已知地标是不同形态的全局约束。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 扫描匹配的输入和输出是什么？它修正相邻两帧的哪种误差，为什么不能凭这一步知道绝对世界位置？

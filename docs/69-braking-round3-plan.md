@@ -40,3 +40,9 @@
 同输入反事实已保存至`results/braking_counterfactual_v3`。计入0.2秒保持延迟时，种子0/2的独立减速外扩分离量为−6.71/−2.77mm，同比例减速为+5.42/+8.61mm。这里只验证两个触发状态，不替代闭环。
 
 开发批次`results/braking_navigation_probe1`的10回合：旧参照种子0到达但余量违规、种子2失败；共同离散口径组两例失败；仅同比例制动两例到达且余量合格；仅限速两例失败；组合种子0失败、种子2到达且余量合格。因此保留原登记参数，不因开发结果删组或调整限速。5项已知答案检查通过；其中圆弧曲率使用弦长近似，测试容差按其约5e−7离散误差修正到1e−6，没有改算法迎合测试。此后冻结源码，开始全部230回合。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

@@ -285,6 +285,12 @@ uv run ruff format --check src/embodied_learning/experiments/rl_arm_reaching.py 
 
 2R 臂让第 39 课的最大熵问题跨到另一种全驱动系统。手工 IK+PD 20/20 与学习策略 0/60 说明任务本身可完成；瞬时进 2 mm 球与保持成功需要的低速、持续时间不同。跨系统重复的熵现象是值得检验的线索，观测缺少关节速度也是独立因素，不能只凭两组阴性结果选定唯一原因。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://arxiv.org/abs/1801.01290)（Tuomas Haarnoja 等，2018）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+本地连续控制 SAC 与几何教师同任务比较；接近、首达、停稳与出包络分别验收，不能只看训练损失。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 瞬时触达 2 mm 球与完整到达成功还差哪些状态或时间条件？为什么 6/60 瞬时进入仍可与 0/60 成功共存？

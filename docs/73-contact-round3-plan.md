@@ -33,3 +33,9 @@ A保留第二轮空间路径与指尖中点；B只换指面截面校准；C只�
 沿用原评分：保持段物体抬升≥10cm、连续≥1s、双指力>0.02N、其他支持<0.02N；放置连续≥0.5s、XY≤2.5cm、高度±3mm、线速度<2cm/s、角速度<0.2rad/s、夹爪>0.9rad并无有效双指接触。报告成功、拒绝、未抬起、掉落、峰值力、耗时及相同条件退步。第二轮A开发输入逐数组桥接，独立逐2ms重放所有正式请求、状态、力与评分。
 
 若最终候选未在登记范围全部通过，保留失败并继续接触研究，不把未完成教师接入74课视觉。讲义、因果图表、相机/3D/统计同步窗口、思考题与README共同更新。全量回归用于共享模块与阶段交付；实验、独立重放、测试耗时分开。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Robotic Manipulation · 作者教材](https://manipulation.mit.edu/intro.html)（Russ Tedrake，持续更新）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+固定开源模型与本地真实接触仿真；夹紧时双侧受力不保证搬运持续接触，已知物体初始位置与 RGB 回放不等于视觉抓取或实机放行。 [完整采用关系与引用规则](references.md)。

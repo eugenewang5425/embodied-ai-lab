@@ -89,6 +89,12 @@
 
 真实抓取还涉及接触面的方向、摩擦锥、物体转动和受力平衡。本课用自由物体与接触仿真揭示这些现象，没有验证力闭合保证。质量、摩擦和驱动均为固定模型假设；相机画面只是按存档重渲染，尚无视觉闭环，也不是实机标定。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Robotic Manipulation · 作者教材](https://manipulation.mit.edu/intro.html)（Russ Tedrake，持续更新）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+固定开源模型与本地真实接触仿真；夹紧时双侧受力不保证搬运持续接触，已知物体初始位置与 RGB 回放不等于视觉抓取或实机放行。 [完整采用关系与引用规则](references.md)。
+
 ## 9. 思考题
 
 1. 为什么固定指不动，开口中心仍会改变？为什么闭合请求0rad不能替代当前真实开度？
@@ -96,6 +102,9 @@
 3. 为什么每个关节都平滑运动，末端却不一定沿直线下降？空间路径加入开口反馈后TCP又为何会偏离名义直线？
 4. 同样17/27→21/27，如果有两例退步与没有退步，下一轮开发重点会有什么不同？
 5. 手指力更低、没有其他手臂接触，但物体掉落了，这能算有效抓取吗？请串起双侧受力、支持力、抬升和保持条件。
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 如何分别测试方块朝向、接触面参考点和双侧接触反馈？为什么不能用修好本轮六失败的成绩冒充新条件泛化？
 
 ## 10. 复现和下一项

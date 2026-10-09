@@ -71,6 +71,12 @@
 
 相对边约束两时刻之间的相对变换，比世界帧绝对锚更接近实际回环输出；但边值若错误且贴近真实候选，优化器仍可能折中接受。开关 `s=0.61` 是数值权衡，不是分类器说“真”的概率。将开关值与边真假混同，会掩盖前端识别问题。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Switchable Constraints for Robust Pose Graph SLAM](https://nikosuenderhauf.github.io/assets/papers/IROS12-switchableConstraints.pdf)（Niko Sünderhauf / Peter Protzel，IROS2012）；[Inference on Networks of Mixtures for Robust Robot Mapping](https://april.eecs.umich.edu/papers/details.php?name=olson2012rss)（Edwin Olson / Pratik Agarwal，RSS2012）。
+
+本地可切换约束及 max-mixture 的机制适配；绝对/相对边、尺度与硬组件选择不同，阴性结果按本地问题陈述。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 相对回环边的测量与第 51 课绝对锚在坐标和残差定义上有什么不同？

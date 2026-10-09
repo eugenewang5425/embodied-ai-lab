@@ -107,6 +107,9 @@
 3. 相机深度无效与解析射线量程内未命中有什么区别？
 4. 三帧深度穿过一个格子，能保证整个格子每个角落为空吗？
 5. 清除320个三维格子，为什么全高度俯视错误数量可能完全不降？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 地面是可行驶表面，但深度射线会打到地面；怎样避免把地面当箱子，也避免随意删除低路障？
 7. “following”状态、零请求、零真实速度分别说明什么？
 8. 把车后首路点跳过后的请求变为0.2m/s，为什么还不能宣称真实到达恢复？
@@ -125,3 +128,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 同第七轮，输出目录须不存在；已有记录直接打开。两个正式摘要、原始数组、协议和执行源码各自保留，图表由同一生成脚本复现。`uv run python scripts/test.py full tests/test_navigation_reinforcement.py tests/test_contact_viewer.py tests/test_navigation_study_viewer.py tests/test_replay_viewer.py`验证受影响模块，再运行quick层。
 
 本轮不推荐把证据更新默认用于所有导航。下一阶段先处理已确认的路点进度，再研究近地面主动观察/分高度通行判断，保留低障碍真实存在的负例。69—71同物理平台组合、异步执行、失定位、65课似然场与跨场景门槛仍未完成。72—73机械臂结果不能替代这些验收。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

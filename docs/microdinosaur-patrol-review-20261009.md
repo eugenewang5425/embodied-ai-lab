@@ -61,3 +61,9 @@
 ## 下一项实验
 
 先补真实传感器安装、内参/外参/时间戳与 ToF 状态标定，分离外参偏差、延迟、测距偏差和光照影响；在新布局上冻结同条件 RGB＋ToF / 深度对照，报告误停、漏停、停后净位移与实际路径。再检查板端 P95/P99 延迟、功耗及 S288 电流温升，进入受控短程实物试验。当前没有动态绕障、设备缺陷识别、无标记定位或真实开放园区无人值守的验收证据，所有实验保持 `hardware_released: false`。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[UniDepth / UniDepthV2](https://github.com/lpiccinelli-eth/UniDepth)（Luigi Piccinelli 等，2024/2025）；[IMX219-77 Camera](https://www.waveshare.com/wiki/IMX219-77_Camera)（Waveshare / 微雪，产品规范）；[VL53L5CX Datasheet](https://www.st.com/resource/en/datasheet/vl53l5cx.pdf)（STMicroelectronics，产品规范）；[GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS)（RVC-Boss 与贡献者）；[parrots-gpt-sovits-speaker · 星瞳来源集合](https://huggingface.co/shibing624/parrots-gpt-sovits-speaker)（shibing624；星瞳模型作者 XzJosh）。
+
+这是 DINO-01/02 的技术交付；实验算法/硬件假设与星瞳本地配音分别引用，媒体制作不是新增实验或实机成绩。 [完整采用关系与引用规则](references.md)。

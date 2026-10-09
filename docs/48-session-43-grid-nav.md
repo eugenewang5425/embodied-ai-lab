@@ -276,6 +276,12 @@ uv run ruff format --check src/embodied_learning/experiments/grid_nav.py src/emb
 
 这是占据地图、全局路径、局部跟踪和紧急刹车第一次接成一条闭环。GIS 中的栅格路径搜索给出几何路线；机器人还要结合轮速、转向和实时传感器执行。15/15 对盲飞 3/15 支持这一套在当前场景的价值；其中规划、控制和安全的距离常数若不一致，单个模块正确也会死锁。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地占据图、A*和差速适配纯追踪；定位/地图/身体/执行误差要分别检验，未调用完整 Nav2 栈。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 占据格、障碍膨胀、A* 路径、纯追踪目标点和刹车门限分别回答什么问题？哪一层直接发轮速？

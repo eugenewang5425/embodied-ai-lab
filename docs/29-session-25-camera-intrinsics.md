@@ -245,6 +245,12 @@ f 误差随 σ 近似线性、C 近似常数、种子确定性（含 NaN 感知�
 
 `K` 在第 22 课是给定相机参数，本课把它变成由多张平面棋盘图估计的未知量，呼应摄影测量的内方位元素。多姿态让约束方向不同；仅平移或固定倾角会使方程退化。重投影误差若同时允许外参吸收错误内参，可能显得很好，因而需要真值位姿或平面外独立探针作评估。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Flexible New Technique for Camera Calibration](https://www.microsoft.com/en-us/research/publication/a-flexible-new-technique-for-camera-calibration/)（Zhengyou Zhang，2000（技术报告1998））；[OpenCV · PnP pose computation](https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html)（OpenCV 官方文档）。
+
+张氏单应闭式内参的本地合成棋盘格实验；PnP为相关几何参考，本课未完成真实镜头标定。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `fx=fy=f、cx、cy` 四个未知量分别改变投影图像的什么？为什么多拍同一倾角、只改变平移，不等于增加了有效几何信息？

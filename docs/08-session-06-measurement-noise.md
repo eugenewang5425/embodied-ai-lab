@@ -159,6 +159,12 @@ uv run python -m embodied_learning.experiments.lqr_measurement_noise --output re
 
 边界照例先行：这些是教学噪声，不是任何真实传感器的实测规格；速度通道被假设为直接可测；本课没有实现估计器，也没有证明某个滤波器必要或更好。先测清影响，是把以后“要不要滤波”的讨论放在证据上。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Underactuated Robotics · LQR](https://underactuated.mit.edu/lqr.html)（Russ Tedrake，作者教材）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+反馈、局部线性化、代价与扰动的教材联系；本地 PD/LQR、能量摆起与切换配置见正文，不把一个控制器的适用域推广到全部状态。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 1× 组的真实位置 RMS 误差是 0.329 cm，比位置读数噪声标准差（2 mm）还小。为什么“反馈+物理惯性”能让真实误差小于读数误差？输入 RMS 0.0527 在其中扮演什么角色？

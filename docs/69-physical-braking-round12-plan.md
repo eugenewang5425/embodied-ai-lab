@@ -19,3 +19,9 @@
 若本项只避免接触但仍不能到达，继续分离观测表示、路线与跟踪。新的开发候选另存，不修改本项已冻结记录，不反复使用已看过的验证数据宣称留出成功。新布局的可达性只由独立评分端采样检查，参考路线不传给控制器。
 
 达到这个有限仿真范围的全通过门槛后，再继续73课第二轮接近几何诊断和独立位置/朝向抓取。位姿误差、移动障碍、实机和真实异步计算仍须单独验证。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

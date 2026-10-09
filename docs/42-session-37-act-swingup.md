@@ -298,6 +298,12 @@ uv run ruff check src tests
 
 多峰门控和动作块把“同一局部观测下有多种合理动作”显式放进策略表示；这可缓解连续 MLP 对分段教师取平均的问题。确定性均值路径 3/3 到顶是表示层修复某个子任务的证据；完整成功 0/60 说明尾段稳定另有约束。不能把到顶、短暂触达和持续成功混成一个事件。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705)（Tony Z. Zhao 等，2023）；[Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137)（Cheng Chi 等，2023）。
+
+本地为门控混合专家的最小多峰块策略；不含原 ACT 完整视觉/CVAE 双臂系统，也未实现扩散策略。两个原方法用于解释块表示与多峰思想。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 门控混合专家怎样避免两种相反教师动作被直接平均？动作块又怎样改变单步预测的时间范围？

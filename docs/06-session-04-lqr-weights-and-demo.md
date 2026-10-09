@@ -121,6 +121,12 @@ uv run python -m embodied_learning.experiments.lqr_weight_sweep --output results
 
 边界照旧：`u` 不是牛顿，执行器力是 `100u N`；`sum(u²) × dt` 只是平方输入累积指标，不是焦耳。R 与各指标的关系只在“本实验、平衡点附近、理想状态可观测”内成立——下一课的推力实验马上会给出一个峰值排序反转的反例。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Underactuated Robotics · LQR](https://underactuated.mit.edu/lqr.html)（Russ Tedrake，作者教材）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+反馈、局部线性化、代价与扰动的教材联系；本地 PD/LQR、能量摆起与切换配置见正文，不把一个控制器的适用域推广到全部状态。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. R=0.1 与 R=1 进入稳定范围只差 2.56 s → 2.60 s（一个控制间隔），输入峰值却从 1.4162 降到 0.9510。如果只看稳定时间一列，会怎样评价 R 的作用？为什么三个指标要放在一起读？

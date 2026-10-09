@@ -172,6 +172,12 @@ uv run pytest -q tests/test_session28_bc_imitation.py
 
 行为克隆把控制器改写成监督学习问题：给定专家访问的状态，拟合专家动作。训练分布里的单步均方误差与自主运行的整段成功率不是同一指标；一旦学生偏离专家轨迹，下一步输入也变了，误差会复合。这是之后 DAgger 和闭环评估的起点。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning](https://proceedings.mlr.press/v15/ross11a.html)（Stéphane Ross / Geoffrey Gordon / Drew Bagnell，2011）。
+
+行为克隆的分布偏移及后续数据聚合机制；本课只做监督 BC，没有执行 DAgger 在线纠错。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 开环 MSE 降低 33 倍而闭环仍 0/75，两个数字分别测了什么？第一步小动作误差怎样改变第二步的输入分布？

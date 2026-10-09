@@ -165,6 +165,12 @@ computer-use 实际点击核验了首次观测、两个页面、隐藏保持组�
 
 本课也如实划出了退化版融合的边界：等权、无异常值剔除、无可靠度加权，一次坏观测就能让估计变差；重置只改估计，不让车瞬移。加权、异常值处理、时变增益——这些 6.3.3 与状态估计文献的主题，都需要先有"最简规则在哪些地方不够"的证据；本课的 168/320 与终点口径问题就是这样的证据，而不是"该上 EKF 了"的口号。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 长直行 320 次重置中 168 次使瞬时位置误差变大，全程平均却从 3.822 cm 降到 1.938 cm。这两个数字为什么同时成立？"平均为正的收益"能保证"每次为正"吗？

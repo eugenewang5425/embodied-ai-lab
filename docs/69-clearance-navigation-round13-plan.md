@@ -29,3 +29,9 @@
 现有失败与开发种子0不计入留出成功率。若留出失败，保留整个批次，进一步改动用新的开发和验证登记，不把已见种子继续叫未见。真实几何/离线绕行链只评分，控制器只拿先验、传感器和测得速度。
 
 通过这个范围后进入73课第二轮接近几何诊断、新位置/朝向抓取。位姿偏差、遮挡、移动障碍、真实异步计算和实机均继续保留独立门槛。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

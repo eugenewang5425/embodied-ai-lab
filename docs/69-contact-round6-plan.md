@@ -33,3 +33,9 @@
 主图对比三组到达、接触程度和停点；窗口保持相机/3D/雷达/目标同步，解释请求速度与实际身体速度、接触次数与强度。讲义补变量、原理、结果、失败、思考题；README/路线图明示用户改变了任务标准。完成受影响测试、图像/窗口、独立物理审计后推送；若仍失败如实报告，不能把撞墙持续推挤或穿透记成轻擦到达。
 
 冻结前验收：第二次预试6cm组仍无路；零余量两组均真实到达并停稳，无接触。已知答案正撞墙受阻在x=0.700m，法向力峰值430.36N、连续接触1.316s，属于重接触；低速斜擦墙后转离的检查，峰值35.664N、压入0.0613mm、最长连续接触4ms，继续行驶并释放接触。2026-10-01冻结39回合；三组统一接近限速，不再按正式结果调参。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

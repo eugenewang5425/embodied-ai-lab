@@ -222,6 +222,12 @@ uv run pytest -q tests/test_session29_ppo_swingup.py
 
 PPO 通过环境奖励更新策略，和第 28 课直接拟合专家动作的信息来源不同。GAE 汇总延迟奖励，clip 限制单次策略更新，但两者都不能创造未被探索到的成功轨迹。第 7 课手工控制器的 20/20 是任务可解的对照；本课的 0/60 是当前训练配置的结果，不是 PPO 的普遍不可能定理。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)（John Schulman 等，2017）；[High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438)（John Schulman 等，2015预印本/ICLR2016）。
+
+本地 numpy PPO/clip 与 GAE；预算、起态、首达和停稳条件不同于原论文基准，失败不构成普遍算法裁决。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 扶稳子技能学到、完整摆起 0/60，说明学习链在哪个过渡阶段断开？为什么只看训练奖励可能看不出来？

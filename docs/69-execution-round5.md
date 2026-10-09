@@ -169,6 +169,9 @@ T接近零时直接归零。两个速度乘同一个比例，保持当前转弯�
 3. 排队停车预测已经−2.99mm时，取消最新前进动作是否一定保住6cm余量？旧意图为什么关键？
 4. 本地接管把0.6降到0.52m/s，为何不能直接记0？如果前方距离已小于剩余减速路程，还能保证不碰吗？
 5. 为什么清旧队列？若停车后恢复执行之前积压的路线，会有什么问题？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 上次新结果4.9秒，5.0秒开始失联，消息年龄何时到0.2秒？它与运输排队0.4秒有什么不同？
 7. 为什么只有提前预测的组在1秒无输出时仍接触？把保护和规划放同一阻塞线程能解决吗？
 8. 窄路0.4秒三改进组都零接触，却都0/9到达，应怎样描述收益？+0.06mm余量能代表鲁棒性吗？
@@ -199,3 +202,9 @@ uv run python scripts/validate_execution_safety.py
 quick851项通过，入口152.3秒；受影响完整选择集74项通过，入口70.9秒，含真实Tk同步验证。独立审计重建队列、加速度、候选停车预测、本地接管、清队列、信息过期、动作积分、实际停稳和真值几何；传感器坐标变换共用原函数，此边界明确记录。三张科学图与真实窗口均实际打开检查，图例移出速度曲线、条件文本完整可读。没有重跑不相关的历史全仓慢层。
 
 本轮按预登记结束，不依据正式成绩继续调参。下一项先统一全高度保守包络并诊断停住后为何无路，加入真实新障碍负例；然后扩大70/71的到点与有限恢复反例，在同一个身体、传感器、积分和执行模型上检验组合。真实独立执行端/规划取消另设调度验证，完整RGB-D、视觉定位、65课似然场与原跨场景门槛继续保留。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

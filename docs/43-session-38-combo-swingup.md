@@ -276,6 +276,12 @@ uv run ruff check src tests
 
 组合策略需要同时满足两层门槛：底座在残差加入后仍可靠，以及残差比底座带来可测增益。120/120 到达且零出界支持保护性；最终 0/60 且差于底座说明本协议下无增值。对已有强基线的任务，先测是否存在可改善空间，再增加模型容量。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Residual Reinforcement Learning for Robot Control](https://arxiv.org/abs/1812.03201)（Tobias Johannink 等，2018预印本/ICRA2019）；[Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705)（Tony Z. Zhao 等，2023）。
+
+组合保护与增值的本地对照；块残差只是机制适配，不称完整 ACT 或原残差机器人复现。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 120/120 到达和 0/60 成功为什么不矛盾？两个判据分别要求车和摆具备什么状态？

@@ -59,6 +59,10 @@ Blender 默认隐藏靠观察者的两面墙，方便看室内结构；这些墙
 
 追加的高度敏感性诊断固定路线任务，扫描床底净空 18、22、40 cm 与激光高度 12、18、30 cm，共 9 组。床底净空 40 cm 时，三种激光高度都能给出通过床下的路径，且 50 个采样位姿均无接触；净空 22 cm、激光 18 cm 时仍有 25 个接触位姿。结论依赖净空与机身高度的关系，实际净空需要测量。
 
+![固定床下任务：低位切片生成路径但25个采样位姿接触，体积图正确拒绝](img/photo-room-v3-height_planning.png)
+
+横纵轴为米；左图沿18cm激光切片规划的床下路径穿过床架，右图2–34cm机身体积图拒绝同一目标。拒绝不计为到达，接触帧是采样位姿数。
+
 ## 4. 里程计、地图和定位怎样关联
 
 参考路线围绕房间中央空地巡游。第一圈采集建图，随后两圈做定位比较。运动由已知参考路线规定，采用差速运动学积分；MuJoCo 提供三维观测与接触检查。没有执行轮胎摩擦、打滑动力学或“用估计位置控制车辆”的闭环导航。
@@ -85,6 +89,14 @@ Blender 默认隐藏靠观察者的两面墙，方便看室内结构；这些墙
 本轮四种 PF 都在三个传感器种子下改善了均值和 P95。匹配传感器高度的图比机身体积投影图更适合本次定位，说明**避障图与定位观测模型需要分别匹配各自用途**。同帧真值落点图更好，也说明扫描落点与地图表示都有影响，不能简单归因为“只要地图越完整，定位就越好”。
 
 自建图相对真值落点图的精确率为 0.560、召回率为 0.786，中位偏移 0.08 m。本轮对齐容差为两个 4 cm 栅格，即 0.08 m；之前跨场景基准的容差为 0.30 m，两个结果不能直接按同一门槛比较。
+
+![同一批扫描三种种子下的均值和P95定位误差，米](img/photo-room-v3-localization_metrics.png)
+
+上图为均值，下图为P95，纵轴单位米。红为有偏里程计，青为匹配扫描高度的理想图，棕为机身体积图，紫为同帧真值落点图，蓝为同帧里程计自建图。三种传感种子使用相同采集/定位路线；真值图为诊断对照，不输入自建图方法。
+
+![同一v3场景的机器人低位RGB检查画面，未参与本轮PF](img/photo-room-v3-robot_rgb.png)
+
+该图检查相机朝向与床/椅的高度关系，不是摄影测量恢复或视觉定位成绩；定量证据来自上述v3表和数组。
 
 ## 5. 哪些结论仍然没有验证
 
@@ -120,3 +132,9 @@ uv run python scripts/test.py quick tests/test_photo_room.py
 ```
 
 文件依据：`photo_room.py` 负责几何与 MuJoCo 适配；`photo_room_validation.py` 负责配对试验；Blender 和 GIF 脚本负责可视化。7 项新增测试检查桌面实测尺寸、不同高度射线、机身接触、净空变化、A* 路径和编码器偏差。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。

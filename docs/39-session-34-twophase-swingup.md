@@ -86,6 +86,12 @@ uv run ruff check src tests
 
 两阶段奖励按任务相位给不同反馈：下方先推动能量，上方再强调姿态和稳定。切换条件本身会改变训练信号；首达直立区与在该区持续稳定仍是两个事件。本课 2/3 种子首达而 0/60 完整成功，要求把阶段之间的失效点单独测量。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Balance Controller Design for Inverted Pendulum Considering Detail Reward Function and Two-Phase Learning Protocol](https://www.mdpi.com/2073-8994/16/9/1227)（Symmetry 16(9):1227，2024）；[Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)（John Schulman 等，2017）。
+
+分阶段奖励/协议的机制借鉴；本地摆起模型、奖励、起态和预算见正文，不直接复制论文结论。出版全文本轮重读限流，未添加新结果解释。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 两阶段奖励的切换变量是什么？如果切换阈值附近来回抖动，策略会收到怎样的矛盾信号？

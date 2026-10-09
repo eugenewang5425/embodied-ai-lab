@@ -184,6 +184,9 @@ K = 前方H范围内的最大绝对曲率
 3. 为什么同时检查立即制动和延迟制动？预留0.2秒空间与真的延迟0.2秒执行有什么区别？
 4. 旧版参照与一致预测组同样21/27，能否认为改预测没有影响？比较具体回合和余量合格数。
 5. 同一束回波的三个高度点能否当作三份独立证据？给点计置信度时应怎样保留来源？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 为什么新布局旧版也通过？怎样设计下一批才能区分更多间隙与更强算法？
 7. 45/45合格是否说明0.5cm定位偏差也能通过？请把最小外扩分离量与误差来源分开考虑。
 8. 最后一帧写了零命令，为什么还需要检查`incoming_velocity`、动作积分与完整尾段？
@@ -213,3 +216,9 @@ uv run python scripts/validate_braking_navigation.py
 4. **统一与系统组合**：统一身体、传感器外参、执行模型及评分后，再把本轮制动接到修图/定位导航；先做静止首次规划，登记运行时截止预算，随后补完整连续RGB-D与视觉定位。65课似然场诊断、跨场景原门槛仍保留。
 
 本轮在冻结批次完成后停止调整算法。可确认的是受控静态窄路上的机制收益；更多观测、更慢速度、更多模块都需要重新做对照。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

@@ -198,6 +198,12 @@ uv run ruff format --check src/embodied_learning/experiments/nav_pose_error.py s
 
 第 43 课假定位姿已知；本课让估计位姿进入建图、规划和控制，将坐标误差传播到真实运动。1% 编码器偏差就使到达率从 15/15 降到 0/15，而外部地标融合恢复 15/15，说明定位误差是当前导航栈的关键上游变量。真值只用于物理推进和评分，不能在待测估计组暗中修正决策。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地占据图、A*和差速适配纯追踪；定位/地图/身体/执行误差要分别检验，未调用完整 Nav2 栈。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 真值位姿 `T`、纯里程计 `O1/O2`、融合 `F` 各让哪份位姿进入规划和控制？哪些世界与初态必须配对？

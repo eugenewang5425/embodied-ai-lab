@@ -153,6 +153,12 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 67 --play
 
 还有几个重要边界：未知空间未实现严格的“已观测自由空间走廊”约束；从未看见的近障仍可能漏检；历史点依赖短期里程计，不处理漂移或移动障碍；静态记忆没有射线清除机制；车身是保守盒模型，没有悬架、侧倾和软接触；场景不是新的盲测园区。以上都不能被本批零碰撞替代。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 雷达正前方读 0.50 m 时，车头实际剩多少空间？0.6 m/s、0.2 s 延迟下是否来得及停车？要把余量也算进去。
@@ -160,6 +166,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 67 --play
 3. 低障碍越来越近却消失在深度图中，是物体被移走了吗？需要什么证据才能删除旧障碍？
 4. 为什么两米通道中仍会“无路”？如何设计矩形足印规划与圆形膨胀的单变量对照？
 5. 如果相机支架变高 10 cm，只更新显示模型会发生什么？应同步更新哪些几何和验收夹具？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 把轮子偏差从 0 改为 2%，历史障碍记忆会怎样变形？怎样将避障失败和定位失败分开计数？
 
 ## 复现与停止点

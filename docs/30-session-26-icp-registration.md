@@ -269,6 +269,12 @@ uv run ruff format --check src tests
 
 ICP 是在两个点集间反复建立对应并求刚体变换，连接了第 22–25 课的三维点与后面的机器人位姿估计。它的残差小，只表示当前对应下贴合；平面、重复纹理和差初值可能让变换方向错误。GIS 多测站点云拼合也需要重叠区域和独立控制点，不能只看配准目标函数。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+本地带噪点云的点到点/点到面对照；Open3D官方文档解释相同机制，不表示调用它的完整实现。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. ICP 一轮里的“找最近点”和“求位姿”各改变什么？为什么初值太远时，重复迭代也未必走到正确解？

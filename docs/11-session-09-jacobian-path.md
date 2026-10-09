@@ -161,6 +161,12 @@ uv run python -m ruff check src tests
 
 分层诊断思想同样值得带走：只给终点组 108 步有力矩饱和却到达并停稳，Jacobian 组 550 步无饱和——饱和是现象不是结论；按“参考误差/执行误差/力矩/奇异值”逐层检查，才能把问题归到正确的层。这与 Benchmarks 的指标设计原则一致：每个指标只回答它对应层的问题。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 三组 0–8 秒最大偏离 76.154/46.241/0.197 mm，电机、PD 增益、动力学完全相同。用“三组对照，分别在改变什么？”表指出：差异来自哪一列？

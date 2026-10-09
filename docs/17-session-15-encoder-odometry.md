@@ -167,6 +167,12 @@ uv run python -m ruff format --check src tests
 
 本课的四种数据划分（指令、真值、读数、估计）也是 6.3.3 实验的标准纪律：估计器只收编码器角度、初态和几何参数，不收真值——第二十课把它落成 ROS 消息时同样如此。落图误差（直行 +2% 组 10.01 cm）小于位置误差（19.40 cm）则说明：数据转换流程正确 ≠ 用于转换的位姿正确，这与第十四课"公式没错、输入错了"是同一条边界的两侧。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 直行 +2% 组终点位置误差 19.40 cm，但轮程只多算了 2.4 m × 2% ≈ 4.8 cm。多出的十几个厘米从哪来？用终点朝向误差 +9.17°（近似随时间线性增长，取平均值）估算"距离 × 平均朝向误差"的量级，看能否对上。

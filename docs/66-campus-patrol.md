@@ -160,6 +160,12 @@ uv run python scripts/test.py quick
 3. **观测与状态估计**：雷达回波是距离；只有与位置和朝向组合，才成为地图上的点。位置错误会把正确测距放到错误位置，错地图又会反过来影响定位。
 4. **任务层评价**：位置误差是中间指标，真正到点和整轮完成才是本实验任务指标。零碰撞、低均值和成功完成必须分别报告。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。
+
 ## 11. 思考题
 
 1. 参考图组只差约 7 cm，为何仍会无法规划？结合膨胀格边界说明，不能只回答“精度不够”。

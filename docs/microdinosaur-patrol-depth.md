@@ -1,5 +1,10 @@
 # MicroDinosaur 巡检：单目深度与 ToF 校正
 
+[![巡检技术讲解封面，非定量指标图](img/microdinosaur-patrol-explainer.jpg)](microdinosaur-patrol-review-20261009.md)
+
+动态相机/ToF/深度图见本机报告，定量结果见本文表和对应 benchmark；封面不替代科研结果图。
+
+
 2026-10-09 已实际运行 UniDepth V2 Small 和 Depth Anything V2 Hypersim Small，并将 UniDepth 接入原 S288 策略的完整园区闭环仿真：**8/8 点，99.60 m，430.18 s，无新增深度停车、误报到达、园区接触或关节越限**。使用原 IMX219-77 彩色相机与 VL53L5CX 8×8 ToF 模拟配置。没有把 MuJoCo 深度缓冲伪装成算法输出。
 
 [本轮小结与下一步](microdinosaur-patrol-review-20261009.md) · [公开技术讲解（B站，3分钟）](https://www.bilibili.com/video/BV1Mtp46EEw9/)
@@ -20,6 +25,10 @@
 AbsRel 在 0.15–4 m 环境像素上计算，每帧取像素均值，再对帧平均。排除机器人、天空及测距点附近 7 px 区域；原始/校正比较使用同一批校正成功帧。完整原始结果包含全部 19 帧，失败校正不被填入成功误差。障碍表面留出 5 帧的 UniDepth 校正平均 AbsRel 为 8.4%。校正主要修复尺度，不能修复全部形状；UniDepth 留出远场 4–20 m 校正 AbsRel 仍为 44.1%，不能依赖它保证远距尺寸。
 
 根据开发组的障碍误差和耗时选择 UniDepth 作闭环候选。模型权重沿用本地已校验文件，SHA256 `93705cb3295dd7476b44911b8a55f5215bf74e8d5eccd27cecdb1b338270a648`；DA-V2 权重 SHA256 `b782898d8a3e8be1f639de33837ed85e9b4b73e40f8f5e5cd99067588d722545`。Depth Pro 尝试运行后因显存压力与长耗时停止，5 张部分输出与 `aborted.json` 留存，不计入完整对照。
+
+![模型在各自接受帧上的配对近场误差，及最终固定障碍停车指令时间](img/microdinosaur-depth-matched-metrics.png)
+
+左侧从[冻结深度摘要](benchmarks/microdinosaur-depth-20261009.json)绘制：每个模型只在自己的有效接受帧上比较原始/校正，不把16和17个帧当成同一全体，也不隐去19帧分母。右侧是最终确认版同种子障碍指令时刻，原0.72s提前量未采用；它不是物理停稳时间、最坏距离或整圈到点收益。
 
 ## 投影、校正与时延
 
@@ -90,3 +99,31 @@ AbsRel 在 0.15–4 m 环境像素上计算，每帧取像素均值，再对帧�
 ```
 
 上游：[UniDepth](https://github.com/lpiccinelli-eth/UniDepth)、[Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2)、[Depth Pro](https://github.com/apple-aiml-research/ml-depth-pro)。当前 UniDepth 软件为 CC-BY-NC 4.0，本次用于本地研究仿真；商业部署需另行确认可用许可和模型选型。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[UniDepth / UniDepthV2](https://github.com/lpiccinelli-eth/UniDepth)（Luigi Piccinelli 等，2024/2025）；[Depth Anything V2（含 Metric Depth）](https://github.com/DepthAnything/Depth-Anything-V2)（Lihe Yang 等，2024）；[Depth Pro](https://github.com/apple-aiml-research/ml-depth-pro)（Apple 研究团队，2024）；[VL53L5CX Datasheet](https://www.st.com/resource/en/datasheet/vl53l5cx.pdf)（STMicroelectronics，产品规范）。
+
+实际运行 UniDepth V2 Small 与 DA V2 Metric Hypersim Small；Depth Pro 仅试跑后中止。ToF稳健定尺、物理地平线、同角域确认和时效门控是本地适配，未替代实物深度验收。 [完整采用关系与引用规则](references.md)。
+
+
+## 教学补充：深度、尺度与时序
+
+密集图补充空间形状，ToF给出测量锚点；锚点能校准尺度，不能保证未被锚定的天空/侧墙形状正确。先把径向测距变到相机光轴，再以交替分区拟合/留出检验尺度，最后检查候选形状、同角域测量和时效；任一步无效就按未知处理。
+
+| 量 | 含义 / 单位 | 来源 | 改变它影响什么 |
+| --- | --- | --- | --- |
+| `r_i` / `Z_i` | 径向距离 / 相机光轴深度，m | ToF外参、估计FK/IMU变换 | 广视角下两者不同，混用会造成尺度偏差 |
+| `D(u,v)` | 模型像素深度，m（模型输出语义） | UniDepth V2 Small | 可受域差距/外观影响；非独立实测 |
+| `s` | ToF与模型的稳健尺度比，无单位 | 偶数分区中位拟合 | 校正 `D_c=sD`；不得用评分真值拟合 |
+| `AbsRel` | 平均绝对相对误差，无单位 | 仅离线评分的独立几何真值 | 回答数值深度误差，不能代替巡检成功率 |
+| `age` | 采样至控制可用的年龄，ms | 采样/推理/IPC/保存/交付记录 | 超200ms不用于新增停车；纯推理耗时不能代替它 |
+| `h` / `σ` | 高于拟合地面的残差 / 模拟不确定性，m | ToF地面与偏差/噪声假设 | 区分地面与近障碍；不是实物安全置信界 |
+
+## 思考题
+
+1. 校正后近场 AbsRel下降，但整圈动作未变，说明哪项问题改善了、哪项没有证据？
+2. ToF锚点全在地面，为什么天空和侧墙仍能触发误停？尺度正确与形状正确有什么区别？
+3. 把深度压缩保存改成非压缩为什么会改变控制结果？怎样避免离线推理忽略端到端时延？
+4. 同角域双分区确认减少误停的同时，可能漏掉什么物体？应设计什么负例检查取舍？
+5. 提前80ms发指令与实际停后净位移/路径各回答什么问题？怎样检验最坏停车界而非单个案例？

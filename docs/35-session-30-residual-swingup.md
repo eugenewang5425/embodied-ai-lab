@@ -153,6 +153,12 @@ uv run ruff check src tests
 
 残差控制写成 `u=clip(u_base+a·u_res)`：底座和新策略共同决定真实动作。`a=0` 的逐位守卫确认底座没有被实现改坏，但 `a>0` 后残差和探索噪声可能频繁触及力矩限幅，使原控制规律失效。比较组合策略必须同时检查安全保持和相对底座的净增益。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Residual Reinforcement Learning for Robot Control](https://arxiv.org/abs/1812.03201)（Tobias Johannink 等，2018预印本/ICRA2019）；[Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)（John Schulman 等，2017）。
+
+能量底座加限幅残差的机制适配；未复现原论文机器人，残差保护性与增值性分别检验。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `a=0` 守卫为什么重要？它能证明残差打开后也安全有效吗？

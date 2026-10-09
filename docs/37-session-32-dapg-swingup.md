@@ -216,6 +216,12 @@ w 缩放 + 无 BC 梯度参数守卫）、BC 梯度有限差分、退火调度�
 
 DAPG 把少量专家动作当作训练锚，使策略更常访问摆起所需状态；监督项和环境回报作用在不同位置。直立首达 33/60 表示探索路径改善，完整稳定任务仍须另测。BC 记忆分化提醒我们：示教动作拟合的好坏与在线控制的长时表现并不等价。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Learning Complex Dexterous Manipulation with Deep Reinforcement Learning and Demonstrations](https://arxiv.org/abs/1709.10087)（Aravind Rajeswaran 等，2017预印本/RSS2018）；[Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)（John Schulman 等，2017）。
+
+DAPG 式示教/BC正则加到 PPO；未使用原文完整 NPG 与灵巧手系统，原论文增益不能移用。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 8 条示教怎样影响策略开始探索的区域？为什么首达 33/60 仍不能换算成成功 33/60？

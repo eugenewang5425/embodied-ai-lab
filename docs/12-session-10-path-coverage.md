@@ -166,6 +166,12 @@ uv run python -m ruff check src tests
 
 奇异性与可达性的关系也在这批数据里展开：完全伸直向内收整条线几何可达，局部 Jacobian 参考却卡死；而三个几何预检查（半径 0.75 m 超总长、原点落在内孔、直线穿越内孔）在仿真前就该拒绝。“几何可达 → 参考可行 → 电机可执行 → 验收通过”是四道独立的门，基准的价值在于把每道门的失败都记录在案。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 固定反例里偏离线段始终为 0、力矩恒为 0、参考误差 RMS 125.227 mm。如果汇报只写“路径无偏离、无饱和”，读者会得出什么错误结论？应补哪两个数字？

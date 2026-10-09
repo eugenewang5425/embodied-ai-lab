@@ -126,6 +126,12 @@ uv run python -m embodied_learning.grounding_demo --results results/visual_groun
 
 本课把“看见一个点”拆成掩码、深度反投影、地标身份和位姿解算四步。MobileSAM 提供像素区域，几何负责把像素变为相机坐标，身份匹配决定这些点可否充当控制点。错配会让后续配准使用错误约束，说明语义识别与几何定位必须分别验收。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[MobileSAM](https://github.com/ChaoningZhang/MobileSAM)（Chaoning Zhang 等，2023）；[Depth Anything V2（含 Metric Depth）](https://github.com/DepthAnything/Depth-Anything-V2)（Lihe Yang 等，2024）。
+
+实际 MobileSAM 掩码与深度反投影/身份关联；身份错配和位置误差分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 掩码质心、该像素深度、地标 ID 各进入哪一步？若深度正确但 ID 错误，最终位姿为什么仍可能严重错误？

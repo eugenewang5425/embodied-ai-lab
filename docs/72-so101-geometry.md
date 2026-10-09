@@ -85,6 +85,12 @@ uv run python -m embodied_learning.manipulation_demo --results results/so101_my_
 4. 数值反投影误差接近零，能否证明真实相机找物体也准确？还缺哪几项验证？
 5. 雅可比正确、逆解通过后，为什么仍需要检查实际接近路径与碰撞？
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[SO-ARM100 / SO-101](https://github.com/TheRobotStudio/SO-ARM100)（TheRobotStudio 官方项目）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+实际固定 SO-101 模型上的 FK/Jacobian/受限 IK 与相机坐标审计；模型自洽不等于实机标定，也不证明所有姿态可达。 [完整采用关系与引用规则](references.md)。
+
 ## 8. 自审与停止点
 
 模型、控制、记录和渲染各自独立；回放只重建存档状态，不重新运行控制器。当前几何接口可进入下一课真实物理抓取。没有宣称实机精度、视觉抓取或通用机械臂路径规划已经完成。下一课的部分失败用于确定后续标定/接近策略研究方向。

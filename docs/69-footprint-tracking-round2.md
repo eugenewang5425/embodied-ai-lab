@@ -154,6 +154,9 @@
 3. 把跟踪误差每次都相对新计划计算，会掩盖哪类问题？为什么还保存首次计划？
 4. 0.6m/s和0.084rad/s在当前加减速限制下同时请求停下，第一帧和后续运动分别是什么？
 5. 为什么实体离墙6.47cm仍可能侵入“各边外扩6cm”的矩形？旋转后画出墙法向投影。
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 3/9成功却集中在开发种子0时，你需要什么额外证据才能认为方法稳定？现在种子3/4还能当下一轮盲测吗？
 7. 规划耗时P95约210ms而整步P95约27ms，是否矛盾？考虑不是每一帧都规划。
 8. 种子1外扩分离量为正仍规划失败，如何分别检查观测、路线沿用条件和搜索预算？
@@ -186,3 +189,9 @@ uv run python scripts/validate_footprint_tracking.py
 6. 这一步完成后，再按[阶段复盘](navigation-stage-review-69-71.md)扩大70/71的到点与恢复反例，统一平台后组合。完整RGB-D采集、视觉定位、65课似然场诊断及跨场景门槛继续保留。
 
 本轮到这里停止调参：已定位并分离两个可修的机制，也用留出失败明确了下一轮应检验的制动问题。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

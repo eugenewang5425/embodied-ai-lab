@@ -116,3 +116,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 71 --play
 ![第71课窗口：准确图种子0，34.20秒，正在执行低速恢复](img/lesson71-window.png)
 
 实现：[决策模块](../src/embodied_learning/navigation_decisions.py)；[基准摘要](benchmarks/navigation-studies-69-71-v1.json)；[验证记录](benchmarks/navigation-studies-69-71-validation.json)。本课证明一个已知起点失效机制可以被有限恢复，仍需更多触发病例和负例。下一步顺序见[69–71阶段复盘](navigation-stage-review-69-71.md)：先补窄路跟踪缺口，再统一身体和时序，最后做组合消融与留出布局。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地到点或有限恢复决策；几何、估计与执行判据分开，停止/拒绝不等于完成巡检，未复现完整 Nav2 行为树恢复。 [完整采用关系与引用规则](references.md)。

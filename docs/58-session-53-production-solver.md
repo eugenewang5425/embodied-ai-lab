@@ -58,6 +58,12 @@ mean 6.15 / final 2.43）。自研桥接（5.18/9.54）与 scipy 数值不同
 
 把同一残差问题交给 SciPy `least_squares` 的成熟鲁棒核，是“实现错误还是信息不足”的控制实验。huber/soft_l1 尺度扫描仍无法满足两条性能门，支持当前问题设置下的辨识瓶颈；它不证明所有生产求解器或所有场景都会失败。需要前端增加可区分的信息，而不仅是更换优化库。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[SciPy · optimize.least_squares](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)（SciPy 官方文档）；[Switchable Constraints for Robust Pose Graph SLAM](https://nikosuenderhauf.github.io/assets/papers/IROS12-switchableConstraints.pdf)（Niko Sünderhauf / Peter Protzel，IROS2012）；[Inference on Networks of Mixtures for Robust Robot Mapping](https://april.eecs.umich.edu/papers/details.php?name=olson2012rss)（Edwin Olson / Pratik Agarwal，RSS2012）。
+
+实际 SciPy least_squares 同题与 loss/尺度对照；不能把换求解器当作换信息或保证拒绝坏边。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 为什么对照生产求解器必须使用同一批节点、边、初始化、损失尺度和评分口径？

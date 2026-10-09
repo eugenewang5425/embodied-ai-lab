@@ -153,6 +153,12 @@ npz 保留每种子逐帧里程计/观测位姿与误差；summary 保存观测�
 
 从观测到位姿的 2D 刚体配准（Procrustes 闭式解）是最小二乘估计的一个特例：3 组已知对应点求旋转 + 平移。它也保留了最小二乘的经典局限——三点等权，没有显式处理"远点测角误差放大"的方向相关性，点集拟合残差不等于定位误差。下一课的"320 次重置中 168 次使瞬时误差增大"会继续追这条线索。另外，本课踩过的"方位角相对世界轴"的坑（误差从 <1 cm 变成 6–16 cm）属于系统性坐标系错误，与第十四课的故意错变换同族：平均不掉，只能靠正确的观测模型。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 长直行末端观测误差 6.57±4.43 cm，全采样均值只有 2.24 cm。用车到地标的距离 4–6.6 m 与 σ_φ = 0.01 rad 推一推横向误差量级，看与实测是否对得上。

@@ -182,3 +182,9 @@ uv run pytest tests/test_photo_room_navigation.py -q
 #   python3 src/embodied_learning/experiments/run_amcl_batch.py          # 27 次
 uv run python src/embodied_learning/experiments/score_amcl_batch.py     # 统一评分（无需 ROS）
 ```
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Nav2 Jazzy · AMCL 源码与参数](https://api.nav2.org/nav2-jazzy/html/amcl__node_8cpp_source.html)（Nav2 维护团队，Jazzy）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。

@@ -41,3 +41,9 @@
 六项已知答案测试通过。开发8回合存于`results/execution_safety_probe1`：正常延迟0.4秒下原参照接触，队列预测没有接触但外扩分离量−5.05mm，两个本地保护组无接触、最小外扩分离量+5.96mm，但均无路终止。1秒无输出下原参照与仅队列预测都接触；两个本地保护组过期停车，余量+195.98mm，未到达。保持参数原样进入正式批次。
 
 固定同输入反事实：上一轮窄路普通箱体种子8延迟0.4秒，第53帧（5.3s）是第一个旧预测放行而队列预测拒绝的帧；旧分离量+57.75mm，完整队列候选−14.20mm，即使此刻请求停车也为−2.99mm。只能说明旧预测漏算动作，以及晚发现时仅远端制动未必能保住余量，不把它当闭环成功。结果存于`docs/benchmarks/execution-counterfactual-v5.json`。冻结后不改两个新算法模块及上一轮全部算法源文件。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

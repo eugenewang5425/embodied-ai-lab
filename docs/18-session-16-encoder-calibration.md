@@ -154,6 +154,12 @@ uv run python -m ruff format --check src tests
 
 本课还提前演示了两条属于估计与学习方法的纪律：其一，四段标定数据与验证路线严格分离，"不能拿验证路线的终点误差反复调 c"与（4）Algorithm 篇·Robot Learning 的 train/test 分离是同一条规则；其二，直线段只能识别"半径 × 编码器比例"的合成尺度，无法区分二者，也不能标定轮距——这是参数可辨识性问题，6.3.3 的标定文献会用转弯等更丰富的激励来处理。本课没有走向这些扩展：一个参数、能被一个正数解释的误差，就先用最简工具解决。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 为什么修正系数是 c≈0.980392 = 1/1.02，而不是 0.98？"多报 2%"和"乘 0.98"各自的参照量是什么？

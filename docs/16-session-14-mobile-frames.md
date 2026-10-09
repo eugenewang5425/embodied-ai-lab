@@ -142,6 +142,12 @@ uv run python -m ruff format --check src tests
 
 差速约束本身也有理论位置：平面位姿 3 个配置量、轮速只有 2 个输入，无侧滑下横向速度恒为零。这解释了直行 4 s 走 0.8 m（r=0.05 m、ω=4 rad/s → v=0.2 m/s）、原地左转 `[-2, 2]` 转出 152.79° 都可以手算核验，也解释了第二十一课的控制器为什么只能"先转向再前进"地走弧线。（4）Algorithm 篇的 Robot Navigation 条目、6.3.3 的 TF 与 SLAM 工具，都建立在这种"每个数字带坐标系语义"的纪律上。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 原地左转 `[-2, 2]` rad/s 持续 4 s，终点朝向 152.79°。用 `ω = r(ωR−ωL)/b` 手算一遍（r=0.05 m、b=0.30 m），把结果换算成度，核对为什么恰好是这个数。

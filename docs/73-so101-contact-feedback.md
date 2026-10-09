@@ -120,9 +120,18 @@
 3. 为什么过去20ms里有一个2ms子步失去接触就清零？如果只看段末的一个力值，会漏掉什么？
 4. 两指各有力，桌面仍受20N，而方块只重0.49N，这可能是悬空夹持还是夹子在压桌？需要哪些额外信息判断？
 5. C拒绝16例、没有执行后掉落，可以说它优于A吗？请同时计算完成、误拒和失败分母。
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. B开发8/8、正式24/27，说明开发没有意义，还是说明验证条件不同？下一轮三失败应怎样使用？
 7. 同一方法完成更多，却峰值力／压入变大，应该追加什么指标和对照？为什么不能只展示成功视频？
 8. 接触方向、试抬保持和物体朝向三个变量如何分开检验？哪些可以作为现有反馈，哪些仍需传感器或特权真值？
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Robotic Manipulation · 作者教材](https://manipulation.mit.edu/intro.html)（Russ Tedrake，持续更新）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+固定开源模型与本地真实接触仿真；夹紧时双侧受力不保证搬运持续接触，已知物体初始位置与 RGB 回放不等于视觉抓取或实机放行。 [完整采用关系与引用规则](references.md)。
 
 ## 10. 复现、停止点与下一轮
 

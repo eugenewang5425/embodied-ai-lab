@@ -222,6 +222,12 @@ docs/26 第六节标准补做三模式真机复核（PrintWindow 真机窗口截
 
 势函数塑形通过相邻状态的势差给中间反馈，目的是缓解稀疏奖励下的探索；理论上的策略不变性依赖折扣、终止和势函数实现满足条件。能量接近目标是摆起的必要线索，仍不保证小车位置、摆角和速度同时进入稳定带。本课的单次触达是探索进展，不是任务成功。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Policy Invariance under Reward Transformations: Theory and Application to Reward Shaping](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/NgHaradaRussell-shaping-ICML1999.pdf)（Andrew Ng / Daishi Harada / Stuart Russell，1999）。
+
+本地势函数项使用 γΦ(s′)−Φ(s)；策略不变定理需相应MDP与终止处理，不能推出训练一定成功。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `cE=2` 在 150k 步出现一次直立区触达，为什么可以说探索改善，却不能说控制任务已完成？

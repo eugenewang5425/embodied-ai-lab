@@ -13,3 +13,9 @@
 ## 评分与验收
 
 保持原标准：抬升≥10cm，保持段连续≥1s、双指力>0.02N、非手指支持<0.02N；松开撤离后连续≥0.5s，XY≤2.5cm、桌上高度±3mm、速度<2cm/s、角速度<0.2rad/s、夹爪>0.9rad、双指无有效力。报告全部27条件，不删逆解拒绝或单侧接触失败。报告500Hz手指峰值与手臂其他接触，不把仿真成绩写为视觉抓取或实机表现。正式后独立逐2ms重放输入、状态、力与评分，并检查第一视角/3D/统计同步和文字布局。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Robotic Manipulation · 作者教材](https://manipulation.mit.edu/intro.html)（Russ Tedrake，持续更新）；[MuJoCo Menagerie · SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/4d038b3feae26ec82b46a4d586379114012a8ac7/robotstudio_so101)（Google DeepMind / 模型贡献者）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+固定开源模型与本地真实接触仿真；夹紧时双侧受力不保证搬运持续接触，已知物体初始位置与 RGB 回放不等于视觉抓取或实机放行。 [完整采用关系与引用规则](references.md)。

@@ -39,3 +39,9 @@
 最终候选冻结：预试3的“纯追踪＋保留曲线”仍在7秒失败；预试4改回预试1相同的切线/曲率反馈，与保留原曲线结合后16.4秒到达、零碰撞。正式四组的跟踪因素因此固定为**旧角度比例跟踪 / 切线曲率反馈**，不使用纯追踪候选。角度增益2/s、横向修正系数2/s、归一速度0.6m/s；原35cm前视点仍决定前进/原地调整，速度上限和刹停保护不变。此后不根据正式批次或留出种子结果调参。
 
 执行完成后的结果和局限另见[第二轮讲义](69-footprint-tracking-round2.md)，以上保留登记与候选选择的先后过程。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

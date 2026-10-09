@@ -162,6 +162,12 @@ uv run ruff format --check src/embodied_learning/experiments/pose_graph.py src/e
 
 位姿图把连续运动与回环一起写成带权残差，优化所有节点的形状。FG 平均误差 5.03 m 略低于弧长法 5.33 m，说明本批次出现形状改善；黄金锚末端 0.016 m 但均值可能反升，说明端点闭合与全程贴合是不同目标。权重代表信任程度，错误高权边会把整条图拉偏。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 图节点、运动边和回环边分别代表什么？调小回环 `σ` 相当于告诉优化器什么？

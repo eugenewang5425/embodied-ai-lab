@@ -267,6 +267,12 @@ uv run ruff format --check src/embodied_learning/experiments/rl_goal_reaching.py
 
 差速车虽能分别调节线速度和角速度，最大熵强化学习仍需从奖励中找到“到达且停稳”的稀有事件。距离从约 1.89 m 缩到 0.85–1.0 m 表示接近行为学到；最近约 54.8 cm、速度约零与 0/60 成功说明在目标外悬停。把接近距离和严格验收分开，才能定位奖励及熵目标的作用。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://arxiv.org/abs/1801.01290)（Tuomas Haarnoja 等，2018）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+本地连续控制 SAC 与几何教师同任务比较；接近、首达、停稳与出包络分别验收，不能只看训练损失。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 最近距离约 54.8 cm、速度接近零时，小车在做什么？为什么这不满足手工基线的 5 cm 到达条件？

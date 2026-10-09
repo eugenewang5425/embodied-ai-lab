@@ -115,3 +115,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 70 --play
 ![第70课窗口：修后图种子1，53.64秒，联合组仍在接近P4](img/lesson70-window.png)
 
 实现：[决策模块](../src/embodied_learning/navigation_decisions.py)。全部数据摘要见[基准记录](benchmarks/navigation-studies-69-71-v1.json)，测试与可视验收见[验证记录](benchmarks/navigation-studies-69-71-validation.json)。本课固定批次通过；扩大到新布局前仍需冻结预算并报告拒绝代价，不自动把结果推广为普遍保证。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地到点或有限恢复决策；几何、估计与执行判据分开，停止/拒绝不等于完成巡检，未复现完整 Nav2 行为树恢复。 [完整采用关系与引用规则](references.md)。

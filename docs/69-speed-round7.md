@@ -87,6 +87,9 @@
 3. 若只比较最终到达而不记录时间，低速方案漏掉什么代价？
 4. 0.4秒正常组失败，能否据单个回合声称所有高延迟都必须低速？
 5. 两条轨迹重合，为什么耗时仍可差近三倍？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 低速正式无接触，能否证明允许轻擦有收益？
 7. 为什么不能用旧种子14–16与新种子17–19直接作算法因果比较？
 8. 30cm窄口拒绝应算保护正确，还是到达成功？两种评价为何要分开？
@@ -102,3 +105,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 输出目录必须全新；已有正式记录直接验证/打开。使用仓库第六轮摘要核对冻结源码，不依赖旧原始数组；本地保存本轮完整npz、协议与源码。两轮完成后生成图与窗口：`uv run python docs/img/make_navigation_reinforcement_figures.py`、`uv run python scripts/check_navigation_reinforcement_window.py`。
 
 本轮停止调参，0.2m/s作为受控参照保留。[第八轮](69-online-map-round8.md)使用这个固定低速研究地图增删。真正异步执行、速度自适应、误定位与70/71恢复组合继续单独验收。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

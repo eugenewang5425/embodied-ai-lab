@@ -146,6 +146,12 @@ uv run ruff format --check src/embodied_learning/experiments/robust_graph.py src
 
 平方损失会让一条大残差错回环主导整张图；Huber 类鲁棒核减弱大残差影响，却不能仅凭残差知道边是否真实。LS 从 4.82 m 劣化到 7.63 m、Huber 回到 5.22 m，支持抵抗部分毒化，但同一权重也压制好回环，形成当前信息条件下的取舍。先改善前端边质量，再谈后端鲁棒性。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[SciPy · optimize.least_squares](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)（SciPy 官方文档）。
+
+本地 Huber/IRLS 的毒化边对照；生产求解器是后续第53课比较，本课不能称已经调用 SciPy 复现。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 一条错回环怎样通过共享节点影响远离它的轨迹？为什么平方损失比 Huber 更容易被拉动？

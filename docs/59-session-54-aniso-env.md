@@ -83,6 +83,12 @@ n=36 属小样本，但方向明确不支撑"各向异性改善判别"）；勘�
 
 评估目标必须是算法有可能从输入中恢复的信息。旧判据把漂移后的估计链差值当成内容匹配真值，使正确几何对齐也被判错；修正为隐含位姿对真实位姿后，ISO/ANISO 为 0.722/0.583。环境不规则并没有自动让匹配更准；评价指标的定义比画出更复杂的场景优先。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 旧 `true_delta(est,k)` 包含什么并非来自两帧内容的信息？为什么拿它给几何匹配器打分会误判？

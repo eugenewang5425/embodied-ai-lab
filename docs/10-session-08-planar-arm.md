@@ -153,6 +153,12 @@ Kd = [2, 0.6]
 
 最后是分层：IK 只给目标姿态，真正动手的是熟悉的关节 PD（力矩限幅 ±0.25 N·m）。第一版参数 6 秒后仍差约 14.7 mm 未通过验收，调整后三个案例 2.52–4.26 s 通过——“算得出角度”与“执行得到位”之间隔着动力学、0.02 s 采样与增益整定。下一课的 Jacobian 将把“位置级”运动学推进到“速度级”。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `0°,90°` 时末端在 (40,30) cm 而不是 (40,60) cm：用世界方向 q1+q2 解释第二根杆的落点，再到几何探针里核验一次。

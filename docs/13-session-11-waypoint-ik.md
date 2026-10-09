@@ -140,6 +140,12 @@ uv run python -m ruff check src tests
 
 结论同时被两组数字钉住边界：近伸直组最大偏离中位数 Jacobian 约 0.509 mm、逐点 IK 约 1.090 mm（near_extension_01 达 1.891 mm，接近 2 mm 门限）——通过率更高不等于所有指标更好。另外，(0.100001,-0.3) 到 (0.100001,+0.3) 的直线几何可达却因参考速度超 1 rad/s 上限被拒：可达、参考可行、按给定时间可执行仍是三道不同的门，时间参数化处在规划层与执行层的交界。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 固定反例中，局部 Jacobian 偏离线段 0 mm 却未通过，逐点 IK 偏离 1.342 mm 却通过：用“偏离线段”与“时间跟踪误差 RMS（0 vs 125.227 mm）”两个指标说明为什么前者会骗人。

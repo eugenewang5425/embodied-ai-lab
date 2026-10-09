@@ -131,6 +131,12 @@ uv run python -m embodied_learning.threshold_demo --results results/goal_thresho
 
 "平均时长包含超时回合的 40 s"这类口径问题，对应（5）Infrastructure 篇·Benchmarks 的通用原则：先定义"谁被平均、失败怎么计"，再看数字。本课刻意没有替默认控制器选"最优门限"——240 个有限样本也选不出来；它提供的是下次改门限前必须回答的检查清单。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+估计驱动反馈和停稳的机制联系；本课是点目标控制，纯追踪仅作后续路径控制比较，不声称本课已运行该算法。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 近/融合组门限从 2 cm 收到 0.5 cm，平均时长 10.922→17.208 s 且三组都无超时；远/融合组 0.5 cm 平均时长 36.236 s 却含 13/20 超时。两组"变慢"的构成一样吗？

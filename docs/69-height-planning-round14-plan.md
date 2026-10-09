@@ -19,3 +19,9 @@
 正式门槛为60/60真实到达且实际停稳、零误报，接触仍≤40N/5mm/连续0.5s；负例单列，必须拒绝并停稳，无重接触。每个新几何组合先由评分端检查固定绕行采样链，不将该链交给控制器。三工作进程彼此独立；计算期间物理暂停的既有边界仍明确保留。
 
 如果失败，保留完整批次和原因，再登记新的开发与验证。不得重复使用37—41并称为未见种子。该范围通过后，继续73课接近几何与物理抓取，随后74课RGB-D估计；不会将仿真导航通过写成实机或视觉定位已通过。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

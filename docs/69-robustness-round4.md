@@ -187,6 +187,9 @@ T = max(|v|/0.8, |ω|/1.8)
 3. 0.2秒预测预留为什么不能直接证明实际0.2秒延迟一定安全？队列里有什么信息没进入旧预测？
 4. 延迟应放在期望意图之前还是加速度限制之后？哪种写法可能造出车辆做不到的速度跳变？
 5. 机器人已经停下，但队列里还有前进意图，此刻可以关闭评分并宣布完成吗？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 零扰动也失败，而某个小偏差成功，能否说明偏差有益？怎样区分路径选择、噪声与几何余量？
 7. 搜索展开10000次仍失败，与真实车身没有通路有什么区别？应继续记录哪些阶段的信息？
 8. 如果删掉一个“离群雷达点”就能恢复通行，怎样证明它不是一个真实的新障碍？
@@ -218,3 +221,9 @@ uv run python scripts/validate_navigation_robustness.py
 验证：quick **844项通过**（入口132.4秒）；受影响完整选择集 **66项通过**（49.6秒，含真实Tk）；Ruff检查通过。旧八个算法模块的执行源码保持不变，27个零扰动桥接逐数组一致（计时除外）。独立审计233份记录、19535个实际动作、133534个扫掠采样位姿，逐帧检查有偏估计、请求来源、队列、执行器限制、动作积分、实际停稳和车身/外扩扫掠，并核对图像、测试日志和文档链接。采样步长按实体车角位移不超过1cm计算，外扩矩形在同一批位姿评分，仍是离散检查。没有重跑不相关的历史全仓慢层，不把当前测试成功等同于实验成功或硬实时。
 
 本轮到此停止，不依据正式失败调参后覆盖结果。下一轮优先拆两个机制：一是有偏投影下候选路线、搜索与路径转换分别在哪里拒绝，二是包含排队动作的停车包络及执行端保护。每项先做相同输入反事实，再做独立闭环；有噪声误拒的改进必须同时保留真实新障碍反例。之后扩大70/71反例，在统一身体与执行模型后再组合。RGB-D采集、视觉定位、65课似然场诊断与原跨场景门槛继续保留。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

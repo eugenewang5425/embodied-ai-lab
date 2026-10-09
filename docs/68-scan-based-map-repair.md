@@ -140,6 +140,12 @@ uv run python scripts/test.py full tests/test_map_repair.py tests/test_navigatio
 
 ![第 68 课 实际同步窗口与分组地图](img/navigation-study-repair-window.png)
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 整张图平移旋转后，为什么左下角好了、右上角仍不对？什么情况下刚体对齐其实足够？
@@ -147,6 +153,9 @@ uv run python scripts/test.py full tests/test_map_repair.py tests/test_navigatio
 3. 为什么知道真实偏差是 2% 后，不能直接把 1/1.02 写进修图器再宣布成功？本课哪些信息只允许评分器访问？
 4. 地图 P/R 接近 1，为什么独立巡检仍会误报一个点？定位误差、停车门限、停止速度应该怎样一起验收？
 5. 如果轮子在湿地突然打滑，两个恒定尺度还能解释所有历史片段吗？应保存什么诊断量来拒绝这个模型？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 停车车辆今天消失了，能否直接用本课轨迹重放把它从长期图删掉？需要补什么观测和变化确认规则？
 
 ## 停止点与下一步

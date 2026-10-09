@@ -90,6 +90,12 @@
 似然场测量模型：同书 6.4。地图落点误差对端点图的影响即 SLAM 的“死锁”
 （deadlock）现象在无回环修正时的表现：估计位姿漂移→地图涂错→定位更差。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+本地对照、观测/评分权限与实际版本见正文；第64课另有实际官方 AMCL 参数回读对照，其他简化栈不当作已运行官方导航系统。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 表示间隙 ≈0 而落点间隙 1.3 m：把建图巡游的里程计偏差从 2% 降到 0.5%，

@@ -43,3 +43,9 @@
 ## 正式冻结前记录
 
 开发七例保存于`results/navigation_robustness_probe1`：零扰动到达且余量合格，与第三轮对应全部既有数组一致（计时除外）；y±1cm与朝向±1度均无路终止；延迟0.2秒无路但余量仍正，延迟0.4秒发生实体接触，接触终帧保留非零进入速度，不伪称停稳。上述结果不触发调参或缩小范围。四项已知答案测试包含队列时序、加速度、偏差符号/角度环绕、估计到点而真实未到的评分及接触终止。此后冻结两个新执行模块及八个旧算法源文件，运行登记的233回合。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

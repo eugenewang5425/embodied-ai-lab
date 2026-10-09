@@ -187,6 +187,12 @@ uv run ruff format --check src/embodied_learning/experiments/loop_closures.py sr
 
 回环把当前帧与早期已访问的位置建立约束，防止漂移链的首尾任意分开。末端从 9.18 m 收到约 0.14 m 证明这批回环可强力闭合端点；若只沿弧长分摊改正，中途轨迹形状仍可不准。闭合误差、平均轨迹误差和边正确率必须分开报告。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 回环边连接哪两个时间点？它与第 45 课相邻帧扫描边在约束跨度上有什么区别？

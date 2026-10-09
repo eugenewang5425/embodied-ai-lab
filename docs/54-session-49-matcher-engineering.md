@@ -98,6 +98,12 @@
 
 接受率是匹配器输出通过阈值的比例，方向正确率还要用独立真值判断所隐含位姿是否对。两项指标测的是不同性质；旧实验把估计链漂移放进了目标位姿，导致方向正确率被系统性误判，已在第 54 课修正。0.32→0.76 的接受率阶梯仍是记录事实，不能再拿旧 ≤5.4% 当真实正确率。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 锚定、弧长重采样和 top-k 分别改变匹配流程的哪一步？接受率从 0.32 到 0.76 说明了什么，不能说明什么？

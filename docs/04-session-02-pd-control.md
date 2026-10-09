@@ -115,6 +115,12 @@ uv run python -m embodied_learning.viewer --policy pd --seconds 10 --seed 7
 
 “这还不是完整控制”一节指向 6.2.2 现代控制·最优控制的动机：500 步延长测试全部在 265～306 步之间失败、长期平均 280.3 步、小车最大漂移约 1.004 m。杆的角度没倒，小车却漂走了——当多个状态通过动力学耦合、单误差反馈顾不过来时，就需要把全部状态纳入统一的代价函数去权衡，这正是下一课 LQR 的事。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Underactuated Robotics · LQR](https://underactuated.mit.edu/lqr.html)（Russ Tedrake，作者教材）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+反馈、局部线性化、代价与扰动的教材联系；本地 PD/LQR、能量摆起与切换配置见正文，不把一个控制器的适用域推广到全部状态。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 方向实验里 `u=-3` 使角度从 `+0.1` 恶化到 `+0.1480 rad`，`u=+3` 使它降到 `+0.0566 rad`。如果有人把公式写成 `u = -Kp×θ - Kd×ω` 并沿用 `Kp=40, Kd=1`，在本模型上会发生什么？

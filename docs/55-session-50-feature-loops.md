@@ -78,6 +78,12 @@ K 匹配器（锚定梯子+点对面抛光）细化 → 接受/方向判定（�
 
 候选检出与几何验证是两道门：第一道判断“是不是曾到过这里”，第二道估计相对位姿。自建地图一致性可能自证，因为地图与查询都沿同一条漂移链生成；分数分布重叠则说明该信息源判别力不足。该课旧 2.6% 与 4.9% 正确率采用错误目标，不能用来宣称几何匹配本身只有个位数正确。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 排序直方图、环移角剖面和建图一致相关峰各想利用什么差异？分数分布大面积重叠意味着怎样的阈值取舍？

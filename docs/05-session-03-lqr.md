@@ -175,6 +175,12 @@ uv run python -m embodied_learning.experiments.lqr_comparison --r 1 --output res
 
 LQR 的适用边界也要记住：线性化只在平衡点附近成立，闭环 `A-BK` 最大特征值模约 0.946574 只支持局部线性稳定性判断，不是全局保证；从正下方摆起超出线性化范围，属于 6.2.3 先进控制的非线性问题，第七课改用能量方法处理。理想仿真里接近数值精度的终态误差，也不代表真实硬件精度。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Underactuated Robotics · LQR](https://underactuated.mit.edu/lqr.html)（Russ Tedrake，作者教材）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+反馈、局部线性化、代价与扰动的教材联系；本地 PD/LQR、能量摆起与切换配置见正文，不把一个控制器的适用域推广到全部状态。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `K` 的第二个分量 `-17.48424` 绝对值最大，对应关节角通道。能否由此断言“角度是四个状态里最重要的”？用 `Q=diag(10,100,1,1)`、`R=0.1` 与“单位不能跨着比”三点说明理由。

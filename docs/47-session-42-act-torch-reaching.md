@@ -288,6 +288,12 @@ uv run ruff format --check src/embodied_learning/experiments/act_torch_reaching.
 
 Transformer 动作块提高了策略表达能力，训练损失下降说明它更会拟合给定标签；闭环 0/60 则说明拟合不足以保证毫米级稳定控制。把观测信息是否充分、训练目标是否对齐成功判据、执行误差是否复合分开测试，比再叠模型更能判断瓶颈。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705)（Tony Z. Zhao 等，2023）；[Attention Is All You Need](https://arxiv.org/abs/1706.03762)（Ashish Vaswani 等，2017）；[Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137)（Cheng Chi 等，2023）。
+
+本地 Transformer 块输出用于已知状态的 2R 到达；不是原 ACT 完整图像/CVAE 双臂方案，Diffusion Policy 只是比较参考，未训练。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 训练损失下降约 6 倍与闭环 0/60 为什么可以同时出现？分别测了哪一层能力？

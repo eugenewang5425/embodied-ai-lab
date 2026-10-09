@@ -139,6 +139,12 @@ uv run python -m ruff check src tests
 
 对照指南的其余章节也有用：（4）Algorithm 篇里 Robot Learning、VLA 等条目的工作最终都要落到"这段参考轨迹在执行层跟不跟得上"的问题上。本课刻意固定 PD、固定轨迹、只改时间表，就是在为替换控制器或加入前馈（下一课，对应 6.2 控制理论基础中反馈与前馈的分工）准备可对比的基线。结论也止于此：57 个执行回合没有触发物理异常终止，"通过"只针对这一套门限与这 25 条路径。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+FK/IK、Jacobian、轨迹与动力学的教材机制；本地为平面 2R 对照，可达、执行和限矩分别验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `interior_00` 在 8/4/2 s 的最大偏离是 0.125 / 0.875 / 5.314 mm，比值约 1 : 7 : 42，远大于时间缩短的倍数。按"加速度 ∝ 1/T²"理论上应放大约多少倍？多出来的部分要用什么解释？

@@ -116,3 +116,9 @@ uv run python scripts/audit_navigation_contact_failure.py
 脚本核验输入协议、全部冻结源码、两条存档SHA-256和静止期同观测，直接按保存的施力重放10350个2ms物理步，并重建205帧地图。状态和单点峰值力最大重放误差均为0；原队列停车的整段状态与实际存档逐项核对。图表由存档和明确标注的停车对照生成，并实际读图检查文字与图例。
 
 [机器可读审计](benchmarks/navigation-contact-diagnosis-v11.json)包含选择规则、时间、接触对、预测检查、四个停车对照、源码和图像哈希。[开发原摘要](benchmarks/navigation-bypass-development-v11-metric.json)、[正式24回合](benchmarks/navigation-reinforcement-v11.json)保持原样。原始数组保留本地results，新克隆先按[第十一轮讲义](69-reachable-obstacles-round11.md)生成对应开发记录。本轮止于诊断，没有修改控制器或运行新正式批次。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。

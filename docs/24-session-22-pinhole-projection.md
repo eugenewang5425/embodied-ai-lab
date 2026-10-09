@@ -133,6 +133,12 @@ uv run python -m ruff format --check src tests
 
 工程边界也对应指南的章节纪律：106 个场景点只有 43 个"可见"（深度 > 近裁剪 0.5 m 且像素落在 640×480 内，杆顶如实出界）——"可见性"的精确定义是 3D 视觉与 SLAM 前端的基本假设；相机平移 (0.5, 0, 0.3) 后反投影回同一世界系差 1.37e-15 m，是外参正确性的独立验证，与第十四课 SE(2) 往返核验同理。注意这些核验都使用同一个给定 K，因此不构成对内参标定的检验——K 从哪里来，属于指南计算机视觉条目里的相机标定方法，本课刻意未做。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[OpenCV · PnP pose computation](https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html)（OpenCV 官方文档）。
+
+针孔投影、光轴深度与坐标变换；PnP 为相关位姿问题参考，本课投影往返不是 PnP 定位验收。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 同一像素配 2/4/6 m 三个深度候选得到三个世界点。写出为什么它们必然共线、且重投影后仍是同一像素。这个事实对"单目深度模型的输出"意味着什么？

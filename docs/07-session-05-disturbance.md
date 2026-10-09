@@ -105,6 +105,12 @@ uv run python -m embodied_learning.teaching_demo --push-results results/lqr_push
 
 边界照例：这是人为定义的测试分布，不是真实环境统计；没有传感噪声、延迟、摩擦变化与模型误差。结论只在“这 20 个方案、这个推力范围内”成立——第七课的 +600 N 场景会展示超出范围后的失败。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Underactuated Robotics · LQR](https://underactuated.mit.edu/lqr.html)（Russ Tedrake，作者教材）；[MuJoCo 官方文档](https://mujoco.readthedocs.io/en/stable/overview.html)（维护团队，持续更新）。
+
+反馈、局部线性化、代价与扰动的教材联系；本地 PD/LQR、能量摆起与切换配置见正文，不把一个控制器的适用域推广到全部状态。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 20 组配对推力下恢复时间中位数随 R 增大而变长（1.76→2.84 s），seed=100 的输入峰值却随 R 增大而变大（0.803→0.894）。用“R 惩罚优化目标中的输入平方”解释这两个方向为什么能同时出现。

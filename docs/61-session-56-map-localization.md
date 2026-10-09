@@ -52,6 +52,12 @@
 
 占据图把传感器观测固定到空间坐标；粒子滤波用新观测对候选位姿打分。坐标落点、地图形态与滤波器似然共同影响结果。本课用同帧投影图让地图落点误差可见，再用全程误差和绑架窗口区分“偶尔回正”“持续跟踪”“全局找回”三个不同任务。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Open3D · ICP registration](https://open3d.org/docs/release/tutorial/pipelines/icp_registration.html)（Open3D 官方实现文档）。
+
+扫描对应、回环、位姿图或地图定位的教材机制；本地简化栈与测量权限见正文，第55课是模拟标记外观检索，不是真实 RGB-D 场所识别。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. `EST`、自建图 PF、同帧真值位姿投影图 PF、理想图 PF 的地图分别从哪里来？为什么同一批激光帧投影后仍可能得到不同的 PF 结果？

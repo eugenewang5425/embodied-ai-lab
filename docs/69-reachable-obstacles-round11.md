@@ -106,6 +106,12 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 
 本轮计算墙钟包含批次存档；控制p95不含传感器生成/物理/写盘。计算时世界没有后台积分，明确的0.2s请求排队不能替代端到端实时延迟验证。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。
+
 ## 8. 思考题
 
 1. 同一根杆把最低点从42cm提高到75cm，为何正确行为应从绕行变成直行？雷达有没有因此变强？

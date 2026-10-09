@@ -171,6 +171,12 @@ npz 保存每次运行的逐帧读数、ε、估计位姿、位置/朝向误差�
 
 "想要一次就准，需要额外信息"——本课停止点第 3 问的答案已经给出方向：不随历史累积的独立观测。这正是下一课已知地标的动机，也是 6.3.3 滤波/SLAM 框架里"观测更新"这一步存在的理由。本课没有引入任何滤波器：卡尔曼式的增益要按预测与观测的相对可靠度分配权重，而在这里我们连"观测误差随几何变差"都还没量化（下一课长直行末端 6.57 cm 会给出量化）。工具的顺序服从于问题的顺序。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）；[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）。
+
+坐标链、运动/观测误差的教材联系；已知地标和简化融合不是无先验视觉 SLAM，标定与随机噪声分开。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 标定组直行 20 次的有符号平均 X/Y 误差是 −0.14/−0.71 cm（毫米级），平均误差距离却仍有 2.52 cm，最差一次 10.16 cm。"有符号均值接近零"和"每次都很准"差在哪一步？

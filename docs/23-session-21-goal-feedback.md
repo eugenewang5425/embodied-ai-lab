@@ -162,6 +162,12 @@ uv run python -m embodied_learning.goal_demo --results results/goal_reaching_my_
 
 控制律本身（v = min(0.25, 0.7ρ)·cos α、ω = clip(2α, ±1.2)）属于（6）Control 篇·控制理论基础（6.2.1 经典控制）的限幅比例反馈：离目标越远越快、方向偏差大时先原地转向。它没有路径规划、没有避障、也没有收敛性证明——指南 Robot Navigation 条目里的全局规划、局部避障、轨迹跟踪都建立在这个最小闭环之上。本课的诚实边界同样要记住：80 回合全部"宣布到达"不等于 80 次任务成功；2 cm/3 cm 两个门限实验前固定，不因结果不理想而放宽。
 
+## 原始来源与本地适配（2026-10-09补引）
+
+[Probabilistic Robotics](https://robots.stanford.edu/probabilistic-robotics/)（Sebastian Thrun / Wolfram Burgard / Dieter Fox，2005）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）。
+
+估计驱动反馈和停稳的机制联系；本课是点目标控制，纯追踪仅作后续路径控制比较，不声称本课已运行该算法。 [完整采用关系与引用规则](references.md)。
+
 ## 思考题
 
 1. 远目标纯里程计 15/20 误判到达、平均最终距离 7.095 cm。用第十九课长直行 32 s 纯里程计全程平均 3.822 cm、以及里程计误差随路程增长的趋势，解释约 4.9 m 的目标为什么系统性停偏。

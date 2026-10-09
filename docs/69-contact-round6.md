@@ -140,6 +140,9 @@
 3. 为什么单纯删掉碰撞终止会得到假的到达？接触求解器多做了什么？
 4. 速度请求已经是零，身体仍有横向速度，算停稳吗？
 5. 接触只持续2ms、压入0.0261mm，为什么仍能判重接触？力、时间、冲量分别回答什么问题？
+
+### 延伸问题（保留原题，不计入核心五题）
+
 6. 允许组与禁行组都是6/9，能说轻擦策略有提升吗？需要怎样的正式样本才能说明差异？
 7. 把速度降到0.2m/s，可能降低什么，仍未解决什么？如何保持其他变量相同？
 8. 街区和窄路复现相同撞角，说明了什么，又不能推出什么？
@@ -165,3 +168,9 @@ uv run python -m embodied_learning.navigation_study_demo --lesson 69 --footprint
 本轮停止调参，不改40N上限来把失败变成功。下一项优先以同一接触模型、零余量允许组比较正常速度与固定低速，分离冲击强度和排队影响；再诊断横杆无路。统一70/71前先对齐身体、运动、接触和到点口径。旧6cm保守包络保留作诊断，今后不再作为当前用户任务必须通过的门槛；真实身体放不下、明显冲撞和持续推墙仍不能称为轻擦到达。
 
 后续更新（2026-10-01）：[第七轮固定低速](69-speed-round7.md)与[第八轮观测地图更新](69-online-map-round8.md)已按登记执行；分别保留时间代价和地图/路点失败。本节“下一项”是第六轮结束时的安排，最新顺序见[阶段复盘](navigation-stage-review-69-71.md)。
+
+## 原始来源与本地适配（2026-10-09补引）
+
+[A Formal Basis for the Heuristic Determination of Minimum Cost Paths](https://ai.stanford.edu/~nilsson/OnlinePubs-Nils/PublishedPapers/astar.pdf)（Peter Hart / Nils Nilsson / Bertram Raphael，1968）；[Implementation of the Pure Pursuit Path Tracking Algorithm](https://publications.ri.cmu.edu/implementation-of-the-pure-pursuit-path-tracking-algorithm)（R. Craig Coulter，CMU技术报告1992）；[Modern Robotics: Mechanics, Planning, and Control](https://github.com/NxRLab/ModernRobotics)（Kevin Lynch / Frank Park，2017）。
+
+在本地差速平台分离足印、动作队列、制动、观测地图和三维通行；这些受控扩展不是原 A* 或纯追踪自带的安全保证，各轮身体/权限/种子与失败分开。 [完整采用关系与引用规则](references.md)。
